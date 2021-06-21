@@ -28,16 +28,17 @@ function Get-GitLabProject {
     }
 
     if ($PSCmdlet.ParameterSetName -eq 'ByGroup') {
-        # workaround for https://github.com/python-gitlab/python-gitlab/issues/1498
-        $GroupId = $GroupId.Replace('/', '%2F')
-        $Projects = gitlab -o json group-project list --group-id $GroupId | ConvertFrom-Json
+        $Group = $(gitlab -o json group get --id $GroupId | ConvertFrom-Json)
+        $Projects = gitlab -o json group-project list --group-id $($Group.id) --include-subgroups true --owned true --all | ConvertFrom-Json
         if ($Projects) {
             if (-not $IncludeArchived) {
                 $Projects = $Projects | Where-Object -not Archived
             }
-            $Projects | ForEach-Object {
-                Get-GitLabProject -ProjectId $_.id
-            } | Sort-Object -Property 'Name'
+            
+            $Projects |
+                Where-Object { $($_.path_with_namespace).StartsWith($Group.path) } |
+                ForEach-Object { Get-GitLabProject -ProjectId $_.id } |
+                Sort-Object -Property 'Name'
         }
     }
 }

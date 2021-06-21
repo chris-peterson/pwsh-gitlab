@@ -59,7 +59,7 @@
     
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     NestedModules = @(
-        'GitlabCli.psm1',
+        'Projects.psm1',
         'Utilities.psm1'
     )
     
