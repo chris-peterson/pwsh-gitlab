@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Types>
+  <Type>
+    <Name>Gitlab.Project</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Group</Name>
+        <GetScriptBlock>$($($this.PathWithNamespace -split '/') | Select-Object -SkipLast 1) -join '/'</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Tags</Name>
+        <GetScriptBlock>$this.TagList</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+</Types>
