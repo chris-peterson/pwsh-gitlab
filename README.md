@@ -16,10 +16,14 @@ Install-Module -Name GitlabCli
 
 ```powershell
 Get-GitlabProject 'mygroup/myproject'
+# OR
+Get-GitlabProject 42
 ```
 
-```powershell
-Get-GitlabProject 42
+```plaintext
+  ID Name        Group     Url
+  -- ----        -----     ---
+  42 myproject   mygroup   https://gitlab.mydomain.com/mygroup/myproject
 ```
 
 ## References / Acknowledgements
