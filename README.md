@@ -14,6 +14,8 @@ Install-Module -Name GitlabCli
 
 ### `Get-GitlabProject`
 
+#### By Project ID
+
 ```powershell
 Get-GitlabProject 'mygroup/myproject'
 # OR
@@ -25,6 +27,25 @@ Get-GitlabProject 42
   -- ----        -----     ---
   42 myproject   mygroup   https://gitlab.mydomain.com/mygroup/myproject
 ```
+
+#### By Group ID
+
+```powershell
+Get-GitLabProject -GroupId 'mygroup/subgroup'
+```
+
+```plaintext
+  ID Name        Group             Url
+  -- ----        -----             ---
+   1 database    mygroup/subgroup  https://gitlab.mydomain.com/mygroup/subgroup/database
+   2 infra       mygroup/subgroup  https://gitlab.mydomain.com/mygroup/subgroup/infra
+   3 service     mygroup/subgroup  https://gitlab.mydomain.com/mygroup/subgroup/service
+   4 website     mygroup/subgroup  https://gitlab.mydomain.com/mygroup/subgroup/website
+```
+
+_Optional Parameters_
+
+`-IncludeArchived` - Set this switch to include archived projects.
 
 ## References / Acknowledgements
 
