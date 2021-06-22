@@ -29,14 +29,14 @@ function Get-GitLabProject {
 
     if ($PSCmdlet.ParameterSetName -eq 'ByGroup') {
         $Group = $(gitlab -o json group get --id $GroupId | ConvertFrom-Json)
-        $Projects = gitlab -o json group-project list --group-id $($Group.id) --include-subgroups true --owned true --all | ConvertFrom-Json
+        $Projects = gitlab -o json group-project list --group-id $($Group.id) --include-subgroups true --all | ConvertFrom-Json
         if ($Projects) {
             if (-not $IncludeArchived) {
                 $Projects = $Projects | Where-Object -not Archived
             }
             
             $Projects |
-                Where-Object { $($_.path_with_namespace).StartsWith($Group.path) } |
+                Where-Object { $($_.path_with_namespace).StartsWith($Group.full_path) } |
                 ForEach-Object { Get-GitLabProject -ProjectId $_.id } |
                 Sort-Object -Property 'Name'
         }
