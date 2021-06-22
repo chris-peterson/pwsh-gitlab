@@ -12,9 +12,21 @@ Install-Module -Name GitlabCli
 
 ## Examples
 
-### `Get-GitlabProject`
+### Groups
 
-#### By Project ID
+```powershell
+Get-GitlabGroup 'mygroup'
+```
+
+```plaintext
+  ID Name     Url
+  -- ----     ---
+  23 mygroup  https://gitlab.mydomain.com/mygroup
+```
+
+### Projects
+
+#### `Get-GitlabProject` (By Project ID)
 
 ```powershell
 Get-GitlabProject 'mygroup/myproject'
@@ -28,7 +40,7 @@ Get-GitlabProject 42
   42 myproject   mygroup   https://gitlab.mydomain.com/mygroup/myproject
 ```
 
-#### By Group ID
+#### `Get-GitlabProject` (By Group ID)
 
 ```powershell
 Get-GitLabProject -GroupId 'mygroup/subgroup'

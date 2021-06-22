@@ -59,14 +59,23 @@
     
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     NestedModules = @(
+        'Groups.psm1',
         'Projects.psm1',
         'Utilities.psm1'
     )
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @(
+        # Groups
+        'Get-GitLabGroup',
+
+        # Projects
         'Get-GitLabProject',
-        'ConvertTo-PascalCase'
+        'Move-GitLabProject',
+
+        # Utilities
+        'ConvertTo-PascalCase',
+        'New-WrapperObject'
     )
     
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.

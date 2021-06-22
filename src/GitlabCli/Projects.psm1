@@ -18,12 +18,7 @@ function Get-GitLabProject {
     if ($PSCmdlet.ParameterSetName -eq 'ById') {
         $Project = gitlab -o json project get --id $ProjectId | ConvertFrom-Json
         if ($Project) {
-            $RetVal = New-Object PSObject
-            $Project.PSObject.Properties | ForEach-Object {
-                $RetVal | Add-Member -MemberType NoteProperty -Name $($_.Name | ConvertTo-PascalCase) -Value $_.Value
-            }
-            $RetVal.PSTypeNames.Insert(0, 'Gitlab.Project')
-            return $RetVal
+            return $Project | New-WrapperObject -DisplayType 'Gitlab.Project'
         }
     }
 
@@ -40,5 +35,31 @@ function Get-GitLabProject {
                 ForEach-Object { Get-GitLabProject -ProjectId $_.id } |
                 Sort-Object -Property 'Name'
         }
+    }
+}
+
+function Move-GitLabProject {
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [string]
+        $DestinationGroup,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf = $false
+    )
+
+    $SourceProject = Get-GitLabProject -ProjectId $ProjectId
+    $Group = $(Get-GitLabGroup -GroupId $DestinationGroup)
+
+    if ($WhatIf) {
+        Write-Host "WhatIf: Moving '$($SourceProject.Name)' (project id: $($SourceProject.Id)) to '$($Group.FullPath)' (group id: $($Group.Id))"
+    } else {
+        gitlab group transfer-project --id $Group.Id --to-project-id $SourceProject.Id
     }
 }

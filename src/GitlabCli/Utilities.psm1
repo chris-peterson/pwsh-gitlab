@@ -19,3 +19,23 @@ function ConvertTo-SnakeCase
 
     return [regex]::replace($Value, '(?<=.)(?=[A-Z])', '_').ToLower()
 }
+
+function New-WrapperObject {
+    param(
+        [Parameter(Position=0, Mandatory=$True, ValueFromPipeline=$true)]
+        $Object,
+
+        [Parameter(Position=1, Mandatory=$False)]
+        [string]
+        $DisplayType
+    )
+
+    $Wrapper = New-Object PSObject
+    $Object.PSObject.Properties | ForEach-Object {
+        $Wrapper | Add-Member -MemberType NoteProperty -Name $($_.Name | ConvertTo-PascalCase) -Value $_.Value
+    }
+    if ($DisplayType) {
+        $Wrapper.PSTypeNames.Insert(0, $DisplayType)
+    }
+    return $Wrapper
+}
