@@ -55,7 +55,7 @@ function Move-GitLabProject {
     )
 
     $SourceProject = Get-GitLabProject -ProjectId $ProjectId
-    $Group = $(Get-GitLabGroup -GroupId $DestinationGroup)
+    $Group = Get-GitLabGroup -GroupId $DestinationGroup
 
     if ($WhatIf) {
         Write-Host "WhatIf: Moving '$($SourceProject.Name)' (project id: $($SourceProject.Id)) to '$($Group.FullPath)' (group id: $($Group.Id))"
