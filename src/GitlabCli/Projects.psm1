@@ -39,6 +39,7 @@ function Get-GitLabProject {
 }
 
 function Move-GitLabProject {
+    [Alias("Transfer-GitLabProject")]
     [CmdletBinding()]
     param (
         [Parameter(Position=0, Mandatory=$true)]
@@ -60,6 +61,6 @@ function Move-GitLabProject {
     if ($WhatIf) {
         Write-Host "WhatIf: moving '$($SourceProject.Name)' (project id: $($SourceProject.Id)) to '$($Group.FullPath)' (group id: $($Group.Id))"
     } else {
-        gitlab group transfer-project --id $Group.Id --to-project-id $SourceProject.Id
+        gitlab project transfer-project --id $SourceProject.Id --to-namespace $Group.Id
     }
 }
