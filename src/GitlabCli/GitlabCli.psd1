@@ -74,6 +74,7 @@
         # Projects
         'Get-GitLabProject',
         'Move-GitLabProject',
+        'Copy-GitLabProject',
 
         # Utilities
         'ConvertTo-PascalCase',
@@ -89,7 +90,8 @@
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
     AliasesToExport = @(
         'Clone-GitLabGroup',
-        'Transfer-GitLabProject'
+        'Transfer-GitLabProject',
+        'Fork-GitLabProject'
     )
     
     # DSC resources to export from this module

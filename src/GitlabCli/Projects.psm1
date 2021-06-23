@@ -64,3 +64,42 @@ function Move-GitLabProject {
         gitlab project transfer-project --id $SourceProject.Id --to-namespace $Group.Id
     }
 }
+
+function Copy-GitLabProject {
+    [Alias("Fork-GitLabProject")]
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [string]
+        $DestinationGroup,
+
+        [bool]
+        [Parameter(Mandatory=$false)]
+        $PreserveForkRelationship = $true,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf = $false
+    )
+
+    $SourceProject = Get-GitLabProject -ProjectId $ProjectId
+    $Group = Get-GitLabGroup -GroupId $DestinationGroup
+
+    if ($WhatIf) {
+        Write-Host "WhatIf: forking '$($SourceProject.Name)' (project id: $($SourceProject.Id)) to '$($Group.FullPath)' (group id: $($Group.Id))"
+    } else {
+        $NewProject = gitlab -o json project-fork create --namespace $Group.Id --project-id $SourceProject.Id | ConvertFrom-Json
+    }
+
+    if (-not $PreserveForkRelationship) {
+        if ($WhatIf) {
+            Write-Host "WhatIf: removing fork relationship to $($SourceProject.Id)"
+        } else {
+            gitlab project delete-fork-relation --id $NewProject.id
+        }
+    }
+}
