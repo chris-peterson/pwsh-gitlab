@@ -10,12 +10,18 @@ Extends (and requires) [python gitlab](https://github.com/python-gitlab/python-g
 Install-Module -Name GitlabCli
 ```
 
+## Global Switches
+
+`-WhatIf` : For mutable operations, `-WhatIf` gives a preview of what actions would be taken.
+
 ## Examples
 
 ### Groups
 
+#### `Get-GitLabGroup`
+
 ```powershell
-Get-GitlabGroup 'mygroup'
+Get-GitLabGroup 'mygroup'
 ```
 
 ```plaintext
@@ -24,14 +30,20 @@ Get-GitlabGroup 'mygroup'
   23 mygroup  https://gitlab.mydomain.com/mygroup
 ```
 
-### Projects
-
-#### `Get-GitlabProject` (By Project ID)
+#### `Clone-GitLabGroup` (aka `Copy-GitLabGroupToLocalFileSystem`)
 
 ```powershell
-Get-GitlabProject 'mygroup/myproject'
+Clone-GitLabGroup 'mygroup'
+```
+
+### Projects
+
+#### `Get-GitLabProject` (By Project ID)
+
+```powershell
+Get-GitLabProject 'mygroup/myproject'
 # OR
-Get-GitlabProject 42
+Get-GitLabProject 42
 ```
 
 ```plaintext
@@ -40,7 +52,7 @@ Get-GitlabProject 42
   42 myproject   mygroup   https://gitlab.mydomain.com/mygroup/myproject
 ```
 
-#### `Get-GitlabProject` (By Group ID)
+#### `Get-GitLabProject` (By Group ID)
 
 ```powershell
 Get-GitLabProject -GroupId 'mygroup/subgroup'

@@ -2,9 +2,9 @@
 <Configuration>
   <ViewDefinitions>
     <View>
-      <Name>GitlabGroup</Name>
+      <Name>GitLabGroup</Name>
       <ViewSelectedBy>
-        <TypeName>Gitlab.Group</TypeName>
+        <TypeName>GitLab.Group</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -39,9 +39,9 @@
       </TableControl>
     </View>
     <View>
-      <Name>GitlabProject</Name>
+      <Name>GitLabProject</Name>
       <ViewSelectedBy>
-        <TypeName>Gitlab.Project</TypeName>
+        <TypeName>GitLab.Project</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>

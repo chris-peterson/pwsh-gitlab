@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '0.1.0'
+    ModuleVersion = '0.2.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -22,7 +22,7 @@
     Copyright = '(c) 2021'
     
     # Description of the functionality provided by this module
-    Description = 'Extensions to make Gitlab CLI interaction feel like native Powershell'
+    Description = 'Extensions to make GitLab interaction feel like native Powershell'
     
     # Minimum version of the Windows PowerShell engine required by this module
     PowerShellVersion = '7.1'
@@ -68,6 +68,7 @@
     FunctionsToExport = @(
         # Groups
         'Get-GitLabGroup',
+        'Copy-GitLabGroupToLocalFileSystem'
 
         # Projects
         'Get-GitLabProject',
@@ -85,7 +86,9 @@
     VariablesToExport = ''
     
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    AliasesToExport = ''
+    AliasesToExport = @(
+        'Clone-GitLabGroup'
+    )
     
     # DSC resources to export from this module
     # DscResourcesToExport = @()

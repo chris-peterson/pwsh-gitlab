@@ -18,7 +18,7 @@ function Get-GitLabProject {
     if ($PSCmdlet.ParameterSetName -eq 'ById') {
         $Project = gitlab -o json project get --id $ProjectId | ConvertFrom-Json
         if ($Project) {
-            return $Project | New-WrapperObject -DisplayType 'Gitlab.Project'
+            return $Project | New-WrapperObject -DisplayType 'GitLab.Project'
         }
     }
 
@@ -58,7 +58,7 @@ function Move-GitLabProject {
     $Group = Get-GitLabGroup -GroupId $DestinationGroup
 
     if ($WhatIf) {
-        Write-Host "WhatIf: Moving '$($SourceProject.Name)' (project id: $($SourceProject.Id)) to '$($Group.FullPath)' (group id: $($Group.Id))"
+        Write-Host "WhatIf: moving '$($SourceProject.Name)' (project id: $($SourceProject.Id)) to '$($Group.FullPath)' (group id: $($Group.Id))"
     } else {
         gitlab group transfer-project --id $Group.Id --to-project-id $SourceProject.Id
     }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Types>
   <Type>
-    <Name>Gitlab.Group</Name>
+    <Name>GitLab.Group</Name>
     <Members>
     </Members>
   </Type>
   <Type>
-    <Name>Gitlab.Project</Name>
+    <Name>GitLab.Project</Name>
     <Members>
       <ScriptProperty>
         <Name>Group</Name>
