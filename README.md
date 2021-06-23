@@ -15,14 +15,9 @@ The python implementation is very well maintained and keeps up with GitLab's rap
 
 While one could use the python CLI as it is, this project adapts it to PowerShell adding higher-level functions (e.g. [`Clone-GitLabGroup`](https://github.com/chris-peterson/pwsh-gitlab#clone-gitlabgroup-aka-copy-gitlabgrouptolocalfilesystem)) as well as advanced reporting capabilities (using `Group-Object`, etc.)
 
-```mermaid
-graph TD;
-  pwsh-gitlab["pwsh-gitlab (this repo)"]
-  python-gitlab["python-gitlab cli"]
-  gitlab-api["fa:fa-gitlab GitLab API"]
-  pwsh-gitlab -- extends --> python-gitlab
-  python-gitlab -- delegates to --> gitlab-api
-```
+## Tech Stack
+
+![image](TechStack.png)
 
 ## Getting Started
 
