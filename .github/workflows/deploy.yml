@@ -31,3 +31,6 @@ jobs:
         with:
           modulePath: src/GitlabCli
           NuGetApiKey: ${{ secrets.PS_GALLERY_KEY }}
+    environment:
+      name: PowerShell Gallery
+      url: https://www.powershellgallery.com/packages/GitlabCli
