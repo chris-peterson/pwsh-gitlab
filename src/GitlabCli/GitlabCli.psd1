@@ -68,7 +68,8 @@
     FunctionsToExport = @(
         # Groups
         'Get-GitLabGroup',
-        'Copy-GitLabGroupToLocalFileSystem'
+        'Copy-GitLabGroupToLocalFileSystem',
+        'Remove-GitLabGroup',
 
         # Projects
         'Get-GitLabProject',

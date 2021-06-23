@@ -69,3 +69,24 @@ function Copy-GitLabGroupToLocalFileSystem {
         Set-Location $LocalPath
     }
 }
+
+function Remove-GitLabGroup {
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $GroupId,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf = $false
+    )
+
+    $Group = Get-GitLabGroup -GroupId $GroupId
+
+    if ($WhatIf) {
+        Write-Host "WhatIf: deleting '$($Group.Name)' (id: $($Group.Id))"
+    } else {
+        gitlab group delete --id $Group.Id
+    }
+}
