@@ -19,7 +19,7 @@ While one could use the python CLI as it is, this project adapts it to PowerShel
 graph TD;
   pwsh-gitlab["pwsh-gitlab (this repo)"]
   python-gitlab["python-gitlab cli"]
-  gitlab-api["GitLab API (v4)"]
+  gitlab-api["fa:fa-gitlab GitLab API"]
   pwsh-gitlab -- extends --> python-gitlab
   python-gitlab -- delegates to --> gitlab-api
 ```
