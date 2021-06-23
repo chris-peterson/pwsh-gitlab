@@ -36,6 +36,12 @@ Get-GitLabGroup 'mygroup'
 Clone-GitLabGroup 'mygroup'
 ```
 
+### `Move-GitLabProject`
+
+```powershell
+Move-GitLabProject -ProjectId 'this-project' -DestinationGroup 'that-group'
+```
+
 ### Projects
 
 #### `Get-GitLabProject` (By Project ID)
