@@ -60,12 +60,12 @@ function Copy-GitLabGroupToLocalFileSystem {
                 Pop-Location
             }
         }
-    $EndingPath = "$LocalPath/$GroupPath"
 
     Pop-Location
+
     if ($WhatIf) {
-        Write-Host "WhatIf: setting directory to $EndingPath"
+        Write-Host "WhatIf: setting directory to $LocalPath"
     } else {
-        Set-Location $EndingPath
+        Set-Location $LocalPath
     }
 }
