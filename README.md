@@ -1,8 +1,28 @@
 # Overview
 
-Powershell extensions for gitlab CLI.
+Interact with GitLab via PowerShell
 
 Extends (and requires) [python gitlab](https://github.com/python-gitlab/python-gitlab#python-gitlab).
+
+You might be thinking
+> Hold on, a wrapper around a wrapper around an API?
+
+Yes!
+
+While the GitLab API is extensive and well documented, there are some common issues that warrant a client-side "sdk" (e.g. retries on rate limit [or other transient] errors, logging, etc).
+
+The python implementation is very well maintained and keeps up with GitLab's rapidly evolving ecosystem.  It comes with a tab-completion module which enables fast discovery and integration.
+
+While one could use the python CLI as it is, this project adapts it to PowerShell adding higher-level functions (e.g. [`Clone-GitLabGroup`](https://github.com/chris-peterson/pwsh-gitlab#clone-gitlabgroup-aka-copy-gitlabgrouptolocalfilesystem)) as well as advanced reporting capabilities (using `Group-Object`, etc.)
+
+```mermaid
+graph TD;
+  pwsh-gitlab["pwsh-gitlab (this repo)"]
+  python-gitlab["python-gitlab cli"]
+  gitlab-api["GitLab API (v4)"]
+  pwsh-gitlab -- extends --> python-gitlab
+  python-gitlab -- delegates to --> gitlab-api
+```
 
 ## Getting Started
 
@@ -30,21 +50,21 @@ Get-GitLabGroup 'mygroup'
   23 mygroup  https://gitlab.mydomain.com/mygroup
 ```
 
+#### `Remove-GitLabGroup`
+
+```powershell
+Remove-GitLabGroup 'mygroup'
+```
+
 #### `Clone-GitLabGroup` (aka `Copy-GitLabGroupToLocalFileSystem`)
 
 ```powershell
 Clone-GitLabGroup 'mygroup'
 ```
 
-### `Move-GitLabProject`
-
-```powershell
-Move-GitLabProject -ProjectId 'this-project' -DestinationGroup 'that-group'
-```
-
 ### Projects
 
-#### `Get-GitLabProject` (By Project ID)
+#### `Get-GitLabProject` (by id)
 
 ```powershell
 Get-GitLabProject 'mygroup/myproject'
@@ -58,7 +78,7 @@ Get-GitLabProject 42
   42 myproject   mygroup   https://gitlab.mydomain.com/mygroup/myproject
 ```
 
-#### `Get-GitLabProject` (By Group ID)
+#### `Get-GitLabProject` (by group)
 
 ```powershell
 Get-GitLabProject -GroupId 'mygroup/subgroup'
@@ -75,8 +95,15 @@ Get-GitLabProject -GroupId 'mygroup/subgroup'
 
 _Optional Parameters_
 
-`-IncludeArchived` - Set this switch to include archived projects.
+`-IncludeArchived` - Set this switch to include archived projects.  _By default, archived projects are not returned_
+
+### `Transfer-GitLabProject` (aka `Move-GitLabProject`)
+
+```powershell
+Transfer-GitLabProject -ProjectId 'this-project' -DestinationGroup 'that-group'
+```
 
 ## References / Acknowledgements
 
 * [PSGitLab](https://github.com/ngetchell/PSGitLab)
+* [python-gitlab CLI documentation](https://python-gitlab.readthedocs.io/en/stable/)
