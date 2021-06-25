@@ -60,6 +60,7 @@
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     NestedModules = @(
         'Groups.psm1',
+        'MergeRequests.psm1',
         'Projects.psm1',
         'Utilities.psm1'
     )
@@ -70,6 +71,11 @@
         'Get-GitLabGroup',
         'Copy-GitLabGroupToLocalFileSystem',
         'Remove-GitLabGroup',
+
+        #MergeRequests
+        'Get-GitLabMergeRequest',
+        'Remove-GitlabMergeRequest',
+        'Update-GitlabMergeRequest',
 
         # Projects
         'Get-GitLabProject',
