@@ -134,7 +134,7 @@ function Update-GitlabMergeRequest {
         $WhatIf = $false
     )
 
-    $cmdToExecute="gitlab project-merge-request update --project-id $($ProjectId) --iid $($MergeRequestIID)"
+    $cmdToExecute="gitlab -o json project-merge-request update --project-id $($ProjectId) --iid $($MergeRequestIID)"
 
     if($Close) {
         $cmdToExecute="$cmdToExecute --state-event close"
@@ -155,6 +155,6 @@ function Update-GitlabMergeRequest {
     if($WhatIf) {
         Write-Host "Whatif: $cmdToExecute"
     } else {
-        Invoke-Expression $cmdToExecute
+        Invoke-Expression $cmdToExecute | ConvertFrom-Json | ForEach-Object { New-WrapperObject $_ -DisplayType 'Gitlab.MergeRequest' }
     }
 }
