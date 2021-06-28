@@ -39,6 +39,50 @@
       </TableControl>
     </View>
     <View>
+      <Name>GitLabMergeRequest</Name>
+      <ViewSelectedBy>
+        <TypeName>GitLab.MergeRequest</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>ID</Label>
+            <Width>5</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Author</Label>
+            <Width>16</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>40</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Url</Label>
+            <Width>80</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Iid</PropertyName>
+                <Alignment>Right</Alignment>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>AuthorName</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Title</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>WebUrl</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>GitLabProject</Name>
       <ViewSelectedBy>
         <TypeName>GitLab.Project</TypeName>

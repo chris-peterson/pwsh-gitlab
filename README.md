@@ -27,7 +27,7 @@ Install-Module -Name GitlabCli
 
 ## Global Switches
 
-`-WhatIf` : For mutable operations, gives a preview of what actions would be taken.
+`-WhatIf` : For mutable operations (or for some complex query operations), gives a preview of what actions would be taken.
 
 ## Examples
 
