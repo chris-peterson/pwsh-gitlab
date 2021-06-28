@@ -81,6 +81,7 @@
         'Get-GitLabProject',
         'Move-GitLabProject',
         'Copy-GitLabProject',
+        'Invoke-GitLabProjectArchival',
 
         # Utilities
         'ConvertTo-PascalCase',
@@ -97,7 +98,8 @@
     AliasesToExport = @(
         'Clone-GitLabGroup',
         'Transfer-GitLabProject',
-        'Fork-GitLabProject'
+        'Fork-GitLabProject',
+        'Archive-GitLabProject'
     )
     
     # DSC resources to export from this module

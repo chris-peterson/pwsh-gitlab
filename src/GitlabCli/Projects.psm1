@@ -103,3 +103,25 @@ function Copy-GitLabProject {
         }
     }
 }
+
+function Invoke-GitLabProjectArchival {
+    [Alias('Archive-GitLabProject')]
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $ProjectId,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf = $false
+    )
+
+    $ProjectId = $(Get-GitLabProject -ProjectId $ProjectId).Id
+
+    if ($WhatIf) {
+        Write-Host "WhatIf: Archiving project $ProjectId"
+    } else {
+        gitlab project archive --id $ProjectId
+    }
+}
