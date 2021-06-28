@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '0.2.0'
+    ModuleVersion = '0.3.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -72,10 +72,10 @@
         'Copy-GitLabGroupToLocalFileSystem',
         'Remove-GitLabGroup',
 
-        #MergeRequests
+        # MergeRequests
         'Get-GitLabMergeRequest',
-        'Remove-GitlabMergeRequest',
-        'Update-GitlabMergeRequest',
+        'Update-GitLabMergeRequest',
+        'Remove-GitLabMergeRequest',
 
         # Projects
         'Get-GitLabProject',
@@ -96,6 +96,7 @@
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
     AliasesToExport = @(
         'Clone-GitLabGroup',
+        'Close-GitLabMergeRequest',
         'Transfer-GitLabProject',
         'Fork-GitLabProject'
     )

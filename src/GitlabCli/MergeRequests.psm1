@@ -1,108 +1,89 @@
 function Get-GitLabMergeRequest {
-    [CmdletBinding(DefaultParameterSetName="ByGroupId")]
+    [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     param(
-        [Parameter(Position=0,Mandatory=$true,ParameterSetName="ByGroupId")]
-        [string]
-        $GroupId,
-
         [Parameter(Position=0, Mandatory=$true, ParameterSetName="ByProjectId")]
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName="MergeRequestIID")]
         [string]
         $ProjectId,
 
-        [Parameter(Position=1, Mandatory=$true, ParameterSetName="MergeRequestIID")]
+        [Parameter(Position=1, Mandatory=$false, ParameterSetName="ByProjectId")]
         [string]
-        $MergeRequestIID,
+        $MergeRequestId,
+
+        [Parameter(Position=0, Mandatory=$true,ParameterSetName="ByGroupId")]
+        [string]
+        $GroupId,
 
         [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
         [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
-        [ValidateSet("closed","opened","merged")]
+        [ValidateSet("closed", "opened", "merged")]
         [string]
         $State,
 
-        [Parameter(Mandatory=$False,ParameterSetName="ByGroupId")]
+        [Parameter(Mandatory=$false,ParameterSetName="ByGroupId")]
         [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
         [string]
         $CreatedAfter,
 
-        [Parameter(Mandatory=$False,ParameterSetName="ByGroupId")]
+        [Parameter(Mandatory=$false,ParameterSetName="ByGroupId")]
         [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
         [string]
         $CreatedBefore,
 
-        [Parameter(Mandatory=$False,ParameterSetName="ByGroupId")]
+        [Parameter(Mandatory=$false,ParameterSetName="ByGroupId")]
         [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
-        [ValidateSet("yes","no")]
-        [string]
-        $Wip,
+        [ValidateSet($null, $true, $false)]
+        [object]
+        $IsDraft,
 
         [Parameter(Mandatory=$false)]
         [switch]
-        $Whatif
+        $WhatIf
     )
 
-    function IsNullOrEmpty([string] $value) { [String]::IsNullOrEmpty($value)}
-    
-    $cmdToExecute = "gitlab -o json"
+    if ($ProjectId) {
+        $ProjectId = $(Get-GitLabProject -ProjectId $ProjectId).Id
+    }
 
-    if(IsNullOrEmpty $ProjectId) {
-        $cmdToExecute = "$cmdToExecute group-merge-request list --group-id $GroupId --all"
-    } elseif (IsNullOrEmpty $MergeRequestIID) {
-        $cmdToExecute = "$cmdToExecute project-merge-request list --project-id $ProjectId --all"   
+    if ($GroupId) {
+        $GroupId = $(Get-GitLabGroup -GroupId $GroupId).Id
+    }
+
+    $CmdToExecute = "gitlab -o json"
+    if ($MergeRequestId) {
+        $CmdToExecute += " project-merge-request get --project-id $ProjectId --iid $MergeRequestId"
+    } elseif ($ProjectId) {
+        $CmdToExecute += " project-merge-request list --project-id $ProjectId --all"
+    } elseif ($GroupId) {
+        $CmdToExecute += " group-merge-request list --group-id $GroupId --all"
     } else {
-        $cmdToExecute="$cmdToExecute project-merge-request get --project-id $ProjectId --iid $MergeRequestIID"
+        throw "Unsupported parameter combination"
     }
 
     if($State) {
-        $cmdToExecute = "$cmdToExecute --state $State"
+        $CmdToExecute += " --state $State"
     }
 
-    if(-not (IsNullOrEmpty $CreatedBefore)) {
-        $cmdToExecute = "$cmdToExecute --created-before $CreatedBefore"
+    if ($CreatedBefore) {
+        $CmdToExecute += " --created-before $CreatedBefore"
     }
 
-    if(-not (IsNullOrEmpty $CreatedAfter)) {
-        $cmdToExecute = "$cmdToExecute --created-after $CreatedAfter"
+    if ($CreatedAfter) {
+        $CmdToExecute += " --created-after $CreatedAfter"
     }
 
-    if(-not (IsNullOrEmpty $Wip)) {
-        $cmdToExecute = "$cmdToExecute --wip $Wip"
+    if ($IsDraft -ne $null) {
+        $CmdToExecute += " --wip $($IsDraft ? 'yes' : 'no')"
     }
     
-    if($Whatif) {
-        Write-Host "Whatif: $cmdToExecute"
+    if ($WhatIf) {
+        Write-Host "WhatIf: $CmdToExecute"
     } else {
-        $MergeRequests = Invoke-Expression $cmdToExecute | ConvertFrom-Json
+        $MergeRequests = Invoke-Expression $CmdToExecute | ConvertFrom-Json
         return $MergeRequests | ForEach-Object { New-WrapperObject $_ -DisplayType 'Gitlab.MergeRequest' }
     }
 }
 
-function Remove-GitlabMergeRequest {
-    [CmdletBinding()]
-    param(
-        [Parameter(Position=0, Mandatory=$true)]
-        [string]
-        $ProjectId,
-
-        [Parameter(Position=1, Mandatory=$true)]
-        [string]
-        $MergeRequestIID,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf = $false
-    )
-
-    $cmdToExecute = "gitlab project-merge-request delete --project-id $ProjectId --iid $MergeRequestIID"
-
-    if ($WhatIf) {
-        Write-Host "Whatif: $cmdToExecute"
-    } else {
-        Invoke-Expression $cmdToExecute
-    }
-}
-
-function Update-GitlabMergeRequest {
+function Update-GitLabMergeRequest {
     [CmdletBinding(DefaultParameterSetName="Update")]
     param(
         [Parameter(Position=0, Mandatory=$true)]
@@ -111,7 +92,7 @@ function Update-GitlabMergeRequest {
 
         [Parameter(Position=1, Mandatory=$true)]
         [string]
-        $MergeRequestIID,
+        $MergeRequestId,
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -121,11 +102,11 @@ function Update-GitlabMergeRequest {
         [string]
         $Description,
 
-        [Parameter(Mandatory=$false,ParameterSetName="Close")]
+        [Parameter(Mandatory=$false, ParameterSetName="Close")]
         [switch]
         $Close,
 
-        [Parameter(Mandatory=$false,ParameterSetName="Reopen")]
+        [Parameter(Mandatory=$false, ParameterSetName="Reopen")]
         [switch]
         $Reopen,
 
@@ -134,27 +115,55 @@ function Update-GitlabMergeRequest {
         $WhatIf = $false
     )
 
-    $cmdToExecute="gitlab -o json project-merge-request update --project-id $($ProjectId) --iid $($MergeRequestIID)"
+    $ProjectId = $(Get-GitLabProject -ProjectId $ProjectId).Id
 
-    if($Close) {
-        $cmdToExecute="$cmdToExecute --state-event close"
+    $CmdToExecute += "gitlab -o json project-merge-request update --project-id $($ProjectId) --iid $($MergeRequestId)"
+
+    if ($Close) {
+        $CmdToExecute += " --state-event close"
     }
 
-    if($Reopen) {
-        $cmdToExecute="$cmdToExecute --stat-event reopen"
+    if ($Reopen) {
+        $CmdToExecute += " --state-event reopen"
     }
     
-    if(-not [String]::IsNullOrEmpty($Title)) {
-        $cmdToExecute = "$cmdToExecute --title $($Title)"
+    if ($Title) {
+        $CmdToExecute += " --title '$Title'"
     }
 
-    if(-not [String]::IsNullOrEmpty($Description)) {
-        $cmdToExecute = "$cmdToExecute --description $($Description)"
+    if ($Description) {
+        $CmdToExecute += " --description '$Description'"
     }
 
     if($WhatIf) {
-        Write-Host "Whatif: $cmdToExecute"
+        Write-Host "WhatIf: $CmdToExecute"
     } else {
-        Invoke-Expression $cmdToExecute | ConvertFrom-Json | ForEach-Object { New-WrapperObject $_ -DisplayType 'Gitlab.MergeRequest' }
+        Invoke-Expression $CmdToExecute | ConvertFrom-Json | ForEach-Object { New-WrapperObject $_ -DisplayType 'Gitlab.MergeRequest' }
+    }
+}
+
+function Remove-GitLabMergeRequest {
+    [Alias("Close-GitLabMergeRequest")]
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [string]
+        $MergeRequestId,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf = $false
+    )
+
+    $ProjectId = $(Get-GitLabProject -ProjectId $ProjectId).Id
+
+    if ($WhatIf) {
+        Write-Host "WhatIf: closing merge request $MergeRequestId for project $ProjectId"
+    } else {
+        Update-GitLabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -Close
     }
 }

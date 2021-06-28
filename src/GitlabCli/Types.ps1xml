@@ -6,6 +6,15 @@
     </Members>
   </Type>
   <Type>
+    <Name>GitLab.MergeRequest</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>AuthorName</Name>
+        <GetScriptBlock>$this.Author.Name</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>GitLab.Project</Name>
     <Members>
       <ScriptProperty>
