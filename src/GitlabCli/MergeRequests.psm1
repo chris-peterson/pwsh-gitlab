@@ -142,8 +142,7 @@ function Update-GitLabMergeRequest {
     }
 }
 
-function Remove-GitLabMergeRequest {
-    [Alias("Close-GitLabMergeRequest")]
+function Close-GitLabMergeRequest {
     [CmdletBinding()]
     param(
         [Parameter(Position=0, Mandatory=$true)]
