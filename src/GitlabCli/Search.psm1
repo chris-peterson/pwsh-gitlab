@@ -22,8 +22,7 @@ function Search-GitLab {
             Invoke-GitLabSearch "blobs" $Search -Whatif
         } 
         else {
-            $initialResult = Invoke-GitLabSearch "blobs" $Search
-            $initialResult | Get-GitLabApiPagedResults -All | Foreach-Object { New-WrapperObject $_ -DisplayType 'GitLab.Blob' }
+            Invoke-GitLabSearch "blobs" $Search | Get-GitLabApiPagedResults -All | Foreach-Object { New-WrapperObject $_ -DisplayType 'GitLab.Blob' }
         }
     }
 
@@ -32,8 +31,7 @@ function Search-GitLab {
             Invoke-GitLabSearch "merge_requests" $Search -Whatif
         } 
         else {
-            $initialResult = Invoke-GitLabSearch "merge_requests" $Search
-            $initialResult | Get-GitLabApiPagedResults -All | Foreach-Object { New-WrapperObject $_ -DisplayType 'GitLab.MergeRequest' }
+            Invoke-GitLabSearch "merge_requests" $Search | Get-GitLabApiPagedResults -All | Foreach-Object { New-WrapperObject $_ -DisplayType 'GitLab.MergeRequest' }
         }
     }
 }
