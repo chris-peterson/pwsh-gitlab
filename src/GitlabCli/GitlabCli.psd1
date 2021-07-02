@@ -83,6 +83,9 @@
         'Copy-GitLabProject',
         'Invoke-GitLabProjectArchival',
 
+        #Search
+        'Search-Gitlab'
+
         # Utilities
         'ConvertTo-PascalCase',
         'New-WrapperObject'
