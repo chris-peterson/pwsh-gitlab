@@ -72,6 +72,7 @@
         'New-GitLabGroup',
         'Remove-GitLabGroup',
         'Copy-GitLabGroupToLocalFileSystem',
+        'Update-LocalGitLabGroup',
 
         # MergeRequests
         'Get-GitLabMergeRequest',
@@ -99,6 +100,7 @@
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
     AliasesToExport = @(
         'Clone-GitLabGroup',
+        'Pull-GitlabGroup',
         'Transfer-GitLabProject',
         'Fork-GitLabProject',
         'Archive-GitLabProject'

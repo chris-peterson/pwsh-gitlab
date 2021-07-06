@@ -119,3 +119,27 @@ function Copy-GitLabGroupToLocalFileSystem {
         Set-Location $LocalPath
     }
 }
+
+function Update-LocalGitLabGroup {
+    [Alias("Pull-GitLabGroup")]
+    [CmdletBinding()]
+    param (
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf = $false
+    )
+
+    Get-ChildItem -Recurse -Hidden -Directory |
+        Where-Object Name -match '.git$' |
+        ForEach-Object {
+            Push-Location
+
+            if ($WhatIf) {
+                Write-Host "WhatIf: git pull -p '$_'"
+            } else {
+                Set-Location -Path "$_/.."
+                git pull -p
+            }
+            Pop-Location
+    }
+}
