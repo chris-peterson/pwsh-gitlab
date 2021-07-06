@@ -12,6 +12,56 @@ function Get-GitLabGroup {
     return $Group | New-WrapperObject -DisplayType 'GitLab.Group'
 }
 
+function New-GitLabGroup {
+
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $GroupName,
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [string]
+        $ParentGroupName,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf = $false
+    )
+
+    $ParentGroup = Get-GitLabGroup -GroupId $ParentGroupName
+
+    if ($WhatIf) {
+        Write-Host "WhatIf: creating $($ParentGroup.visibility) gitlab group '$GroupName' in $ParentGroupName (id: $($ParentGroup.Id))"
+    } else {
+        $GroupId = gitlab -o json group create --name $GroupName --path $GroupName --parent-id $ParentGroup.Id --visibility $ParentGroup.visibility |
+            ConvertFrom-Json | Select-Object -ExpandProperty Id
+        Get-GitLabGroup -GroupId $GroupId
+    }
+}
+
+
+function Remove-GitLabGroup {
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $GroupId,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf = $false
+    )
+
+    $Group = Get-GitLabGroup -GroupId $GroupId
+
+    if ($WhatIf) {
+        Write-Host "WhatIf: deleting '$($Group.Name)' (id: $($Group.Id))"
+    } else {
+        gitlab group delete --id $Group.Id
+    }
+}
+
 function Copy-GitLabGroupToLocalFileSystem {
     [Alias("Clone-GitLabGroup")]
     [CmdletBinding()]
@@ -67,26 +117,5 @@ function Copy-GitLabGroupToLocalFileSystem {
         Write-Host "WhatIf: setting directory to $LocalPath"
     } else {
         Set-Location $LocalPath
-    }
-}
-
-function Remove-GitLabGroup {
-    [CmdletBinding()]
-    param (
-        [Parameter(Position=0, Mandatory=$true)]
-        [string]
-        $GroupId,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf = $false
-    )
-
-    $Group = Get-GitLabGroup -GroupId $GroupId
-
-    if ($WhatIf) {
-        Write-Host "WhatIf: deleting '$($Group.Name)' (id: $($Group.Id))"
-    } else {
-        gitlab group delete --id $Group.Id
     }
 }

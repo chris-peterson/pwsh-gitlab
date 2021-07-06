@@ -69,8 +69,9 @@
     FunctionsToExport = @(
         # Groups
         'Get-GitLabGroup',
-        'Copy-GitLabGroupToLocalFileSystem',
+        'New-GitLabGroup',
         'Remove-GitLabGroup',
+        'Copy-GitLabGroupToLocalFileSystem',
 
         # MergeRequests
         'Get-GitLabMergeRequest',
@@ -79,9 +80,9 @@
 
         # Projects
         'Get-GitLabProject',
+        'New-GitLabProject',
         'Move-GitLabProject',
         'Copy-GitLabProject',
-        'New-GitLabProject',
         'Invoke-GitLabProjectArchival',
 
         # Utilities
