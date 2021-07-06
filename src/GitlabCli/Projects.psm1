@@ -103,6 +103,31 @@ function Copy-GitLabProject {
         }
     }
 }
+function New-GitLabProject {
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $ProjectName,
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [string]
+        $DestinationGroup,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf = $false
+    )
+
+    $Group = Get-GitLabGroup -GroupId $DestinationGroup
+    if ($Group) {
+        if ($WhatIf) {
+            Write-Host "WhatIf: creating project '$ProjectName' in group $DesinationGroup (id: $($Group.Id))"
+        } else {
+            gitlab project create --namespace $Group.Id --name $ProjectName
+        }
+    }
+}
 
 function Invoke-GitLabProjectArchival {
     [Alias('Archive-GitLabProject')]

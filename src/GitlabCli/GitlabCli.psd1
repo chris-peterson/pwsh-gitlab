@@ -81,6 +81,7 @@
         'Get-GitLabProject',
         'Move-GitLabProject',
         'Copy-GitLabProject',
+        'New-GitLabProject',
         'Invoke-GitLabProjectArchival',
 
         # Utilities
