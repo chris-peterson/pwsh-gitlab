@@ -61,6 +61,7 @@
     NestedModules = @(
         'Groups.psm1',
         'MergeRequests.psm1',
+        'Pipelines.psm1',
         'Projects.psm1',
         'Utilities.psm1'
     )
@@ -78,6 +79,10 @@
         'Get-GitLabMergeRequest',
         'Update-GitLabMergeRequest',
         'Close-GitLabMergeRequest',
+
+        # Pipelines
+        'Get-GitLabPipeline',
+        'Get-GitLabPipelineSchedule',
 
         # Projects
         'Get-GitLabProject',

@@ -15,6 +15,15 @@
     </Members>
   </Type>
   <Type>
+    <Name>GitLab.Pipeline</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>UserName</Name>
+        <GetScriptBlock>$this.User.username</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>GitLab.Project</Name>
     <Members>
       <ScriptProperty>
