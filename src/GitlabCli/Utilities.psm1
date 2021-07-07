@@ -22,10 +22,10 @@ function ConvertTo-SnakeCase
 
 function New-WrapperObject {
     param(
-        [Parameter(Position=0, Mandatory=$True, ValueFromPipeline=$true)]
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipeline=$true)]
         $Object,
 
-        [Parameter(Position=1, Mandatory=$False)]
+        [Parameter(Position=1, Mandatory=$false)]
         [string]
         $DisplayType
     )

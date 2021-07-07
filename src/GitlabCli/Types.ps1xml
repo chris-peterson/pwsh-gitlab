@@ -36,4 +36,22 @@
       </ScriptProperty>
     </Members>
   </Type>
+  <Type>
+    <Name>GitLab.MergeRequestSearchResult</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>AuthorName</Name>
+        <GetScriptBlock>$this.Author.username</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>GitLab.BlobSearchResult</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>LineNumber</Name>
+        <GetScriptBlock>$this.Startline</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
 </Types>

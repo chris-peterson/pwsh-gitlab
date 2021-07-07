@@ -68,6 +68,10 @@ function Invoke-GitLabSearch {
         $WhatIf
     )
 
+    switch ($Scope) {
+        blobs { $DisplayType = 'GitLab.BlobSearchResult' }
+        merge_requests { $DisplayType = 'GitLab.MergeRequestSearchResult' }
+    }
     $GitlabConfig = Get-GitLabCliConfig
 
     $RequestParameters = @{
@@ -84,7 +88,7 @@ function Invoke-GitLabSearch {
         Invoke-RestMethod -Uri $RequestParameters.Uri -Method $RequestParameters.Method -Headers $RequestParameters.Headers -FollowRelLink -MaximumFollowRelLink $MaxPages |
             ForEach-Object { # Page
                 $_ | ForEach-Object { # Result
-                    $_ | New-WrapperObject }
+                    $_ | New-WrapperObject -DisplayType $DisplayType}
             }
     }
 }
