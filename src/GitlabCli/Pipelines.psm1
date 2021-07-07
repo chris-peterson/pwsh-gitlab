@@ -22,8 +22,9 @@ function Get-GitLabPipeline {
     $Project = Get-GitLabProject -ProjectId $ProjectId
 
     if ($PipelineId) {
-        $Pipeline = gitlab -o json project-pipeline get --id $PipelineId --project-id $Project.Id | ConvertFrom-Json
-        New-WrapperObject $Pipeline -DisplayType 'GitLab.Pipeline'
+        gitlab -o json project-pipeline get --id $PipelineId --project-id $Project.Id |
+            ConvertFrom-Json |
+            New-WrapperObject -DisplayType 'GitLab.Pipeline'
     } else {
         $Command = "gitlab -o json project-pipeline list --project-id $($Project.Id)"
         if ($Recent) {
@@ -33,10 +34,7 @@ function Get-GitLabPipeline {
         } else {
             throw "Must provide either an ID, or a range parameter (e.g. Recent/All)"
         }
-        $Pipelines = Invoke-Expression -Command $Command | ConvertFrom-Json
-        $Pipelines | ForEach-Object {
-            Get-GitLabPipeline -ProjectId $ProjectId -PipelineId $_.Id
-        }
+        Invoke-Expression -Command $Command | ConvertFrom-Json | ForEach-Object { $_ | New-WrapperObject -DisplayType 'GitLab.Pipeline'}
     }
 }
 

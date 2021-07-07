@@ -94,8 +94,7 @@
             <Width>8</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>User</Label>
-            <Width>10</Width>
+            <Width>32</Width>
           </TableColumnHeader>
           <TableColumnHeader>
             <Width>8</Width>
@@ -113,7 +112,7 @@
                 <Alignment>Right</Alignment>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>UserName</PropertyName>
+                <PropertyName>Ref</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Status</PropertyName>
