@@ -1,14 +1,14 @@
 function Search-GitLab {
     param(
-        [Parameter(Position=0,Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true)]
         [string]
-        $Search,
+        $Phrase,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory=$false, ParameterSetName="Blobs")]
         [switch]
         $Blobs,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory=$false, ParameterSetName="MergeRequests")]
         [switch]
         $MergeRequests,
 
@@ -19,97 +19,93 @@ function Search-GitLab {
 
     if($Blobs) {
         if($WhatIf) {
-            Invoke-GitLabSearch "blobs" $Search -Whatif
+            Invoke-GitLabSearch "blobs" $Phrase -Whatif
         } 
         else {
-            Invoke-GitLabSearch "blobs" $Search | Get-GitLabApiPagedResults -All | Foreach-Object { New-WrapperObject $_ -DisplayType 'GitLab.Blob' }
+            Invoke-GitLabSearch "blobs" $Phrase | Get-GitLabApiPagedResults -All |
+                Foreach-Object { $_ | New-WrapperObject }
         }
-    }
-
-    if($MergeRequests) {
+    } elseif($MergeRequests) {
         if($WhatIf) {
-            Invoke-GitLabSearch "merge_requests" $Search -Whatif
+            Invoke-GitLabSearch "merge_requests" $Phrase -WhatIf
         } 
         else {
-            Invoke-GitLabSearch "merge_requests" $Search | Get-GitLabApiPagedResults -All | Foreach-Object { New-WrapperObject $_ -DisplayType 'GitLab.MergeRequest' }
+            Invoke-GitLabSearch "merge_requests" $Phrase | Get-GitLabApiPagedResults -All |
+                Foreach-Object { $_ | New-WrapperObject }
         }
+    } else {
+        throw "Must search either blobs OR merge requests"
     }
 }
 
-Function Invoke-GitLabSearch {
+function Invoke-GitLabSearch {
     param(
         [Parameter(Mandatory=$true)]
-        [ValidateSet("blobs","merge_requests")]
+        [ValidateSet("blobs", "merge_requests")]
         [string]
         $Scope,
 
         [Parameter(Mandatory=$true)]
         [string]
-        $Search,
+        $Phrase,
 
         [Parameter(Mandatory=$false)]
         [switch]
         $WhatIf
     )
 
-    $gitlabConfig = Get-GitLabCliConfig
+    $GitlabConfig = Get-GitLabCliConfig
 
-    $requestParameters = @{
+    $RequestParameters = @{
         Method="GET"
-        Uri= "$($gitlabConfig.Url)/api/v$($gitlabConfig.ApiVersion)/search"
-        Headers=@{ "PRIVATE-TOKEN"=$gitlabConfig.Token }
+        Uri= "$($GitlabConfig.Url)/api/v$($GitlabConfig.ApiVersion)/search"
+        Headers=@{ "PRIVATE-TOKEN"=$GitlabConfig.Token }
     }
 
-    $requestParameters.Uri += "?scope=$Scope&search=" + [System.Web.HttpUtility]::UrlEncode($Search)
+    $RequestParameters.Uri += "?scope=$Scope&search=" + [System.Web.HttpUtility]::UrlEncode($Phrase)
 
-    $requestResults = Invoke-WebRequest @requestParameters
-
-    if($requestResults.StatusCode -gt 399) {
-        throw "$($initialResult.StatusCode) $($initialResult.StatusDescription)"
+    if ($WhatIf) {
+        Write-Host "WhatIf: $($RequestParameters | ConvertTo-Json)"
+    } else {
+        $Results = Invoke-RestMethod @RequestParameters
     }
-
-    return $requestResults
+    $Results
 }
 
 function Get-GitLabApiPagedResults {
     [CmdletBinding()]
     param(
-        [Parameter(ValueFromPipeline)]
-        [object] $gitlabResponse,
+        [Parameter(ValueFromPipeline=$true)]
+        $GitlabResponse,
 
         [Parameter(Mandatory=$false)]
         [switch]
         $All
     )
 
-    $gitlabConfig = Get-GitLabCliConfig
-    $baseSearchRequestParameters = @{
+    $GitlabConfig = Get-GitLabCliConfig
+    $BaseSearchRequestParameters = @{
         Method="GET"
-        Headers=@{ "PRIVATE-TOKEN"=$gitlabConfig.Token }
+        Headers=@{ "PRIVATE-TOKEN"=$GitlabConfig.Token }
     }
 
-    [object[]] $projects = $gitlabResponse.Content | ConvertFrom-Json
-    try {
-        while($null -ne $gitlabResponse.RelationLink.next) {
-            Write-Verbose "Getting Next Page $($gitlabResponse.RelationLink.next)"
-            $loopParams = $baseSearchRequestParameters + @{
-                Uri = $gitlabResponse.RelationLink.next
-            }
-            $gitlabResponse = Invoke-WebRequest @loopParams
-            $gitlabResponse.Content | ConvertFrom-Json
-        }  
-    }
-    catch {
-        throw
-    }
-    
+    while ($GitlabResponse.RelationLink.next) {
+        Write-Verbose "Getting Next Page $($GitlabResponse.RelationLink.next)"
+        $LoopParams = $BaseSearchRequestParameters + @{
+            Uri = $GitlabResponse.RelationLink.next
+        }
+        $GitlabResponse = Invoke-RestMethod @LoopParams
+        $GitlabResponse.Content | ConvertFrom-Json
+    }  
 }
+
 function Get-GitLabCliConfig {
-    $captures = (Get-Content '~/.python-gitlab.cfg' | Select-String -Pattern 'private_token = (?<Token>.*)','url = (?<Url>.*)','ap_version = (?<ApiVersion>.*)' -AllMatches).Matches.Groups | Where-Object -Property Name -ne "0" 
-    $result = New-Object psobject
-    foreach($capture in $captures) {
-        $result | Add-Member -NotePropertyName $capture.Name -NotePropertyValue $capture.Value.TrimEnd()
+    $Captures = (Get-Content '~/.python-gitlab.cfg' |
+        Select-String -Pattern 'private_token = (?<Token>.*)','url = (?<Url>.*)','api_version = (?<ApiVersion>.*)' -AllMatches).Matches.Groups | Where-Object -Property Name -ne "0" 
+    $Result = New-Object PSObject
+    $Captures | ForEach-Object {
+        $Result | Add-Member -NotePropertyName $_.Name -NotePropertyValue $_.Value.TrimEnd()
     }
 
-    return $result
+    $Result
 }
