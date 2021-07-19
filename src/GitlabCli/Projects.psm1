@@ -65,6 +65,31 @@ function Move-GitLabProject {
     }
 }
 
+function Rename-GitLabProject {
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [string]
+        $NewName,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf = $false
+    )
+
+    $SourceProject = Get-GitLabProject -ProjectId $ProjectId
+
+    if ($WhatIf) {
+        Write-Host "WhatIf: renaming '$($SourceProject.Name)' (project id: $($SourceProject.Id)) to '$NewName'"
+    } else {
+        gitlab project update --id $SourceProject.Id --name $NewName --path $NewName | Out-Null
+    }
+}
+
 function Copy-GitLabProject {
     [Alias("Fork-GitLabProject")]
     [CmdletBinding()]

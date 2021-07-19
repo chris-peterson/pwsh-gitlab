@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '0.5.0'
+    ModuleVersion = '0.6.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -89,6 +89,7 @@
         'Get-GitLabProject',
         'New-GitLabProject',
         'Move-GitLabProject',
+        'Rename-GitLabProject',
         'Copy-GitLabProject',
         'Invoke-GitLabProjectArchival',
 
