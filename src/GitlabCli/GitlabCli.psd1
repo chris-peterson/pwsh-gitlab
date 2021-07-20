@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '0.6.0'
+    ModuleVersion = '0.7.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -64,6 +64,7 @@
         'Pipelines.psm1',
         'Projects.psm1',
         'Search.psm1',
+        'Users.psm1',
         'Utilities.psm1'
     )
     
@@ -94,7 +95,12 @@
         'Invoke-GitLabProjectArchival',
 
         # Search
-        'Search-GitLab'
+        'Search-GitLab',
+
+        # User
+        'Get-GitLabUser',
+        'Get-GitLabGroupMembership',
+        'Add-GitLabUserToGroup',
 
         # Utilities
         'ConvertTo-PascalCase',

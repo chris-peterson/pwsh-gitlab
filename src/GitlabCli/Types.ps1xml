@@ -54,4 +54,13 @@
       </ScriptProperty>
     </Members>
   </Type>
+  <Type>
+    <Name>GitLab.User</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Status</Name>
+        <GetScriptBlock>$this.State</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
 </Types>
