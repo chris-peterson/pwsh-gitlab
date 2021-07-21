@@ -79,6 +79,7 @@
 
         # MergeRequests
         'Get-GitLabMergeRequest',
+        'Get-GitLabMergeRequestChangeSummary',
         'Update-GitLabMergeRequest',
         'Close-GitLabMergeRequest',
 

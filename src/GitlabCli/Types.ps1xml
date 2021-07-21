@@ -12,6 +12,18 @@
         <Name>AuthorName</Name>
         <GetScriptBlock>$this.Author.Name</GetScriptBlock>
       </ScriptProperty>
+      <ScriptProperty>
+        <Name>AssigneeName</Name>
+        <GetScriptBlock>$this.Assignee.Name</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>ProjectName</Name>
+        <GetScriptBlock>$this.WebUrl -match '://[\w\.]+/(?&lt;ProjectPath&gt;.*)/-' | Out-Null; $Matches['ProjectPath']</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>ChangeSummary</Name>
+        <GetScriptBlock>$this | Get-GitLabMergeRequestChangeSummary</GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
   <Type>

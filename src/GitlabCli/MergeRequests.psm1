@@ -83,6 +83,35 @@ function Get-GitLabMergeRequest {
     }
 }
 
+function Get-GitLabMergeRequestChangeSummary {
+    param (
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipeline=$true)]
+        $MergeRequest
+    )
+    $MrDiff = gitlab -o json project-merge-request-diff list --project-id $MergeRequest.ProjectId --mr-iid $MergeRequest.Iid |
+        ConvertFrom-Json |
+        Where-Object state -ieq 'collected'
+    $Summary = gitlab -o json project-merge-request-diff get --project-id $MergeRequest.ProjectId --mr-iid $MergeRequest.Iid --id $MrDiff.id |
+        ConvertFrom-Json |
+        Select-Object -ExpandProperty commits |
+        ForEach-Object {
+            $Commit = gitlab -o json project-commit get --project-id $MergeRequest.ProjectId --id $_.id | ConvertFrom-Json
+            [PSCustomObject]@{
+                AuthorName = $Commit.author_name
+                AuthoredDate = $Commit.authored_date
+                Stats = $Commit.stats
+            }
+        }
+    [PSCustomObject]@{
+        Authors = [string]::Join(', ', $($Summary.AuthorName | Select-Object -Unique | Sort-Object))
+        OldestChange = $Summary.AuthoredDate | Sort-Object | Select-Object -First 1
+        Commits = $Summary.Stats | Measure-Object | Select-Object -ExpandProperty Count
+        Additions = $Summary.Stats.additions | Measure-Object -Sum | Select-Object -ExpandProperty Sum
+        Deletions = $Summary.Stats.deletions | Measure-Object -Sum | Select-Object -ExpandProperty Sum
+        Total = $Summary.Stats.total | Measure-Object -Sum | Select-Object -ExpandProperty Sum
+    }
+}
+
 function Update-GitLabMergeRequest {
     [CmdletBinding(DefaultParameterSetName="Update")]
     param(
