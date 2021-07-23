@@ -17,7 +17,9 @@ While one could use the python CLI as it is, this project adapts it to PowerShel
 
 ## Status
 
-[![CI](https://github.com/chris-peterson/pwsh-gitlab/actions/workflows/deploy.yml/badge.svg)](https://github.com/chris-peterson/pwsh-gitlab/actions/workflows/deploy.yml)
+![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/GitLabCli)
+![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/GitlabCli?color=green)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/chris-peterson/pwsh-gitlab/CI?label=ci)
 
 ## Tech Stack
 
