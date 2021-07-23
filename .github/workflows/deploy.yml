@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Publish Module to PowerShell Gallery
-        uses: chris-peterson/publish-powershell-module-action@patched
+        uses: pcgeek86/publish-powershell-module-action@99981d10a20c344d474a288764bb8e3d27f64de9
         id: publish-module
         with:
           modulePath: src/GitlabCli
