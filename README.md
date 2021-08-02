@@ -110,6 +110,34 @@ _Optional Parameters_
 Transfer-GitLabProject -ProjectId 'this-project' -DestinationGroup 'that-group'
 ```
 
+### Merge Requests
+
+#### `New-GitLabMergeRequest` (aka `new-mr`)
+
+```powershell
+New-GitLabMergeRequest
+```
+
+_Optional Parameters_
+
+`-ProjectId` - Defaults to local git context
+
+`-SourceBranch` - Defaults to local git context
+
+`-TargetBranch` - Defaults to the default branch set in repository config (typically `main`)
+
+`-Title` - Defaults to space-delimited source branch name
+
+`-Follow` - If provided, follow the URL after creation
+
+Short version:
+
+```powershell
+new-mr -Follow
+```
+
+Creates a new merge request and follows the URL.
+
 ## References / Acknowledgements
 
 * [PSGitLab](https://github.com/ngetchell/PSGitLab)

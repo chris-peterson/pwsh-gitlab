@@ -83,6 +83,7 @@
 
         # MergeRequests
         'Get-GitLabMergeRequest'
+        'New-GitLabMergeRequest'
         'Get-GitLabMergeRequestChangeSummary'
         'Update-GitLabMergeRequest'
         'Close-GitLabMergeRequest'
@@ -125,6 +126,9 @@
         'Transfer-GitLabProject'
         'Fork-GitLabProject'
         'Archive-GitLabProject'
+
+        # short names
+        'new-mr'
     )
     
     # DSC resources to export from this module
