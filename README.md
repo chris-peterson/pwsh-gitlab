@@ -35,6 +35,10 @@ Install-Module -Name GitlabCli
 
 `-WhatIf` : For mutable operations (or for some complex query operations), gives a preview of what actions would be taken.
 
+## Global Behaviors
+
+If invoking commands from within a git repository, `.` can be used for `ProjectId` / `BranchName` to use the local context.
+
 ## Examples
 
 ### Groups
@@ -71,6 +75,8 @@ Clone-GitLabGroup 'mygroup'
 Get-GitLabProject 'mygroup/myproject'
 # OR
 Get-GitLabProject 42
+# OR
+Get-GitLabProject . # use local context
 ```
 
 ```plaintext
