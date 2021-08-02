@@ -112,6 +112,66 @@ function Get-GitLabMergeRequestChangeSummary {
     }
 }
 
+function New-GitLabMergeRequest {
+    [CmdletBinding()]
+    [Alias("new-mr")]
+    param(
+        [Parameter(Position=0, Mandatory=$false)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Position=1, Mandatory=$false)]
+        [string]
+        $SourceBranch,
+
+        [Parameter(Position=2, Mandatory=$false)]
+        [string]
+        $TargetBranch,
+
+        [Parameter(Position=3, Mandatory=$false)]
+        [string]
+        $Title,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $Follow,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $WhatIf
+    )
+
+    if (-not $ProjectId) {
+        $ProjectId = '.'
+    }
+
+    $Project = Get-GitLabProject -ProjectId $ProjectId
+
+    if (-not $TargetBranch) {
+        $TargetBranch = $Project.DefaultBranch
+    }
+    if (-not $SourceBranch) {
+        $SourceBranch = $(Get-LocalGitContext).Branch
+    }
+    if (-not $Title) {
+        $Title = $SourceBranch.Replace('-', ' ').Replace('_', ' ')
+    }
+
+
+    if ($WhatIf) {
+        Write-Host "WhatIf: create merge request of '$SourceBranch' to '$TargetBranch' in '$($Project.PathWithNamespace)'"
+    } else {
+        $MergeRequest = $(gitlab -o json project-merge-request create --project-id $($Project.Id) --source-branch $SourceBranch --target-branch $TargetBranch --title "$Title") |
+            ConvertFrom-Json |
+            ForEach-Object { New-WrapperObject $_ -DisplayType 'GitLab.MergeRequest' }
+        if ($Follow) {
+            Start-Process $MergeRequest.WebUrl
+        }
+
+        $MergeRequest | Format-Table -AutoSize
+    }
+}
+
 function Update-GitLabMergeRequest {
     [CmdletBinding(DefaultParameterSetName="Update")]
     param(
@@ -167,7 +227,7 @@ function Update-GitLabMergeRequest {
     if($WhatIf) {
         Write-Host "WhatIf: $CmdToExecute"
     } else {
-        Invoke-Expression $CmdToExecute | ConvertFrom-Json | ForEach-Object { New-WrapperObject $_ -DisplayType 'Gitlab.MergeRequest' }
+        Invoke-Expression $CmdToExecute | ConvertFrom-Json | ForEach-Object { New-WrapperObject $_ -DisplayType 'GitLab.MergeRequest' }
     }
 }
 

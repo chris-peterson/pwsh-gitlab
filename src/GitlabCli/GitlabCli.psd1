@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '0.7.1'
+    ModuleVersion = '0.8.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -59,52 +59,57 @@
     
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     NestedModules = @(
-        'Groups.psm1',
-        'MergeRequests.psm1',
-        'Pipelines.psm1',
-        'Projects.psm1',
-        'Search.psm1',
-        'Users.psm1',
+        'Git.psm1'
+        'Groups.psm1'
+        'MergeRequests.psm1'
+        'Pipelines.psm1'
+        'Projects.psm1'
+        'Search.psm1'
+        'Users.psm1'
         'Utilities.psm1'
     )
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @(
+        #Git
+        'Get-LocalGitContext'
+
         # Groups
-        'Get-GitLabGroup',
-        'New-GitLabGroup',
-        'Remove-GitLabGroup',
-        'Copy-GitLabGroupToLocalFileSystem',
-        'Update-LocalGitLabGroup',
+        'Get-GitLabGroup'
+        'New-GitLabGroup'
+        'Remove-GitLabGroup'
+        'Copy-GitLabGroupToLocalFileSystem'
+        'Update-LocalGitLabGroup'
 
         # MergeRequests
-        'Get-GitLabMergeRequest',
-        'Get-GitLabMergeRequestChangeSummary',
-        'Update-GitLabMergeRequest',
-        'Close-GitLabMergeRequest',
+        'Get-GitLabMergeRequest'
+        'New-GitLabMergeRequest'
+        'Get-GitLabMergeRequestChangeSummary'
+        'Update-GitLabMergeRequest'
+        'Close-GitLabMergeRequest'
 
         # Pipelines
-        'Get-GitLabPipeline',
-        'Get-GitLabPipelineSchedule',
+        'Get-GitLabPipeline'
+        'Get-GitLabPipelineSchedule'
 
         # Projects
-        'Get-GitLabProject',
-        'New-GitLabProject',
-        'Move-GitLabProject',
-        'Rename-GitLabProject',
-        'Copy-GitLabProject',
-        'Invoke-GitLabProjectArchival',
+        'Get-GitLabProject'
+        'New-GitLabProject'
+        'Move-GitLabProject'
+        'Rename-GitLabProject'
+        'Copy-GitLabProject'
+        'Invoke-GitLabProjectArchival'
 
         # Search
-        'Search-GitLab',
+        'Search-GitLab'
 
         # User
-        'Get-GitLabUser',
-        'Get-GitLabGroupMembership',
-        'Add-GitLabUserToGroup',
+        'Get-GitLabUser'
+        'Get-GitLabGroupMembership'
+        'Add-GitLabUserToGroup'
 
         # Utilities
-        'ConvertTo-PascalCase',
+        'ConvertTo-PascalCase'
         'New-WrapperObject'
     )
     
@@ -116,11 +121,14 @@
     
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
     AliasesToExport = @(
-        'Clone-GitLabGroup',
-        'Pull-GitlabGroup',
-        'Transfer-GitLabProject',
-        'Fork-GitLabProject',
+        'Clone-GitLabGroup'
+        'Pull-GitlabGroup'
+        'Transfer-GitLabProject'
+        'Fork-GitLabProject'
         'Archive-GitLabProject'
+
+        # short names
+        'new-mr'
     )
     
     # DSC resources to export from this module

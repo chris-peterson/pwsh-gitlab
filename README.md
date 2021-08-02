@@ -35,6 +35,10 @@ Install-Module -Name GitlabCli
 
 `-WhatIf` : For mutable operations (or for some complex query operations), gives a preview of what actions would be taken.
 
+## Global Behaviors
+
+If invoking commands from within a git repository, `.` can be used for `ProjectId` / `BranchName` to use the local context.
+
 ## Examples
 
 ### Groups
@@ -71,6 +75,8 @@ Clone-GitLabGroup 'mygroup'
 Get-GitLabProject 'mygroup/myproject'
 # OR
 Get-GitLabProject 42
+# OR
+Get-GitLabProject . # use local context
 ```
 
 ```plaintext
@@ -103,6 +109,34 @@ _Optional Parameters_
 ```powershell
 Transfer-GitLabProject -ProjectId 'this-project' -DestinationGroup 'that-group'
 ```
+
+### Merge Requests
+
+#### `New-GitLabMergeRequest` (aka `new-mr`)
+
+```powershell
+New-GitLabMergeRequest
+```
+
+_Optional Parameters_
+
+`-ProjectId` - Defaults to local git context
+
+`-SourceBranch` - Defaults to local git context
+
+`-TargetBranch` - Defaults to the default branch set in repository config (typically `main`)
+
+`-Title` - Defaults to space-delimited source branch name
+
+`-Follow` - If provided, follow the URL after creation
+
+Short version:
+
+```powershell
+new-mr -Follow
+```
+
+Creates a new merge request and follows the URL.
 
 ## References / Acknowledgements
 

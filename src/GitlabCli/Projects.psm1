@@ -16,6 +16,9 @@ function Get-GitLabProject {
     )
 
     if ($PSCmdlet.ParameterSetName -eq 'ById') {
+        if ($ProjectId -eq '.') {
+            $ProjectId = $(Get-LocalGitContext).Repo
+        }
         $Project = gitlab -o json project get --id $ProjectId | ConvertFrom-Json
         if ($Project) {
             return $Project | New-WrapperObject -DisplayType 'GitLab.Project'
