@@ -72,20 +72,18 @@ function Invoke-GitLabSearch {
         blobs { $DisplayType = 'GitLab.BlobSearchResult' }
         merge_requests { $DisplayType = 'GitLab.MergeRequestSearchResult' }
     }
-    $GitlabConfig = Get-GitLabCliConfig
-
-    $RequestParameters = @{
-        Method = "GET"
-        Uri = "$($GitlabConfig.Url)/api/v$($GitlabConfig.ApiVersion)/search?per_page=$($GitlabConfig.PageSize)&scope=$Scope&search=$([System.Web.HttpUtility]::UrlEncode($Phrase))"
-        Headers = @{ "PRIVATE-TOKEN" = $GitlabConfig.Token }
+    $PageSize = 20
+    $MaxPages = [Math]::Max(1, $MaxResults / $PageSize)
+    $Query = @{
+        'per_page' = $PageSize
+        'scope' = $Scope
+        'search' = $Phrase
     }
 
-    $MaxPages = [Math]::Max(1, $MaxResults / $GitlabConfig.PageSize)
-
     if ($WhatIf) {
-        Write-Host "WhatIf: $($RequestParameters | ConvertTo-Json) -- up to $MaxPages pages of results"
+        Write-Host "WhatIf: $($Query | ConvertTo-Json) -- up to $MaxPages pages of results"
     } else {
-        Invoke-RestMethod -Uri $RequestParameters.Uri -Method $RequestParameters.Method -Headers $RequestParameters.Headers -FollowRelLink -MaximumFollowRelLink $MaxPages |
+        Invoke-GitlabApi GET "search" $Query -MaximumFollowRelLink $MaxPages |
             ForEach-Object { # Page
                 $_ | ForEach-Object { # Result
                     $_ | New-WrapperObject -DisplayType $DisplayType}

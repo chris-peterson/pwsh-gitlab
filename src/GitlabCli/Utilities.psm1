@@ -20,6 +20,54 @@ function ConvertTo-SnakeCase
     return [regex]::replace($Value, '(?<=.)(?=[A-Z])', '_').ToLower()
 }
 
+function Invoke-GitlabApi {
+    param(
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $HttpMethod,
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [string]
+        $Path,
+
+        [Parameter(Position=2, Mandatory=$false)]
+        [hashtable]
+        $Query = @{},
+
+        [Parameter()]
+        [int]
+        $MaximumFollowRelLink = 0
+    )
+
+    $Headers = @{
+        'Accept' = 'application/json'
+    }
+    if($env:GITLAB_PRIVATE_TOKEN -or $env:GITLAB_ACCESS_TOKEN) {
+        $Headers['Authorization'] = "Bearer $($env:GITLAB_PRIVATE_TOKEN ?? $env:GITLAB_ACCESS_TOKEN)"
+    }
+    $GitlabUrl = $env:GITLAB_URL ?? 'https://gitlab.com'
+
+    $SerializedQuery = ''
+    $Delimiter = '?'
+    if($Query.Count -gt 0) {
+        foreach($Name in $Query.Keys) {
+            $SerializedQuery += $Delimiter
+            $SerializedQuery += "$Name="
+            $SerializedQuery += [System.Net.WebUtility]::UrlDecode($Query[$Name])
+            $Delimiter = '&'
+        }
+    }
+    $Uri = "$GitlabUrl/api/v4/$Path$SerializedQuery"
+
+    Write-Debug "$HttpMethod $Uri"
+    $RestMethodParams = @{}
+    if($MaximumFollowRelLink -gt 0) {
+        $RestMethodParams['FollowRelLink'] = $true
+        $RestMethodParams['MaximumFollowRelLink'] = $MaximumFollowRelLink
+    }
+    Invoke-RestMethod -Method $HttpMethod -Uri $Uri -Header $Headers @RestMethodParams
+}
+
 function New-WrapperObject {
     param(
         [Parameter(Position=0, Mandatory=$true, ValueFromPipeline=$true)]

@@ -7,7 +7,9 @@ function Get-GitLabGroup {
         $GroupId
     )
 
-    $Group = gitlab -o json group get --id $GroupId | ConvertFrom-Json
+    $Group = Invoke-GitlabApi GET "groups/$([System.Net.WebUtility]::UrlEncode($GroupId))" @{
+        'with_projects' = 'false'
+    }
 
     return $Group | New-WrapperObject -DisplayType 'GitLab.Group'
 }

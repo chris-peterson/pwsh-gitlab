@@ -19,23 +19,26 @@ function Get-GitLabProject {
         if ($ProjectId -eq '.') {
             $ProjectId = $(Get-LocalGitContext).Repo
         }
-        $Project = gitlab -o json project get --id $ProjectId | ConvertFrom-Json
+        $Project = Invoke-GitlabApi "GET" "projects/$([System.Net.WebUtility]::UrlEncode($ProjectId))"
         if ($Project) {
             return $Project | New-WrapperObject -DisplayType 'GitLab.Project'
         }
     }
 
     if ($PSCmdlet.ParameterSetName -eq 'ByGroup') {
-        $Group = $(gitlab -o json group get --id $GroupId | ConvertFrom-Json)
-        $Projects = gitlab -o json group-project list --group-id $($Group.id) --include-subgroups true --all | ConvertFrom-Json
+        $Group = Get-GitlabGroup $GroupId
+        $Projects = Invoke-GitlabApi GET "groups/$([System.Net.WebUtility]::UrlEncode($GroupId))/projects" @{
+            'include_subgroups' = 'true'
+        }
+        Write-Debug "Project.Count: $($Projects.Count)"
         if ($Projects) {
             if (-not $IncludeArchived) {
-                $Projects = $Projects | Where-Object -not Archived
+                $Projects = $Projects | Where-Object -not archived
             }
             
             $Projects |
-                Where-Object { $($_.path_with_namespace).StartsWith($Group.full_path) } |
-                ForEach-Object { Get-GitLabProject -ProjectId $_.id } |
+                Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
+                ForEach-Object { $_ | New-WrapperObject -DisplayType 'GitLab.Project' } |
                 Sort-Object -Property 'Name'
         }
     }
@@ -64,7 +67,9 @@ function Move-GitLabProject {
     if ($WhatIf) {
         Write-Host "WhatIf: moving '$($SourceProject.Name)' (project id: $($SourceProject.Id)) to '$($Group.FullPath)' (group id: $($Group.Id))"
     } else {
-        gitlab project transfer-project --id $SourceProject.Id --to-namespace $Group.Id
+        Invoke-GitlabApi PUT "projects/$($SourceProject.Id)/transfer" @{
+            'namespace' = $Group.Id
+        } | Out-Null
     }
 }
 
@@ -89,7 +94,10 @@ function Rename-GitLabProject {
     if ($WhatIf) {
         Write-Host "WhatIf: renaming '$($SourceProject.Name)' (project id: $($SourceProject.Id)) to '$NewName'"
     } else {
-        gitlab project update --id $SourceProject.Id --name $NewName --path $NewName | Out-Null
+        Invoke-GitlabApi PUT "projects/$($SourceProject.Id)" @{
+            'name' = $NewName
+            'path' = $NewName
+        } | Out-Null
     }
 }
 
