@@ -32,13 +32,14 @@ function New-GitLabGroup {
     )
 
     $ParentGroup = Get-GitLabGroup -GroupId $ParentGroupName
-
-    if ($WhatIf) {
-        Write-Host "WhatIf: creating $($ParentGroup.visibility) gitlab group '$GroupName' in $ParentGroupName (id: $($ParentGroup.Id))"
-    } else {
-        $GroupId = gitlab -o json group create --name $GroupName --path $GroupName --parent-id $ParentGroup.Id --visibility $ParentGroup.visibility |
-            ConvertFrom-Json | Select-Object -ExpandProperty Id
-        Get-GitLabGroup -GroupId $GroupId
+    $GroupId = Invoke-GitlabApi POST "groups" @{
+        name = $GroupName
+        path = $GroupName
+        parent_id = $ParentGroup.Id
+        visibility = $ParentGroup.Visibility
+    } -WhatIf:$WhatIf | Select-Object -ExcludeProperty id
+    if(-not $WhatIf) {
+        return Get-GitLabGroup -GroupId $GroupId
     }
 }
 
@@ -57,11 +58,7 @@ function Remove-GitLabGroup {
 
     $Group = Get-GitLabGroup -GroupId $GroupId
 
-    if ($WhatIf) {
-        Write-Host "WhatIf: deleting '$($Group.Name)' (id: $($Group.Id))"
-    } else {
-        gitlab group delete --id $Group.Id
-    }
+    Invoke-GitlabApi DELETE "groups/$([System.Net.WebUtility]::UrlEncode($Group.Id))" -WhatIf:$WhatIf | Out-Null
 }
 
 function Copy-GitLabGroupToLocalFileSystem {

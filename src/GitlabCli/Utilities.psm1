@@ -36,7 +36,11 @@ function Invoke-GitlabApi {
 
         [Parameter()]
         [int]
-        $MaximumFollowRelLink = 0
+        $MaxPages = 1,
+
+        [Parameter()]
+        [switch]
+        $WhatIf
     )
 
     $Headers = @{
@@ -59,13 +63,32 @@ function Invoke-GitlabApi {
     }
     $Uri = "$GitlabUrl/api/v4/$Path$SerializedQuery"
 
-    Write-Debug "$HttpMethod $Uri"
     $RestMethodParams = @{}
-    if($MaximumFollowRelLink -gt 0) {
+    if($MaxPages -gt 1) {
         $RestMethodParams['FollowRelLink'] = $true
-        $RestMethodParams['MaximumFollowRelLink'] = $MaximumFollowRelLink
+        $RestMethodParams['MaximumFollowRelLink'] = $MaxPages
     }
-    Invoke-RestMethod -Method $HttpMethod -Uri $Uri -Header $Headers @RestMethodParams
+    if($WhatIf) {
+        $SerializedParams = $RestMethodParams.Keys | 
+            ForEach-Object {
+                "-$_ `"$($RestMethodParams[$_])`""
+            } |
+            Join-String " "
+        Write-Host "$HttpMethod $Uri $SerializedParams"
+    }
+    else {
+        $Result = Invoke-RestMethod -Method $HttpMethod -Uri $Uri -Header $Headers @RestMethodParams
+        if($MaxPages -gt 1) {
+            # Unwrap pagination container
+            $Result | ForEach-Object { 
+                Write-Output $_
+            }
+        }
+        else {
+            Write-Output $Result
+        }
+    }
+    
 }
 
 function New-WrapperObject {
