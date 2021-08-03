@@ -40,7 +40,11 @@ function Invoke-GitlabApi {
 
         [Parameter()]
         [switch]
-        $WhatIf
+        $WhatIf,
+
+        [Parameter()]
+        [hashtable]
+        $WhatIfContext = @{}
     )
 
     $Headers = @{
@@ -69,12 +73,27 @@ function Invoke-GitlabApi {
         $RestMethodParams['MaximumFollowRelLink'] = $MaxPages
     }
     if($WhatIf) {
-        $SerializedParams = $RestMethodParams.Keys | 
-            ForEach-Object {
-                "-$_ `"$($RestMethodParams[$_])`""
-            } |
-            Join-String " "
-        Write-Host "$HttpMethod $Uri $SerializedParams"
+        $SerializedParams = ""
+        if($RestMethodParams.Count -gt 0) {
+            $SerializedParams = $RestMethodParams.Keys | 
+                ForEach-Object {
+                    "-$_ `"$($RestMethodParams[$_])`""
+                } |
+                Join-String -Separator " "
+            $SerializedParams += " "
+        }
+        
+        $SerializedContext = ""
+        if($WhatIfContext.Count -gt 0) {
+            $SerializedContext = $WhatIfContext.Keys |
+                ForEach-Object {
+                    "$_=`"$($WhatIfContext[$_])`""
+                } |
+                Join-String -Separator " "
+            $SerializedContext = "($SerializedContext)"
+        }
+        
+        Write-Host "$HttpMethod $Uri $SerializedParams$SerializedContext"
     }
     else {
         $Result = Invoke-RestMethod -Method $HttpMethod -Uri $Uri -Header $Headers @RestMethodParams
