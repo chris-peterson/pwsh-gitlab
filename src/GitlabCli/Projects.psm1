@@ -27,20 +27,16 @@ function Get-GitLabProject {
 
     if ($PSCmdlet.ParameterSetName -eq 'ByGroup') {
         $Group = Get-GitlabGroup $GroupId
-        $Projects = Invoke-GitlabApi GET "groups/$($Group.Id)/projects" @{
+        $Query = @{
             'include_subgroups' = 'true'
         }
-        Write-Debug "Project.Count: $($Projects.Count)"
-        if ($Projects) {
-            if (-not $IncludeArchived) {
-                $Projects = $Projects | Where-Object -not archived
-            }
-            
-            $Projects |
-                Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
-                ForEach-Object { $_ | New-WrapperObject -DisplayType 'GitLab.Project' } |
-                Sort-Object -Property 'Name'
+        if(-not $IncludeArchived) {
+            $Query['archived'] = 'false'
         }
+        Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPage 10 | 
+        Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
+        ForEach-Object { $_ | New-WrapperObject -DisplayType 'GitLab.Project' } |
+        Sort-Object -Property 'Name'
     }
 }
 
