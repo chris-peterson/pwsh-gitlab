@@ -61,7 +61,7 @@ function Invoke-GitlabApi {
         foreach($Name in $Query.Keys) {
             $SerializedQuery += $Delimiter
             $SerializedQuery += "$Name="
-            $SerializedQuery += [System.Net.WebUtility]::UrlDecode($Query[$Name])
+            $SerializedQuery += [System.Net.WebUtility]::UrlEncode($Query[$Name])
             $Delimiter = '&'
         }
     }
