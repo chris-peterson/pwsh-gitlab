@@ -58,7 +58,7 @@ function Remove-GitLabGroup {
 
     $Group = Get-GitLabGroup -GroupId $GroupId
 
-    Invoke-GitlabApi DELETE "groups/$([System.Net.WebUtility]::UrlEncode($Group.Id))" -WhatIf:$WhatIf | Out-Null
+    Invoke-GitlabApi DELETE "groups/$($Group.Id)" -WhatIf:$WhatIf | Out-Null
 }
 
 function Copy-GitLabGroupToLocalFileSystem {

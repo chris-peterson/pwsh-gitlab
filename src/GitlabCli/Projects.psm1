@@ -19,7 +19,7 @@ function Get-GitLabProject {
         if ($ProjectId -eq '.') {
             $ProjectId = $(Get-LocalGitContext).Repo
         }
-        $Project = Invoke-GitlabApi "GET" "projects/$([System.Net.WebUtility]::UrlEncode($ProjectId))"
+        $Project = Invoke-GitlabApi GET "projects/$([System.Net.WebUtility]::UrlEncode($ProjectId))"
         if ($Project) {
             return $Project | New-WrapperObject -DisplayType 'GitLab.Project'
         }
@@ -27,7 +27,7 @@ function Get-GitLabProject {
 
     if ($PSCmdlet.ParameterSetName -eq 'ByGroup') {
         $Group = Get-GitlabGroup $GroupId
-        $Projects = Invoke-GitlabApi GET "groups/$([System.Net.WebUtility]::UrlEncode($GroupId))/projects" @{
+        $Projects = Invoke-GitlabApi GET "groups/$($Group.Id)/projects" @{
             'include_subgroups' = 'true'
         }
         Write-Debug "Project.Count: $($Projects.Count)"

@@ -53,12 +53,12 @@ function Get-GitLabMergeRequest {
     $Query = @{}
 
     if ($MergeRequestId) {
-        $Path = "projects/$([System.Net.WebUtility]::UrlEncode($ProjectId))/merge_requests/$([System.Net.WebUtility]::UrlEncode($MergeRequestId))"
+        $Path = "projects/$ProjectId/merge_requests/$MergeRequestId"
     } elseif ($ProjectId) {
-        $Path = "projects/$([System.Net.WebUtility]::UrlEncode($ProjectId))/merge_requests"
+        $Path = "projects/$ProjectId/merge_requests"
         $MaxPages = 10
     } elseif ($GroupId) {
-        $Path = "groups/$([System.Net.WebUtility]::UrlEncode($GroupId))/merge_requests"
+        $Path = "groups/$GroupId/merge_requests"
         $MaxPages = 10
     } else {
         throw "Unsupported parameter combination"
