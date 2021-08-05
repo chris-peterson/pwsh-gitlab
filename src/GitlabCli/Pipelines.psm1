@@ -14,6 +14,11 @@ function Get-GitLabPipeline {
         [Parameter(Mandatory=$false, ParameterSetName="Recent")]
         $Recent = $false,
 
+        [Parameter()]
+        [Alias("Branch")]
+        [string]
+        $Ref,
+
         [switch]
         [Parameter(Mandatory=$false, ParameterSetName="All")]
         $All = $false
@@ -22,19 +27,27 @@ function Get-GitLabPipeline {
     $Project = Get-GitLabProject -ProjectId $ProjectId
 
     if ($PipelineId) {
-        gitlab -o json project-pipeline get --id $PipelineId --project-id $Project.Id |
-            ConvertFrom-Json |
+        Invoke-GitlabApi GET "projects/$($Project.Id)/pipelines/$PipelineId" |
             New-WrapperObject -DisplayType 'GitLab.Pipeline'
     } else {
-        $Command = "gitlab -o json project-pipeline list --project-id $($Project.Id)"
+        $Query = @{}
+        $MaxPages = 1
         if ($Recent) {
             # default behavior of CLI/API
         } elseif ($All) {
-            $Command += ' --all'
+            $MaxPages = 10 #ok, not really all, but let's not DOS gitlab
         } else {
             throw "Must provide either an ID, or a range parameter (e.g. Recent/All)"
         }
-        Invoke-Expression -Command $Command | ConvertFrom-Json | ForEach-Object { $_ | New-WrapperObject -DisplayType 'GitLab.Pipeline'}
+        if($Ref) {
+            if($Ref -eq '.') {
+                $LocalContext = Get-LocalGitContext
+                $Ref = $LocalContext.Branch
+            }
+            $Query['ref'] = $Ref
+        }
+        Invoke-GitlabApi GET "projects/$($Project.Id)/pipelines" $Query -MaxPages $MaxPages | 
+            ForEach-Object { $_ | New-WrapperObject -DisplayType 'GitLab.Pipeline'}
     }
 }
 

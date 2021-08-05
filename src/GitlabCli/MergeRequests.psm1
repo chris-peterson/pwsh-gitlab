@@ -48,39 +48,42 @@ function Get-GitLabMergeRequest {
         $GroupId = $(Get-GitLabGroup -GroupId $GroupId).Id
     }
 
-    $CmdToExecute = "gitlab -o json"
+    $Path = $null
+    $MaxPages = 1
+    $Query = @{}
+
     if ($MergeRequestId) {
-        $CmdToExecute += " project-merge-request get --project-id $ProjectId --iid $MergeRequestId"
+        $Path = "projects/$ProjectId/merge_requests/$MergeRequestId"
     } elseif ($ProjectId) {
-        $CmdToExecute += " project-merge-request list --project-id $ProjectId --all"
+        $Path = "projects/$ProjectId/merge_requests"
+        $MaxPages = 10
     } elseif ($GroupId) {
-        $CmdToExecute += " group-merge-request list --group-id $GroupId --all"
+        $Path = "groups/$GroupId/merge_requests"
+        $MaxPages = 10
     } else {
         throw "Unsupported parameter combination"
     }
 
     if($State) {
-        $CmdToExecute += " --state $State"
+        $Query['state'] = $State
     }
 
     if ($CreatedBefore) {
-        $CmdToExecute += " --created-before $CreatedBefore"
+        $Query['created_before'] = $CreatedBefore
     }
 
     if ($CreatedAfter) {
-        $CmdToExecute += " --created-after $CreatedAfter"
+        $Query['created_after'] = $CreatedAfter
     }
 
     if ($IsDraft -ne $null) {
-        $CmdToExecute += " --wip $($IsDraft ? 'yes' : 'no')"
+        $Query['wip'] = $IsDraft ? 'yes' : 'no'
     }
     
-    if ($WhatIf) {
-        Write-Host "WhatIf: $CmdToExecute"
-    } else {
-        $MergeRequests = Invoke-Expression $CmdToExecute | ConvertFrom-Json
-        return $MergeRequests | ForEach-Object { New-WrapperObject $_ -DisplayType 'Gitlab.MergeRequest' }
-    }
+    return Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf | 
+        ForEach-Object {
+            $_ | New-WrapperObject -DisplayType 'Gitlab.MergeRequest'
+        }
 }
 
 function Get-GitLabMergeRequestChangeSummary {
@@ -157,19 +160,16 @@ function New-GitLabMergeRequest {
         $Title = $SourceBranch.Replace('-', ' ').Replace('_', ' ')
     }
 
-
-    if ($WhatIf) {
-        Write-Host "WhatIf: create merge request of '$SourceBranch' to '$TargetBranch' in '$($Project.PathWithNamespace)'"
-    } else {
-        $MergeRequest = $(gitlab -o json project-merge-request create --project-id $($Project.Id) --source-branch $SourceBranch --target-branch $TargetBranch --title "$Title") |
-            ConvertFrom-Json |
-            ForEach-Object { New-WrapperObject $_ -DisplayType 'GitLab.MergeRequest' }
-        if ($Follow) {
-            Start-Process $MergeRequest.WebUrl
-        }
-
-        $MergeRequest | Format-Table -AutoSize
+    $MergeRequest = Invoke-GitlabApi POST "projects/$($Project.Id)/merge_requests" @{
+        source_branch = $SourceBranch
+        target_branch = $TargetBranch
+        title = $Title
+    } -WhatIf:$WhatIf | New-WrapperObject $_ -DisplayType 'GitLab.MergeRequest'
+    if ($Follow) {
+        Start-Process $MergeRequest.WebUrl
     }
+
+    $MergeRequest | Format-Table -AutoSize
 }
 
 function Update-GitLabMergeRequest {
@@ -205,30 +205,26 @@ function Update-GitLabMergeRequest {
     )
 
     $ProjectId = $(Get-GitLabProject -ProjectId $ProjectId).Id
-
-    $CmdToExecute += "gitlab -o json project-merge-request update --project-id $($ProjectId) --iid $($MergeRequestId)"
+    $Query = @{}
 
     if ($Close) {
-        $CmdToExecute += " --state-event close"
+        $Query['state_event'] = 'close'
     }
 
     if ($Reopen) {
-        $CmdToExecute += " --state-event reopen"
+        $Query['state_event'] = 'reopen'
     }
     
     if ($Title) {
-        $CmdToExecute += " --title '$Title'"
+        $Query['title'] = $Title
     }
 
     if ($Description) {
-        $CmdToExecute += " --description '$Description'"
+        $Query['description'] = $Description
     }
 
-    if($WhatIf) {
-        Write-Host "WhatIf: $CmdToExecute"
-    } else {
-        Invoke-Expression $CmdToExecute | ConvertFrom-Json | ForEach-Object { New-WrapperObject $_ -DisplayType 'GitLab.MergeRequest' }
-    }
+    Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" $Query -WhatIf:$WhatIf |
+        New-WrapperObject $_ -DisplayType 'GitLab.MergeRequest'
 }
 
 function Close-GitLabMergeRequest {
@@ -242,16 +238,12 @@ function Close-GitLabMergeRequest {
         [string]
         $MergeRequestId,
 
-        [switch]
         [Parameter(Mandatory=$false)]
-        $WhatIf = $false
+        [switch]
+        $WhatIf
     )
 
     $ProjectId = $(Get-GitLabProject -ProjectId $ProjectId).Id
 
-    if ($WhatIf) {
-        Write-Host "WhatIf: closing merge request $MergeRequestId for project $ProjectId"
-    } else {
-        Update-GitLabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -Close
-    }
+    Update-GitLabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -Close -WhatIf:$WhatIf
 }

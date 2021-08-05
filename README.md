@@ -2,19 +2,6 @@
 
 Interact with GitLab via PowerShell
 
-Extends (and requires) [python gitlab](https://github.com/python-gitlab/python-gitlab#python-gitlab).
-
-You might be thinking
-> Hold on, a wrapper around a wrapper around an API?
-
-Yes!
-
-While the GitLab API is extensive and well documented, there are some common issues that warrant a client-side "sdk" (e.g. retries on rate limit [or other transient] errors, logging, etc).
-
-The python implementation is very well maintained and keeps up with GitLab's rapidly evolving ecosystem.  It comes with a tab-completion module which enables fast discovery and integration.
-
-While one could use the python CLI as it is, this project adapts it to PowerShell adding higher-level functions (e.g. [`Clone-GitLabGroup`](https://github.com/chris-peterson/pwsh-gitlab#clone-gitlabgroup-aka-copy-gitlabgrouptolocalfilesystem)) as well as advanced reporting capabilities (using `Group-Object`, etc.)
-
 ## Status
 
 [![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/GitLabCli)](https://www.powershellgallery.com/packages/GitlabCli)
