@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Types>
   <Type>
-    <Name>GitLab.Group</Name>
+    <Name>Gitlab.Group</Name>
     <Members>
     </Members>
   </Type>
   <Type>
-    <Name>GitLab.MergeRequest</Name>
+    <Name>Gitlab.MergeRequest</Name>
     <Members>
       <ScriptProperty>
         <Name>AuthorName</Name>
@@ -22,12 +22,12 @@
       </ScriptProperty>
       <ScriptProperty>
         <Name>ChangeSummary</Name>
-        <GetScriptBlock>$this | Get-GitLabMergeRequestChangeSummary</GetScriptBlock>
+        <GetScriptBlock>$this | Get-GitlabMergeRequestChangeSummary</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
   <Type>
-    <Name>GitLab.Pipeline</Name>
+    <Name>Gitlab.Pipeline</Name>
     <Members>
       <ScriptProperty>
         <Name>UserName</Name>
@@ -36,7 +36,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>GitLab.Project</Name>
+    <Name>Gitlab.Project</Name>
     <Members>
       <ScriptProperty>
         <Name>Group</Name>
@@ -49,7 +49,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>GitLab.MergeRequestSearchResult</Name>
+    <Name>Gitlab.MergeRequestSearchResult</Name>
     <Members>
       <ScriptProperty>
         <Name>AuthorName</Name>
@@ -58,7 +58,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>GitLab.BlobSearchResult</Name>
+    <Name>Gitlab.BlobSearchResult</Name>
     <Members>
       <ScriptProperty>
         <Name>LineNumber</Name>
@@ -67,7 +67,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>GitLab.User</Name>
+    <Name>Gitlab.User</Name>
     <Members>
       <ScriptProperty>
         <Name>Status</Name>

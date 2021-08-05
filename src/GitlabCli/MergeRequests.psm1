@@ -1,4 +1,4 @@
-function Get-GitLabMergeRequest {
+function Get-GitlabMergeRequest {
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     param(
         [Parameter(Position=0, Mandatory=$true, ParameterSetName="ByProjectId")]
@@ -41,11 +41,11 @@ function Get-GitLabMergeRequest {
     )
 
     if ($ProjectId) {
-        $ProjectId = $(Get-GitLabProject -ProjectId $ProjectId).Id
+        $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
     }
 
     if ($GroupId) {
-        $GroupId = $(Get-GitLabGroup -GroupId $GroupId).Id
+        $GroupId = $(Get-GitlabGroup -GroupId $GroupId).Id
     }
 
     $Path = $null
@@ -86,7 +86,7 @@ function Get-GitLabMergeRequest {
         }
 }
 
-function Get-GitLabMergeRequestChangeSummary {
+function Get-GitlabMergeRequestChangeSummary {
     param (
         [Parameter(Position=0, Mandatory=$true, ValueFromPipeline=$true)]
         $MergeRequest
@@ -115,7 +115,7 @@ function Get-GitLabMergeRequestChangeSummary {
     }
 }
 
-function New-GitLabMergeRequest {
+function New-GitlabMergeRequest {
     [CmdletBinding()]
     [Alias("new-mr")]
     param(
@@ -148,7 +148,7 @@ function New-GitLabMergeRequest {
         $ProjectId = '.'
     }
 
-    $Project = Get-GitLabProject -ProjectId $ProjectId
+    $Project = Get-GitlabProject -ProjectId $ProjectId
 
     if (-not $TargetBranch) {
         $TargetBranch = $Project.DefaultBranch
@@ -164,7 +164,7 @@ function New-GitLabMergeRequest {
         source_branch = $SourceBranch
         target_branch = $TargetBranch
         title = $Title
-    } -WhatIf:$WhatIf | New-WrapperObject $_ -DisplayType 'GitLab.MergeRequest'
+    } -WhatIf:$WhatIf | New-WrapperObject $_ -DisplayType 'Gitlab.MergeRequest'
     if ($Follow) {
         Start-Process $MergeRequest.WebUrl
     }
@@ -172,7 +172,7 @@ function New-GitLabMergeRequest {
     $MergeRequest | Format-Table -AutoSize
 }
 
-function Update-GitLabMergeRequest {
+function Update-GitlabMergeRequest {
     [CmdletBinding(DefaultParameterSetName="Update")]
     param(
         [Parameter(Position=0, Mandatory=$true)]
@@ -204,7 +204,7 @@ function Update-GitLabMergeRequest {
         $WhatIf = $false
     )
 
-    $ProjectId = $(Get-GitLabProject -ProjectId $ProjectId).Id
+    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
     $Query = @{}
 
     if ($Close) {
@@ -224,10 +224,10 @@ function Update-GitLabMergeRequest {
     }
 
     Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" $Query -WhatIf:$WhatIf |
-        New-WrapperObject $_ -DisplayType 'GitLab.MergeRequest'
+        New-WrapperObject $_ -DisplayType 'Gitlab.MergeRequest'
 }
 
-function Close-GitLabMergeRequest {
+function Close-GitlabMergeRequest {
     [CmdletBinding()]
     param(
         [Parameter(Position=0, Mandatory=$true)]
@@ -243,7 +243,7 @@ function Close-GitLabMergeRequest {
         $WhatIf
     )
 
-    $ProjectId = $(Get-GitLabProject -ProjectId $ProjectId).Id
+    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
 
-    Update-GitLabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -Close -WhatIf:$WhatIf
+    Update-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -Close -WhatIf:$WhatIf
 }

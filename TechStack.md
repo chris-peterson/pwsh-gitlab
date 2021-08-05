@@ -6,5 +6,5 @@ This is a workaround for the fact that GitHub doesn't render mermaid in READMEs
 graph TD
   pwsh-gitlab["fa:fa-arrow-circle-right pwsh-gitlab"]
   gitlab-api["fa:fa-server GitLab API"]
-  pwsh-gitlab -- delegates to --> gitlab-api
+  pwsh-gitlab -- interacts with --> gitlab-api
 ```

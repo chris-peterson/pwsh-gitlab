@@ -1,16 +1,16 @@
 # Overview
 
-Interact with GitLab via PowerShell
+Interact with [GitLab](https://about.gitlab.com/) via [PowerShell](https://github.com/powershell/powershell#-powershell)
 
 ## Status
 
-[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/GitLabCli)](https://www.powershellgallery.com/packages/GitlabCli)
+[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/GitlabCli)](https://www.powershellgallery.com/packages/GitlabCli)
 [![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/GitlabCli?color=green)](https://www.powershellgallery.com/packages/GitlabCli)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/chris-peterson/pwsh-gitlab/CI?label=ci)](https://github.com/chris-peterson/pwsh-gitlab/actions/workflows/deploy.yml)
 
 ## Tech Stack
 
-![image](TechStack.png)
+<img height=200 src="TechStack.png"/>
 
 ## Getting Started
 
@@ -18,6 +18,35 @@ Interact with GitLab via PowerShell
 Install-Module -Name GitlabCli
 ```
 
+### Configuration
+
+#### `GITLAB_ACCESS_TOKEN`
+
+Obtain a "Personal Access Token" (PAT) for your GitLab instance
+
+`https://<your gitlab instance>/-/profile/personal_access_tokens`
+
+<img width=600 src="PersonalAccessToken.jpg"/>
+
+Make the value available via
+
+`$env:GITLAB_ACCESS_TOKEN='<your pat>'`.
+
+One way to do this would be to add a line to your `$PROFILE`
+
+#### `GITLAB_URL`
+
+(Optional) If using a gitlab instance that is not `gitlab.com`, provide it via:
+
+`$env:GITLAB_URL='<your gitlab instance>'`
+
+### Example PowerShell Profile
+
+```powershell
+$env:GITLAB_URL='gitlab.mydomain.com'
+$env:GITLAB_ACCESS_TOKEN='<my token>'
+Import-Module GitlabCli
+```
 ## Global Switches
 
 `-WhatIf` : For mutable operations (or for some complex query operations), gives a preview of what actions would be taken.
@@ -30,10 +59,10 @@ If invoking commands from within a git repository, `.` can be used for `ProjectI
 
 ### Groups
 
-#### `Get-GitLabGroup`
+#### `Get-GitlabGroup`
 
 ```powershell
-Get-GitLabGroup 'mygroup'
+Get-GitlabGroup 'mygroup'
 ```
 
 ```plaintext
@@ -42,28 +71,28 @@ Get-GitLabGroup 'mygroup'
   23 mygroup  https://gitlab.mydomain.com/mygroup
 ```
 
-#### `Remove-GitLabGroup`
+#### `Remove-GitlabGroup`
 
 ```powershell
-Remove-GitLabGroup 'mygroup'
+Remove-GitlabGroup 'mygroup'
 ```
 
-#### `Clone-GitLabGroup` (aka `Copy-GitLabGroupToLocalFileSystem`)
+#### `Clone-GitlabGroup` (aka `Copy-GitlabGroupToLocalFileSystem`)
 
 ```powershell
-Clone-GitLabGroup 'mygroup'
+Clone-GitlabGroup 'mygroup'
 ```
 
 ### Projects
 
-#### `Get-GitLabProject` (by id)
+#### `Get-GitlabProject` (by id)
 
 ```powershell
-Get-GitLabProject 'mygroup/myproject'
+Get-GitlabProject 'mygroup/myproject'
 # OR
-Get-GitLabProject 42
+Get-GitlabProject 42
 # OR
-Get-GitLabProject . # use local context
+Get-GitlabProject . # use local context
 ```
 
 ```plaintext
@@ -72,10 +101,10 @@ Get-GitLabProject . # use local context
   42 myproject   mygroup   https://gitlab.mydomain.com/mygroup/myproject
 ```
 
-#### `Get-GitLabProject` (by group)
+#### `Get-GitlabProject` (by group)
 
 ```powershell
-Get-GitLabProject -GroupId 'mygroup/subgroup'
+Get-GitlabProject -GroupId 'mygroup/subgroup'
 ```
 
 ```plaintext
@@ -91,18 +120,18 @@ _Optional Parameters_
 
 `-IncludeArchived` - Set this switch to include archived projects.  _By default, archived projects are not returned_
 
-### `Transfer-GitLabProject` (aka `Move-GitLabProject`)
+### `Transfer-GitlabProject` (aka `Move-GitlabProject`)
 
 ```powershell
-Transfer-GitLabProject -ProjectId 'this-project' -DestinationGroup 'that-group'
+Transfer-GitlabProject -ProjectId 'this-project' -DestinationGroup 'that-group'
 ```
 
 ### Merge Requests
 
-#### `New-GitLabMergeRequest` (aka `new-mr`)
+#### `New-GitlabMergeRequest` (aka `new-mr`)
 
 ```powershell
-New-GitLabMergeRequest
+New-GitlabMergeRequest
 ```
 
 _Optional Parameters_
@@ -129,3 +158,4 @@ Creates a new merge request and follows the URL.
 
 * [PSGitLab](https://github.com/ngetchell/PSGitLab)
 * [python-gitlab CLI documentation](https://python-gitlab.readthedocs.io/en/stable/)
+* [GitLab API docs](https://docs.gitlab.com/ee/api/)

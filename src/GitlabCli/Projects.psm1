@@ -1,4 +1,4 @@
-function Get-GitLabProject {
+function Get-GitlabProject {
 
     [CmdletBinding(DefaultParameterSetName='ById')]
     param (
@@ -21,7 +21,7 @@ function Get-GitLabProject {
         }
         $Project = Invoke-GitlabApi GET "projects/$([System.Net.WebUtility]::UrlEncode($ProjectId))"
         if ($Project) {
-            return $Project | New-WrapperObject -DisplayType 'GitLab.Project'
+            return $Project | New-WrapperObject -DisplayType 'Gitlab.Project'
         }
     }
 
@@ -35,13 +35,13 @@ function Get-GitLabProject {
         }
         Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPage 10 | 
         Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
-        ForEach-Object { $_ | New-WrapperObject -DisplayType 'GitLab.Project' } |
+        ForEach-Object { $_ | New-WrapperObject -DisplayType 'Gitlab.Project' } |
         Sort-Object -Property 'Name'
     }
 }
 
-function Move-GitLabProject {
-    [Alias("Transfer-GitLabProject")]
+function Move-GitlabProject {
+    [Alias("Transfer-GitlabProject")]
     [CmdletBinding()]
     param (
         [Parameter(Position=0, Mandatory=$true)]
@@ -57,8 +57,8 @@ function Move-GitLabProject {
         $WhatIf = $false
     )
 
-    $SourceProject = Get-GitLabProject -ProjectId $ProjectId
-    $Group = Get-GitLabGroup -GroupId $DestinationGroup
+    $SourceProject = Get-GitlabProject -ProjectId $ProjectId
+    $Group = Get-GitlabGroup -GroupId $DestinationGroup
 
     Invoke-GitlabApi PUT "projects/$($SourceProject.Id)/transfer" @{
         namespace = $Group.Id
@@ -68,7 +68,7 @@ function Move-GitLabProject {
     } | Out-Null
 }
 
-function Rename-GitLabProject {
+function Rename-GitlabProject {
     [CmdletBinding()]
     param (
         [Parameter(Position=0, Mandatory=$true)]
@@ -84,7 +84,7 @@ function Rename-GitLabProject {
         $WhatIf = $false
     )
 
-    $SourceProject = Get-GitLabProject -ProjectId $ProjectId
+    $SourceProject = Get-GitlabProject -ProjectId $ProjectId
     
     Invoke-GitlabApi PUT "projects/$($SourceProject.Id)" @{
         'name' = $NewName
@@ -92,8 +92,8 @@ function Rename-GitLabProject {
     } -WhatIf:$WhatIf | Out-Null
 }
 
-function Copy-GitLabProject {
-    [Alias("Fork-GitLabProject")]
+function Copy-GitlabProject {
+    [Alias("Fork-GitlabProject")]
     [CmdletBinding()]
     param (
         [Parameter(Position=0, Mandatory=$true)]
@@ -113,8 +113,8 @@ function Copy-GitLabProject {
         $WhatIf = $false
     )
 
-    $SourceProject = Get-GitLabProject -ProjectId $ProjectId
-    $Group = Get-GitLabGroup -GroupId $DestinationGroup
+    $SourceProject = Get-GitlabProject -ProjectId $ProjectId
+    $Group = Get-GitlabGroup -GroupId $DestinationGroup
 
     if ($WhatIf) {
         Write-Host "WhatIf: forking '$($SourceProject.Name)' (project id: $($SourceProject.Id)) to '$($Group.FullPath)' (group id: $($Group.Id))"
@@ -132,7 +132,7 @@ function Copy-GitLabProject {
         }
     }
 }
-function New-GitLabProject {
+function New-GitlabProject {
     [CmdletBinding()]
     param (
         [Parameter(Position=0, Mandatory=$true)]
@@ -148,7 +148,7 @@ function New-GitLabProject {
         $WhatIf = $false
     )
 
-    $Group = Get-GitLabGroup -GroupId $DestinationGroup
+    $Group = Get-GitlabGroup -GroupId $DestinationGroup
     if(-not $Group) {
         throw "DestinationGroup '$DestinationGroup' not found"
     }
@@ -161,8 +161,8 @@ function New-GitLabProject {
     }
 }
 
-function Invoke-GitLabProjectArchival {
-    [Alias('Archive-GitLabProject')]
+function Invoke-GitlabProjectArchival {
+    [Alias('Archive-GitlabProject')]
     [CmdletBinding()]
     param (
         [Parameter(Position=0, Mandatory=$true)]
@@ -174,7 +174,7 @@ function Invoke-GitLabProjectArchival {
         $WhatIf = $false
     )
 
-    $Project = $(Get-GitLabProject -ProjectId $ProjectId)
+    $Project = $(Get-GitlabProject -ProjectId $ProjectId)
     
     Invoke-GitlabApi POST "projects/$($Project.Id)/archive" -WhatIf:$WhatIf -WhatIfContext @{
         ProjectName = $Project.Name

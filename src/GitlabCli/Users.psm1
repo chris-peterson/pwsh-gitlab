@@ -1,4 +1,4 @@
-function Get-GitLabUser {
+function Get-GitlabUser {
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -13,18 +13,18 @@ function Get-GitLabUser {
         $UserId = Invoke-GitlabApi GET "users" @{
             username = $Username
         } | Select-Object -First 1 -ExpandProperty id
-        Invoke-GitlabApi GET "users/$UserId" | New-WrapperObject -DisplayType 'GitLab.User'
+        Invoke-GitlabApi GET "users/$UserId" | New-WrapperObject -DisplayType 'Gitlab.User'
     }
     elseif ($EmailAddress) {
         $UserId = Invoke-GitlabApi GET "search" @{
             scope = 'users'
             search = $EmailAddress
         } | Select-Object -First 1 -ExpandProperty id
-        Invoke-GitlabApi GET "users/$UserId" | New-WrapperObject -DisplayType 'GitLab.User'
+        Invoke-GitlabApi GET "users/$UserId" | New-WrapperObject -DisplayType 'Gitlab.User'
     }
 }
 
-function Get-GitLabGroupMembership {
+function Get-GitlabGroupMembership {
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -34,13 +34,13 @@ function Get-GitLabGroupMembership {
         [string]
         $EmailAddress
     )
-    $User = Get-GitLabUser -Username $Username -EmailAddress $EmailAddress
+    $User = Get-GitlabUser -Username $Username -EmailAddress $EmailAddress
 
     Invoke-GitlabApi GET "users/$($User.Id)/memberships" -MaxPages 10 |
         ForEach-Object { New-WrapperObject $_ }
 }
 
-function Add-GitLabUserToGroup {
+function Add-GitlabUserToGroup {
     param (
         [Parameter(Position=0, Mandatory=$true)]
         [string]
@@ -63,16 +63,16 @@ function Add-GitLabUserToGroup {
         [switch]
         $WhatIf
     )
-    $Group = Get-GitLabGroup -GroupId $GroupName
-    $User = Get-GitLabUser -Username $Username -EmailAddress $EmailAddress
+    $Group = Get-GitlabGroup -GroupId $GroupName
+    $User = Get-GitlabUser -Username $Username -EmailAddress $EmailAddress
     Invoke-GitlabApi POST "groups/$($Group.Id)/members" @{
         user_id = $User.Id
-        access_level = $Global:GitLabAccessLevels[$AccessLevel]
+        access_level = $Global:GitlabAccessLevels[$AccessLevel]
     } -WhatIf:$WhatIf | Out-Null
 
     if(-not $WhatIf) {
-        Get-GitLabGroupMembership -Username $Username -EmailAddress $EmailAddress
+        Get-GitlabGroupMembership -Username $Username -EmailAddress $EmailAddress
     }
 }
 
-$Global:GitLabAccessLevels = @{developer = 30; maintainer = 40}
+$Global:GitlabAccessLevels = @{developer = 30; maintainer = 40}

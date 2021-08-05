@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '0.8.0'
+    ModuleVersion = '1.0.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -75,38 +75,38 @@
         'Get-LocalGitContext'
 
         # Groups
-        'Get-GitLabGroup'
-        'New-GitLabGroup'
-        'Remove-GitLabGroup'
-        'Copy-GitLabGroupToLocalFileSystem'
-        'Update-LocalGitLabGroup'
+        'Get-GitlabGroup'
+        'New-GitlabGroup'
+        'Remove-GitlabGroup'
+        'Copy-GitlabGroupToLocalFileSystem'
+        'Update-LocalGitlabGroup'
 
         # MergeRequests
-        'Get-GitLabMergeRequest'
-        'New-GitLabMergeRequest'
-        'Get-GitLabMergeRequestChangeSummary'
-        'Update-GitLabMergeRequest'
-        'Close-GitLabMergeRequest'
+        'Get-GitlabMergeRequest'
+        'New-GitlabMergeRequest'
+        'Get-GitlabMergeRequestChangeSummary'
+        'Update-GitlabMergeRequest'
+        'Close-GitlabMergeRequest'
 
         # Pipelines
-        'Get-GitLabPipeline'
-        'Get-GitLabPipelineSchedule'
+        'Get-GitlabPipeline'
+        'Get-GitlabPipelineSchedule'
 
         # Projects
-        'Get-GitLabProject'
-        'New-GitLabProject'
-        'Move-GitLabProject'
-        'Rename-GitLabProject'
-        'Copy-GitLabProject'
-        'Invoke-GitLabProjectArchival'
+        'Get-GitlabProject'
+        'New-GitlabProject'
+        'Move-GitlabProject'
+        'Rename-GitlabProject'
+        'Copy-GitlabProject'
+        'Invoke-GitlabProjectArchival'
 
         # Search
-        'Search-GitLab'
+        'Search-Gitlab'
 
         # User
-        'Get-GitLabUser'
-        'Get-GitLabGroupMembership'
-        'Add-GitLabUserToGroup'
+        'Get-GitlabUser'
+        'Get-GitlabGroupMembership'
+        'Add-GitlabUserToGroup'
 
         # Utilities
         'ConvertTo-PascalCase'
@@ -122,11 +122,11 @@
     
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
     AliasesToExport = @(
-        'Clone-GitLabGroup'
+        'Clone-GitlabGroup'
         'Pull-GitlabGroup'
-        'Transfer-GitLabProject'
-        'Fork-GitLabProject'
-        'Archive-GitLabProject'
+        'Transfer-GitlabProject'
+        'Fork-GitlabProject'
+        'Archive-GitlabProject'
 
         # short names
         'new-mr'

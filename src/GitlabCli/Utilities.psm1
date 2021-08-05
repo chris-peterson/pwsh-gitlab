@@ -50,10 +50,17 @@ function Invoke-GitlabApi {
     $Headers = @{
         'Accept' = 'application/json'
     }
-    if($env:GITLAB_PRIVATE_TOKEN -or $env:GITLAB_ACCESS_TOKEN) {
-        $Headers['Authorization'] = "Bearer $($env:GITLAB_PRIVATE_TOKEN ?? $env:GITLAB_ACCESS_TOKEN)"
+    if ($env:GITLAB_ACCESS_TOKEN) {
+        $Headers['Authorization'] = "Bearer $env:GITLAB_ACCESS_TOKEN"
+    } else {
+        Write-Error "`$env:GITLAB_ACCESS_TOKEN` has not been configured`nSee https://github.com/chris-peterson/pwsh-gitlab#getting-started for details"
+        return
     }
     $GitlabUrl = $env:GITLAB_URL ?? 'https://gitlab.com'
+
+    if (-not $GitlabUrl.StartsWith('http')) {
+        $GitlabUrl = "https://$GitlabUrl"
+    }
 
     $SerializedQuery = ''
     $Delimiter = '?'

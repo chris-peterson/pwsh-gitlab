@@ -1,4 +1,4 @@
-function Get-GitLabGroup {
+function Get-GitlabGroup {
 
     [CmdletBinding()]
     param (
@@ -11,10 +11,10 @@ function Get-GitLabGroup {
         'with_projects' = 'false'
     }
 
-    return $Group | New-WrapperObject -DisplayType 'GitLab.Group'
+    return $Group | New-WrapperObject -DisplayType 'Gitlab.Group'
 }
 
-function New-GitLabGroup {
+function New-GitlabGroup {
 
     [CmdletBinding()]
     param (
@@ -31,7 +31,7 @@ function New-GitLabGroup {
         $WhatIf = $false
     )
 
-    $ParentGroup = Get-GitLabGroup -GroupId $ParentGroupName
+    $ParentGroup = Get-GitlabGroup -GroupId $ParentGroupName
     $GroupId = Invoke-GitlabApi POST "groups" @{
         name = $GroupName
         path = $GroupName
@@ -39,12 +39,12 @@ function New-GitLabGroup {
         visibility = $ParentGroup.Visibility
     } -WhatIf:$WhatIf | Select-Object -ExcludeProperty id
     if(-not $WhatIf) {
-        return Get-GitLabGroup -GroupId $GroupId
+        return Get-GitlabGroup -GroupId $GroupId
     }
 }
 
 
-function Remove-GitLabGroup {
+function Remove-GitlabGroup {
     [CmdletBinding()]
     param (
         [Parameter(Position=0, Mandatory=$true)]
@@ -56,13 +56,13 @@ function Remove-GitLabGroup {
         $WhatIf = $false
     )
 
-    $Group = Get-GitLabGroup -GroupId $GroupId
+    $Group = Get-GitlabGroup -GroupId $GroupId
 
     Invoke-GitlabApi DELETE "groups/$($Group.Id)" -WhatIf:$WhatIf | Out-Null
 }
 
-function Copy-GitLabGroupToLocalFileSystem {
-    [Alias("Clone-GitLabGroup")]
+function Copy-GitlabGroupToLocalFileSystem {
+    [Alias("Clone-GitlabGroup")]
     [CmdletBinding()]
     param (
         [Parameter(Position=0, Mandatory=$true)]
@@ -76,7 +76,7 @@ function Copy-GitLabGroupToLocalFileSystem {
 
     Push-Location
 
-    $Group = Get-GitLabGroup $GroupId
+    $Group = Get-GitlabGroup $GroupId
     $GroupSplit = $Group.FullPath -split '/'
 
     $LocalPath = $(Get-Location).Path
@@ -93,7 +93,7 @@ function Copy-GitLabGroupToLocalFileSystem {
         Write-Host "WhatIf: setting local directory to '$LocalPath'"
     }
 
-    Get-GitLabProject -GroupId $GroupId |
+    Get-GitlabProject -GroupId $GroupId |
         ForEach-Object {
             $Path="$LocalPath/$($_.Group)"
 
@@ -119,8 +119,8 @@ function Copy-GitLabGroupToLocalFileSystem {
     }
 }
 
-function Update-LocalGitLabGroup {
-    [Alias("Pull-GitLabGroup")]
+function Update-LocalGitlabGroup {
+    [Alias("Pull-GitlabGroup")]
     [CmdletBinding()]
     param (
         [switch]

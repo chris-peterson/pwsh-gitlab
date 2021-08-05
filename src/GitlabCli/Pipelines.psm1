@@ -1,4 +1,4 @@
-function Get-GitLabPipeline {
+function Get-GitlabPipeline {
 
     [CmdletBinding(DefaultParameterSetName="ById")]
     param (
@@ -24,11 +24,11 @@ function Get-GitLabPipeline {
         $All = $false
     )
 
-    $Project = Get-GitLabProject -ProjectId $ProjectId
+    $Project = Get-GitlabProject -ProjectId $ProjectId
 
     if ($PipelineId) {
         Invoke-GitlabApi GET "projects/$($Project.Id)/pipelines/$PipelineId" |
-            New-WrapperObject -DisplayType 'GitLab.Pipeline'
+            New-WrapperObject -DisplayType 'Gitlab.Pipeline'
     } else {
         $Query = @{}
         $MaxPages = 1
@@ -47,11 +47,11 @@ function Get-GitLabPipeline {
             $Query['ref'] = $Ref
         }
         Invoke-GitlabApi GET "projects/$($Project.Id)/pipelines" $Query -MaxPages $MaxPages | 
-            ForEach-Object { $_ | New-WrapperObject -DisplayType 'GitLab.Pipeline'}
+            ForEach-Object { $_ | New-WrapperObject -DisplayType 'Gitlab.Pipeline'}
     }
 }
 
-function Get-GitLabPipelineSchedule {
+function Get-GitlabPipelineSchedule {
 
     [CmdletBinding()]
     param (

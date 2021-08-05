@@ -1,4 +1,4 @@
-function Search-GitLab {
+function Search-Gitlab {
     param(
         [Parameter(Position=0, Mandatory=$true)]
         [string]
@@ -41,10 +41,10 @@ function Search-GitLab {
 
     if ($Blobs) {
         $Query['scope'] = 'blobs'
-        $DisplayType = 'GitLab.BlobSearchResult'
+        $DisplayType = 'Gitlab.BlobSearchResult'
     } elseif ($MergeRequests) {
         $Query['scope'] = 'merge_requests'
-        $DisplayType = 'GitLab.MergeRequestSearchResult'
+        $DisplayType = 'Gitlab.MergeRequestSearchResult'
     } else {
         throw "Must search either blobs OR merge requests"
     }

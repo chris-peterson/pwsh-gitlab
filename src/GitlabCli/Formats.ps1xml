@@ -2,9 +2,9 @@
 <Configuration>
   <ViewDefinitions>
     <View>
-      <Name>GitLabGroup</Name>
+      <Name>GitlabGroup</Name>
       <ViewSelectedBy>
-        <TypeName>GitLab.Group</TypeName>
+        <TypeName>Gitlab.Group</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -39,9 +39,9 @@
       </TableControl>
     </View>
     <View>
-      <Name>GitLabMergeRequest</Name>
+      <Name>GitlabMergeRequest</Name>
       <ViewSelectedBy>
-        <TypeName>GitLab.MergeRequest</TypeName>
+        <TypeName>Gitlab.MergeRequest</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -83,9 +83,9 @@
       </TableControl>
     </View>
     <View>
-      <Name>GitLabPipeline</Name>
+      <Name>GitlabPipeline</Name>
       <ViewSelectedBy>
-        <TypeName>GitLab.Pipeline</TypeName>
+        <TypeName>Gitlab.Pipeline</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -126,9 +126,9 @@
       </TableControl>
     </View>
     <View>
-      <Name>GitLabProject</Name>
+      <Name>GitlabProject</Name>
       <ViewSelectedBy>
-        <TypeName>GitLab.Project</TypeName>
+        <TypeName>Gitlab.Project</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -170,9 +170,9 @@
       </TableControl>
     </View>
     <View>
-      <Name>GitLabBlobSearchResult</Name>
+      <Name>GitlabBlobSearchResult</Name>
       <ViewSelectedBy>
-        <TypeName>GitLab.BlobSearchResult</TypeName>
+        <TypeName>Gitlab.BlobSearchResult</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -214,9 +214,9 @@
       </TableControl>
     </View>
     <View>
-      <Name>GitLabMergeRequestSearchResult</Name>
+      <Name>GitlabMergeRequestSearchResult</Name>
       <ViewSelectedBy>
-        <TypeName>GitLab.MergeRequestSearchResult</TypeName>
+        <TypeName>Gitlab.MergeRequestSearchResult</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -265,9 +265,9 @@
       </TableControl>
     </View>
     <View>
-      <Name>GitLabUser</Name>
+      <Name>GitlabUser</Name>
       <ViewSelectedBy>
-        <TypeName>GitLab.User</TypeName>
+        <TypeName>Gitlab.User</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
