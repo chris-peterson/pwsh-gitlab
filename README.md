@@ -20,7 +20,7 @@ Install-Module -Name GitlabCli
 
 ### Configuration
 
-#### `GITLAB_ACCESS_TOKEN`
+#### `$env:GITLAB_ACCESS_TOKEN`
 
 Obtain a "Personal Access Token" (PAT) for your GitLab instance
 
@@ -34,7 +34,7 @@ Make the value available via
 
 One way to do this would be to add a line to your `$PROFILE`
 
-#### `GITLAB_URL`
+#### `$env:GITLAB_URL`
 
 (Optional) If using a gitlab instance that is not `gitlab.com`, provide it via:
 
@@ -120,7 +120,7 @@ _Optional Parameters_
 
 `-IncludeArchived` - Set this switch to include archived projects.  _By default, archived projects are not returned_
 
-### `Transfer-GitlabProject` (aka `Move-GitlabProject`)
+#### `Transfer-GitlabProject` (aka `Move-GitlabProject`)
 
 ```powershell
 Transfer-GitlabProject -ProjectId 'this-project' -DestinationGroup 'that-group'

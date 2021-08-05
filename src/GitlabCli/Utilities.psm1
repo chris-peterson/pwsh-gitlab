@@ -56,7 +56,7 @@ function Invoke-GitlabApi {
         Write-Error "`$env:GITLAB_ACCESS_TOKEN` has not been configured`nSee https://github.com/chris-peterson/pwsh-gitlab#getting-started for details"
         return
     }
-    $GitlabUrl = $env:GITLAB_URL ?? 'https://gitlab.com'
+    $GitlabUrl = $env:GITLAB_URL ?? 'gitlab.com'
 
     if (-not $GitlabUrl.StartsWith('http')) {
         $GitlabUrl = "https://$GitlabUrl"
