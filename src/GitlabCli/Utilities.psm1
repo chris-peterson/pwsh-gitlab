@@ -119,13 +119,17 @@ function Invoke-GitlabApi {
 
 function New-WrapperObject {
     param(
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipeline=$true)]
+        [Parameter(Position=0, Mandatory=$false, ValueFromPipeline=$true)]
         $Object,
 
         [Parameter(Position=1, Mandatory=$false)]
         [string]
         $DisplayType
     )
+
+    if (-not $Object) {
+        return $null
+    }
 
     $Wrapper = New-Object PSObject
     $Object.PSObject.Properties | ForEach-Object {
