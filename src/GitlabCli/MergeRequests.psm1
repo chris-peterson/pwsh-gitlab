@@ -223,8 +223,9 @@ function Update-GitlabMergeRequest {
         $Query['description'] = $Description
     }
 
-    Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" $Query -WhatIf:$WhatIf |
-        New-WrapperObject $_ -DisplayType 'Gitlab.MergeRequest'
+    $result = Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" $Query -WhatIf:$WhatIf
+    New-WrapperObject $result -DisplayType 'Gitlab.MergeRequest'
+
 }
 
 function Close-GitlabMergeRequest {
