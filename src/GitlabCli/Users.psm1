@@ -24,6 +24,10 @@ function Get-GitlabUser {
     }
 }
 
+function Get-GitlabCurrentUser {
+    Invoke-GitlabApi GET "user" | New-WrapperObject -DisplayType 'Gitlab.User'
+}
+
 function Get-GitlabGroupMembership {
     param (
         [Parameter(Mandatory=$false)]

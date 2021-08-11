@@ -160,11 +160,15 @@ function New-GitlabMergeRequest {
         $Title = $SourceBranch.Replace('-', ' ').Replace('_', ' ')
     }
 
-    $MergeRequest = Invoke-GitlabApi POST "projects/$($Project.Id)/merge_requests" @{
+    $Me = Get-GitlabCurrentUser
+
+    $MergeRequest = $(Invoke-GitlabApi POST "projects/$($Project.Id)/merge_requests" @{
         source_branch = $SourceBranch
         target_branch = $TargetBranch
+        remove_source_branch = 'true'
+        assignee_id = $Me.Id
         title = $Title
-    } -WhatIf:$WhatIf | New-WrapperObject $_ -DisplayType 'Gitlab.MergeRequest'
+    } -WhatIf:$WhatIf) | New-WrapperObject $_ -DisplayType 'Gitlab.MergeRequest'
     if ($Follow) {
         Start-Process $MergeRequest.WebUrl
     }

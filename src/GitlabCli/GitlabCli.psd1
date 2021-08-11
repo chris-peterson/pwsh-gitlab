@@ -105,6 +105,7 @@
 
         # User
         'Get-GitlabUser'
+        'Get-GitlabCurrentUser'
         'Get-GitlabGroupMembership'
         'Add-GitlabUserToGroup'
 
