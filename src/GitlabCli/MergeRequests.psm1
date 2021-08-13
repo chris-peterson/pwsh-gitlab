@@ -1,5 +1,6 @@
 function Get-GitlabMergeRequest {
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
+    [Alias("mr")]
     param(
         [Parameter(Position=0, Mandatory=$true, ParameterSetName="ByProjectId")]
         [string]
@@ -168,7 +169,9 @@ function New-GitlabMergeRequest {
         remove_source_branch = 'true'
         assignee_id = $Me.Id
         title = $Title
-    } -WhatIf:$WhatIf) | New-WrapperObject $_ -DisplayType 'Gitlab.MergeRequest'
+    } -WhatIf:$WhatIf)
+
+    $MergeRequest | New-WrapperObject -DisplayType 'Gitlab.MergeRequest'
     if ($Follow) {
         Start-Process $MergeRequest.WebUrl
     }
