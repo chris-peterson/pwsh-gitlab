@@ -175,8 +175,6 @@ function New-GitlabMergeRequest {
     if ($Follow) {
         Start-Process $MergeRequest.WebUrl
     }
-
-    $MergeRequest | Format-Table -AutoSize
 }
 
 function Update-GitlabMergeRequest {
