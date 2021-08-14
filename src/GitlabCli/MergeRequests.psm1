@@ -169,12 +169,12 @@ function New-GitlabMergeRequest {
         remove_source_branch = 'true'
         assignee_id = $Me.Id
         title = $Title
-    } -WhatIf:$WhatIf)
-
-    $MergeRequest | New-WrapperObject -DisplayType 'Gitlab.MergeRequest'
+    } -WhatIf:$WhatIf) | New-WrapperObject -DisplayType 'Gitlab.MergeRequest'
     if ($Follow) {
         Start-Process $MergeRequest.WebUrl
     }
+
+    $MergeRequest
 }
 
 function Update-GitlabMergeRequest {
