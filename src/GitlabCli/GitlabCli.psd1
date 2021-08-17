@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.1.0'
+    ModuleVersion = '1.2.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -88,6 +88,7 @@
         # MergeRequests
         'Get-GitlabMergeRequest'
         'New-GitlabMergeRequest'
+        'Set-GitlabMergeRequest'
         'Get-GitlabMergeRequestChangeSummary'
         'Update-GitlabMergeRequest'
         'Close-GitlabMergeRequest'
@@ -127,16 +128,17 @@
     
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
     AliasesToExport = @(
+        # long form
         'Clone-GitlabGroup'
         'Pull-GitlabGroup'
         'Transfer-GitlabProject'
         'Fork-GitlabProject'
         'Archive-GitlabProject'
 
-        # short names
+        # short form
         'issues'
+        'mr'
         'mrs'
-        'new-mr'
     )
     
     # DSC resources to export from this module

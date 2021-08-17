@@ -10,7 +10,7 @@ function Get-GitlabIssues {
         [string]
         $IssueId,
 
-        [Parameter(Position=0, Mandatory=$true,ParameterSetName="ByGroupId")]
+        [Parameter(Position=0, Mandatory=$true, ParameterSetName="ByGroupId")]
         [string]
         $GroupId,
 
@@ -20,17 +20,17 @@ function Get-GitlabIssues {
         [string]
         $State,
 
-        [Parameter(Mandatory=$false,ParameterSetName="ByGroupId")]
+        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
         [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
         [string]
         $CreatedAfter,
 
-        [Parameter(Mandatory=$false,ParameterSetName="ByGroupId")]
+        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
         [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
         [string]
         $CreatedBefore,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(Position=0, Mandatory=$true, ParameterSetName="Mine")]
         [switch]
         $Mine,
 
@@ -38,34 +38,36 @@ function Get-GitlabIssues {
         [switch]
         $WhatIf
     )
-
-    if ($ProjectId) {
-        $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
-    }
-
-    if ($GroupId) {
-        $GroupId = $(Get-GitlabGroup -GroupId $GroupId).Id
-    }
-
     $Path = $null
     $MaxPages = 1
     $Query = @{}
 
     if ($Mine) {
         $Path = 'issues'
-    } elseif ($IssueId) {
-        $Path = "projects/$ProjectId/issues/$IssueId"
-    } elseif ($ProjectId) {
-        $Path = "projects/$ProjectId/issues"
-        $MaxPages = 10
-    } elseif ($GroupId) {
-        $Path = "groups/$GroupId/issues"
-        $MaxPages = 10
     } else {
-        throw "Unsupported parameter combination"
+        if ($ProjectId) {
+            $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+        }
+
+        if ($GroupId) {
+            $GroupId = $(Get-GitlabGroup -GroupId $GroupId).Id
+        }
+
+        if ($IssueId) {
+            $Path = "projects/$ProjectId/issues/$IssueId"
+        } elseif ($GroupId) {
+            $Path = "groups/$GroupId/issues"
+            $MaxPages = 10
+        } else {
+            if (-not $ProjectId) {
+                $ProjectId = $(Get-GitlabProject -ProjectId '.').Id
+            }
+            $Path = "projects/$ProjectId/issues"
+            $MaxPages = 10
+        }
     }
 
-    if($State) {
+    if ($State) {
         $Query['state'] = $State
     }
 

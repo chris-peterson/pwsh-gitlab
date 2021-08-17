@@ -20,54 +20,63 @@ function Get-GitlabMergeRequest {
         [string]
         $State,
 
-        [Parameter(Mandatory=$false,ParameterSetName="ByGroupId")]
+        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
         [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
         [string]
         $CreatedAfter,
 
-        [Parameter(Mandatory=$false,ParameterSetName="ByGroupId")]
+        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
         [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
         [string]
         $CreatedBefore,
 
-        [Parameter(Mandatory=$false,ParameterSetName="ByGroupId")]
+        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
         [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
         [ValidateSet($null, $true, $false)]
         [object]
         $IsDraft,
 
-        [Parameter(Mandatory=$false,ParameterSetName="ByGroupId")]
+        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
         [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
         [string]
         $Branch,
+
+        [Parameter(Position=0, Mandatory=$true, ParameterSetName="Mine")]
+        [switch]
+        $Mine,
 
         [Parameter(Mandatory=$false)]
         [switch]
         $WhatIf
     )
 
-    if ($ProjectId) {
-        $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
-    }
-
-    if ($GroupId) {
-        $GroupId = $(Get-GitlabGroup -GroupId $GroupId).Id
-    }
-
     $Path = $null
     $MaxPages = 1
     $Query = @{}
 
-    if ($MergeRequestId) {
-        $Path = "projects/$ProjectId/merge_requests/$MergeRequestId"
-    } elseif ($ProjectId) {
-        $Path = "projects/$ProjectId/merge_requests"
-        $MaxPages = 10
-    } elseif ($GroupId) {
-        $Path = "groups/$GroupId/merge_requests"
-        $MaxPages = 10
-    } else {
-        throw "Unsupported parameter combination"
+    if ($Mine) {
+        $Path = 'merge_requests'
+    }
+    else {
+        if ($ProjectId) {
+            $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+        }
+
+        if ($GroupId) {
+            $GroupId = $(Get-GitlabGroup -GroupId $GroupId).Id
+        }
+
+        if ($MergeRequestId) {
+            $Path = "projects/$ProjectId/merge_requests/$MergeRequestId"
+        } elseif ($ProjectId) {
+            $Path = "projects/$ProjectId/merge_requests"
+            $MaxPages = 10
+        } elseif ($GroupId) {
+            $Path = "groups/$GroupId/merge_requests"
+            $MaxPages = 10
+        } else {
+            throw "Unsupported parameter combination"
+        }
     }
 
     if($State) {
@@ -86,7 +95,10 @@ function Get-GitlabMergeRequest {
         $Query['wip'] = $IsDraft ? 'yes' : 'no'
     }
 
-    if($Branch) {
+    if ($Branch) {
+        if ($Branch -eq '.') {
+            $Branch = Get-LocalGitContext | Select-Object -ExpandProperty Branch
+        }
         $Query['source_branch'] = $Branch
     }
     
@@ -127,7 +139,6 @@ function Get-GitlabMergeRequestChangeSummary {
 
 function New-GitlabMergeRequest {
     [CmdletBinding()]
-    [Alias("new-mr")]
     param(
         [Parameter(Position=0, Mandatory=$false)]
         [string]
@@ -163,7 +174,7 @@ function New-GitlabMergeRequest {
     if (-not $TargetBranch) {
         $TargetBranch = $Project.DefaultBranch
     }
-    if (-not $SourceBranch) {
+    if (-not $SourceBranch -or $SourceBranch -eq '.') {
         $SourceBranch = $(Get-LocalGitContext).Branch
     }
     if (-not $Title) {
@@ -184,6 +195,24 @@ function New-GitlabMergeRequest {
     }
 
     $MergeRequest
+}
+
+function Set-GitlabMergeRequest {
+    [CmdletBinding()]
+    [Alias("mr")]
+
+    param (
+    )
+
+    $ProjectId = '.'
+    $Branch = '.'
+
+    $Existing = Get-GitlabMergeRequest -ProjectId $ProjectId -Branch $Branch -State 'opened'
+    if ($Existing) {
+        return $Existing
+    }
+
+    New-GitlabMergeRequest -ProjectId $ProjectId -SourceBranch $Branch
 }
 
 function Update-GitlabMergeRequest {
@@ -239,7 +268,6 @@ function Update-GitlabMergeRequest {
 
     $result = Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" $Query -WhatIf:$WhatIf
     New-WrapperObject $result -DisplayType 'Gitlab.MergeRequest'
-
 }
 
 function Close-GitlabMergeRequest {
