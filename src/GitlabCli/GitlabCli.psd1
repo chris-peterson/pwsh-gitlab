@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.0.4'
+    ModuleVersion = '1.1.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -22,7 +22,7 @@
     Copyright = '(c) 2021'
     
     # Description of the functionality provided by this module
-    Description = 'Extensions to make GitLab interaction feel like native Powershell'
+    Description = 'Interact with GitLab via PowerShell'
     
     # Minimum version of the Windows PowerShell engine required by this module
     PowerShellVersion = '7.1'
@@ -61,6 +61,7 @@
     NestedModules = @(
         'Git.psm1'
         'Groups.psm1'
+        'Issues.psm1'
         'MergeRequests.psm1'
         'Pipelines.psm1'
         'Projects.psm1'
@@ -71,7 +72,7 @@
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @(
-        #Git
+        # Git
         'Get-LocalGitContext'
 
         # Groups
@@ -80,6 +81,9 @@
         'Remove-GitlabGroup'
         'Copy-GitlabGroupToLocalFileSystem'
         'Update-LocalGitlabGroup'
+
+        # Issues
+        'Get-GitlabIssues'
 
         # MergeRequests
         'Get-GitlabMergeRequest'
@@ -130,6 +134,8 @@
         'Archive-GitlabProject'
 
         # short names
+        'issues'
+        'mrs'
         'new-mr'
     )
     

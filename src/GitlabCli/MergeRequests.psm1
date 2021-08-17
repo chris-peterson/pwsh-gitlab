@@ -1,6 +1,6 @@
 function Get-GitlabMergeRequest {
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
-    [Alias("mr")]
+    [Alias("mrs")]
     param(
         [Parameter(Position=0, Mandatory=$true, ParameterSetName="ByProjectId")]
         [string]

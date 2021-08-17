@@ -6,6 +6,23 @@
     </Members>
   </Type>
   <Type>
+    <Name>Gitlab.Issue</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>AuthorName</Name>
+        <GetScriptBlock>$this.Author.Name</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>AssigneeName</Name>
+        <GetScriptBlock>$this.Assignee.Name</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>ProjectName</Name>
+        <GetScriptBlock>$this.WebUrl -match '://[\w\.]+/(?&lt;ProjectPath&gt;.*)/-' | Out-Null; $Matches['ProjectPath']</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Gitlab.MergeRequest</Name>
     <Members>
       <ScriptProperty>
