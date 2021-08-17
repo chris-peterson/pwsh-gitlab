@@ -2,9 +2,9 @@ function Get-GitlabMergeRequest {
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     [Alias("mrs")]
     param(
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName="ByProjectId")]
+        [Parameter(Position=0, Mandatory=$false, ParameterSetName="ByProjectId")]
         [string]
-        $ProjectId,
+        $ProjectId = ".",
 
         [Parameter(Position=1, Mandatory=$false, ParameterSetName="ByProjectId")]
         [string]
@@ -35,6 +35,11 @@ function Get-GitlabMergeRequest {
         [ValidateSet($null, $true, $false)]
         [object]
         $IsDraft,
+
+        [Parameter(Mandatory=$false,ParameterSetName="ByGroupId")]
+        [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
+        [string]
+        $Branch,
 
         [Parameter(Mandatory=$false)]
         [switch]
@@ -80,8 +85,12 @@ function Get-GitlabMergeRequest {
     if ($IsDraft -ne $null) {
         $Query['wip'] = $IsDraft ? 'yes' : 'no'
     }
+
+    if($Branch) {
+        $Query['source_branch'] = $Branch
+    }
     
-    return Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf | 
+    Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf | 
         ForEach-Object {
             $_ | New-WrapperObject -DisplayType 'Gitlab.MergeRequest'
         }

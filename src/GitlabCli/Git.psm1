@@ -15,7 +15,18 @@ function Get-LocalGitContext {
         Set-Location $Path
         if (Get-ChildItem -Filter '.git' -Hidden -Directory) {
             $Context.Repo = $($(git config --get remote.origin.url) -split ':' | Select-Object -Last 1).Replace('.git', '')
-            $Context.Branch = git rev-parse --abbrev-ref HEAD
+            
+            $branchOrSha = git status | Select-String "^HEAD detached at (?<sha>.{8})`|^On branch (?<branch>.*)"
+ 
+            if($branchOrSha.Matches[0].Groups["sha"].Success) {
+                $Context.Branch = (git branch -a --contains $branchOrSha.Matches[0].Groups["sha"].Value `
+                    | Select-Object -Skip 1 -First 1 `
+                    | Select-String "  (?<branch>.*)").Matches[0].Groups["branch"].Value
+            } elseif ($branchOrSha.Matches[0].Groups["branch"]) {
+                $Context.Branch = $branchOrSha.Matches[0].Groups["branch"].Value
+            } else {
+                $Context.Branch = "Detached HEAD"
+            }
         }
     }
     finally {
