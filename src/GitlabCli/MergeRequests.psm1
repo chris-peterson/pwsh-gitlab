@@ -84,15 +84,15 @@ function Get-GitlabMergeRequest {
     if ($IsDraft -ne $null) {
         $Query['wip'] = $IsDraft ? 'yes' : 'no'
     }
+
+    if($Branch) {
+        $Query['source_branch'] = $Branch
+    }
     
-    $result = Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf | 
+    Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf | 
         ForEach-Object {
             $_ | New-WrapperObject -DisplayType 'Gitlab.MergeRequest'
         }
-
-    if($Branch -ne $null) {
-        $result | Where-Object SourceBranch -eq $Branch
-    }
 }
 
 function Get-GitlabMergeRequestChangeSummary {
