@@ -62,3 +62,41 @@ function Get-GitlabPipelineSchedule {
 
     throw "not implemented yet"
 }
+
+function Get-GitlabPipelineJobs {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true,Position=0)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Mandatory=$true,Position=1)]
+        [string]
+        $PipelineId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        [ValidateSet("created","pending","running","failed","success","canceled","skipped","manual")]
+        $Scope,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $IncludeRetired
+    )
+
+    $GitlabApiArguments = @{
+        HttpMethod="GET"
+        Path="projects/$ProjectId/pipelines/$PipelineId/jobs"
+        Query=@{}
+    }
+
+    if($Scope) {
+        $GitlabApiArguments['Query']['scope'] = $Scope
+    }
+
+    if($IncludeRetired) {
+        $GitlabApiArguments['Query']['include_retired'] = $true
+    }
+
+    Invoke-GitlabApi @GitlabApiArguments
+}

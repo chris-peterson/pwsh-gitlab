@@ -59,6 +59,7 @@
     
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     NestedModules = @(
+        'Branches.psm1'
         'Git.psm1'
         'Groups.psm1'
         'Issues.psm1'
@@ -96,6 +97,7 @@
         # Pipelines
         'Get-GitlabPipeline'
         'Get-GitlabPipelineSchedule'
+        'Get-GitlabPipelineJobs'
 
         # Projects
         'Get-GitlabProject'
