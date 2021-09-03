@@ -52,6 +52,16 @@
       </ScriptProperty>
     </Members>
   </Type>
+    <Type>
+    <Name>Gitlab.PipelineSchedule</Name>
+    <Members>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Gitlab.PipelineJob</Name>
+    <Members>
+    </Members>
+  </Type>
   <Type>
     <Name>Gitlab.Project</Name>
     <Members>
