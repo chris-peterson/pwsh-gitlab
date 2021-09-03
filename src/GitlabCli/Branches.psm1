@@ -1,15 +1,16 @@
 function Get-GitlabBranch {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     param (
-        [Parameter(Mandatory=$false,Position=0)]
+        [Parameter(ParameterSetName="ByProjectId",Mandatory=$false)]
+        [Parameter(ParameterSetName="ByRef",Mandatory=$false)]
         [string]
         $ProjectId = ".",
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(ParameterSetName="ByProjectId",Mandatory=$false)]
         [string]
         $Search,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(ParameterSetName="ByRef", Mandatory=$true)]
         [Alias("Ref")]
         [string]
         $Branch
@@ -23,12 +24,18 @@ function Get-GitlabBranch {
         Query=@{}
     }
 
-    if($Branch) {
-        $GitlabApiArguments["Path"] =+ "/$($Branch)"
-    }
-
-    if($Search) {
-        $GitlabApiArguments["Query"]["search"] = $Search
+    switch($PSCmdlet.ParameterSetName) {
+        ByProjectId {
+            if($Search) {
+                $GitlabApiArguments["Query"]["search"] = $Search
+            }        
+        }
+        ByRef {
+            $GitlabApiArguments["Path"] =+ "/$($Branch)"
+        }
+        default {
+            throw "Parameterset $($PSCmdlet.ParameterSetName) is not implemented"
+        }
     }
 
     Invoke-GitlabApi @GitlabApiArguments | ForEach-Object { $_ |
