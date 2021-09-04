@@ -96,6 +96,7 @@
         # Pipelines
         'Get-GitlabPipeline'
         'Get-GitlabPipelineSchedule'
+        'Get-GitlabPipelineJobs'
 
         # Projects
         'Get-GitlabProject'
