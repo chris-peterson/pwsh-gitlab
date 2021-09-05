@@ -63,6 +63,7 @@
         'Git.psm1'
         'Groups.psm1'
         'Issues.psm1'
+        'Jobs.psm1'
         'MergeRequests.psm1'
         'Pipelines.psm1'
         'Projects.psm1'
@@ -89,6 +90,10 @@
         # Issues
         'Get-GitlabIssues'
 
+        # Jobs
+        'Get-GitlabJobs'
+        'Start-GitlabJob'
+
         # MergeRequests
         'Get-GitlabMergeRequest'
         'New-GitlabMergeRequest'
@@ -101,6 +106,8 @@
         'Get-GitlabPipeline'
         'Get-GitlabPipelineSchedule'
         'Get-GitlabPipelineJobs'
+        'New-GitlabPipeline'
+        'Get-GitlabPipelineBridges'
 
         # Projects
         'Get-GitlabProject'

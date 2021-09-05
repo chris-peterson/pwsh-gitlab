@@ -2,10 +2,10 @@ function Get-GitlabPipeline {
 
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     param (
-        [Parameter(ParameterSetName="ByProjectId", Position=0, Mandatory=$true)]
-        [Parameter(ParameterSetName="ByPipelineId", Position=0, Mandatory=$true)]
+        [Parameter(ParameterSetName="ByProjectId", Position=0, Mandatory=$false)]
+        [Parameter(ParameterSetName="ByPipelineId", Position=0, Mandatory=$false)]
         [string]
-        $ProjectId,
+        $ProjectId=".",
 
         [Parameter(ParameterSetName="ByPipelineId", Position=1, Mandatory=$false)]
         [string]
@@ -39,7 +39,7 @@ function Get-GitlabPipeline {
             if ($All) {
                 $MaxPages = 10 #ok, not really all, but let's not DOS gitlab
             }
-            
+
             if($Ref) {
                 if($Ref -eq '.') {
                     $LocalContext = Get-LocalGitContext
@@ -124,13 +124,18 @@ function Get-GitlabPipelineJobs {
 
         [Parameter(Mandatory=$false)]
         [switch]
-        $IncludeRetired
+        $IncludeRetired,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $ExcludeBridgeJobs = $false
     )
+
+    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
 
     $GitlabApiArguments = @{
         HttpMethod="GET"
         Path="projects/$ProjectId/pipelines/$PipelineId/jobs"
-        Query=@{}
     }
 
     if($Scope) {
@@ -141,29 +146,78 @@ function Get-GitlabPipelineJobs {
         $GitlabApiArguments['Query']['include_retired'] = $true
     }
 
-    Invoke-GitlabApi @GitlabApiArguments | 
+    $result = Invoke-GitlabApi @GitlabApiArguments
+
+    $result | 
         ForEach-Object { $_ | New-WrapperObject -DisplayType 'Gitlab.PipelineJob'}
+}
+
+function Get-GitlabPipelineBridges {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true,Position=0)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Mandatory=$true,Position=1)]
+        [string]
+        $PipelineId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        [ValidateSet("created","pending","running","failed","success","canceled","skipped","manual")]
+        $Scope
+    )
+    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+
+    $GitlabApiArguments = @{
+        HttpMethod="GET"
+        Path="projects/$ProjectId/pipelines/$PipelineId/bridges"
+        Query=@{}
+    }
+
+    if($Scope) {
+        $GitlabApiArguments['Query']['scope'] = $Scope
+    }
+
+    #Invoke-GitlabApi @GitlabApiArguments | ForEach-Object { $_ | New-WrapperObject "Gitlab.PipelineJobBridge"}
+    Invoke-GitlabApi @GitlabApiArguments
 }
 
 function New-GitlabPipeline {
     [CmdletBinding()]
     [Alias("Create-GitlabPipeline")]
     param (
-        [Parameter()]
+        [Parameter(Mandatory=$false)]
         [string]
-        $ProjectId,
+        $ProjectId = ".",
 
-        [Parameter()]
-        [Alias("BranchName")]
+        [Parameter(Mandatory=$false)]
+        [Alias("Branch")]
         [string]
-        $Ref
+        $Ref = ".",
+        
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $WhatIf = $false
     )
+
+    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
 
     $GitlabApiArguments = @{
         HttpMethod="POST"
         Path="projects/$ProjectId/pipeline"
+        Query=@{}
+        WhatIf=$WhatIf
     }
 
+    if($Ref -eq '.') {
+        $LocalContext = Get-LocalGitContext
+        $Ref = $LocalContext.Branch
+    }
+
+    $GitlabApiArguments["Query"]["ref"] = $Ref
+    
     Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject -DisplayType 'Gitlab.Pipeline'
 
 }
