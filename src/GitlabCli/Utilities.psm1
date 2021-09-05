@@ -118,25 +118,27 @@ function Invoke-GitlabApi {
 }
 
 function New-WrapperObject {
+    [CmdletBinding()]
     param(
-        [Parameter(Position=0, Mandatory=$false, ValueFromPipeline=$true)]
-        $Object,
+        [Parameter(ValueFromPipeline)]
+        $InputObject,
 
-        [Parameter(Position=1, Mandatory=$false)]
+        [Parameter(Position=0,Mandatory=$false)]
         [string]
         $DisplayType
     )
-
-    if (-not $Object) {
-        return $null
+    Begin{}
+    Process {
+        foreach ($item in $InputObject) {
+            $Wrapper = New-Object PSObject
+            $item.PSObject.Properties | ForEach-Object {
+                $Wrapper | Add-Member -MemberType NoteProperty -Name $($_.Name | ConvertTo-PascalCase) -Value $_.Value
+            }
+            if ($DisplayType) {
+                $Wrapper.PSTypeNames.Insert(0, $DisplayType)
+            }
+            Write-Output $Wrapper
+        }
     }
-
-    $Wrapper = New-Object PSObject
-    $Object.PSObject.Properties | ForEach-Object {
-        $Wrapper | Add-Member -MemberType NoteProperty -Name $($_.Name | ConvertTo-PascalCase) -Value $_.Value
-    }
-    if ($DisplayType) {
-        $Wrapper.PSTypeNames.Insert(0, $DisplayType)
-    }
-    return $Wrapper
+    End{}
 }
