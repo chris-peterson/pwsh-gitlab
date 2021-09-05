@@ -79,8 +79,6 @@ function Get-GitlabIssues {
         $Query['created_after'] = $CreatedAfter
     }
 
-    return Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf |
-        ForEach-Object {
-            $_ | New-WrapperObject -DisplayType 'Gitlab.Issue'
-        }
+    return Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Issue'
+        
 }

@@ -28,7 +28,6 @@ function Get-GitlabPipeline {
         "Path" = "projects/$($Project.Id)/pipelines"
     }
 
-    
     switch ($PSCmdlet.ParameterSetName) {
         ByPipelineId {
             $GitlabApiParameters["Path"] += "/$PipelineId"
@@ -57,8 +56,7 @@ function Get-GitlabPipeline {
         }
     }
 
-    Invoke-GitlabApi @GitlabApiParameters | 
-        ForEach-Object { $_ | New-WrapperObject -DisplayType 'Gitlab.Pipeline'}
+    Invoke-GitlabApi @GitlabApiParameters | New-WrapperObject 'Gitlab.Pipeline'
 }
 
 function Get-GitlabPipelineSchedule {
@@ -101,8 +99,7 @@ function Get-GitlabPipelineSchedule {
         default { throw "Parameterset $($PSCmdlet.ParameterSetName) is not implemented"}
     }
 
-    Invoke-GitlabApi @GitlabApiArguments | 
-        ForEach-Object { $_ | New-WrapperObject -DisplayType 'Gitlab.PipelineSchedule'}
+    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
 
 }
 
@@ -146,10 +143,7 @@ function Get-GitlabPipelineJobs {
         $GitlabApiArguments['Query']['include_retired'] = $true
     }
 
-    $result = Invoke-GitlabApi @GitlabApiArguments
-
-    $result | 
-        ForEach-Object { $_ | New-WrapperObject -DisplayType 'Gitlab.PipelineJob'}
+    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineJob'
 }
 
 function Get-GitlabPipelineBridges {
@@ -180,8 +174,7 @@ function Get-GitlabPipelineBridges {
         $GitlabApiArguments['Query']['scope'] = $Scope
     }
 
-    #Invoke-GitlabApi @GitlabApiArguments | ForEach-Object { $_ | New-WrapperObject "Gitlab.PipelineJobBridge"}
-    Invoke-GitlabApi @GitlabApiArguments
+    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.PipelineJobBridge"
 }
 
 function New-GitlabPipeline {
@@ -218,6 +211,6 @@ function New-GitlabPipeline {
 
     $GitlabApiArguments["Query"]["ref"] = $Ref
     
-    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject -DisplayType 'Gitlab.Pipeline'
+    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Pipeline'
 
 }

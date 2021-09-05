@@ -102,10 +102,7 @@ function Get-GitlabMergeRequest {
         $Query['source_branch'] = $Branch
     }
     
-    Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf | 
-        ForEach-Object {
-            $_ | New-WrapperObject -DisplayType 'Gitlab.MergeRequest'
-        }
+    Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.MergeRequest'
 }
 
 function Get-GitlabMergeRequestChangeSummary {
@@ -189,7 +186,7 @@ function New-GitlabMergeRequest {
         remove_source_branch = 'true'
         assignee_id = $Me.Id
         title = $Title
-    } -WhatIf:$WhatIf) | New-WrapperObject -DisplayType 'Gitlab.MergeRequest'
+    } -WhatIf:$WhatIf) | New-WrapperObject 'Gitlab.MergeRequest'
     if ($Follow) {
         Start-Process $MergeRequest.WebUrl
     }
@@ -266,8 +263,7 @@ function Update-GitlabMergeRequest {
         $Query['description'] = $Description
     }
 
-    $result = Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" $Query -WhatIf:$WhatIf
-    New-WrapperObject $result -DisplayType 'Gitlab.MergeRequest'
+    Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" $Query -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.MergeRequest'
 }
 
 function Close-GitlabMergeRequest {

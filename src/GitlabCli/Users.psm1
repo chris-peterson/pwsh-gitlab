@@ -13,19 +13,19 @@ function Get-GitlabUser {
         $UserId = Invoke-GitlabApi GET "users" @{
             username = $Username
         } | Select-Object -First 1 -ExpandProperty id
-        Invoke-GitlabApi GET "users/$UserId" | New-WrapperObject -DisplayType 'Gitlab.User'
+        Invoke-GitlabApi GET "users/$UserId" | New-WrapperObject 'Gitlab.User'
     }
     elseif ($EmailAddress) {
         $UserId = Invoke-GitlabApi GET "search" @{
             scope = 'users'
             search = $EmailAddress
         } | Select-Object -First 1 -ExpandProperty id
-        Invoke-GitlabApi GET "users/$UserId" | New-WrapperObject -DisplayType 'Gitlab.User'
+        Invoke-GitlabApi GET "users/$UserId" | New-WrapperObject 'Gitlab.User'
     }
 }
 
 function Get-GitlabCurrentUser {
-    Invoke-GitlabApi GET "user" | New-WrapperObject -DisplayType 'Gitlab.User'
+    Invoke-GitlabApi GET "user" | New-WrapperObject 'Gitlab.User'
 }
 
 function Get-GitlabGroupMembership {
@@ -40,8 +40,7 @@ function Get-GitlabGroupMembership {
     )
     $User = Get-GitlabUser -Username $Username -EmailAddress $EmailAddress
 
-    Invoke-GitlabApi GET "users/$($User.Id)/memberships" -MaxPages 10 |
-        ForEach-Object { New-WrapperObject $_ }
+    Invoke-GitlabApi GET "users/$($User.Id)/memberships" -MaxPages 10 | New-WrapperObject "Gitlab.GroupMembership"
 }
 
 function Add-GitlabUserToGroup {

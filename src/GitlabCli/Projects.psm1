@@ -21,7 +21,7 @@ function Get-GitlabProject {
         }
         $Project = Invoke-GitlabApi GET "projects/$([System.Net.WebUtility]::UrlEncode($ProjectId))"
         if ($Project) {
-            return $Project | New-WrapperObject -DisplayType 'Gitlab.Project'
+            return $Project | New-WrapperObject 'Gitlab.Project'
         }
     }
 
@@ -35,7 +35,7 @@ function Get-GitlabProject {
         }
         Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPage 10 | 
         Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
-        ForEach-Object { $_ | New-WrapperObject -DisplayType 'Gitlab.Project' } |
+        New-WrapperObject 'Gitlab.Project' |
         Sort-Object -Property 'Name'
     }
 }

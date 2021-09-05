@@ -19,7 +19,7 @@ function Get-GitlabJobs {
         Path="projects/$ProjectId/jobs/$JobId"
     }
 
-    Invoke-GitlabApi @GitlabApiArguments | ForEach-Object { $_ | New-WrapperObject "Gitlab.Job"}
+    Invoke-GitlabApi @GitlabApiArguments |  New-WrapperObject "Gitlab.Job"
 }
 
 function Start-GitlabJob {
@@ -44,8 +44,11 @@ function Start-GitlabJob {
 
     $GitlabApiArguments = @{
         HttpMethod="POST"
-        Path="projects/$ProjectId/jobs/$JobId"
-        Whatif=$WhatIf
+        Path="projects/$ProjectId/jobs/$JobId/play"
+    }
+
+    if($Whatif) {
+        return Invoke-GitlabApi @GitlabApiArguments -WhatIf
     }
 
     Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.GitlabJob"
