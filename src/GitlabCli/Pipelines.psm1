@@ -7,7 +7,7 @@ function Get-GitlabPipeline {
         [string]
         $ProjectId,
 
-        [Parameter(ParameterSetName="ByPipelineId", Postion=1, Mandatory=$false)]
+        [Parameter(ParameterSetName="ByPipelineId", Position=1, Mandatory=$false)]
         [string]
         $PipelineId,
 
