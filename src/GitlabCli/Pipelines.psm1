@@ -11,19 +11,14 @@ function Get-GitlabPipeline {
         [string]
         $PipelineId,
 
-        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
-        [switch]
-        $Recent = $false,
-
         [Parameter(ParameterSetName="ByProjectId",Mandatory=$false)]
         [Alias("Branch")]
         [string]
         $Ref,
 
-
         [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
         [switch]
-        $All = $false
+        $All
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
@@ -41,13 +36,10 @@ function Get-GitlabPipeline {
         ByProjectId {
             $Query = @{}
             $MaxPages = 1
-            if ($Recent) {
-                # default behavior of CLI/API
-            } elseif ($All) {
+            if ($All) {
                 $MaxPages = 10 #ok, not really all, but let's not DOS gitlab
-            } else {
-                throw "Must provide either an ID, or a range parameter (e.g. Recent/All)"
             }
+            
             if($Ref) {
                 if($Ref -eq '.') {
                     $LocalContext = Get-LocalGitContext
@@ -151,4 +143,27 @@ function Get-GitlabPipelineJobs {
 
     Invoke-GitlabApi @GitlabApiArguments | 
         ForEach-Object { $_ | New-WrapperObject -DisplayType 'Gitlab.PipelineJob'}
+}
+
+function New-GitlabPipeline {
+    [CmdletBinding()]
+    [Alias("Create-GitlabPipeline")]
+    param (
+        [Parameter()]
+        [string]
+        $ProjectId,
+
+        [Parameter()]
+        [Alias("BranchName")]
+        [string]
+        $Ref
+    )
+
+    $GitlabApiArguments = @{
+        HttpMethod="POST"
+        Path="projects/$ProjectId/pipeline"
+    }
+
+    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject -DisplayType 'Gitlab.Pipeline'
+
 }
