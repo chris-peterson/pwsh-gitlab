@@ -11,7 +11,7 @@ function Get-GitlabGroup {
         'with_projects' = 'false'
     }
 
-    return $Group | New-WrapperObject -DisplayType 'Gitlab.Group'
+    return $Group | New-WrapperObject 'Gitlab.Group'
 }
 
 function New-GitlabGroup {

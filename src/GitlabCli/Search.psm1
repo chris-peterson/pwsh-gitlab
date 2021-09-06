@@ -49,8 +49,6 @@ function Search-Gitlab {
         throw "Must search either blobs OR merge requests"
     }
 
-    Invoke-GitlabApi GET "search" $Query -MaxPages $MaxPages -WhatIf:$WhatIf | 
-        Foreach-Object {
-            $_ | New-WrapperObject -DisplayType $DisplayType
-        }
+    Invoke-GitlabApi GET "search" $Query -MaxPages $MaxPages -WhatIf:$WhatIf | New-WrapperObject $DisplayType
+    
 }

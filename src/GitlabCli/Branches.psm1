@@ -38,7 +38,6 @@ function Get-GitlabBranch {
         }
     }
 
-    Invoke-GitlabApi @GitlabApiArguments | ForEach-Object { $_ |
-        New-WrapperObject -DisplayType 'Gitlab.Branch'}
+    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Branch'
 
 }
