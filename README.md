@@ -52,6 +52,8 @@ Import-Module GitlabCli
 
 `-WhatIf` : For mutable operations (or for some complex query operations), gives a preview of what actions would be taken.
 
+`-Follow` : For operations that create a resource, follow the the URL after creation
+
 ## Global Behaviors
 
 If invoking commands from within a git repository, `.` can be used for `ProjectId` / `BranchName` to use the local context.
@@ -129,7 +131,7 @@ Transfer-GitlabProject -ProjectId 'this-project' -DestinationGroup 'that-group'
 
 ### Merge Requests
 
-#### `New-GitlabMergeRequest` (aka `new-mr`)
+#### `New-GitlabMergeRequest`
 
 ```powershell
 New-GitlabMergeRequest
@@ -145,15 +147,11 @@ _Optional Parameters_
 
 `-Title` - Defaults to space-delimited source branch name
 
-`-Follow` - If provided, follow the URL after creation
+## Other Examples
 
-Short version:
+### `mr`
 
-```powershell
-new-mr -Follow
-```
-
-Creates a new merge request and follows the URL.
+Create or get merge request for current git context
 
 ## References / Acknowledgements
 

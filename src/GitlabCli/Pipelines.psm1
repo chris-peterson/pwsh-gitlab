@@ -179,7 +179,6 @@ function Get-GitlabPipelineBridges {
 
 function New-GitlabPipeline {
     [CmdletBinding()]
-    [Alias("Create-GitlabPipeline")]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -189,7 +188,11 @@ function New-GitlabPipeline {
         [Alias("Branch")]
         [string]
         $Ref,
-        
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $Follow,
+
         [Parameter(Mandatory=$false)]
         [switch]
         $WhatIf = $false
@@ -212,5 +215,12 @@ function New-GitlabPipeline {
         Query=@{'ref' = $Ref}
         WhatIf=$WhatIf
     }
-    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Pipeline'
+
+    $Pipeline = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Pipeline'
+
+    if ($Follow) {
+        Start-Process $Pipeline.WebUrl
+    }
+
+    $Pipeline
 }
