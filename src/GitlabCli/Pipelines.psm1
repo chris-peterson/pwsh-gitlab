@@ -188,29 +188,29 @@ function New-GitlabPipeline {
         [Parameter(Mandatory=$false)]
         [Alias("Branch")]
         [string]
-        $Ref = ".",
+        $Ref,
         
         [Parameter(Mandatory=$false)]
         [switch]
         $WhatIf = $false
     )
 
-    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = $Project.Id
+
+    if ($Ref) {
+        if ($Ref -eq '.') {
+            $Ref = $(Get-LocalGitContext).Branch
+        }
+    } else {
+        $Ref = $Project.DefaultBranch
+    }
 
     $GitlabApiArguments = @{
         HttpMethod="POST"
         Path="projects/$ProjectId/pipeline"
-        Query=@{}
+        Query=@{'ref' = $Ref}
         WhatIf=$WhatIf
     }
-
-    if($Ref -eq '.') {
-        $LocalContext = Get-LocalGitContext
-        $Ref = $LocalContext.Branch
-    }
-
-    $GitlabApiArguments["Query"]["ref"] = $Ref
-    
     Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Pipeline'
-
 }
