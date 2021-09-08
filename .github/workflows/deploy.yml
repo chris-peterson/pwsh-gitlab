@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Publish Module to PowerShell Gallery
-        uses: pcgeek86/publish-powershell-module-action@7c0bb5c0041e699d64298cf22b1e27e5cf9a5f73
+        uses: pcgeek86/publish-powershell-module-action@v20
         id: publish-module
         with:
           NuGetApiKey: ${{ secrets.PS_GALLERY_KEY }}
