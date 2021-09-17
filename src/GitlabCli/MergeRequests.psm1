@@ -10,9 +10,13 @@ function Get-GitlabMergeRequest {
         [string]
         $MergeRequestId,
 
-        [Parameter(Position=0, Mandatory=$true,ParameterSetName="ByGroupId")]
+        [Parameter(Position=0, Mandatory=$true, ParameterSetName="ByGroupId")]
         [string]
         $GroupId,
+
+        [Parameter(Position=0, Mandatory=$true, ParameterSetName="ByUrl")]
+        [string]
+        $Url,
 
         [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
         [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
@@ -58,10 +62,13 @@ function Get-GitlabMergeRequest {
         $Path = 'merge_requests'
     }
     else {
+        if ($Url -and $Url -match "$env:GITLAB_URL/(?<ProjectId>.*)/-/merge_requests/(?<MergeRequestId>\d+)") {
+            $ProjectId = $Matches.ProjectId
+            $MergeRequestId = $Matches.MergeRequestId
+        }
         if ($ProjectId) {
             $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
         }
-
         if ($GroupId) {
             $GroupId = $(Get-GitlabGroup -GroupId $GroupId).Id
         }
