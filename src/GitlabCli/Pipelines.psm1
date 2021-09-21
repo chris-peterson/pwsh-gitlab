@@ -134,11 +134,11 @@ function Get-GitlabPipelineSchedule {
 function Get-GitlabPipelineJobs {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true,Position=0)]
+        [Parameter(Mandatory=$true, Position=0)]
         [string]
         $ProjectId,
 
-        [Parameter(Mandatory=$true,Position=1)]
+        [Parameter(Mandatory=$true, Position=1)]
         [string]
         $PipelineId,
 
@@ -153,7 +153,11 @@ function Get-GitlabPipelineJobs {
 
         [Parameter(Mandatory=$false)]
         [switch]
-        $ExcludeBridgeJobs = $false
+        $ExcludeBridgeJobs = $false,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $IncludeTrace
     )
 
     $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
@@ -171,7 +175,21 @@ function Get-GitlabPipelineJobs {
         $GitlabApiArguments['Query']['include_retired'] = $true
     }
 
-    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineJob'
+    $Jobs = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineJob'
+
+    if ($IncludeTrace) {
+        $Jobs | ForEach-Object {
+            try {
+                $Trace = Invoke-GitlabApi GET "projects/$ProjectId/jobs/$($_.Id)/trace"
+            }
+            catch {
+                $Trace = $Null
+            }
+            $_ | Add-Member -MemberType 'NoteProperty' -Name 'Trace' -Value $Trace
+        }
+    }
+
+    $Jobs
 }
 
 function Get-GitlabPipelineBridges {
