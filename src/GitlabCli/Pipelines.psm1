@@ -29,6 +29,10 @@ function Get-GitlabPipeline {
         [switch]
         $Mine,
 
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $IncludeTestReport,
+
         [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
         [switch]
         $All,
@@ -84,7 +88,22 @@ function Get-GitlabPipeline {
     if ($WhatIf) {
         $GitlabApiParameters["WhatIf"] = $True
     }
-    Invoke-GitlabApi @GitlabApiParameters | New-WrapperObject 'Gitlab.Pipeline'
+    $Pipelines = Invoke-GitlabApi @GitlabApiParameters | New-WrapperObject 'Gitlab.Pipeline'
+
+    if ($IncludeTestReport) {
+        $Pipelines | ForEach-Object {
+            try {
+                $TestReport = Invoke-GitlabApi GET "projects/$($_.ProjectId)/pipelines/$($_.Id)/test_report" | New-WrapperObject 'Gitlab.TestReport'
+            }
+            catch {
+                $TestReport = $Null
+            }
+
+            $_ | Add-Member -MemberType 'NoteProperty' -Name 'TestReport' -Value $TestReport
+        }
+    }
+
+    $Pipelines
 }
 
 function Get-GitlabPipelineSchedule {

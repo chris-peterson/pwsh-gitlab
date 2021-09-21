@@ -68,6 +68,15 @@
     </Members>
   </Type>
   <Type>
+    <Name>Gitlab.TestReport</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Failures</Name>
+        <GetScriptBlock>$this.TestSuites.test_cases | Where-Object status -eq 'failed'</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Gitlab.Project</Name>
     <Members>
       <ScriptProperty>
