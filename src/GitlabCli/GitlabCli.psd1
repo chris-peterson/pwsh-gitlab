@@ -148,6 +148,7 @@
         'Archive-GitlabProject'
 
         # short form
+        'build'
         'issues'
         'mr'
         'mrs'

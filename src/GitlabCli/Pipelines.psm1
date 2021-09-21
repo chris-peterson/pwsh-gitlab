@@ -168,7 +168,7 @@ function Get-GitlabPipelineJobs {
 
         [Parameter(Mandatory=$false)]
         [switch]
-        $IncludeRetired,
+        $IncludeRetried,
 
         [Parameter(Mandatory=$false)]
         [switch]
@@ -186,12 +186,12 @@ function Get-GitlabPipelineJobs {
         Path="projects/$ProjectId/pipelines/$PipelineId/jobs"
     }
 
-    if($Scope) {
+    if ($Scope) {
         $GitlabApiArguments['Query']['scope'] = $Scope
     }
 
-    if($IncludeRetired) {
-        $GitlabApiArguments['Query']['include_retired'] = $true
+    if ($IncludeRetried) {
+        $GitlabApiArguments['Query']['include_retried'] = $true
     }
 
     $Jobs = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineJob'
@@ -244,6 +244,7 @@ function Get-GitlabPipelineBridges {
 
 function New-GitlabPipeline {
     [CmdletBinding()]
+    [Alias("build")]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -253,6 +254,10 @@ function New-GitlabPipeline {
         [Alias("Branch")]
         [string]
         $Ref,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $Wait,
 
         [Parameter(Mandatory=$false)]
         [switch]
@@ -283,9 +288,33 @@ function New-GitlabPipeline {
 
     $Pipeline = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Pipeline'
 
-    if ($Follow) {
-        Start-Process $Pipeline.WebUrl
+    if ($Wait) {
+        Write-Host "waiting for $($Pipeline.Id)..."
+        while ($True) {
+            Start-Sleep -Seconds 5
+            $Jobs = Get-GitlabPipelineJobs -ProjectId $Pipeline.ProjectId -PipelineId $Pipeline.Id -IncludeTrace
+
+            $RunningJobs = $Jobs | Where-Object { $_.Status -ieq 'running' -or $_.Status -ieq 'pending' }
+            if ($RunningJobs) {
+                Clear-Host
+                $RunningJobs | ForEach-Object {
+                    Write-Host
+                    Write-Host "[$($_.Name)]" -ForegroundColor DarkYellow
+                    $RecentProgress = $_.Trace -split "`n" | Select-Object -Last 10
+                    $RecentProgress | ForEach-Object {
+                        Write-Host "   $_"
+                    }
+                }
+            }
+            else {
+                break;
+            }
+        }
     }
 
-    $Pipeline
+    if ($Follow) {
+        Start-Process $Pipeline.WebUrl
+    } else {
+        $Pipeline
+    }
 }
