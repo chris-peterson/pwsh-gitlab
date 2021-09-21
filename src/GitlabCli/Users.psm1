@@ -1,12 +1,16 @@
 function Get-GitlabUser {
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(ParameterSetName='ByUsername', Mandatory=$false)]
         [string]
         $Username,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(ParameterSetName='ByEmail', Mandatory=$false)]
         [string]
-        $EmailAddress
+        $EmailAddress,
+
+        [Parameter(ParameterSetName='ByMe', Mandatory=$False)]
+        [switch]
+        $Me
     )
 
     if ($Username) {
@@ -15,17 +19,20 @@ function Get-GitlabUser {
         } | Select-Object -First 1 -ExpandProperty id
         Invoke-GitlabApi GET "users/$UserId" | New-WrapperObject 'Gitlab.User'
     }
-    elseif ($EmailAddress) {
+    if ($EmailAddress) {
         $UserId = Invoke-GitlabApi GET "search" @{
             scope = 'users'
             search = $EmailAddress
         } | Select-Object -First 1 -ExpandProperty id
         Invoke-GitlabApi GET "users/$UserId" | New-WrapperObject 'Gitlab.User'
     }
+    if ($Me) {
+        Invoke-GitlabApi GET 'user' | New-WrapperObject 'Gitlab.User'
+    }
 }
 
 function Get-GitlabCurrentUser {
-    Invoke-GitlabApi GET "user" | New-WrapperObject 'Gitlab.User'
+    Get-GitlabUser -Me
 }
 
 function Get-GitlabGroupMembership {

@@ -16,9 +16,26 @@ function Get-GitlabPipeline {
         [string]
         $Ref,
 
+        [Parameter(ParameterSetName="ByProjectId",Mandatory=$false)]
+        [ValidateSet('created', 'waiting_for_resource', 'preparing', 'pending', 'running', 'success', 'failed', 'canceled', 'skipped', 'manual', 'scheduled')]
+        [string]
+        $Status,
+
+        [Parameter(ParameterSetName="ByProjectId",Mandatory=$false)]
+        [string]
+        $Username,
+
+        [Parameter(ParameterSetName="ByProjectId",Mandatory=$false)]
+        [switch]
+        $Mine,
+
         [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
         [switch]
-        $All
+        $All,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $WhatIf
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
@@ -46,6 +63,14 @@ function Get-GitlabPipeline {
                 }
                 $Query['ref'] = $Ref
             }
+            if ($Status) {
+                $Query['status'] = $Status
+            }
+            if ($Mine) {
+                $Query['username'] = $(Get-GitlabUser -Me).Username
+            } elseif ($Username) {
+                $Query['username'] = $Username
+            }
     
             $GitlabApiParameters["Query"] = $Query
             $GitlabApiParameters["MaxPages"] = $MaxPages
@@ -56,6 +81,9 @@ function Get-GitlabPipeline {
         }
     }
 
+    if ($WhatIf) {
+        $GitlabApiParameters["WhatIf"] = $True
+    }
     Invoke-GitlabApi @GitlabApiParameters | New-WrapperObject 'Gitlab.Pipeline'
 }
 
