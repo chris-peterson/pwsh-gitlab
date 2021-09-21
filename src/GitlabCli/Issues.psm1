@@ -80,5 +80,55 @@ function Get-GitlabIssues {
     }
 
     return Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Issue'
-        
+}
+
+function New-GitlabIssue {
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0, Mandatory=$false)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [string]
+        $Title,
+
+        [Parameter(Position=2, Mandatory=$true)]
+        [string]
+        $Description,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $WhatIf
+    )
+
+    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+
+    return Invoke-GitlabApi POST "projects/$ProjectId/issues" @{
+        title = $Title
+        description = $Description
+    } -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Issue'
+}
+
+function Close-GitlabIssue {
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0, Mandatory=$false)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [string]
+        $IssueId,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $WhatIf
+    )
+
+    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+
+    return Invoke-GitlabApi PUT "projects/$ProjectId/issues/$IssueId" @{
+        state_event = 'close'
+    } -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Issue'
 }

@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.6.0'
+    ModuleVersion = '1.7.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -89,6 +89,8 @@
 
         # Issues
         'Get-GitlabIssues'
+        'New-GitlabIssue'
+        'Close-GitlabIssue'
 
         # Jobs
         'Get-GitlabJobs'
@@ -99,6 +101,8 @@
         'New-GitlabMergeRequest'
         'Set-GitlabMergeRequest'
         'Get-GitlabMergeRequestChangeSummary'
+        'Invoke-GitlabMergeRequestReview'
+        'Approve-GitlabMergeRequest'
         'Update-GitlabMergeRequest'
         'Close-GitlabMergeRequest'
 
@@ -146,6 +150,7 @@
         'Transfer-GitlabProject'
         'Fork-GitlabProject'
         'Archive-GitlabProject'
+        'Review-GitlabMergeRequest'
 
         # short form
         'build'

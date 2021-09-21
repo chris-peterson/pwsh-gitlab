@@ -54,7 +54,10 @@
             <Width>16</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>40</Width>
+            <Width>32</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>8</Width>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Url</Label>
@@ -73,6 +76,9 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Title</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>State</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>WebUrl</PropertyName>

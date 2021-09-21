@@ -45,6 +45,10 @@ function Get-GitlabMergeRequest {
         [string]
         $Branch,
 
+        [Parameter(Position=0, Mandatory=$false)]
+        [switch]
+        $IncludeApprovals,
+
         [Parameter(Position=0, Mandatory=$true, ParameterSetName="Mine")]
         [switch]
         $Mine,
@@ -109,7 +113,29 @@ function Get-GitlabMergeRequest {
         $Query['source_branch'] = $Branch
     }
     
-    Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.MergeRequest'
+    $MergeRequests = Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.MergeRequest'
+
+    if ($IncludeApprovals) {
+        $MergeRequests | ForEach-Object {
+            try {
+                $Approvals = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.Iid)/approval_state"
+            }
+            catch {
+                $Approvals = $Null
+            }
+            $_ | Add-Member -MemberType 'NoteProperty' -Name 'Approvals' -Value $($Approvals.rules.approved_by | New-WrapperObject 'Gitlab.User')
+
+            try {
+                $ThumbsUp = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.Iid)/award_emoji" | Where-Object name -ieq 'thumbsup'
+            }
+            catch {
+                $ThumbsUp = $Null
+            }
+            $_ | Add-Member -MemberType 'NoteProperty' -Name 'ThumbsUp' -Value $($ThumbsUp.user | New-WrapperObject 'Gitlab.User')
+        }
+    }
+
+    $MergeRequests
 }
 
 function Get-GitlabMergeRequestChangeSummary {
@@ -292,4 +318,48 @@ function Close-GitlabMergeRequest {
     $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
 
     Update-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -Close -WhatIf:$WhatIf
+}
+
+function Invoke-GitlabMergeRequestReview {
+    [CmdletBinding()]
+    [Alias('Review-GitlabMergeRequest')]
+    param(
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $MergeRequestId
+    )
+
+    $ProjectId = $(Get-GitlabProject -ProjectId '.').Id
+
+    $MergeRequest = Get-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId
+
+    git stash | Out-Null
+    git pull -p | Out-Null
+    git checkout $MergeRequest.SourceBranch
+    git diff "origin/$($MergeRequest.TargetBranch)"
+}
+
+function Approve-GitlabMergeRequest {
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0, Mandatory=$false)]
+        [string]
+        $MergeRequestId,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $WhatIf
+    )
+
+    $ProjectId = $(Get-GitlabProject -ProjectId '.').Id
+
+    if (-not $MergeRequestId) {
+        $MergeRequest = Get-GitlabMergeRequest -ProjectId $ProjectId -Branch '.' -State 'opened'
+        if ($MergeRequest) {
+            $MergeRequestId = $MergeRequest.Iid
+        }
+    }
+
+    Invoke-GitlabApi POST "/projects/$ProjectId/merge_requests/$MergeRequestId/approve" -WhatIf:$WhatIf | Out-Null
+    Get-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -IncludeApprovals
 }
