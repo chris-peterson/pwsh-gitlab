@@ -262,12 +262,12 @@ function New-GitlabPipeline {
     param (
         [Parameter(Mandatory=$false)]
         [string]
-        $ProjectId = ".",
+        $ProjectId = '.',
 
         [Parameter(Mandatory=$false)]
         [Alias("Branch")]
         [string]
-        $Ref,
+        $Ref = '.',
 
         [Parameter(Mandatory=$false)]
         [switch]
@@ -325,8 +325,11 @@ function New-GitlabPipeline {
                             Write-Host "[$($_.Name)] ❌" -ForegroundColor DarkRed
                     }
                 Write-Host
-                $Jobs |
-                    Where-Object { $_.Status -ne 'success' -and $_.Status -ne 'failed' } |
+
+                $InProgress = $Jobs |
+                    Where-Object { $_.Status -ne 'success' -and $_.Status -ne 'failed' }
+                if ($InProgress) {
+                    $InProgress |
                         ForEach-Object {
                             Write-Host "[$($_.Name)] ⏳" -ForegroundColor DarkYellow
                             $RecentProgress = $_.Trace -split "`n" | Select-Object -Last 15
@@ -334,11 +337,10 @@ function New-GitlabPipeline {
                                 Write-Host "  $_"
                         }
                     }
-            }
-            else {
-                Write-Host
-                Write-Host "Pipeline $($Pipeline.Id) finished!"
-                break;
+                }
+                else {
+                    break;
+                }
             }
         }
     }
