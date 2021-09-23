@@ -292,29 +292,34 @@ function New-GitlabPipeline {
         Write-Host "$($Pipeline.Id) created..."
         while ($True) {
             Start-Sleep -Seconds 5
-            $Jobs = Get-GitlabPipelineJobs -ProjectId $Pipeline.ProjectId -PipelineId $Pipeline.Id -IncludeTrace
-
-            $RunningJobs = $Jobs | Where-Object { $_.Status -ieq 'running' -or $_.Status -ieq 'pending' }
-            if ($RunningJobs) {
+            $Jobs = Get-GitlabPipelineJobs -ProjectId $Pipeline.ProjectId -PipelineId $Pipeline.Id -IncludeTrace |
+                Where-Object { $_.Status -ne 'manual' -and $_.Status -ne 'skipped' -and $_.Status -ne 'created' } |
+                Sort-Object CreatedAt
+            
+            if ($Jobs) {
                 Clear-Host
-
-                $Jobs | Where-Object { $_.Status -ieq 'success' } | ForEach-Object {
-                    Write-Host "[$($_.Name)] ✅" -ForegroundColor DarkGreen
-                }
+                Write-Host "$($Pipeline.WebUrl)"
                 Write-Host
-                $Jobs | Where-Object { $_.Status -ieq 'failed' } | ForEach-Object {
-                    Write-Host "[$($_.Name)] ❌" -ForegroundColor DarkRed
-                }
-                Write-Host
-
-                $RunningJobs | ForEach-Object {
-                    Write-Host "[$($_.Name)] ⏳" -ForegroundColor DarkYellow
-                    $RecentProgress = $_.Trace -split "`n" | Select-Object -Last 15
-                    $RecentProgress | ForEach-Object {
-                        Write-Host "  $_"
+                $Jobs |
+                    Where-Object { $_.Status -eq 'success' } |
+                        ForEach-Object {
+                            Write-Host "[$($_.Name)] ✅" -ForegroundColor DarkGreen
+                        }
+                $Jobs |
+                    Where-Object { $_.Status -eq 'failed' } |
+                        ForEach-Object {
+                            Write-Host "[$($_.Name)] ❌" -ForegroundColor DarkRed
                     }
-                    Write-Host
-                }
+                Write-Host
+                $Jobs |
+                    Where-Object { $_.Status -ne 'success' -and $_.Status -ne 'failed' } |
+                        ForEach-Object {
+                            Write-Host "[$($_.Name)] ⏳" -ForegroundColor DarkYellow
+                            $RecentProgress = $_.Trace -split "`n" | Select-Object -Last 15
+                            $RecentProgress | ForEach-Object {
+                                Write-Host "  $_"
+                        }
+                    }
             }
             else {
                 Write-Host
