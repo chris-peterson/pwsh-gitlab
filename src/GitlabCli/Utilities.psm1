@@ -142,3 +142,20 @@ function New-WrapperObject {
     }
     End{}
 }
+
+function Open-InBrowser {
+    [CmdletBinding()]
+    [Alias('go')]
+    param(
+        [Parameter(ValueFromPipeline=$True)]
+        $Object
+    )
+
+    if (-not $Object) {
+        # do nothing
+    } elseif ($Object -is [string]) {
+        Start-Process $Object
+    } elseif ($Object.WebUrl -and $Object.WebUrl -is [string]) {
+        Start-Process $Object.WebUrl
+    }
+}
