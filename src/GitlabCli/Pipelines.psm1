@@ -289,7 +289,7 @@ function New-GitlabPipeline {
     $Pipeline = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Pipeline'
 
     if ($Wait) {
-        Write-Host "waiting for $($Pipeline.Id)..."
+        Write-Host "$($Pipeline.Id) created..."
         while ($True) {
             Start-Sleep -Seconds 5
             $Jobs = Get-GitlabPipelineJobs -ProjectId $Pipeline.ProjectId -PipelineId $Pipeline.Id -IncludeTrace
@@ -297,16 +297,28 @@ function New-GitlabPipeline {
             $RunningJobs = $Jobs | Where-Object { $_.Status -ieq 'running' -or $_.Status -ieq 'pending' }
             if ($RunningJobs) {
                 Clear-Host
+
+                $Jobs | Where-Object { $_.Status -ieq 'success' } | ForEach-Object {
+                    Write-Host "[$($_.Name)] ✅" -ForegroundColor DarkGreen
+                }
+                Write-Host
+                $Jobs | Where-Object { $_.Status -ieq 'failed' } | ForEach-Object {
+                    Write-Host "[$($_.Name)] ❌" -ForegroundColor DarkRed
+                }
+                Write-Host
+
                 $RunningJobs | ForEach-Object {
-                    Write-Host
-                    Write-Host "[$($_.Name)]" -ForegroundColor DarkYellow
-                    $RecentProgress = $_.Trace -split "`n" | Select-Object -Last 10
+                    Write-Host "[$($_.Name)] ⏳" -ForegroundColor DarkYellow
+                    $RecentProgress = $_.Trace -split "`n" | Select-Object -Last 15
                     $RecentProgress | ForEach-Object {
-                        Write-Host "   $_"
+                        Write-Host "  $_"
                     }
+                    Write-Host
                 }
             }
             else {
+                Write-Host
+                Write-Host "Pipeline $($Pipeline.Id) finished!"
                 break;
             }
         }
