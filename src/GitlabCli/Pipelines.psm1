@@ -11,21 +11,21 @@ function Get-GitlabPipeline {
         [string]
         $PipelineId,
 
-        [Parameter(ParameterSetName="ByProjectId",Mandatory=$false)]
+        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
         [Alias("Branch")]
         [string]
         $Ref,
 
-        [Parameter(ParameterSetName="ByProjectId",Mandatory=$false)]
+        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
         [ValidateSet('created', 'waiting_for_resource', 'preparing', 'pending', 'running', 'success', 'failed', 'canceled', 'skipped', 'manual', 'scheduled')]
         [string]
         $Status,
 
-        [Parameter(ParameterSetName="ByProjectId",Mandatory=$false)]
+        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
         [string]
         $Username,
 
-        [Parameter(ParameterSetName="ByProjectId",Mandatory=$false)]
+        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
         [switch]
         $Mine,
 
@@ -169,10 +169,6 @@ function Get-GitlabPipelineJobs {
         [Parameter(Mandatory=$false)]
         [switch]
         $IncludeRetried,
-
-        [Parameter(Mandatory=$false)]
-        [switch]
-        $ExcludeBridgeJobs = $false,
 
         [Parameter(Mandatory=$false)]
         [switch]

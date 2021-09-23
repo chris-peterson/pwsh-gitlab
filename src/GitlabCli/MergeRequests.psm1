@@ -18,6 +18,7 @@ function Get-GitlabMergeRequest {
         [string]
         $Url,
 
+        [Parameter(Mandatory=$false, ParameterSetName="Mine")]
         [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
         [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
         [ValidateSet("closed", "opened", "merged")]
