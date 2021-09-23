@@ -16,7 +16,6 @@
             <Width>16</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>Url</Label>
             <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
@@ -60,7 +59,6 @@
             <Width>8</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>Url</Label>
             <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
@@ -107,7 +105,6 @@
             <Width>40</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>Url</Label>
             <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
@@ -150,7 +147,6 @@
             <Width>8</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>Url</Label>
             <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
@@ -196,7 +192,6 @@
             <Width>12</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>Url</Label>
             <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
@@ -243,7 +238,6 @@
             <Width>32</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>Url</Label>
             <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
@@ -334,7 +328,6 @@
             <Width>40</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>Url</Label>
             <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
