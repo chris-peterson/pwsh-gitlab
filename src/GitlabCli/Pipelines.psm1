@@ -153,18 +153,27 @@ function Get-GitlabPipelineSchedule {
 function Get-GitlabPipelineJobs {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true, Position=0)]
-        [string]
-        $ProjectId,
-
-        [Parameter(Mandatory=$true, Position=1)]
+        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [Alias('Id')]
         [string]
         $PipelineId,
+
+        [Parameter(Mandatory=$false, Position=1, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $ProjectId = '.',
 
         [Parameter(Mandatory=$false)]
         [string]
         [ValidateSet("created","pending","running","failed","success","canceled","skipped","manual")]
         $Scope,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Stage,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Name,
 
         [Parameter(Mandatory=$false)]
         [switch]
@@ -180,17 +189,26 @@ function Get-GitlabPipelineJobs {
     $GitlabApiArguments = @{
         HttpMethod="GET"
         Path="projects/$ProjectId/pipelines/$PipelineId/jobs"
+        Query=@{}
     }
 
     if ($Scope) {
         $GitlabApiArguments['Query']['scope'] = $Scope
     }
-
     if ($IncludeRetried) {
         $GitlabApiArguments['Query']['include_retried'] = $true
     }
 
     $Jobs = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineJob'
+
+    if ($Stage) {
+        $Jobs = $Jobs |
+            Where-Object Stage -match $Stage
+    }
+    if ($Name) {
+        $Jobs = $Jobs |
+            Where-Object Name -match $Name
+    }
 
     if ($IncludeTrace) {
         $Jobs | ForEach-Object {

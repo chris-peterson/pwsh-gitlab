@@ -19,20 +19,21 @@ function Get-GitlabJobs {
         Path="projects/$ProjectId/jobs/$JobId"
     }
 
-    Invoke-GitlabApi @GitlabApiArguments |  New-WrapperObject "Gitlab.Job"
+    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.Job"
 }
 
 function Start-GitlabJob {
     [Alias("Play-GitlabJob")]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false)]
-        [string]
-        $ProjectId = ".",
-
-        [Parameter(Mandatory=$true, Position=0)]
+        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [Alias('Id')]
         [string]
         $JobId,
+
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $ProjectId = '.',
 
         [Parameter(Mandatory=$false)]
         [switch]
@@ -40,17 +41,19 @@ function Start-GitlabJob {
     )
 
     $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
-    
 
     $GitlabApiArguments = @{
         HttpMethod="POST"
         Path="projects/$ProjectId/jobs/$JobId/play"
     }
 
-    if($Whatif) {
-        return Invoke-GitlabApi @GitlabApiArguments -WhatIf
+    try {
+        Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject "Gitlab.PipelineJob"
     }
-
-    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.GitlabJob"
-
+    catch {
+        if ($_.ErrorDetails.Message -match 'Unplayable Job') {
+            $GitlabApiArguments.Path = $GitlabApiArguments.Path -replace '/play', '/retry'
+            Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject "Gitlab.PipelineJob"
+        }
+    }
 }

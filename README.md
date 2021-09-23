@@ -153,6 +153,12 @@ _Optional Parameters_
 
 Create or get merge request for current git context
 
+### Deploy latest successful build to production
+
+```powershell
+~/src/your-project > Get-GitlabPipeline -Branch 'main' -Status 'success' | Select-Object -First 1 | Get-GitlabPipelineJobs -Stage deploy -Name prod | Play-GitlabJob
+```
+
 ## References / Acknowledgements
 
 * [PSGitLab](https://github.com/ngetchell/PSGitLab)

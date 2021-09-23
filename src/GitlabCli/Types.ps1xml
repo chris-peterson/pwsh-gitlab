@@ -65,6 +65,10 @@
   <Type>
     <Name>Gitlab.PipelineJob</Name>
     <Members>
+      <ScriptProperty>
+        <Name>ProjectId</Name>
+        <GetScriptBlock>$this.Pipeline.project_id</GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
   <Type>

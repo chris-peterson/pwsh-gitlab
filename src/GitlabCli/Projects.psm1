@@ -2,9 +2,9 @@ function Get-GitlabProject {
 
     [CmdletBinding(DefaultParameterSetName='ById')]
     param (
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ById')]
+        [Parameter(Position=0, Mandatory=$false, ParameterSetName='ById')]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
         [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByGroup')]
         [string]
