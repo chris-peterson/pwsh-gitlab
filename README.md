@@ -157,7 +157,7 @@ Create or get merge request for current git context
 
 ```powershell
 ~/src/your-project > Get-GitlabProject |
-  Get-GitlabPipeline -Latest -Branch 'master' -Status 'success' | go
+  Get-GitlabPipeline -Latest -Branch 'main' -Status 'success' | go
 ```
 
 Opens latest successful pipeline in browser.
