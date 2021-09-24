@@ -228,7 +228,7 @@
         <TableHeaders>
           <TableColumnHeader>
             <Label>ID</Label>
-            <Width>4</Width>
+            <Width>5</Width>
           </TableColumnHeader>
           <TableColumnHeader>
             <Width>16</Width>

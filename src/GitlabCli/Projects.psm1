@@ -161,6 +161,34 @@ function New-GitlabProject {
     }
 }
 
+function Update-GitlabProject {
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Mandatory=$false)]
+        [bool]
+        $CiForwardDeployment,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf = $false
+    )
+
+    $Project = Get-GitlabProject $ProjectId
+
+    $Query = @{}
+
+    if($PSBoundParameters.ContainsKey("CiForwardDeployment")){
+        $Query['ci_forward_deployment_enabled'] = $CiForwardDeployment
+    }
+
+    Invoke-GitlabApi PUT "projects/$($Project.Id)" $Query -WhatIf:$WhatIf |
+        New-WrapperObject 'Gitlab.Project'
+}
+
 function Invoke-GitlabProjectArchival {
     [Alias('Archive-GitlabProject')]
     [CmdletBinding()]

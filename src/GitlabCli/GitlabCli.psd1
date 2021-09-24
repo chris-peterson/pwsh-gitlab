@@ -116,6 +116,7 @@
         # Projects
         'Get-GitlabProject'
         'New-GitlabProject'
+        'Update-GitlabProject'
         'Move-GitlabProject'
         'Rename-GitlabProject'
         'Copy-GitlabProject'
