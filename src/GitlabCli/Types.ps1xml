@@ -83,6 +83,10 @@
   <Type>
     <Name>Gitlab.Project</Name>
     <Members>
+        <ScriptProperty>
+        <Name>ProjectId</Name>
+        <GetScriptBlock>$this.Id</GetScriptBlock>
+      </ScriptProperty>
       <ScriptProperty>
         <Name>Group</Name>
         <GetScriptBlock>$($($this.PathWithNamespace -split '/') | Select-Object -SkipLast 1) -join '/'</GetScriptBlock>

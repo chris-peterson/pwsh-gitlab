@@ -2,7 +2,7 @@ function Get-GitlabPipeline {
 
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     param (
-        [Parameter(ParameterSetName="ByProjectId", Position=0, Mandatory=$false)]
+        [Parameter(ParameterSetName="ByProjectId", Position=0, Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Parameter(ParameterSetName="ByPipelineId", Position=0, Mandatory=$false)]
         [string]
         $ProjectId=".",
@@ -29,13 +29,17 @@ function Get-GitlabPipeline {
         [switch]
         $Mine,
 
+        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
+        [switch]
+        $Latest,
+
         [Parameter(Mandatory=$false)]
         [switch]
         $IncludeTestReport,
 
         [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
-        [switch]
-        $All,
+        [int]
+        $MaxPages = 1,
 
         [Parameter(Mandatory=$false)]
         [switch]
@@ -55,10 +59,6 @@ function Get-GitlabPipeline {
         }
         ByProjectId {
             $Query = @{}
-            $MaxPages = 1
-            if ($All) {
-                $MaxPages = 10 #ok, not really all, but let's not DOS gitlab
-            }
 
             if($Ref) {
                 if($Ref -eq '.') {
@@ -103,7 +103,11 @@ function Get-GitlabPipeline {
         }
     }
 
-    $Pipelines
+    if ($Latest) {
+        $Pipelines | Sort-Object -Descending Id | Select-Object -First 1
+    } else {
+        $Pipelines
+    }
 }
 
 function Get-GitlabPipelineSchedule {
