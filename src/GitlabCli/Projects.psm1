@@ -65,7 +65,7 @@ function Move-GitlabProject {
     } -WhatIf:$WhatIf -WhatIfContext @{
         SourceProjectName = $SourceProject.Name
         NamespacePath = $Group.FullPath
-    } | Out-Null
+    } | New-WrapperObject 'Gitlab.Project'
 }
 
 function Rename-GitlabProject {
@@ -84,12 +84,9 @@ function Rename-GitlabProject {
         $WhatIf = $false
     )
 
+    Update-GitlabProject -ProjectId $ProjectId -Name $NewName -Path $NewName -WhatIf:$WhatIf
+
     $SourceProject = Get-GitlabProject -ProjectId $ProjectId
-    
-    Invoke-GitlabApi PUT "projects/$($SourceProject.Id)" @{
-        'name' = $NewName
-        'path' = $NewName
-    } -WhatIf:$WhatIf | Out-Null
 }
 
 function Copy-GitlabProject {
@@ -168,6 +165,17 @@ function Update-GitlabProject {
         [string]
         $ProjectId,
 
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Name,
+
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Path,
+
+
         [Parameter(Mandatory=$false)]
         [bool]
         $CiForwardDeployment,
@@ -183,6 +191,12 @@ function Update-GitlabProject {
 
     if($PSBoundParameters.ContainsKey("CiForwardDeployment")){
         $Query['ci_forward_deployment_enabled'] = $CiForwardDeployment
+    }
+    if ($Name) {
+        $Query['name'] = $Name
+    }
+    if ($Path) {
+        $Query['path'] = $Path
     }
 
     Invoke-GitlabApi PUT "projects/$($Project.Id)" $Query -WhatIf:$WhatIf |
