@@ -31,6 +31,10 @@
     <Name>Gitlab.MergeRequest</Name>
     <Members>
       <ScriptProperty>
+        <Name>MergeRequestId</Name>
+        <GetScriptBlock>$this.Iid</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
         <Name>AuthorName</Name>
         <GetScriptBlock>$this.Author.Name</GetScriptBlock>
       </ScriptProperty>
@@ -52,6 +56,10 @@
     <Name>Gitlab.Pipeline</Name>
     <Members>
       <ScriptProperty>
+        <Name>PipelineId</Name>
+        <GetScriptBlock>$this.Id</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
         <Name>UserName</Name>
         <GetScriptBlock>$this.User.username</GetScriptBlock>
       </ScriptProperty>
@@ -63,8 +71,12 @@
     </Members>
   </Type>
   <Type>
-    <Name>Gitlab.PipelineJob</Name>
+    <Name>Gitlab.Job</Name>
     <Members>
+      <ScriptProperty>
+        <Name>JobId</Name>
+        <GetScriptBlock>$this.Id</GetScriptBlock>
+      </ScriptProperty>
       <ScriptProperty>
         <Name>ProjectId</Name>
         <GetScriptBlock>$this.Pipeline.project_id</GetScriptBlock>
@@ -83,7 +95,7 @@
   <Type>
     <Name>Gitlab.Project</Name>
     <Members>
-        <ScriptProperty>
+      <ScriptProperty>
         <Name>ProjectId</Name>
         <GetScriptBlock>$this.Id</GetScriptBlock>
       </ScriptProperty>

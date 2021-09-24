@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.10.0'
+    ModuleVersion = '1.11.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -93,7 +93,7 @@
         'Close-GitlabIssue'
 
         # Jobs
-        'Get-GitlabJobs'
+        'Get-GitlabJob'
         'Start-GitlabJob'
 
         # MergeRequests
@@ -109,7 +109,6 @@
         # Pipelines
         'Get-GitlabPipeline'
         'Get-GitlabPipelineSchedule'
-        'Get-GitlabPipelineJobs'
         'Get-GitlabPipelineBridges'
         'New-GitlabPipeline'
         'Remove-GitlabPipeline'
@@ -159,6 +158,9 @@
         # short form
         'go'
         'build'
+        'pipelines'
+        'schedule'
+        'jobs'
         'issues'
         'mr'
         'mrs'

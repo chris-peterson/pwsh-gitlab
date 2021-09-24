@@ -303,11 +303,12 @@ function Update-GitlabMergeRequest {
 function Close-GitlabMergeRequest {
     [CmdletBinding()]
     param(
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
         $ProjectId,
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Position=1, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Alias('Id')]
         [string]
         $MergeRequestId,
 

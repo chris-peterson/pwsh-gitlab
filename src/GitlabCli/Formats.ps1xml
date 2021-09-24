@@ -172,9 +172,9 @@
       </TableControl>
     </View>
     <View>
-      <Name>GitlabPipelineJob</Name>
+      <Name>GitlabJob</Name>
       <ViewSelectedBy>
-        <TypeName>Gitlab.PipelineJob</TypeName>
+        <TypeName>Gitlab.Job</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -213,6 +213,54 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>WebUrl</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>GitlabPipelineSchedule</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.PipelineSchedule</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>ID</Label>
+            <Width>5</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>6</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>40</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>12</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>28</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+                <Alignment>Right</Alignment>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Active</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Description</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Cron</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>NextRunAt</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

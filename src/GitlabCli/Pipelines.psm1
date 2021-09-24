@@ -1,5 +1,6 @@
 function Get-GitlabPipeline {
 
+    [Alias('pipelines')]
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     param (
         [Parameter(ParameterSetName="ByProjectId", Position=0, Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -112,21 +113,22 @@ function Get-GitlabPipeline {
 
 function Get-GitlabPipelineSchedule {
 
-    [CmdletBinding(DefaultParameterSetName="ByProjectId")]
+    [CmdletBinding(DefaultParameterSetName='ByProjectId')]
+    [Alias('schedule')]
     param (
-        [Parameter(Position=0,ParameterSetName="ByProjectId", Mandatory=$true)]
-        [Parameter(Position=0,ParameterSetName="ByPipelineId",Mandatory=$true)]
+        [Parameter(ParameterSetName='ByProjectId', Mandatory=$false)]
+        [Parameter(ParameterSetName='ByPipelineScheduleId', Mandatory=$false)]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
-        [Parameter(ParameterSetName="ByPipelineId",Mandatory=$true,Position=1)]
-        [Parameter(Position=1, Mandatory=$false)]
+        [Parameter(ParameterSetName='ByProjectId', Mandatory=$false)]
+        [Parameter(ParameterSetName='ByPipelineScheduleId', Mandatory=$true)]
         [int]
-        $PipelineId,
+        $PipelineScheduleId,
 
-        [Parameter(Position=1,ParameterSetName="ByProjectId", Mandatory=$false)]
+        [Parameter(ParameterSetName='ByProjectId', Mandatory=$false)]
         [string]
-        [ValidateSet("active","inactive")]
+        [ValidateSet('active', 'inactive')]
         $Scope
     )
 
@@ -140,7 +142,7 @@ function Get-GitlabPipelineSchedule {
 
     switch ($PSCmdlet.ParameterSetName) {
         ByPipelineId { 
-            $GitlabApiArguments["Path"] += "/$PipelineId" 
+            $GitlabApiArguments["Path"] += "/$PipelineScheduleId" 
         }
         ByProjectId {
             if($Scope) {
@@ -151,82 +153,6 @@ function Get-GitlabPipelineSchedule {
     }
 
     Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
-
-}
-
-function Get-GitlabPipelineJobs {
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
-        [Alias('Id')]
-        [string]
-        $PipelineId,
-
-        [Parameter(Mandatory=$false, Position=1, ValueFromPipelineByPropertyName=$true)]
-        [string]
-        $ProjectId = '.',
-
-        [Parameter(Mandatory=$false)]
-        [string]
-        [ValidateSet("created","pending","running","failed","success","canceled","skipped","manual")]
-        $Scope,
-
-        [Parameter(Mandatory=$false)]
-        [string]
-        $Stage,
-
-        [Parameter(Mandatory=$false)]
-        [string]
-        $Name,
-
-        [Parameter(Mandatory=$false)]
-        [switch]
-        $IncludeRetried,
-
-        [Parameter(Mandatory=$false)]
-        [switch]
-        $IncludeTrace
-    )
-
-    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
-
-    $GitlabApiArguments = @{
-        HttpMethod="GET"
-        Path="projects/$ProjectId/pipelines/$PipelineId/jobs"
-        Query=@{}
-    }
-
-    if ($Scope) {
-        $GitlabApiArguments['Query']['scope'] = $Scope
-    }
-    if ($IncludeRetried) {
-        $GitlabApiArguments['Query']['include_retried'] = $true
-    }
-
-    $Jobs = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineJob'
-
-    if ($Stage) {
-        $Jobs = $Jobs |
-            Where-Object Stage -match $Stage
-    }
-    if ($Name) {
-        $Jobs = $Jobs |
-            Where-Object Name -match $Name
-    }
-
-    if ($IncludeTrace) {
-        $Jobs | ForEach-Object {
-            try {
-                $Trace = Invoke-GitlabApi GET "projects/$ProjectId/jobs/$($_.Id)/trace"
-            }
-            catch {
-                $Trace = $Null
-            }
-            $_ | Add-Member -MemberType 'NoteProperty' -Name 'Trace' -Value $Trace
-        }
-    }
-
-    $Jobs
 }
 
 function Get-GitlabPipelineBridges {
@@ -257,7 +183,7 @@ function Get-GitlabPipelineBridges {
         $GitlabApiArguments['Query']['scope'] = $Scope
     }
 
-    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.PipelineJobBridge"
+    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject "Gitlab.PipelineBridge"
 }
 
 function New-GitlabPipeline {
@@ -283,7 +209,7 @@ function New-GitlabPipeline {
 
         [Parameter(Mandatory=$false)]
         [switch]
-        $WhatIf = $false
+        $WhatIf
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
@@ -310,7 +236,7 @@ function New-GitlabPipeline {
         Write-Host "$($Pipeline.Id) created..."
         while ($True) {
             Start-Sleep -Seconds 5
-            $Jobs = Get-GitlabPipelineJobs -ProjectId $Pipeline.ProjectId -PipelineId $Pipeline.Id -IncludeTrace |
+            $Jobs = Get-GitlabJobs -ProjectId $Pipeline.ProjectId -PipelineId $Pipeline.Id -IncludeTrace |
                 Where-Object { $_.Status -ne 'manual' -and $_.Status -ne 'skipped' -and $_.Status -ne 'created' } |
                 Sort-Object CreatedAt
             

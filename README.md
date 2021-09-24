@@ -153,22 +153,32 @@ _Optional Parameters_
 
 Create or get merge request for current git context
 
-### Navigate to latest main pipeline
+### Open Web Browser
 
 ```powershell
-~/src/your-project > Get-GitlabProject |
-  Get-GitlabPipeline -Latest -Branch 'main' -Status 'success' | go
+~/src/your-project> Get-GitlabProject |
+  pipelines -Latest -Branch 'main' -Status 'success' | go
 ```
 
 Opens latest successful pipeline in browser.
 
-### Deploy latest successful build to production
+### Deploy To Production
 
 ```powershell
-~/src/your-project > Get-GitlabPipeline -Branch 'main' -Status 'success' -Latest |
-  Get-GitlabPipelineJobs -Stage deploy -Name prod |
+~/src/your-project> pipelines -Branch 'main' -Status 'success' -Latest |
+  jobs -Stage deploy -Name prod |
   Play-GitlabJob
 ```
+
+### Get Pipeline Schedule
+
+```powershell
+~/src/your-project> schedule
+
+   ID Active Description                              Cron         NextRunAt
+   -- ------ -----------                              ----         ---------
+ 1948 True   Weekly restore for database              0 3 * * 0    9/26/2021 10:04:00 AM
+ ```
 
 ## References / Acknowledgements
 
