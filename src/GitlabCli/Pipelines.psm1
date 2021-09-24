@@ -351,3 +351,24 @@ function New-GitlabPipeline {
         $Pipeline
     }
 }
+
+function Remove-GitlabPipeline {
+
+    [CmdletBinding()]
+    param (
+        [string]
+        $ProjectId = '.',
+
+        [string]
+        $PipelineId,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $WhatIf = $false
+    )
+
+    $Project = Get-GitlabProject $ProjectId
+    $Pipeline = Get-GitlabPipeline -ProjectId $ProjectId -PipelineId $PipelineId
+
+    Invoke-GitlabApi DELETE "projects/$($Project.Id)/pipelines/$($Pipeline.Id)" -WhatIf:$WhatIf
+}

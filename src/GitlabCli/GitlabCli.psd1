@@ -110,8 +110,9 @@
         'Get-GitlabPipeline'
         'Get-GitlabPipelineSchedule'
         'Get-GitlabPipelineJobs'
-        'New-GitlabPipeline'
         'Get-GitlabPipelineBridges'
+        'New-GitlabPipeline'
+        'Remove-GitlabPipeline'
 
         # Projects
         'Get-GitlabProject'
