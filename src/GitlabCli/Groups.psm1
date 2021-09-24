@@ -37,7 +37,7 @@ function New-GitlabGroup {
         path = $GroupName
         parent_id = $ParentGroup.Id
         visibility = $ParentGroup.Visibility
-    } -WhatIf:$WhatIf | Select-Object -ExcludeProperty id
+    } -WhatIf:$WhatIf | Select-Object -ExpandProperty id
     if(-not $WhatIf) {
         return Get-GitlabGroup -GroupId $GroupId
     }

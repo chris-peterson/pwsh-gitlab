@@ -178,5 +178,5 @@ function Invoke-GitlabProjectArchival {
     
     Invoke-GitlabApi POST "projects/$($Project.Id)/archive" -WhatIf:$WhatIf -WhatIfContext @{
         ProjectName = $Project.Name
-    }
+    } | New-WrapperObject 'Gitlab.Project'
 }
