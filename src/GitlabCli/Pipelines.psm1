@@ -9,14 +9,14 @@ function Get-GitlabPipeline {
         [string]
         $ProjectId=".",
 
-        [Parameter(ParameterSetName="ByPipelineId", Position=1, Mandatory=$false)]
-        [string]
-        $PipelineId,
-
         [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
         [Alias("Branch")]
         [string]
-        $Ref,
+        $Ref = '.',
+
+        [Parameter(ParameterSetName="ByPipelineId", Position=1, Mandatory=$false)]
+        [string]
+        $PipelineId,
 
         [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
         [ValidateSet('created', 'waiting_for_resource', 'preparing', 'pending', 'running', 'success', 'failed', 'canceled', 'skipped', 'manual', 'scheduled')]

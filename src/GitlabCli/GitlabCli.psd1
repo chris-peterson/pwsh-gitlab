@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.11.1'
+    ModuleVersion = '1.12.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -74,12 +74,12 @@
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @(
-        # Branches    
-        'Get-GitlabBranch'
-        
         # Git
         'Get-LocalGitContext'
 
+        # Branches    
+        'Get-GitlabBranch'
+        
         # Groups
         'Get-GitlabGroup'
         'New-GitlabGroup'
@@ -87,14 +87,19 @@
         'Copy-GitlabGroupToLocalFileSystem'
         'Update-LocalGitlabGroup'
 
+        # Projects
+        'Get-GitlabProject'
+        'New-GitlabProject'
+        'Update-GitlabProject'
+        'Move-GitlabProject'
+        'Rename-GitlabProject'
+        'Copy-GitlabProject'
+        'Invoke-GitlabProjectArchival'
+        
         # Issues
         'Get-GitlabIssues'
         'New-GitlabIssue'
         'Close-GitlabIssue'
-
-        # Jobs
-        'Get-GitlabJob'
-        'Start-GitlabJob'
 
         # MergeRequests
         'Get-GitlabMergeRequest'
@@ -113,14 +118,10 @@
         'New-GitlabPipeline'
         'Remove-GitlabPipeline'
 
-        # Projects
-        'Get-GitlabProject'
-        'New-GitlabProject'
-        'Update-GitlabProject'
-        'Move-GitlabProject'
-        'Rename-GitlabProject'
-        'Copy-GitlabProject'
-        'Invoke-GitlabProjectArchival'
+        # Jobs
+        'Get-GitlabJob'
+        'Get-GitlabJobTrace'
+        'Start-GitlabJob'
 
         # Search
         'Search-Gitlab'
@@ -164,6 +165,7 @@
         'schedules'
         'job'
         'jobs'
+        'trace'
         'issue'
         'issues'
         'mr'

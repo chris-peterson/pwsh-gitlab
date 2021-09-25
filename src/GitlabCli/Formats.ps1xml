@@ -180,7 +180,7 @@
         <TableHeaders>
           <TableColumnHeader>
             <Label>ID</Label>
-            <Width>8</Width>
+            <Width>10</Width>
           </TableColumnHeader>
           <TableColumnHeader>
             <Width>16</Width>

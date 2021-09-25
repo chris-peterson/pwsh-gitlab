@@ -10,9 +10,13 @@ function Get-GitlabJob {
         [string]
         $ProjectId = '.',
 
-        [Parameter(ParameterSetName='ByPipelineId', Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ParameterSetName='ByPipeline', Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
         $PipelineId,
+
+        [Parameter(ParameterSetName='ByPipeline', Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $Ref,
 
         [Parameter(ParameterSetName='ByJobId', Mandatory=$true)]
         [string]
@@ -81,7 +85,7 @@ function Get-GitlabJob {
     if ($IncludeTrace) {
         $Jobs | ForEach-Object {
             try {
-                $Trace = Invoke-GitlabApi GET "projects/$ProjectId/jobs/$($_.Id)/trace" -WhatIf:$WhatIf
+                $Trace = $_ | Get-GitlabJobTrace -WhatIf:$WhatIf
             }
             catch {
                 $Trace = $Null
@@ -91,6 +95,37 @@ function Get-GitlabJob {
     }
 
     $Jobs
+}
+
+
+function Get-GitlabJobTrace {
+    [Alias('trace')]
+    [CmdletBinding()]
+    param (
+
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $JobId,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $WhatIf
+    )
+
+    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = $Project.Id
+
+    $GitlabApiArguments = @{
+        HttpMethod="GET"
+        Query=@{}
+        Path = "projects/$ProjectId/jobs/$JobId/trace"
+    }
+
+    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf
 }
 
 function Start-GitlabJob {
