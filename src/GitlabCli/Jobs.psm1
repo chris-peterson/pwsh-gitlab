@@ -1,5 +1,6 @@
 
 function Get-GitlabJob {
+    [Alias('job')]
     [Alias('jobs')]
     [CmdletBinding(DefaultParameterSetName='ByProjectId')]
     param (
@@ -36,7 +37,11 @@ function Get-GitlabJob {
 
         [Parameter(Mandatory=$false)]
         [switch]
-        $IncludeTrace
+        $IncludeTrace,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $WhatIf
     )
 
     $Project = Get-GitlabProject $ProjectId
@@ -49,10 +54,10 @@ function Get-GitlabJob {
     }
 
     if ($PipelineId) {
-        GitlabApiArguments['Query'].Path = "projects/$ProjectId/pipelines/$PipelineId/jobs"
+        $GitlabApiArguments.Path = "projects/$ProjectId/pipelines/$PipelineId/jobs"
     }
     if ($JobId) {
-        GitlabApiArguments['Query'].Path = "projects/$ProjectId/jobs/$JobId"
+        $GitlabApiArguments.Path = "projects/$ProjectId/jobs/$JobId"
     }
 
     if ($Scope) {
@@ -62,7 +67,7 @@ function Get-GitlabJob {
         $GitlabApiArguments['Query']['include_retried'] = $true
     }
 
-    $Jobs = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Job'
+    $Jobs = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Job'
 
     if ($Stage) {
         $Jobs = $Jobs |
@@ -76,7 +81,7 @@ function Get-GitlabJob {
     if ($IncludeTrace) {
         $Jobs | ForEach-Object {
             try {
-                $Trace = Invoke-GitlabApi GET "projects/$ProjectId/jobs/$($_.Id)/trace"
+                $Trace = Invoke-GitlabApi GET "projects/$ProjectId/jobs/$($_.Id)/trace" -WhatIf:$WhatIf
             }
             catch {
                 $Trace = $Null

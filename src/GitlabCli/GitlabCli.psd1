@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.11.0'
+    ModuleVersion = '1.11.1'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -158,9 +158,13 @@
         # short form
         'go'
         'build'
+        'pipeline'
         'pipelines'
         'schedule'
+        'schedules'
+        'job'
         'jobs'
+        'issue'
         'issues'
         'mr'
         'mrs'

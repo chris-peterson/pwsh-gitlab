@@ -1,5 +1,6 @@
 function Get-GitlabPipeline {
 
+    [Alias('pipeline')]
     [Alias('pipelines')]
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     param (
@@ -115,6 +116,7 @@ function Get-GitlabPipelineSchedule {
 
     [CmdletBinding(DefaultParameterSetName='ByProjectId')]
     [Alias('schedule')]
+    [Alias('schedules')]
     param (
         [Parameter(ParameterSetName='ByProjectId', Mandatory=$false)]
         [Parameter(ParameterSetName='ByPipelineScheduleId', Mandatory=$false)]

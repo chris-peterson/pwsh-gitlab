@@ -1,6 +1,7 @@
 function Get-GitlabIssues {
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
-    [Alias("issues")]
+    [Alias('issue')]
+    [Alias('issues')]
     param(
         [Parameter(Position=0, Mandatory=$false, ParameterSetName="ByProjectId")]
         [string]
