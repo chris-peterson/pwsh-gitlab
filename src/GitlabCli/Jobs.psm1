@@ -7,6 +7,7 @@ function Get-GitlabJob {
 
         [Parameter(ParameterSetName='ByJobId', Mandatory=$false)]
         [Parameter(ParameterSetName='ByProjectId', Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ParameterSetName='ByPipeline', Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
         $ProjectId = '.',
 
