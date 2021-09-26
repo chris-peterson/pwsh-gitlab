@@ -153,6 +153,18 @@ _Optional Parameters_
 
 Create or get merge request for current git context
 
+### Get Deployment
+
+```powershell
+Get-GitlabDeployment -Status 'created' -Environment 'nuget.org'
+```
+
+```plaintext
+        ID Status     EnvironmentName      Ref                     CreatedAt
+        -- ------     ---------------      ---                     ---------
+ 196679897 created    nuget.org            main         9/26/2021 5:56:57 AM
+ ```
+
 ### Open Web Browser
 
 ```powershell

@@ -71,6 +71,40 @@
     </Members>
   </Type>
   <Type>
+    <Name>Gitlab.Environment</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>EnvironmentId</Name>
+        <GetScriptBlock>$this.Id</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>ProjectId</Name>
+        <GetScriptBlock>$this.Project.id</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Gitlab.Deployment</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>DeploymentId</Name>
+        <GetScriptBlock>$this.Id</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>EnvironmentId</Name>
+        <GetScriptBlock>$this.Environment.id</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>EnvironmentName</Name>
+        <GetScriptBlock>$this.Environment.name</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>PipelineId</Name>
+        <GetScriptBlock>$this.Pipeline.id</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Gitlab.Job</Name>
     <Members>
       <ScriptProperty>

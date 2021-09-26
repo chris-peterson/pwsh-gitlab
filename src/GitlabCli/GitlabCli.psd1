@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.12.2'
+    ModuleVersion = '1.13.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -60,6 +60,8 @@
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     NestedModules = @(
         'Branches.psm1'
+        'Deployments.psm1'
+        'Environments.psm1'
         'Git.psm1'
         'Groups.psm1'
         'Issues.psm1'
@@ -95,7 +97,13 @@
         'Rename-GitlabProject'
         'Copy-GitlabProject'
         'Invoke-GitlabProjectArchival'
-        
+
+        # Environments
+        'Get-GitlabEnvironment'
+
+        # Deployments
+        'Get-GitlabDeployment'
+
         # Issues
         'Get-GitlabIssues'
         'New-GitlabIssue'

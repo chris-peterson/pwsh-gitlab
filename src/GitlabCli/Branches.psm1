@@ -13,7 +13,11 @@ function Get-GitlabBranch {
         [Parameter(ParameterSetName="ByRef", Mandatory=$true)]
         [Alias("Ref")]
         [string]
-        $Branch
+        $Branch,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $WhatIf
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
@@ -38,6 +42,6 @@ function Get-GitlabBranch {
         }
     }
 
-    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Branch'
+    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Branch'
 
 }
