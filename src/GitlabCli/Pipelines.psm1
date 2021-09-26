@@ -238,7 +238,7 @@ function New-GitlabPipeline {
         Write-Host "$($Pipeline.Id) created..."
         while ($True) {
             Start-Sleep -Seconds 5
-            $Jobs = Get-GitlabJobs -ProjectId $Pipeline.ProjectId -PipelineId $Pipeline.Id -IncludeTrace |
+            $Jobs = Get-GitlabJob -ProjectId $Pipeline.ProjectId -PipelineId $Pipeline.Id -IncludeTrace |
                 Where-Object { $_.Status -ne 'manual' -and $_.Status -ne 'skipped' -and $_.Status -ne 'created' } |
                 Sort-Object CreatedAt
             
