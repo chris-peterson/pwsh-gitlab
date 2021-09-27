@@ -12,31 +12,36 @@ function Get-GitlabProject {
 
         [switch]
         [Parameter(Mandatory=$false, ParameterSetName='ByGroup')]
-        $IncludeArchived = $false
+        $IncludeArchived = $false,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf = $false
     )
 
-    if ($PSCmdlet.ParameterSetName -eq 'ById') {
-        if ($ProjectId -eq '.') {
-            $ProjectId = $(Get-LocalGitContext).Repo
+    switch ($PSCmdlet.ParameterSetName) {
+        ById {
+            if ($ProjectId -eq '.') {
+                $ProjectId = $(Get-LocalGitContext).Repo
+            }
+            $Project = Invoke-GitlabApi GET "projects/$([System.Net.WebUtility]::UrlEncode($ProjectId))"
+            if ($Project) {
+                return $Project | New-WrapperObject 'Gitlab.Project'
+            }
         }
-        $Project = Invoke-GitlabApi GET "projects/$([System.Net.WebUtility]::UrlEncode($ProjectId))"
-        if ($Project) {
-            return $Project | New-WrapperObject 'Gitlab.Project'
+        ByGroup {
+            $Group = Get-GitlabGroup $GroupId
+            $Query = @{
+                'include_subgroups' = 'true'
+            }
+            if (-not $IncludeArchived) {
+                $Query['archived'] = 'false'
+            }
+            Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPage 10 |
+                Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
+                New-WrapperObject 'Gitlab.Project' |
+                Sort-Object -Property 'Name'
         }
-    }
-
-    if ($PSCmdlet.ParameterSetName -eq 'ByGroup') {
-        $Group = Get-GitlabGroup $GroupId
-        $Query = @{
-            'include_subgroups' = 'true'
-        }
-        if(-not $IncludeArchived) {
-            $Query['archived'] = 'false'
-        }
-        Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPage 10 | 
-        Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
-        New-WrapperObject 'Gitlab.Project' |
-        Sort-Object -Property 'Name'
     }
 }
 
@@ -44,11 +49,11 @@ function Move-GitlabProject {
     [Alias("Transfer-GitlabProject")]
     [CmdletBinding()]
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Mandatory=$false)]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Mandatory=$true)]
         [string]
         $DestinationGroup,
 
@@ -71,11 +76,11 @@ function Move-GitlabProject {
 function Rename-GitlabProject {
     [CmdletBinding()]
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Mandatory=$false)]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Mandatory=$true)]
         [string]
         $NewName,
 
@@ -85,8 +90,6 @@ function Rename-GitlabProject {
     )
 
     Update-GitlabProject -ProjectId $ProjectId -Name $NewName -Path $NewName -WhatIf:$WhatIf
-
-    $SourceProject = Get-GitlabProject -ProjectId $ProjectId
 }
 
 function Copy-GitlabProject {
@@ -161,20 +164,21 @@ function New-GitlabProject {
 function Update-GitlabProject {
     [CmdletBinding()]
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Mandatory=$false)]
         [string]
-        $ProjectId,
-
+        $ProjectId = '.',
 
         [Parameter(Mandatory=$false)]
         [string]
         $Name,
 
-
         [Parameter(Mandatory=$false)]
         [string]
         $Path,
 
+        [Parameter(Mandatory=$false)]
+        [string []]
+        $Topics,
 
         [Parameter(Mandatory=$false)]
         [bool]
@@ -197,6 +201,9 @@ function Update-GitlabProject {
     }
     if ($Path) {
         $Query['path'] = $Path
+    }
+    if ($Topics) {
+        $Query['topics'] = $Topics -join ','
     }
 
     Invoke-GitlabApi PUT "projects/$($Project.Id)" $Query -WhatIf:$WhatIf |
