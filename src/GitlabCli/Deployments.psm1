@@ -1,3 +1,4 @@
+# https://docs.gitlab.com/ee/api/deployments.html#list-project-deployments
 function Get-GitlabDeployment {
     [CmdletBinding(DefaultParameterSetName='ProjectId')]
     [Alias('deploys')]
@@ -20,6 +21,18 @@ function Get-GitlabDeployment {
         $Latest,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $UpdatedBefore,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $UpdatedAfter,
+
+        [Parameter(Mandatory=$false)]
+        [int]
+        $MaxPages = 1,
+
+        [Parameter(Mandatory=$false)]
         [switch]
         $Pipeline,
 
@@ -31,11 +44,12 @@ function Get-GitlabDeployment {
     $Project = Get-GitlabProject -ProjectId $ProjectId
 
     $GitlabApiArguments = @{
-        HttpMethod='GET'
-        Path="projects/$($Project.Id)/deployments"
-        Query=@{
+        HttpMethod = 'GET'
+        Path = "projects/$($Project.Id)/deployments"
+        Query = @{
             sort='desc'
         }
+        MaxPages = $MaxPages
     }
 
     if ($EnvironmentName) {
@@ -43,6 +57,12 @@ function Get-GitlabDeployment {
     }
     if ($Status -and $Status -ne 'all') {
         $GitlabApiArguments.Query['status'] = $Status
+    }
+    if ($UpdatedBefore) {
+        $GitlabApiArguments.Query['updated_before'] = $UpdatedBefore
+    }
+    if ($UpdatedAfter) {
+        $GitlabApiArguments.Query['updated_after'] = $UpdatedAfter
     }
 
     $Result = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Deployment'

@@ -103,6 +103,14 @@
         <GetScriptBlock>$this.Environment.name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
+        <Name>Created</Name>
+        <GetScriptBlock>$this.CreatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Deployer</Name>
+        <GetScriptBlock>$this.User.name</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
         <Name>Pipeline</Name>
         <GetScriptBlock>$this.Deployable.Pipeline | New-WrapperObject 'Gitlab.Pipeline'</GetScriptBlock>
       </ScriptProperty>

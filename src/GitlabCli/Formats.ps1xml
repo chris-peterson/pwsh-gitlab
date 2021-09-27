@@ -276,8 +276,10 @@
               <Width>12</Width>
             </TableColumnHeader>
             <TableColumnHeader>
+              <Width>16</Width>
+            </TableColumnHeader>
+            <TableColumnHeader>
               <Width>20</Width>
-              <Alignment>Right</Alignment>
             </TableColumnHeader>
           </TableHeaders>
         <TableRowEntries>
@@ -297,7 +299,10 @@
                 <PropertyName>Ref</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>CreatedAt</PropertyName>
+                <PropertyName>Created</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Deployer</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

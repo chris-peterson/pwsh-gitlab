@@ -48,11 +48,16 @@ $env:GITLAB_URL='gitlab.mydomain.com'
 $env:GITLAB_ACCESS_TOKEN='<my token>'
 Import-Module GitlabCli
 ```
+
 ## Global Switches
 
-`-WhatIf` : For mutable operations (or for some complex query operations), gives a preview of what actions would be taken.
+The following switches are supported when possible:
+
+`-WhatIf` : For mutable operations (or for some complex query operations), gives a preview of what actions would be taken
 
 `-Follow` : For operations that create a resource, follow the the URL after creation
+
+`-MaxPages`: For query operations, maximum number of pages to return.  Typically defaults to 1
 
 ## Global Behaviors
 
