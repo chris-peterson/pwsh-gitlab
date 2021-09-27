@@ -1,18 +1,27 @@
 function Get-GitlabDeployment {
     [CmdletBinding(DefaultParameterSetName='ProjectId')]
+    [Alias('deploys')]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
-        $Environment,
+        $EnvironmentName,
 
         [Parameter(Mandatory=$false)]
         [ValidateSet('created', 'running', 'success', 'failed', 'canceled')]
         [string]
         $Status,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $Latest,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $Pipeline,
 
         [Parameter(Mandatory=$false)]
         [switch]
@@ -24,16 +33,26 @@ function Get-GitlabDeployment {
     $GitlabApiArguments = @{
         HttpMethod='GET'
         Path="projects/$($Project.Id)/deployments"
-        Query=@{}
+        Query=@{
+            sort='desc'
+        }
     }
 
-
-    if ($Environment) {
-        $GitlabApiArguments['Query']['environment'] = $Environment
+    if ($EnvironmentName) {
+        $GitlabApiArguments.Query['environment'] = $EnvironmentName
     }
     if ($Status) {
-        $GitlabApiArguments['Query']['status'] = $Status
+        $GitlabApiArguments.Query['status'] = $Status
     }
 
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Deployment'
+    $Result = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Deployment'
+
+    if ($Latest) {
+        $Result = $Result | Select-Object -First 1
+    }
+    if ($Pipeline) {
+        $Result = $Result.Pipeline
+    }
+
+    $Result
 }

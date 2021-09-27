@@ -78,6 +78,10 @@
         <GetScriptBlock>$this.Id</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
+        <Name>EnvironmentName</Name>
+        <GetScriptBlock>$this.Name</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
         <Name>ProjectId</Name>
         <GetScriptBlock>$this.Project.id</GetScriptBlock>
       </ScriptProperty>
@@ -99,8 +103,12 @@
         <GetScriptBlock>$this.Environment.name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
-        <Name>PipelineId</Name>
-        <GetScriptBlock>$this.Pipeline.id</GetScriptBlock>
+        <Name>Pipeline</Name>
+        <GetScriptBlock>$this.Deployable.Pipeline | New-WrapperObject 'Gitlab.Pipeline'</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Url</Name>
+        <GetScriptBlock>$this.Pipeline.WebUrl</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>

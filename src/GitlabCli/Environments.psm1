@@ -1,5 +1,6 @@
 function Get-GitlabEnvironment {
     [CmdletBinding(DefaultParameterSetName='ProjectId')]
+    [Alias('envs')]
     param (
         [Parameter(ParameterSetName='ProjectId', Mandatory=$false)]
         [string]
@@ -15,6 +16,10 @@ function Get-GitlabEnvironment {
 
         [Parameter(Mandatory=$false)]
         [switch]
+        $IncludeStopped,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
         $WhatIf
     )
 
@@ -26,13 +31,17 @@ function Get-GitlabEnvironment {
         Query=@{}
     }
 
-    switch($PSCmdlet.ParameterSetName) {
+    switch ($PSCmdlet.ParameterSetName) {
         Name {
-            $GitlabApiArguments['Query']['name'] = $Name
+            $GitlabApiArguments.Query['name'] = $Name
         }
         Search {
-            $GitlabApiArguments['Query']['search'] = $Search
+            $GitlabApiArguments.Query['search'] = $Search
         }
+    }
+
+    if (-not $IncludeStopped) {
+        $GitlabApiArguments.Query['states'] = 'available'
     }
 
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Environment'
