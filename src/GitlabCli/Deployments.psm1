@@ -11,9 +11,9 @@ function Get-GitlabDeployment {
         $EnvironmentName,
 
         [Parameter(Mandatory=$false)]
-        [ValidateSet('created', 'running', 'success', 'failed', 'canceled')]
+        [ValidateSet('created', 'running', 'success', 'failed', 'canceled', 'all')]
         [string]
-        $Status,
+        $Status = 'success',
 
         [Parameter(Mandatory=$false)]
         [switch]
@@ -41,7 +41,7 @@ function Get-GitlabDeployment {
     if ($EnvironmentName) {
         $GitlabApiArguments.Query['environment'] = $EnvironmentName
     }
-    if ($Status) {
+    if ($Status -and $Status -ne 'all') {
         $GitlabApiArguments.Query['status'] = $Status
     }
 
