@@ -174,6 +174,13 @@ Get-GitlabDeployment -Status 'created' -Environment 'nuget.org'
 
 Opens latest successful pipeline in browser.
 
+ 
+ ### Get pipeline for latest deployement
+ 
+ ```powershell
+ envs -Search prod | deploys -Latest -Pipeline [| go]
+ ```
+
 ### Deploy To Production
 
 ```powershell
