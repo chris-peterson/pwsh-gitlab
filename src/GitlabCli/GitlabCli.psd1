@@ -81,6 +81,11 @@
 
         # Branches    
         'Get-GitlabBranch'
+
+        # Configuration
+        'Remove-GitlabCliSystem'
+        'Add-GitlabCliSystem'
+        'Get-GitlabCliConfig'
         
         # Groups
         'Get-GitlabGroup'
