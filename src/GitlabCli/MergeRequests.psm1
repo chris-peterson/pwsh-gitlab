@@ -59,6 +59,8 @@ function Get-GitlabMergeRequest {
         $WhatIf
     )
 
+    $configuration = Get-GitlabCliConfig
+
     $Path = $null
     $MaxPages = 1
     $Query = @{}
@@ -67,7 +69,7 @@ function Get-GitlabMergeRequest {
         $Path = 'merge_requests'
     }
     else {
-        if ($Url -and $Url -match "$env:GITLAB_URL/(?<ProjectId>.*)/-/merge_requests/(?<MergeRequestId>\d+)") {
+        if ($Url -and $Url -match "$($configuration.DefaultSite)/(?<ProjectId>.*)/-/merge_requests/(?<MergeRequestId>\d+)") {
             $ProjectId = $Matches.ProjectId
             $MergeRequestId = $Matches.MergeRequestId
         }

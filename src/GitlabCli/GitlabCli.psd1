@@ -60,6 +60,7 @@
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     NestedModules = @(
         'Branches.psm1'
+        'Config.psm1'
         'Deployments.psm1'
         'Environments.psm1'
         'Git.psm1'
@@ -86,6 +87,7 @@
         'Remove-GitlabCliSystem'
         'Add-GitlabCliSystem'
         'Get-GitlabCliConfig'
+        'Set-DefaultGitlabCliSystem'
         
         # Groups
         'Get-GitlabGroup'
