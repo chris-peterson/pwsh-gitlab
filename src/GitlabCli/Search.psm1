@@ -21,7 +21,11 @@ function Search-Gitlab {
         $All,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
@@ -49,6 +53,5 @@ function Search-Gitlab {
         throw "Must search either blobs OR merge requests"
     }
 
-    Invoke-GitlabApi GET "search" $Query -MaxPages $MaxPages -WhatIf:$WhatIf | New-WrapperObject $DisplayType
-    
+    Invoke-GitlabApi GET "search" $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject $DisplayType
 }

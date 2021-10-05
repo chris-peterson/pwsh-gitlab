@@ -55,7 +55,11 @@ function Get-GitlabMergeRequest {
         $Mine,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
@@ -67,7 +71,7 @@ function Get-GitlabMergeRequest {
         $Path = 'merge_requests'
     }
     else {
-        if ($Url -and $Url -match "$env:GITLAB_URL/(?<ProjectId>.*)/-/merge_requests/(?<MergeRequestId>\d+)") {
+        if ($Url -and $Url -match "$(Get-DefaultGitlabSite)/(?<ProjectId>.*)/-/merge_requests/(?<MergeRequestId>\d+)") {
             $ProjectId = $Matches.ProjectId
             $MergeRequestId = $Matches.MergeRequestId
         }
@@ -114,12 +118,12 @@ function Get-GitlabMergeRequest {
         $Query['source_branch'] = $Branch
     }
     
-    $MergeRequests = Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.MergeRequest'
+    $MergeRequests = Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.MergeRequest'
 
     if ($IncludeApprovals) {
         $MergeRequests | ForEach-Object {
             try {
-                $Approvals = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.Iid)/approval_state"
+                $Approvals = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.Iid)/approval_state" -SiteUrl $SiteUrl -WhatIf:$WhatIf
             }
             catch {
                 $Approvals = $Null
@@ -127,7 +131,7 @@ function Get-GitlabMergeRequest {
             $_ | Add-Member -MemberType 'NoteProperty' -Name 'Approvals' -Value $($Approvals.rules.approved_by | New-WrapperObject 'Gitlab.User')
 
             try {
-                $ThumbsUp = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.Iid)/award_emoji" | Where-Object name -ieq 'thumbsup'
+                $ThumbsUp = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.Iid)/award_emoji" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Where-Object name -ieq 'thumbsup'
             }
             catch {
                 $ThumbsUp = $Null
@@ -192,7 +196,11 @@ function New-GitlabMergeRequest {
         $Follow,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
@@ -220,7 +228,7 @@ function New-GitlabMergeRequest {
         remove_source_branch = 'true'
         assignee_id = $Me.Id
         title = $Title
-    } -WhatIf:$WhatIf) | New-WrapperObject 'Gitlab.MergeRequest'
+    } -SiteUrl $SiteUrl -WhatIf:$WhatIf) | New-WrapperObject 'Gitlab.MergeRequest'
     if ($Follow) {
         Start-Process $MergeRequest.WebUrl
     }
@@ -273,9 +281,13 @@ function Update-GitlabMergeRequest {
         [switch]
         $Reopen,
 
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
         [Parameter(Mandatory=$false)]
-        $WhatIf = $false
+        $WhatIf
     )
 
     $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
@@ -297,7 +309,7 @@ function Update-GitlabMergeRequest {
         $Query['description'] = $Description
     }
 
-    Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" $Query -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.MergeRequest'
+    Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.MergeRequest'
 }
 
 function Close-GitlabMergeRequest {
@@ -328,7 +340,15 @@ function Invoke-GitlabMergeRequestReview {
     param(
         [Parameter(Position=0, Mandatory=$true)]
         [string]
-        $MergeRequestId
+        $MergeRequestId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
     )
 
     $ProjectId = $(Get-GitlabProject -ProjectId '.').Id
@@ -349,19 +369,23 @@ function Approve-GitlabMergeRequest {
         $MergeRequestId,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
-    $ProjectId = $(Get-GitlabProject -ProjectId '.').Id
+    $ProjectId = $(Get-GitlabProject -ProjectId '.' -SiteUrl $SiteUrl).Id
 
     if (-not $MergeRequestId) {
-        $MergeRequest = Get-GitlabMergeRequest -ProjectId $ProjectId -Branch '.' -State 'opened'
+        $MergeRequest = Get-GitlabMergeRequest -ProjectId $ProjectId -Branch '.' -State 'opened' -SiteUrl $SiteUrl
         if ($MergeRequest) {
             $MergeRequestId = $MergeRequest.Iid
         }
     }
 
-    Invoke-GitlabApi POST "/projects/$ProjectId/merge_requests/$MergeRequestId/approve" -WhatIf:$WhatIf | Out-Null
-    Get-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -IncludeApprovals
+    Invoke-GitlabApi POST "/projects/$ProjectId/merge_requests/$MergeRequestId/approve" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+    Get-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -IncludeApprovals -SiteUrl $SiteUrl
 }

@@ -21,7 +21,9 @@ Install-Module -Name GitlabCli
 
 ### Configuration
 
-#### `$env:GITLAB_ACCESS_TOKEN`
+#### Environment Variables
+
+##### `$env:GITLAB_ACCESS_TOKEN`
 
 Obtain a "Personal Access Token" (PAT) for your GitLab instance
 
@@ -35,13 +37,13 @@ Make the value available via
 
 One way to do this would be to add a line to your `$PROFILE`
 
-#### `$env:GITLAB_URL`
+##### `$env:GITLAB_URL`
 
 (Optional) If using a gitlab instance that is not `gitlab.com`, provide it via:
 
 `$env:GITLAB_URL='<your gitlab instance>'`
 
-### Example PowerShell Profile
+#### Example PowerShell Profile
 
 ```powershell
 $env:GITLAB_URL='gitlab.mydomain.com'
@@ -49,9 +51,19 @@ $env:GITLAB_ACCESS_TOKEN='<my token>'
 Import-Module GitlabCli
 ```
 
+#### Configuration File
+
+The following commands can be used to configure your system for use with **multiple** gitlab sites.
+
+* `Add-GitlabSite`
+* `Remove-GitlabSite`
+* `Set-DefaultGitlabSite`
+
 ## Global Switches
 
 The following switches are supported when possible:
+
+`-SiteUrl` : Optional.  By default, site url is inferred from the local git context.  Providing a value overrides this value.  The provided value must match a configured site's url (e.g. `gitlab.com`)
 
 `-WhatIf` : For mutable operations (or for some complex query operations), gives a preview of what actions would be taken
 

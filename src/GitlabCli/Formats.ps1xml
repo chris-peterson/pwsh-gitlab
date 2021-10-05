@@ -542,5 +542,27 @@
         </TableRowEntries>
       </TableControl>
     </View>
+    <View>
+      <Name>GitlabConfiguration</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.Configuration</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>Sites</Label>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>SitesDisplay</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
   </ViewDefinitions>
 </Configuration>

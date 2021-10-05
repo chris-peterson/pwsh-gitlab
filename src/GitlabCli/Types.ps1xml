@@ -186,4 +186,15 @@
       </ScriptProperty>
     </Members>
   </Type>
+  <Type>
+    <Name>Gitlab.Configuration</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>SitesDisplay</Name>
+        <GetScriptBlock>
+          $this.Sites | ForEach-Object { [bool]::Parse($_.IsDefault) ? "$($_.Url) (default)" : $_.Url }
+        </GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
 </Types>

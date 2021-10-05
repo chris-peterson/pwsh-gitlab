@@ -37,7 +37,11 @@ function Get-GitlabDeployment {
         $Pipeline,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
@@ -50,6 +54,7 @@ function Get-GitlabDeployment {
             sort='desc'
         }
         MaxPages = $MaxPages
+        SiteUrl = $SiteUrl
     }
 
     if ($EnvironmentName) {

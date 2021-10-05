@@ -7,23 +7,26 @@ function Get-LocalGitContext {
     
     Push-Location
     $Context = [PSCustomObject]@{
-        Repo = ''
+        Site = ''
+        Project = ''
         Branch = ''
     }
 
     try {
         Set-Location $Path
         if (Get-ChildItem -Filter '.git' -Hidden -Directory) {
-            $Context.Repo = $($(git config --get remote.origin.url) -split ':' | Select-Object -Last 1).Replace('.git', '')
+            $(git config --get remote.origin.url) -match '(https://|git@)(?<Site>.*?)(/|:)(?<Project>[a-zA-Z/-]+)'
+            $Context.Site = $Matches.Site
+            $Context.Project = $Matches.Project
             
-            $branchOrSha = git status | Select-String "^HEAD detached at (?<sha>.{8})`|^On branch (?<branch>.*)"
+            $Ref = git status | Select-String "^HEAD detached at (?<sha>.{8})`|^On branch (?<branch>.*)"
  
-            if($branchOrSha.Matches[0].Groups["sha"].Success) {
-                $Context.Branch = (git branch -a --contains $branchOrSha.Matches[0].Groups["sha"].Value `
+            if ($Ref.Matches[0].Groups["sha"].Success) {
+                $Context.Branch = (git branch -a --contains $Ref.Matches[0].Groups["sha"].Value `
                     | Select-Object -Skip 1 -First 1 `
                     | Select-String "  (?<branch>.*)").Matches[0].Groups["branch"].Value
-            } elseif ($branchOrSha.Matches[0].Groups["branch"]) {
-                $Context.Branch = $branchOrSha.Matches[0].Groups["branch"].Value
+            } elseif ($Ref.Matches[0].Groups["branch"]) {
+                $Context.Branch = $Ref.Matches[0].Groups["branch"].Value
             } else {
                 $Context.Branch = "Detached HEAD"
             }

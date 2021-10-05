@@ -4,12 +4,20 @@ function Get-GitlabGroup {
     param (
         [Parameter(Position=0, Mandatory=$true)]
         [string]
-        $GroupId
+        $GroupId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
     )
 
     $Group = Invoke-GitlabApi GET "groups/$([System.Net.WebUtility]::UrlEncode($GroupId))" @{
         'with_projects' = 'false'
-    }
+    } -SiteUrl $SiteUrl -WhatIf:$WhatIf
 
     return $Group | New-WrapperObject 'Gitlab.Group'
 }
@@ -26,9 +34,13 @@ function New-GitlabGroup {
         [string]
         $ParentGroupName,
 
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
         [Parameter(Mandatory=$false)]
-        $WhatIf = $false
+        $WhatIf
     )
 
     $ParentGroup = Get-GitlabGroup -GroupId $ParentGroupName
@@ -37,7 +49,7 @@ function New-GitlabGroup {
         path = $GroupName
         parent_id = $ParentGroup.Id
         visibility = $ParentGroup.Visibility
-    } -WhatIf:$WhatIf | Select-Object -ExpandProperty id
+    } -SiteUrl $SiteUrl -WhatIf:$WhatIf | Select-Object -ExpandProperty id
     if(-not $WhatIf) {
         return Get-GitlabGroup -GroupId $GroupId
     }
@@ -51,14 +63,18 @@ function Remove-GitlabGroup {
         [string]
         $GroupId,
 
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
         [Parameter(Mandatory=$false)]
-        $WhatIf = $false
+        $WhatIf
     )
 
     $Group = Get-GitlabGroup -GroupId $GroupId
 
-    Invoke-GitlabApi DELETE "groups/$($Group.Id)" -WhatIf:$WhatIf | Out-Null
+    Invoke-GitlabApi DELETE "groups/$($Group.Id)" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
 }
 
 function Copy-GitlabGroupToLocalFileSystem {
@@ -69,9 +85,13 @@ function Copy-GitlabGroupToLocalFileSystem {
         [string]
         $GroupId,
 
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
         [Parameter(Mandatory=$false)]
-        $WhatIf = $false
+        $WhatIf
     )
 
     Push-Location

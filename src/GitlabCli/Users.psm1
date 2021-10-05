@@ -10,29 +10,47 @@ function Get-GitlabUser {
 
         [Parameter(ParameterSetName='ByMe', Mandatory=$False)]
         [switch]
-        $Me
+        $Me,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
     )
 
     if ($Username) {
         $UserId = Invoke-GitlabApi GET "users" @{
             username = $Username
         } | Select-Object -First 1 -ExpandProperty id
-        Invoke-GitlabApi GET "users/$UserId" | New-WrapperObject 'Gitlab.User'
+        Invoke-GitlabApi GET "users/$UserId" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.User'
     }
     if ($EmailAddress) {
         $UserId = Invoke-GitlabApi GET "search" @{
             scope = 'users'
             search = $EmailAddress
-        } | Select-Object -First 1 -ExpandProperty id
-        Invoke-GitlabApi GET "users/$UserId" | New-WrapperObject 'Gitlab.User'
+        } -SiteUrl $SiteUrl -WhatIf:$WhatIf | Select-Object -First 1 -ExpandProperty id
+        Invoke-GitlabApi GET "users/$UserId" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.User'
     }
     if ($Me) {
-        Invoke-GitlabApi GET 'user' | New-WrapperObject 'Gitlab.User'
+        Invoke-GitlabApi GET 'user' -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.User'
     }
 }
 
 function Get-GitlabCurrentUser {
-    Get-GitlabUser -Me
+    param (
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    Get-GitlabUser -Me -SiteUrl $SiteUrl -WhatIf:$WhatIf
 }
 
 function Get-GitlabGroupMembership {
@@ -43,11 +61,20 @@ function Get-GitlabGroupMembership {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $EmailAddress
-    )
-    $User = Get-GitlabUser -Username $Username -EmailAddress $EmailAddress
+        $EmailAddress,
 
-    Invoke-GitlabApi GET "users/$($User.Id)/memberships" -MaxPages 10 | New-WrapperObject "Gitlab.GroupMembership"
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+    $User = Get-GitlabUser -Username $Username -EmailAddress $EmailAddress -SiteUrl $SiteUrl
+
+    Invoke-GitlabApi GET "users/$($User.Id)/memberships" -MaxPages 10 -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+        New-WrapperObject "Gitlab.GroupMembership"
 }
 
 function Add-GitlabUserToGroup {
