@@ -45,7 +45,11 @@ function Get-GitlabJob {
         $IncludeTrace,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
@@ -56,6 +60,7 @@ function Get-GitlabJob {
         HttpMethod="GET"
         Query=@{}
         Path = "projects/$ProjectId/jobs"
+        SiteUrl = $SiteUrl
     }
 
     if ($PipelineId) {
@@ -113,7 +118,11 @@ function Get-GitlabJobTrace {
         $JobId,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
@@ -121,9 +130,10 @@ function Get-GitlabJobTrace {
     $ProjectId = $Project.Id
 
     $GitlabApiArguments = @{
-        HttpMethod="GET"
-        Query=@{}
-        Path = "projects/$ProjectId/jobs/$JobId/trace"
+        HttpMethod = "GET"
+        Query      = @{}
+        Path       = "projects/$ProjectId/jobs/$JobId/trace"
+        SiteUrl    = $SiteUrl
     }
 
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf
@@ -143,15 +153,20 @@ function Start-GitlabJob {
         $ProjectId = '.',
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
-        $WhatIf = $false
+        [Parameter(Mandatory=$false)]
+        $WhatIf
     )
 
     $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
 
     $GitlabApiArguments = @{
-        HttpMethod="POST"
-        Path="projects/$ProjectId/jobs/$JobId/play"
+        HttpMethod = "POST"
+        Path       = "projects/$ProjectId/jobs/$JobId/play"
+        SiteUrl    = $SiteUrl
     }
 
     try {

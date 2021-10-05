@@ -14,17 +14,21 @@ function Get-GitlabProject {
         [Parameter(Mandatory=$false, ParameterSetName='ByGroup')]
         $IncludeArchived = $false,
 
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
         [Parameter(Mandatory=$false)]
-        $WhatIf = $false
+        $WhatIf
     )
 
     switch ($PSCmdlet.ParameterSetName) {
         ById {
             if ($ProjectId -eq '.') {
-                $ProjectId = $(Get-LocalGitContext).Repo
+                $ProjectId = $(Get-LocalGitContext).Project
             }
-            $Project = Invoke-GitlabApi GET "projects/$([System.Net.WebUtility]::UrlEncode($ProjectId))"
+            $Project = Invoke-GitlabApi GET "projects/$([System.Net.WebUtility]::UrlEncode($ProjectId))" -SiteUrl $SiteUrl -WhatIf:$WhatIf
             if ($Project) {
                 return $Project | New-WrapperObject 'Gitlab.Project'
             }
@@ -37,7 +41,7 @@ function Get-GitlabProject {
             if (-not $IncludeArchived) {
                 $Query['archived'] = 'false'
             }
-            Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPage 10 |
+            Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPage 10 -SiteUrl $SiteUrl -WhatIf:$WhatIf |
                 Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
                 New-WrapperObject 'Gitlab.Project' |
                 Sort-Object -Property 'Name'
@@ -57,9 +61,13 @@ function Move-GitlabProject {
         [string]
         $DestinationGroup,
 
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
         [Parameter(Mandatory=$false)]
-        $WhatIf = $false
+        $WhatIf
     )
 
     $SourceProject = Get-GitlabProject -ProjectId $ProjectId
@@ -67,7 +75,7 @@ function Move-GitlabProject {
 
     Invoke-GitlabApi PUT "projects/$($SourceProject.Id)/transfer" @{
         namespace = $Group.Id
-    } -WhatIf:$WhatIf -WhatIfContext @{
+    } -SiteUrl $SiteUrl -WhatIf:$WhatIf -WhatIfContext @{
         SourceProjectName = $SourceProject.Name
         NamespacePath = $Group.FullPath
     } | New-WrapperObject 'Gitlab.Project'
@@ -84,12 +92,16 @@ function Rename-GitlabProject {
         [string]
         $NewName,
 
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
         [Parameter(Mandatory=$false)]
-        $WhatIf = $false
+        $WhatIf
     )
 
-    Update-GitlabProject -ProjectId $ProjectId -Name $NewName -Path $NewName -WhatIf:$WhatIf
+    Update-GitlabProject -ProjectId $ProjectId -Name $NewName -Path $NewName -SiteUrl $SiteUrl -WhatIf:$WhatIf
 }
 
 function Copy-GitlabProject {
@@ -108,9 +120,13 @@ function Copy-GitlabProject {
         [Parameter(Mandatory=$false)]
         $PreserveForkRelationship = $true,
 
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
         [Parameter(Mandatory=$false)]
-        $WhatIf = $false
+        $WhatIf
     )
 
     $SourceProject = Get-GitlabProject -ProjectId $ProjectId
@@ -121,15 +137,11 @@ function Copy-GitlabProject {
     } else {
         $NewProject = Invoke-GitlabApi POST "projects/$($SourceProject.Id)/fork" @{
             namespace_id = $Group.Id
-        }
+        } -SiteUrl $SiteUrl -WhatIf:$WhatIf
     }
 
     if (-not $PreserveForkRelationship) {
-        if ($WhatIf) {
-            Write-Host "WhatIf: removing fork relationship to $($SourceProject.Id)"
-        } else {
-            Invoke-GitlabApi DELETE "projects/$($NewProject.id)/fork"
-        }
+        Invoke-GitlabApi DELETE "projects/$($NewProject.id)/fork" -SiteUrl $SiteUrl -WhatIf:$WhatIf
     }
 }
 function New-GitlabProject {
@@ -143,9 +155,13 @@ function New-GitlabProject {
         [string]
         $DestinationGroup,
 
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
         [Parameter(Mandatory=$false)]
-        $WhatIf = $false
+        $WhatIf
     )
 
     $Group = Get-GitlabGroup -GroupId $DestinationGroup
@@ -156,7 +172,7 @@ function New-GitlabProject {
     Invoke-GitlabApi POST "projects" @{
         name = $ProjectName
         namespace_id = $Group.Id
-    } -WhatIf:$WhatIf -WhatIfContext @{
+    } -SiteUrl $SiteUrl -WhatIf:$WhatIf -WhatIfContext @{
         DestinationGroupName = $Group.Name
     }
 }
@@ -184,9 +200,13 @@ function Update-GitlabProject {
         [bool]
         $CiForwardDeployment,
 
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
         [Parameter(Mandatory=$false)]
-        $WhatIf = $false
+        $WhatIf
     )
 
     $Project = Get-GitlabProject $ProjectId
@@ -206,7 +226,7 @@ function Update-GitlabProject {
         $Query['topics'] = $Topics -join ','
     }
 
-    Invoke-GitlabApi PUT "projects/$($Project.Id)" $Query -WhatIf:$WhatIf |
+    Invoke-GitlabApi PUT "projects/$($Project.Id)" $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf |
         New-WrapperObject 'Gitlab.Project'
 }
 
@@ -218,14 +238,18 @@ function Invoke-GitlabProjectArchival {
         [string]
         $ProjectId,
 
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
         [Parameter(Mandatory=$false)]
-        $WhatIf = $false
+        $WhatIf
     )
 
     $Project = $(Get-GitlabProject -ProjectId $ProjectId)
     
-    Invoke-GitlabApi POST "projects/$($Project.Id)/archive" -WhatIf:$WhatIf -WhatIfContext @{
+    Invoke-GitlabApi POST "projects/$($Project.Id)/archive" -SiteUrl $SiteUrl -WhatIf:$WhatIf -WhatIfContext @{
         ProjectName = $Project.Name
     } | New-WrapperObject 'Gitlab.Project'
 }

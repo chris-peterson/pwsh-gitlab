@@ -44,15 +44,20 @@ function Get-GitlabPipeline {
         $MaxPages = 1,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
 
     $GitlabApiParameters = @{
-        "HttpMethod" = "GET"
-        "Path" = "projects/$($Project.Id)/pipelines"
+        HttpMethod = "GET"
+        Path       = "projects/$($Project.Id)/pipelines"
+        SiteUrl    = $SiteUrl
     }
 
     switch ($PSCmdlet.ParameterSetName) {
@@ -90,12 +95,12 @@ function Get-GitlabPipeline {
     if ($WhatIf) {
         $GitlabApiParameters["WhatIf"] = $True
     }
-    $Pipelines = Invoke-GitlabApi @GitlabApiParameters | New-WrapperObject 'Gitlab.Pipeline'
+    $Pipelines = Invoke-GitlabApi @GitlabApiParameters -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Pipeline'
 
     if ($IncludeTestReport) {
         $Pipelines | ForEach-Object {
             try {
-                $TestReport = Invoke-GitlabApi GET "projects/$($_.ProjectId)/pipelines/$($_.Id)/test_report" | New-WrapperObject 'Gitlab.TestReport'
+                $TestReport = Invoke-GitlabApi GET "projects/$($_.ProjectId)/pipelines/$($_.Id)/test_report" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.TestReport'
             }
             catch {
                 $TestReport = $Null
@@ -131,15 +136,24 @@ function Get-GitlabPipelineSchedule {
         [Parameter(ParameterSetName='ByProjectId', Mandatory=$false)]
         [string]
         [ValidateSet('active', 'inactive')]
-        $Scope
+        $Scope,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
     )
 
     $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
 
     $GitlabApiArguments = @{
-        HttpMethod="GET"
-        Path="projects/$ProjectId/pipeline_schedules"
-        Query=@{}
+        HttpMethod = "GET"
+        Path       = "projects/$ProjectId/pipeline_schedules"
+        Query      = @{}
+        SiteUrl    = $SiteUrl
     }
 
     switch ($PSCmdlet.ParameterSetName) {
@@ -154,7 +168,7 @@ function Get-GitlabPipelineSchedule {
         default { throw "Parameterset $($PSCmdlet.ParameterSetName) is not implemented"}
     }
 
-    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
+    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineSchedule'
 }
 
 function Get-GitlabPipelineBridges {
@@ -171,14 +185,23 @@ function Get-GitlabPipelineBridges {
         [Parameter(Mandatory=$false)]
         [string]
         [ValidateSet("created","pending","running","failed","success","canceled","skipped","manual")]
-        $Scope
+        $Scope,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
     )
     $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
 
     $GitlabApiArguments = @{
-        HttpMethod="GET"
-        Path="projects/$ProjectId/pipelines/$PipelineId/bridges"
-        Query=@{}
+        HttpMethod = "GET"
+        Path       = "projects/$ProjectId/pipelines/$PipelineId/bridges"
+        Query      = @{}
+        SiteUrl    = $SiteUrl
     }
 
     if($Scope) {
@@ -210,7 +233,11 @@ function New-GitlabPipeline {
         $Follow,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
@@ -226,13 +253,13 @@ function New-GitlabPipeline {
     }
 
     $GitlabApiArguments = @{
-        HttpMethod="POST"
-        Path="projects/$ProjectId/pipeline"
-        Query=@{'ref' = $Ref}
-        WhatIf=$WhatIf
+        HttpMethod = "POST"
+        Path       = "projects/$ProjectId/pipeline"
+        Query      = @{'ref' = $Ref}
+        SiteUrl    = $SiteUrl
     }
 
-    $Pipeline = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Pipeline'
+    $Pipeline = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Pipeline'
 
     if ($Wait) {
         Write-Host "$($Pipeline.Id) created..."
@@ -295,12 +322,16 @@ function Remove-GitlabPipeline {
         $PipelineId,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
-        $WhatIf = $false
+        [Parameter(Mandatory=$false)]
+        $WhatIf
     )
 
-    $Project = Get-GitlabProject $ProjectId
-    $Pipeline = Get-GitlabPipeline -ProjectId $ProjectId -PipelineId $PipelineId
+    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $Pipeline = Get-GitlabPipeline -ProjectId $ProjectId -PipelineId $PipelineId -SiteUrl $SiteUrl
 
-    Invoke-GitlabApi DELETE "projects/$($Project.Id)/pipelines/$($Pipeline.Id)" -WhatIf:$WhatIf
+    Invoke-GitlabApi DELETE "projects/$($Project.Id)/pipelines/$($Pipeline.Id)" -SiteUrl $SiteUrl -WhatIf:$WhatIf
 }

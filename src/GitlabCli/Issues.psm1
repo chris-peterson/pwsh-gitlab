@@ -36,9 +36,14 @@ function Get-GitlabIssues {
         $Mine,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
+
     $Path = $null
     $MaxPages = 1
     $Query = @{}
@@ -80,7 +85,7 @@ function Get-GitlabIssues {
         $Query['created_after'] = $CreatedAfter
     }
 
-    return Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Issue'
+    return Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Issue'
 }
 
 function New-GitlabIssue {
@@ -99,7 +104,11 @@ function New-GitlabIssue {
         $Description,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
@@ -108,7 +117,7 @@ function New-GitlabIssue {
     return Invoke-GitlabApi POST "projects/$ProjectId/issues" @{
         title = $Title
         description = $Description
-    } -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Issue'
+    } -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Issue'
 }
 
 function Close-GitlabIssue {
@@ -123,7 +132,11 @@ function Close-GitlabIssue {
         $IssueId,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
@@ -131,5 +144,5 @@ function Close-GitlabIssue {
 
     return Invoke-GitlabApi PUT "projects/$ProjectId/issues/$IssueId" @{
         state_event = 'close'
-    } -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Issue'
+    } -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Issue'
 }

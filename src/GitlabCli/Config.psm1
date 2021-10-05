@@ -1,137 +1,170 @@
-function Set-DefaultGitlabCliSystem {
-    [CmdletBinding()]
+$global:GitlabConfigurationPath = "$($env:HOME)/.config/powershell/gitlab.config"
+
+function Test-IsConfigurationEnvironmentVariables {
     param (
-        [Parameter()]
-        [string]
-        $Name
     )
 
-    $configuration = Get-GitlabCliConfig
-    if($configuration.FromEnvironment) {
-        Write-Warning "Unsupported: Current configuration is from environment variables."
-        Write-Warning "Unset `$env:GITLAB_ACCESS_TOKEN and `$env:GITLAB_URL"
-        return $configuration
-    }
-
-    if($configuration[$Name] -ne $null ) {
-        $configuration.DefaultSite = $Name
-        return Write-GitlabCliConfig $configuration
-    }
-
-    Write-Warning "System with $($Name) doesn't exist"
-    return $configuration
+    $env:GITLAB_ACCESS_TOKEN
 }
 
-function Add-GitlabCliSystem {
+function Write-GitlabConfiguration {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
-        [string]
-        $Name,
-        [Parameter(Mandatory=$true)]
-        [string]
-        $Token
+        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        $Configuration
     )
-        
-    $configuration = Get-GitlabCliConfig
 
-    if($configuration.FromEnvironment) {
-        Write-Warning "Unsupported: Current configuration is from environment variables."
-        Write-Warning "Unset `$env:GITLAB_ACCESS_TOKEN and `$env:GITLAB_URL"
-        return $configuration
+    $ToSave = $Configuration |
+        Select-Object -ExcludeProperty '*Display'
+
+    # fun with cardinality
+    if (-not ($ToSave.Sites -is [array])) {
+        $ToSave.Sites = @($ToSave.Sites)
     }
 
-    if($configuration[$Name] -ne $null) {
-        if($configuration[$Name].ApiToken -ne $Token) {
-            Write-Host "A token already exists for $Name"
-            $response = $(Read-Host -Prompt "Would you like to replace it? [y/n]")
-            if($response -imatch "y") {
-                $configuration[$Name].ApiToken = $Token
-                Write-GitlabCliConfig $configuration
-            } else {
-                Write-Host "Information already exists"
-                return $configuration
-            }
+    $ToSave |
+        ConvertTo-Json |
+        Set-Content -Path $global:GitlabConfigurationPath |
+        Out-Null
+}
+
+function Get-GitlabConfiguration {
+    [CmdletBinding()]
+    param (
+    )
+
+    if (Test-IsConfigurationEnvironmentVariables) {
+        return [PSCustomObject]@{
+            Sites = @(@{
+                Url = $env:GITLAB_URL ?? 'gitlab.com'
+                AccessToken = $env:GITLAB_ACCESS_TOKEN
+                IsDefault = $true
+            })
+        } | New-WrapperObject 'Gitlab.Configuration'
+    }
+
+    if (-not (Test-Path $global:GitlabConfigurationPath)) {
+        Write-Warning "GitlabCli: Creating blank configuration file '$global:GitlabConfigurationPath'"
+        @{
+            Sites = @()
+        } | Write-GitlabConfiguration
+    }
+
+    Get-Content $global:GitlabConfigurationPath | ConvertFrom-Json | New-WrapperObject 'Gitlab.Configuration'
+}
+
+function Get-DefaultGitlabSite {
+    param (
+    )
+
+    $Configuration = Get-GitlabConfiguration
+    $LocalContext = Get-LocalGitContext
+
+    if ($LocalContext.Site) {
+        $MatchingSite = $Configuration.Sites | Where-Object Url -eq $LocalContext.Site
+        if ($MatchingSite) {
+            return $MatchingSite | Select-Object -First 1
         }
     }
 
-    $configuration[$Name] = @{
-        ApiToken = $Token
-    }
-
-    return Write-GitlabCliConfig $configuration
+    $Configuration | Select-Object -ExpandProperty Sites | Where-Object IsDefault | Select-Object -First 1
 }
 
-function Remove-GitlabCliSystem {
+function Set-DefaultGitlabSite {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$true)]
         [string]
-        $Name
+        $Url
     )
 
-    $configuration = Get-GitlabCliConfig
-    if($configuration.FromEnvironment) {
-        Write-Warning "Unsupported: Current configuration is from environment variables."
-        Write-Warning "Unset `$env:GITLAB_ACCESS_TOKEN and `$env:GITLAB_URL"
+    if (Test-IsConfigurationEnvironmentVariables) {
+        Write-Warning "GitlabCli: Current configuration is from environment variables which only supports a single site"
+        Write-Warning "Unset `$env:GITLAB_ACCESS_TOKEN to use file-based configuration option"
         return
     }
 
-    if($configuration[$Name] -eq $null) {
-        Write-Warning "No entry for $($Name)"
+    $Config = Get-GitlabConfiguration
+    $Site = $Config.Sites | Where-Object Url -eq $Url
+
+    if (-not $Site) {
+        throw "'$Url' site not found"
     }
 
-    $configuration.Remove($Name)
-    return Write-GitlabCliConfig $configuration
+    $Config.Sites | ForEach-Object {
+        $_.IsDefault = $false
+    }
+    $Site.IsDefault = $true
+
+    $Config | Write-GitlabConfiguration
 }
 
-function Write-GitlabCliConfig {
+function Add-GitlabSite {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$true)]
-        [hashtable]
-        $configuration
+        [string]
+        $Url,
+
+        [Parameter(Mandatory=$true)]
+        [string]
+        $AccessToken,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $IsDefault
     )
 
-    Get-GitlabCliConfig | Out-Null
+    if (Test-IsConfigurationEnvironmentVariables) {
+        Write-Warning "GitlabCli: Current configuration is from environment variables"
+        Write-Warning "Unset `$env:GITLAB_ACCESS_TOKEN to use file-based configuration"
+        return
+    }
+
+    $Config = Get-GitlabConfiguration
+    $ExistingSite = $Config.Sites | Where-Object Url -eq $Url
+    if ($ExistingSite) {
+        if ($(Read-Host -Prompt "Configuration for '$Url' already exists -- replace it? [y/n]") -ieq 'y') {
+            Remove-GitlabSite $Url
+            $Config = Get-GitlabConfiguration
+        } else {
+            return
+        }
+    }
+
+    $Config.Sites += @{
+        Url = $Url
+        AccessToken = $AccessToken
+        IsDefault = 'false'
+    }
     
-    Clear-Content $Global:GitlabCliConfigPath
-    $configuration | ConvertTo-Json | Add-Content $Global:GitlabCliConfigPath
-    return $configuration
+    $Config | Write-GitlabConfiguration
+
+    if ($IsDefault) {
+        Set-DefaultGitlabSite -Url $Url
+    }
+
+    Get-GitlabConfiguration
 }
 
-function Get-GitlabCliConfig {
+function Remove-GitlabSite {
     [CmdletBinding()]
     param (
-        [Parameter()]
+        [Parameter(Mandatory=$true)]
         [string]
-        $ConfigRoot = "$($env:HOME)/.gitlabcli",
-        
-        [Parameter()]
-        [string]
-        $ConfigName = "config.json"
+        $Url
     )
 
-    if($env:GITLAB_URL -ne $null -and $env:GITLAB_ACCESS_TOKEN -ne $null) {
-        return @{
-            "DefaultSite"=$env:GITLAB_URL
-            "$($env:GITLAB_URL)" = @{
-                ApiToken = $env:GITLAB_ACCESS_TOKEN
-            }
-
-            FromEnvironment=$true
-        }
+    if (Test-IsConfigurationEnvironmentVariables) {
+        Write-Warning "GitlabCli: Current configuration is from environment variables"
+        Write-Warning "Unset `$env:GITLAB_ACCESS_TOKEN to use file-based configuration"
+        return
     }
 
-    $configPath = "$($ConfigRoot)/$($ConfigName)"
-    $Global:GitlabCliConfigPath = $configPath
+    $Config = Get-GitlabConfiguration
+    $Config.Sites = $Config.Sites | Where-Object Url -ne $Url
 
-    if(-NOT (Test-Path $configPath)) {
-        if(-NOT(Test-Path $ConfigRoot)) {
-            mkdir $ConfigRoot
-        }
-        Add-Content $configPath "{`"DefaultSite`": `"`" }" -Force        
-    }
+    $Config | Write-GitlabConfiguration
 
-    return Get-Content $configPath | ConvertFrom-Json -AsHashtable
+    Get-GitlabConfiguration
 }

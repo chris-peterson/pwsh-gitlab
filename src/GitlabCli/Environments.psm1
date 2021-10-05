@@ -19,7 +19,11 @@ function Get-GitlabEnvironment {
         $IncludeStopped,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
@@ -29,6 +33,7 @@ function Get-GitlabEnvironment {
         HttpMethod='GET'
         Path="projects/$($Project.Id)/environments"
         Query=@{}
+        SiteUrl = $SiteUrl
     }
 
     switch ($PSCmdlet.ParameterSetName) {

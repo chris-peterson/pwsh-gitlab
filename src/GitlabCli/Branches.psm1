@@ -16,7 +16,11 @@ function Get-GitlabBranch {
         $Branch,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
         [switch]
+        [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
@@ -26,6 +30,7 @@ function Get-GitlabBranch {
         HttpMethod="GET"
         Path="projects/$($Project.Id)/repository/branches"
         Query=@{}
+        SiteUrl=$SiteUrl
     }
 
     switch($PSCmdlet.ParameterSetName) {

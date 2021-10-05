@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.13.4'
+    ModuleVersion = '1.14.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -84,10 +84,11 @@
         'Get-GitlabBranch'
 
         # Configuration
-        'Remove-GitlabCliSystem'
-        'Add-GitlabCliSystem'
-        'Get-GitlabCliConfig'
-        'Set-DefaultGitlabCliSystem'
+        'Get-GitlabConfiguration'
+        'Add-GitlabSite'
+        'Remove-GitlabSite'
+        'Get-DefaultGitlabSite'
+        'Set-DefaultGitlabSite'
         
         # Groups
         'Get-GitlabGroup'
@@ -216,7 +217,7 @@
             # IconUri = ''
     
             # ReleaseNotes of this module
-            ReleaseNotes = 'Bug fixes, fleshing out additional APIs'
+            ReleaseNotes = 'File-based configuration (thanks @CaseyMacPherson)'
     
         } # End of PSData hashtable
     

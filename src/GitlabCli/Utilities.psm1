@@ -39,6 +39,10 @@ function Invoke-GitlabApi {
         $MaxPages = 1,
 
         [Parameter()]
+        [string]
+        $SiteUrl,
+
+        [Parameter()]
         [switch]
         $WhatIf,
 
@@ -47,19 +51,23 @@ function Invoke-GitlabApi {
         $WhatIfContext = @{}
     )
 
+    if ($SiteUrl) {
+        $Site = Get-GitlabConfiguration | Select-Object -ExpandProperty Sites | Where-Object Url -eq $SiteUrl | Select-Object -First 1
+    }
+    if (-not $Site) {
+        $Site = Get-DefaultGitlabSite
+    }
+    $GitlabUrl = $Site.Url
+    $AccessToken = $Site.AccessToken
+
     $Headers = @{
         'Accept' = 'application/json'
     }
-
-    $configuration = Get-GitlabCliConfig
-    $defaultSiteApiToken = $configuration[$configuration.DefaultSite].ApiToken
-    if ($defaultSiteApiToken) {
-        $Headers['Authorization'] = "Bearer $defaultSiteApiToken"
+    if ($AccessToken) {
+        $Headers['Authorization'] = "Bearer $AccessToken"
     } else {
-        Write-Error "Add-GitlabCliSystem hasn't been executed or `$env:GITLAB_ACCESS_TOKEN` has not been configured`nSee https://github.com/chris-peterson/pwsh-gitlab#getting-started for details"
-        return
+        throw "GitlabCli: environment not configured`nSee https://github.com/chris-peterson/pwsh-gitlab#getting-started for details"
     }
-    $GitlabUrl = $configuration.DefaultSite
 
     if (-not $GitlabUrl.StartsWith('http')) {
         $GitlabUrl = "https://$GitlabUrl"
@@ -82,6 +90,7 @@ function Invoke-GitlabApi {
         $RestMethodParams['FollowRelLink'] = $true
         $RestMethodParams['MaximumFollowRelLink'] = $MaxPages
     }
+
     if($WhatIf) {
         $SerializedParams = ""
         if($RestMethodParams.Count -gt 0) {
@@ -117,7 +126,6 @@ function Invoke-GitlabApi {
             Write-Output $Result
         }
     }
-    
 }
 
 function New-WrapperObject {
