@@ -6,6 +6,19 @@
     </Members>
   </Type>
   <Type>
+    <Name>Gitlab.ProtectedBranch</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>WhoCanPush</Name>
+        <GetScriptBlock>$this.PushAccessLevels.access_level_description -join ','</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>WhoCanMerge</Name>
+        <GetScriptBlock>$this.MergeAccessLevels.access_level_description -join ','</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Gitlab.Group</Name>
     <Members>
     </Members>

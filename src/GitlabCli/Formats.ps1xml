@@ -401,6 +401,51 @@
       </TableControl>
     </View>
     <View>
+      <Name>GitlabProtectedBranch</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.ProtectedBranch</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>ID</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Who Can Push</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Who Can Merge</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+                <Alignment>Right</Alignment>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Name</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>WhoCanPush</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>WhoCanMerge</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>AllowForcePush</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>GitlabBlobSearchResult</Name>
       <ViewSelectedBy>
         <TypeName>Gitlab.BlobSearchResult</TypeName>
