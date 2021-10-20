@@ -15,7 +15,7 @@ function Get-LocalGitContext {
     try {
         Set-Location $Path
         if (Get-ChildItem -Filter '.git' -Hidden -Directory) {
-            $(git config --get remote.origin.url) -match '(https://|git@)(?<Site>.*?)(/|:)(?<Project>[a-zA-Z/-]+)'
+            $(git config --get remote.origin.url) -match '(https://|git@)(?<Site>.*?)(/|:)(?<Project>[a-zA-Z0-9/-]+)'
             $Context.Site = $Matches.Site
             $Context.Project = $Matches.Project
             
