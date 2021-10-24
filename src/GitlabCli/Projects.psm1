@@ -6,7 +6,7 @@ function Get-GitlabProject {
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByGroup')]
+        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByGroup', ValueFromPipelineByPropertyName=$true)]
         [string]
         $GroupId,
 

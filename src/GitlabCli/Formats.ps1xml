@@ -9,14 +9,10 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>ID</Label>
-            <Width>4</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>16</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -30,7 +26,45 @@
                 <PropertyName>Name</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>WebUrl</PropertyName>
+                <PropertyName>Url</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>GitlabProject</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.Project</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+          </TableColumnHeader>
+          <TableColumnHeader>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Group</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+                <Alignment>Right</Alignment>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Name</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Group</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Url</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>
@@ -45,21 +79,16 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>ID</Label>
-            <Width>5</Width>
+            <Label>Id</Label>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Author</Label>
-            <Width>16</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>32</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>8</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -79,7 +108,7 @@
                 <PropertyName>State</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>WebUrl</PropertyName>
+                <PropertyName>Url</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>
@@ -94,18 +123,14 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>ID</Label>
-            <Width>5</Width>
+            <Label>Id</Label>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Author</Label>
-            <Width>16</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>40</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -122,7 +147,7 @@
                 <PropertyName>Title</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>WebUrl</PropertyName>
+                <PropertyName>Url</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>
@@ -137,17 +162,12 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>ID</Label>
-            <Width>9</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>32</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>8</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -164,7 +184,7 @@
                 <PropertyName>Status</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>WebUrl</PropertyName>
+                <PropertyName>Url</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>
@@ -179,20 +199,14 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>ID</Label>
-            <Width>10</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>16</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>24</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>12</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -212,7 +226,7 @@
                 <PropertyName>Status</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>WebUrl</PropertyName>
+                <PropertyName>Url</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>
@@ -227,14 +241,10 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>ID</Label>
-            <Width>7</Width>
             </TableColumnHeader>
             <TableColumnHeader>
-              <Width>20</Width>
             </TableColumnHeader>
             <TableColumnHeader>
-              <Width>12</Width>
             </TableColumnHeader>
           </TableHeaders>
         <TableRowEntries>
@@ -263,23 +273,16 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>ID</Label>
-            <Width>10</Width>
             </TableColumnHeader>
             <TableColumnHeader>
-              <Width>10</Width>
             </TableColumnHeader>
             <TableColumnHeader>
-              <Width>20</Width>
             </TableColumnHeader>
             <TableColumnHeader>
-              <Width>12</Width>
             </TableColumnHeader>
             <TableColumnHeader>
-              <Width>16</Width>
             </TableColumnHeader>
             <TableColumnHeader>
-              <Width>20</Width>
             </TableColumnHeader>
           </TableHeaders>
         <TableRowEntries>
@@ -317,20 +320,14 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>ID</Label>
-            <Width>5</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>6</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>40</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>12</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>28</Width>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -358,49 +355,6 @@
       </TableControl>
     </View>
     <View>
-      <Name>GitlabProject</Name>
-      <ViewSelectedBy>
-        <TypeName>Gitlab.Project</TypeName>
-      </ViewSelectedBy>
-      <TableControl>
-        <TableHeaders>
-          <TableColumnHeader>
-            <Label>ID</Label>
-            <Width>8</Width>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Width>16</Width>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>Group</Label>
-            <Width>32</Width>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Width>80</Width>
-          </TableColumnHeader>
-        </TableHeaders>
-        <TableRowEntries>
-          <TableRowEntry>
-            <TableColumnItems>
-              <TableColumnItem>
-                <PropertyName>Id</PropertyName>
-                <Alignment>Right</Alignment>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>Name</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>Group</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>WebUrl</PropertyName>
-              </TableColumnItem>
-            </TableColumnItems>
-          </TableRowEntry>
-        </TableRowEntries>
-      </TableControl>
-    </View>
-    <View>
       <Name>GitlabProtectedBranch</Name>
       <ViewSelectedBy>
         <TypeName>Gitlab.ProtectedBranch</TypeName>
@@ -408,7 +362,6 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>ID</Label>
           </TableColumnHeader>
           <TableColumnHeader>
           </TableColumnHeader>
@@ -453,18 +406,14 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Width>10</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>40</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>5</Width>
             <Label>Line</Label>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Data</Label>
-            <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -497,21 +446,16 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>ID</Label>
-            <Width>4</Width>
+            <Label>Id</Label>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>10</Width>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Author</Label>
-            <Width>12</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>40</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -532,7 +476,7 @@
                 <PropertyName>Title</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>WebUrl</PropertyName>
+                <PropertyName>Url</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>
@@ -547,20 +491,14 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>ID</Label>
-            <Width>4</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>8</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>10</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>16</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Width>80</Width>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -580,7 +518,7 @@
                 <PropertyName>Name</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>WebUrl</PropertyName>
+                <PropertyName>Url</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

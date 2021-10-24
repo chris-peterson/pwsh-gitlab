@@ -69,10 +69,6 @@
     <Name>Gitlab.Pipeline</Name>
     <Members>
       <ScriptProperty>
-        <Name>PipelineId</Name>
-        <GetScriptBlock>$this.Id</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
         <Name>UserName</Name>
         <GetScriptBlock>$this.User.username</GetScriptBlock>
       </ScriptProperty>
@@ -87,10 +83,6 @@
     <Name>Gitlab.Environment</Name>
     <Members>
       <ScriptProperty>
-        <Name>EnvironmentId</Name>
-        <GetScriptBlock>$this.Id</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
         <Name>EnvironmentName</Name>
         <GetScriptBlock>$this.Name</GetScriptBlock>
       </ScriptProperty>
@@ -103,10 +95,6 @@
   <Type>
     <Name>Gitlab.Deployment</Name>
     <Members>
-      <ScriptProperty>
-        <Name>DeploymentId</Name>
-        <GetScriptBlock>$this.Id</GetScriptBlock>
-      </ScriptProperty>
       <ScriptProperty>
         <Name>EnvironmentId</Name>
         <GetScriptBlock>$this.Environment.id</GetScriptBlock>
@@ -127,19 +115,11 @@
         <Name>Pipeline</Name>
         <GetScriptBlock>$this.Deployable.Pipeline | New-WrapperObject 'Gitlab.Pipeline'</GetScriptBlock>
       </ScriptProperty>
-      <ScriptProperty>
-        <Name>Url</Name>
-        <GetScriptBlock>$this.Pipeline.WebUrl</GetScriptBlock>
-      </ScriptProperty>
     </Members>
   </Type>
   <Type>
     <Name>Gitlab.Job</Name>
     <Members>
-      <ScriptProperty>
-        <Name>JobId</Name>
-        <GetScriptBlock>$this.Id</GetScriptBlock>
-      </ScriptProperty>
       <ScriptProperty>
         <Name>ProjectId</Name>
         <GetScriptBlock>$this.Pipeline.project_id</GetScriptBlock>
@@ -158,10 +138,6 @@
   <Type>
     <Name>Gitlab.Project</Name>
     <Members>
-      <ScriptProperty>
-        <Name>ProjectId</Name>
-        <GetScriptBlock>$this.Id</GetScriptBlock>
-      </ScriptProperty>
       <ScriptProperty>
         <Name>Group</Name>
         <GetScriptBlock>$($($this.PathWithNamespace -split '/') | Select-Object -SkipLast 1) -join '/'</GetScriptBlock>

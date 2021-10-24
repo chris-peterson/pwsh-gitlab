@@ -128,6 +128,24 @@ function Invoke-GitlabApi {
     }
 }
 
+function Add-AliasedProperty {
+    param (
+        [PSCustomObject]
+        [Parameter(Mandatory=$true, Position = 0)]
+        $On,
+
+        [string]
+        [Parameter(Mandatory=$true)]
+        $From,
+
+        [string]
+        [Parameter(Mandatory=$true)]
+        $To
+    )
+    
+    $On | Add-Member -MemberType NoteProperty -Name $From -Value $On.$To
+}
+
 function New-WrapperObject {
     [CmdletBinding()]
     param(
@@ -142,11 +160,17 @@ function New-WrapperObject {
     Process {
         foreach ($item in $InputObject) {
             $Wrapper = New-Object PSObject
-            $item.PSObject.Properties | ForEach-Object {
-                $Wrapper | Add-Member -MemberType NoteProperty -Name $($_.Name | ConvertTo-PascalCase) -Value $_.Value
-            }
+            $item.PSObject.Properties |
+                Sort-Object Name |
+                ForEach-Object {
+                    $Wrapper | Add-Member -MemberType NoteProperty -Name $($_.Name | ConvertTo-PascalCase) -Value $_.Value
+                }
+            # aliases for common property names
+            Add-AliasedProperty -On $Wrapper -From 'Url' -To 'WebUrl'
             if ($DisplayType) {
                 $Wrapper.PSTypeNames.Insert(0, $DisplayType)
+                $TypeShortName = $DisplayType.Split('.') | Select-Object -Last 1
+                Add-AliasedProperty -On $Wrapper -From "$($TypeShortName)Id" -To 'Id'
             }
             Write-Output $Wrapper
         }
