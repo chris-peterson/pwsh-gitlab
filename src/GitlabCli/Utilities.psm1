@@ -170,7 +170,8 @@ function New-WrapperObject {
             if ($DisplayType) {
                 $Wrapper.PSTypeNames.Insert(0, $DisplayType)
                 $TypeShortName = $DisplayType.Split('.') | Select-Object -Last 1
-                Add-AliasedProperty -On $Wrapper -From "$($TypeShortName)Id" -To 'Id'
+                $IdentityPropertyName = $Wrapper.Iid ? 'Iid' : 'Id'
+                Add-AliasedProperty -On $Wrapper -From "$($TypeShortName)$IdentityPropertyName" -To 'Id'
             }
             Write-Output $Wrapper
         }

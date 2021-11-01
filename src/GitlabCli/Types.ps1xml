@@ -44,10 +44,6 @@
     <Name>Gitlab.MergeRequest</Name>
     <Members>
       <ScriptProperty>
-        <Name>MergeRequestId</Name>
-        <GetScriptBlock>$this.Iid</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
         <Name>AuthorName</Name>
         <GetScriptBlock>$this.Author.Name</GetScriptBlock>
       </ScriptProperty>
