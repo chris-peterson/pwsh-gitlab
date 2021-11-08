@@ -10,6 +10,10 @@ function Get-GitlabProject {
         [string]
         $GroupId,
 
+        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByUrl')]
+        [string]
+        $Url,
+
         [switch]
         [Parameter(Mandatory=$false, ParameterSetName='ByGroup')]
         $IncludeArchived = $false,
@@ -45,6 +49,13 @@ function Get-GitlabProject {
                 Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
                 New-WrapperObject 'Gitlab.Project' |
                 Sort-Object -Property 'Name'
+        }
+        ByUrl {
+            $Url -match "$($(Get-DefaultGitlabSite).Url)/(?<ProjectId>.*)" | Out-Null
+            if ($Matches) {
+                $ProjectId = $Matches.ProjectId
+                Get-GitlabProject -ProjectId $ProjectId
+            }
         }
     }
 }

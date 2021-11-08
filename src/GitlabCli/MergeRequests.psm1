@@ -69,7 +69,7 @@ function Get-GitlabMergeRequest {
         $Path = 'merge_requests'
     }
     else {
-        if ($Url -and $Url -match "$(Get-DefaultGitlabSite)/(?<ProjectId>.*)/-/merge_requests/(?<MergeRequestId>\d+)") {
+        if ($Url -and $Url -match "$($(Get-DefaultGitlabSite).Url)/(?<ProjectId>.*)/-/merge_requests/(?<MergeRequestId>\d+)") {
             $ProjectId = $Matches.ProjectId
             $MergeRequestId = $Matches.MergeRequestId
         }
