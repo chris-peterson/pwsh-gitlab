@@ -264,3 +264,107 @@ function Invoke-GitlabProjectArchival {
         ProjectName = $Project.Name
     } | New-WrapperObject 'Gitlab.Project'
 }
+
+# https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
+function Get-GitlabProjectVariable {
+
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Position=1, Mandatory=$false)]
+        [string]
+        $Key,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Project = Get-GitlabProject $ProjectId
+
+    if ($Key) {
+        Invoke-GitlabApi GET "projects/$($Project.Id)/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
+    }
+    else {
+        Invoke-GitlabApi GET "projects/$($Project.Id)/variables" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
+    }
+}
+
+# https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
+function Set-GitlabProjectVariable {
+
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true, Position=0)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Mandatory=$true, Position=1)]
+        [string]
+        $Key,
+
+        [Parameter(Mandatory=$true, Position=2)]
+        [string]
+        $Value,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Query = @{
+        value = $Value
+    }
+
+    try {
+        Get-GitlabProjectVariable $ProjectId $Key
+        $IsExistingVariable = $True
+    }
+    catch {
+        $IsExistingVariable = $False
+    }
+
+    if ($IsExistingVariable) {
+        Invoke-GitlabApi PUT "projects/$($ProjectId)/variables/$Key" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
+    }
+    else {
+        $Query.Add('key', $Key)
+        Invoke-GitlabApi POST "projects/$($ProjectId)/variables" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
+    }
+}
+
+# https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
+function Remove-GitlabProjectVariable {
+
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true, Position=0)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Mandatory=$true, Position=1)]
+        [string]
+        $Key,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    Invoke-GitlabApi DELETE "Projects/$($ProjectId)/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+}

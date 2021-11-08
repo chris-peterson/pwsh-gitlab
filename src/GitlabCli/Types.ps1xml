@@ -182,4 +182,9 @@
       </ScriptProperty>
     </Members>
   </Type>
+  <Type>
+    <Name>Gitlab.Variable</Name>
+    <Members>
+    </Members>
+  </Type>
 </Types>

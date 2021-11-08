@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.18.0'
+    ModuleVersion = '1.19.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -99,6 +99,9 @@
         'Remove-GitlabGroup'
         'Copy-GitlabGroupToLocalFileSystem'
         'Update-LocalGitlabGroup'
+        'Get-GitlabGroupVariable'
+        'Set-GitlabGroupVariable'
+        'Remove-GitlabGroupVariable'
 
         # Projects
         'Get-GitlabProject'
@@ -108,6 +111,9 @@
         'Rename-GitlabProject'
         'Copy-GitlabProject'
         'Invoke-GitlabProjectArchival'
+        'Get-GitlabProjectVariable'
+        'Set-GitlabProjectVariable'
+        'Remove-GitlabProjectVariable'
 
         # Environments
         'Get-GitlabEnvironment'
