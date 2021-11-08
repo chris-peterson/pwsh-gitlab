@@ -1,48 +1,46 @@
 function Get-GitlabMergeRequest {
-    [CmdletBinding(DefaultParameterSetName="ByProjectId")]
-    [Alias("mrs")]
+    [CmdletBinding(DefaultParameterSetName='ByProjectId')]
+    [Alias('mrs')]
     param(
-        [Parameter(Position=0, Mandatory=$false, ParameterSetName="ByProjectId")]
+        [Parameter(Position=0, Mandatory=$false, ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName=$true)]
         [string]
-        $ProjectId = ".",
+        $ProjectId = '.',
 
-        [Parameter(Position=1, Mandatory=$false, ParameterSetName="ByProjectId")]
+        [Parameter(Position=1, Mandatory=$false, ParameterSetName='ByProjectId')]
         [string]
         $MergeRequestId,
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName="ByGroupId")]
+        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByGroupId')]
         [string]
         $GroupId,
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName="ByUrl")]
+        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByUrl')]
         [string]
         $Url,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Mine")]
-        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
-        [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
-        [ValidateSet("closed", "opened", "merged")]
+        [Parameter(Mandatory=$false)]
+        [ValidateSet('', 'closed', 'opened', 'merged')]
         [string]
-        $State,
+        $State = 'opened',
 
-        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
-        [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
+        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
+        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
         [string]
         $CreatedAfter,
 
-        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
-        [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
+        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
+        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
         [string]
         $CreatedBefore,
 
-        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
-        [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
+        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
+        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
         [ValidateSet($null, $true, $false)]
         [object]
         $IsDraft,
 
-        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
-        [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
+        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
+        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
         [string]
         $Branch,
 
@@ -50,7 +48,7 @@ function Get-GitlabMergeRequest {
         [switch]
         $IncludeApprovals,
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName="Mine")]
+        [Parameter(Position=0, Mandatory=$true, ParameterSetName='Mine')]
         [switch]
         $Mine,
 
@@ -107,7 +105,7 @@ function Get-GitlabMergeRequest {
         $Query['created_after'] = $CreatedAfter
     }
 
-    if ($IsDraft -ne $null) {
+    if ($IsDraft) {
         $Query['wip'] = $IsDraft ? 'yes' : 'no'
     }
 
