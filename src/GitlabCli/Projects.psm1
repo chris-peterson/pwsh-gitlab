@@ -32,7 +32,7 @@ function Get-GitlabProject {
             if ($ProjectId -eq '.') {
                 $ProjectId = $(Get-LocalGitContext).Project
             }
-            $Project = Invoke-GitlabApi GET "projects/$([System.Net.WebUtility]::UrlEncode($ProjectId))" -SiteUrl $SiteUrl -WhatIf:$WhatIf
+            $Project = Invoke-GitlabApi GET "projects/$($ProjectId | ConvertTo-UrlEncoded)" -SiteUrl $SiteUrl -WhatIf:$WhatIf
             if ($Project) {
                 return $Project | New-WrapperObject 'Gitlab.Project'
             }
@@ -270,11 +270,11 @@ function Get-GitlabProjectVariable {
 
     [CmdletBinding()]
     param (
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
-        [Parameter(Position=1, Mandatory=$false)]
+        [Parameter(Position=0, Mandatory=$false)]
         [string]
         $Key,
 
@@ -302,15 +302,15 @@ function Set-GitlabProjectVariable {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true, Position=0)]
+        [Parameter(Mandatory=$false)]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
-        [Parameter(Mandatory=$true, Position=1)]
+        [Parameter(Mandatory=$true, Position=0)]
         [string]
         $Key,
 
-        [Parameter(Mandatory=$true, Position=2)]
+        [Parameter(Mandatory=$true, Position=1)]
         [string]
         $Value,
 
@@ -326,6 +326,8 @@ function Set-GitlabProjectVariable {
     $Query = @{
         value = $Value
     }
+
+    $ProjectId = $(Get-GitlabProject $ProjectId).Id
 
     try {
         Get-GitlabProjectVariable $ProjectId $Key
@@ -349,11 +351,11 @@ function Remove-GitlabProjectVariable {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true, Position=0)]
+        [Parameter(Mandatory=$false)]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
-        [Parameter(Mandatory=$true, Position=1)]
+        [Parameter(Mandatory=$true, Position=0)]
         [string]
         $Key,
 
@@ -366,5 +368,7 @@ function Remove-GitlabProjectVariable {
         $WhatIf
     )
 
-    Invoke-GitlabApi DELETE "Projects/$($ProjectId)/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+    $Project = Get-GitlabProject $ProjectId
+
+    Invoke-GitlabApi DELETE "projects/$($Project.Id)/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
 }

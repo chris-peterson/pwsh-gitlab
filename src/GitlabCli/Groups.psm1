@@ -15,7 +15,7 @@ function Get-GitlabGroup {
         $WhatIf
     )
 
-    $Group = Invoke-GitlabApi GET "groups/$([System.Net.WebUtility]::UrlEncode($GroupId))" @{
+    $Group = Invoke-GitlabApi GET "groups/$($GroupId | ConvertTo-UrlEncoded)" @{
         'with_projects' = 'false'
     } -SiteUrl $SiteUrl -WhatIf:$WhatIf
 
@@ -185,11 +185,13 @@ function Get-GitlabGroupVariable {
         $WhatIf
     )
 
+    $GroupId = $GroupId | ConvertTo-UrlEncoded
+
     if ($Key) {
-        Invoke-GitlabApi GET "groups/$($GroupId)/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "groups/$GroupId/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
     }
     else {
-        Invoke-GitlabApi GET "groups/$($GroupId)/variables" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "groups/$GroupId/variables" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
     }
 }
 
@@ -198,7 +200,7 @@ function Set-GitlabGroupVariable {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true, Position=0)]
+        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
         [string]
         $GroupId,
 
@@ -219,6 +221,8 @@ function Set-GitlabGroupVariable {
         $WhatIf
     )
 
+    $GroupId = $GroupId | ConvertTo-UrlEncoded
+
     $Query = @{
         value = $Value
     }
@@ -232,11 +236,11 @@ function Set-GitlabGroupVariable {
     }
 
     if ($IsExistingVariable) {
-        Invoke-GitlabApi PUT "groups/$($GroupId)/variables/$Key" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
+        Invoke-GitlabApi PUT "groups/$GroupId/variables/$Key" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
     }
     else {
         $Query.Add('key', $Key)
-        Invoke-GitlabApi POST "groups/$($GroupId)/variables" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
+        Invoke-GitlabApi POST "groups/$GroupId/variables" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
     }
 }
 
@@ -245,7 +249,7 @@ function Remove-GitlabGroupVariable {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true, Position=0)]
+        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
         [string]
         $GroupId,
 
@@ -262,5 +266,7 @@ function Remove-GitlabGroupVariable {
         $WhatIf
     )
 
-    Invoke-GitlabApi DELETE "groups/$($GroupId)/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+    $GroupId = $GroupId | ConvertTo-UrlEncoded
+
+    Invoke-GitlabApi DELETE "groups/$GroupId/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
 }

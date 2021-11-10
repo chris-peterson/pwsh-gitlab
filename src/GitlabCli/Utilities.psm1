@@ -20,6 +20,15 @@ function ConvertTo-SnakeCase
     return [regex]::replace($Value, '(?<=.)(?=[A-Z])', '_').ToLower()
 }
 
+function ConvertTo-UrlEncoded {
+    param (
+        [Parameter(Position=0, ValueFromPipeline=$true)]
+        [string]
+        $Value
+    )
+    [System.Net.WebUtility]::UrlEncode($Value)
+}
+
 function Invoke-GitlabApi {
     param(
         [Parameter(Position=0, Mandatory=$true)]
