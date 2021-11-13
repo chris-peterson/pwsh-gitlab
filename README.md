@@ -191,7 +191,19 @@ Get-GitlabDeployment -Status 'created' -Environment 'nuget.org'
 
 Opens latest successful pipeline in browser.
 
- 
+### Resolve Variable
+
+`Resolve-GitlabVariable` (aka `var`) checks a project or group for a variable.  Walks up the group hierarchy until found, or no other nodes to check.
+Automatically expands the value.
+
+Example
+```powershell
+Get-GitlabProject | var APPLICATION_NAME
+```
+```text
+Your application
+```
+
  ### Get pipeline for latest deployement
  
  ```powershell

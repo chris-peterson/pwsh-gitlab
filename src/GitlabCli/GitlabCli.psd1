@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.19.0'
+    ModuleVersion = '1.19.1'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -73,6 +73,7 @@
         'Search.psm1'
         'Users.psm1'
         'Utilities.psm1'
+        'Variables.psm1'
     )
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
@@ -160,8 +161,12 @@
         # Utilities
         'ConvertTo-PascalCase'
         'New-WrapperObject'
+        'ConvertTo-UrlEncoded'
         'Invoke-GitlabApi'
         'Open-InBrowser'
+
+        # Variables
+        'Resolve-GitlabVariable'
     )
     
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -197,6 +202,7 @@
         'issues'
         'mr'
         'mrs'
+        'var'
     )
     
     # DSC resources to export from this module
@@ -226,7 +232,7 @@
             # IconUri = ''
     
             # ReleaseNotes of this module
-            ReleaseNotes = 'File-based configuration (thanks @CaseyMacPherson)'
+            ReleaseNotes = 'Support for variables'
     
         } # End of PSData hashtable
     
