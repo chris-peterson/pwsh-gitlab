@@ -73,6 +73,10 @@ function Get-GitlabIssues {
         }
     }
 
+    if ($Visibility) {
+        $Query['visibility'] = $State
+    }
+
     if ($State) {
         $Query['state'] = $State
     }

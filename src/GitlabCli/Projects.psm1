@@ -197,6 +197,11 @@ function Update-GitlabProject {
         $ProjectId = '.',
 
         [Parameter(Mandatory=$false)]
+        [ValidateSet('private', 'internal', 'public')]
+        [string]
+        $Visibility,
+
+        [Parameter(Mandatory=$false)]
         [string]
         $Name,
 
@@ -232,6 +237,9 @@ function Update-GitlabProject {
 
     if($PSBoundParameters.ContainsKey("CiForwardDeployment")){
         $Query['ci_forward_deployment_enabled'] = $CiForwardDeployment
+    }
+    if ($Visibility) {
+        $Query['visibility'] = $Visibility
     }
     if ($Name) {
         $Query['name'] = $Name

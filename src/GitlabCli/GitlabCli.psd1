@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.19.3'
+    ModuleVersion = '1.19.4'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -232,7 +232,7 @@
             # IconUri = ''
     
             # ReleaseNotes of this module
-            ReleaseNotes = 'Support build access level'
+            ReleaseNotes = 'Support project visibility'
     
         } # End of PSData hashtable
     
