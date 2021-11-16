@@ -188,6 +188,7 @@ function New-GitlabProject {
     }
 }
 
+# https://docs.gitlab.com/ee/api/projects.html#edit-project
 function Update-GitlabProject {
     [CmdletBinding()]
     param (
@@ -210,6 +211,11 @@ function Update-GitlabProject {
         [Parameter(Mandatory=$false)]
         [bool]
         $CiForwardDeployment,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateSet('disabled', 'private', 'enabled')]
+        [string]
+        $BuildsAccessLevel,
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -235,6 +241,9 @@ function Update-GitlabProject {
     }
     if ($Topics) {
         $Query['topics'] = $Topics -join ','
+    }
+    if ($BuildsAccessLevel) {
+        $Query['builds_access_level'] = $BuildsAccessLevel
     }
 
     Invoke-GitlabApi PUT "projects/$($Project.Id)" $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf |
