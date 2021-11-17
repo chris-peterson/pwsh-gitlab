@@ -11,9 +11,9 @@ function Get-GitlabBranch {
         $Search,
 
         [Parameter(ParameterSetName="ByRef", Mandatory=$true)]
-        [Alias("Ref")]
+        [Alias("Branch")]
         [string]
-        $Branch,
+        $Ref,
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -25,6 +25,10 @@ function Get-GitlabBranch {
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
+
+    if ($Ref -eq '.') {
+        $Ref = $(Get-LocalGitContext).Branch
+    }
 
     $GitlabApiArguments = @{
         HttpMethod = 'GET'
@@ -40,7 +44,7 @@ function Get-GitlabBranch {
             }        
         }
         ByRef {
-            $GitlabApiArguments.Path += "/$($Branch)"
+            $GitlabApiArguments.Path += "/$($Ref)"
         }
         default {
             throw "Parameterset $($PSCmdlet.ParameterSetName) is not implemented"
