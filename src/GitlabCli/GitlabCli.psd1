@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.20.0'
+    ModuleVersion = '1.21.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -140,6 +140,7 @@
         # Pipelines
         'Get-GitlabPipeline'
         'Get-GitlabPipelineSchedule'
+        'Update-GitlabPipelineSchedule'
         'Get-GitlabPipelineBridges'
         'New-GitlabPipeline'
         'Remove-GitlabPipeline'
@@ -232,7 +233,7 @@
             # IconUri = ''
     
             # ReleaseNotes of this module
-            ReleaseNotes = 'Support repository access level'
+            ReleaseNotes = 'Support enabling/disabling pipeline schedules'
     
         } # End of PSData hashtable
     

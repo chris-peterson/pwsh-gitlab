@@ -123,7 +123,7 @@ function Get-GitlabPipelineSchedule {
     [Alias('schedule')]
     [Alias('schedules')]
     param (
-        [Parameter(ParameterSetName='ByProjectId', Mandatory=$false)]
+        [Parameter(ParameterSetName='ByProjectId', Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Parameter(ParameterSetName='ByPipelineScheduleId', Mandatory=$false)]
         [string]
         $ProjectId = '.',
@@ -166,6 +166,48 @@ function Get-GitlabPipelineSchedule {
             }
         }
         default { throw "Parameterset $($PSCmdlet.ParameterSetName) is not implemented"}
+    }
+
+    $Wrapper = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineSchedule'
+    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId
+    $Wrapper
+}
+
+# https://docs.gitlab.com/ee/api/pipeline_schedules.html#edit-a-pipeline-schedule
+function Update-GitlabPipelineSchedule {
+
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [int]
+        $PipelineScheduleId,
+
+        [Parameter(Mandatory=$false)]
+        [bool]
+        $Active,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $GitlabApiArguments = @{
+        HttpMethod = "PUT"
+        Path       = "projects/$ProjectId/pipeline_schedules/$PipelineScheduleId"
+        Query      = @{}
+        SiteUrl    = $SiteUrl
+    }
+
+    if ($PSBoundParameters.ContainsKey("Active")) {
+        $GitlabApiArguments.Query['active'] = $Active.ToString().ToLower()
     }
 
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineSchedule'
