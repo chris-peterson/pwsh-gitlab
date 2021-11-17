@@ -220,6 +220,11 @@ function Update-GitlabProject {
         [Parameter(Mandatory=$false)]
         [ValidateSet('disabled', 'private', 'enabled')]
         [string]
+        $RepositoryAccessLevel,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateSet('disabled', 'private', 'enabled')]
+        [string]
         $BuildsAccessLevel,
 
         [Parameter(Mandatory=$false)]
@@ -249,6 +254,9 @@ function Update-GitlabProject {
     }
     if ($Topics) {
         $Query['topics'] = $Topics -join ','
+    }
+    if ($RepositoryAccessLevel) {
+        $Query['repository_access_level'] = $RepositoryAccessLevel
     }
     if ($BuildsAccessLevel) {
         $Query['builds_access_level'] = $BuildsAccessLevel
