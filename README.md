@@ -9,10 +9,6 @@ Interact with [GitLab](https://about.gitlab.com/) via [PowerShell](https://githu
 [![GitHub license](https://img.shields.io/github/license/chris-peterson/pwsh-gitlab.svg)](LICENSE)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/chris-peterson/pwsh-gitlab/CI?label=ci)](https://github.com/chris-peterson/pwsh-gitlab/actions/workflows/deploy.yml)
 
-## Tech Stack
-
-<img height=200 src="TechStack.png"/>
-
 ## Getting Started
 
 ```powershell
