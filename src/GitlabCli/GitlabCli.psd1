@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.21.0'
+    ModuleVersion = '1.22.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -43,7 +43,7 @@
     # ProcessorArchitecture = ''
     
     # Modules that must be imported into the global environment prior to importing this module
-    # RequiredModules = @()
+    RequiredModules = @('powershell-yaml')
     
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()
@@ -70,6 +70,7 @@
         'MergeRequests.psm1'
         'Pipelines.psm1'
         'Projects.psm1'
+        'RepositoryFiles.psm1'
         'Search.psm1'
         'Users.psm1'
         'Utilities.psm1'
@@ -115,6 +116,10 @@
         'Get-GitlabProjectVariable'
         'Set-GitlabProjectVariable'
         'Remove-GitlabProjectVariable'
+
+        # Repository Files
+        'Get-GitlabRepositoryFileContent'
+        'Get-GitlabCiYml'
 
         # Environments
         'Get-GitlabEnvironment'
@@ -233,7 +238,7 @@
             # IconUri = ''
     
             # ReleaseNotes of this module
-            ReleaseNotes = 'Support enabling/disabling pipeline schedules'
+            ReleaseNotes = 'Support getting repository files or gitlab CI yml'
     
         } # End of PSData hashtable
     
