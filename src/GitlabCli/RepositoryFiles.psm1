@@ -12,7 +12,7 @@ function Get-GitlabRepositoryFileContent {
         [Parameter(Mandatory=$false)]
         [Alias("Branch")]
         [string]
-        $Ref = '.',
+        $Ref,
 
         [Parameter(Position=0, Mandatory=$true)]
         [string]
@@ -28,6 +28,9 @@ function Get-GitlabRepositoryFileContent {
     )
 
     $Project = Get-GitlabProject $ProjectId
+    if (-not $Ref) {
+        $Ref = $Project.DefaultBranch
+    }
     $RefName = $(Get-GitlabBranch -ProjectId $ProjectId -Ref $Ref).Name
 
     $File = Invoke-GitlabApi GET "projects/$($Project.Id)/repository/files/$($FilePath)?ref=$RefName" -SiteUrl $SiteUrl -WhatIf:$WhatIf
@@ -47,7 +50,7 @@ function Get-GitlabCiYml {
         [Parameter(Mandatory=$false)]
         [Alias("Branch")]
         [string]
-        $Ref = '.',
+        $Ref,
 
         [Parameter(Mandatory=$false)]
         [string]
