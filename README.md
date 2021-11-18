@@ -227,5 +227,6 @@ Your application
 ## References / Acknowledgements
 
 * [PSGitLab](https://github.com/ngetchell/PSGitLab)
-* [python-gitlab CLI documentation](https://python-gitlab.readthedocs.io/en/stable/)
-* [GitLab API docs](https://docs.gitlab.com/ee/api/)
+* [python-gitlab CLI documentation](https://python-gitlab.readthedocs.io/en/stable)
+* [GitLab API docs](https://docs.gitlab.com/ee/api)
+* [powershell-yaml](https://github.com/cloudbase/powershell-yaml)

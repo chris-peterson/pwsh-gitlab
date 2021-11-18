@@ -61,5 +61,11 @@ function Get-GitlabCiYml {
         $WhatIf
     )
 
-    New-Object 'psobject' -Property $(ConvertFrom-Yaml $(Get-GitlabRepositoryFileContent -ProjectId $ProjectId -Ref $Ref -FilePath '.gitlab-ci.yml' -SiteUrl $SiteUrl -WhatIf:$WhatIf))
+    $Yml = $(Get-GitlabRepositoryFileContent -ProjectId $ProjectId -Ref $Ref -FilePath '.gitlab-ci.yml' -SiteUrl $SiteUrl -WhatIf:$WhatIf)
+    $Hash = $([YamlDotNet.Serialization.Deserializer].GetMethods() |
+        Where-Object { $_.Name -eq 'Deserialize' -and $_.ReturnType.Name -eq 'T' -and $_.GetParameters().ParameterType.Name -eq 'String' }). `
+        MakeGenericMethod(
+            [object]). `
+        Invoke($(New-Object 'YamlDotNet.Serialization.Deserializer'), $Yml)
+    New-Object 'psobject' -Property $Hash
 }
