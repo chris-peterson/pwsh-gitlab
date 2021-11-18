@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.22.2'
+    ModuleVersion = '1.22.3'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -119,6 +119,7 @@
 
         # Repository Files
         'Get-GitlabRepositoryFileContent'
+        'Get-GitlabRepositoryYmlFileContent'
         'Get-GitlabCiYml'
 
         # Environments
