@@ -10,6 +10,11 @@ function Get-GitlabProject {
         [string]
         $GroupId,
 
+        [Parameter(Mandatory=$false, ParameterSetName='ByGroup')]
+        [Alias('r')]
+        [switch]
+        $Recurse,
+
         [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByUrl')]
         [string]
         $Url,
@@ -40,7 +45,7 @@ function Get-GitlabProject {
         ByGroup {
             $Group = Get-GitlabGroup $GroupId
             $Query = @{
-                'include_subgroups' = 'true'
+                'include_subgroups' = $Recurse ? 'true' : 'false'
             }
             if (-not $IncludeArchived) {
                 $Query['archived'] = 'false'
