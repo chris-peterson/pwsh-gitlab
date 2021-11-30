@@ -3,6 +3,10 @@
   <Type>
     <Name>Gitlab.Branch</Name>
     <Members>
+      <ScriptProperty>
+        <Name>LastAuthor</Name>
+        <GetScriptBlock>$this.Commit[0].author_name</GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
   <Type>
@@ -185,6 +189,24 @@
   <Type>
     <Name>Gitlab.Variable</Name>
     <Members>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Gitlab.RepositoryTree</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>ItemType</Name>
+        <GetScriptBlock>$this.Type -eq 'tree' ? 'Directory' : 'File'</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Gitlab.RepositoryFile</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Name</Name>
+        <GetScriptBlock>$this.FileName</GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
 </Types>

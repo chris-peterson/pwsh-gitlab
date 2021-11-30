@@ -1,23 +1,44 @@
 function Get-GitlabGroup {
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='ByGroupId')]
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$false, ParameterSetName='ByGroupId')]
         [string]
         $GroupId,
+
+        [Parameter(Mandatory=$true, ParameterSetName='ByParentGroup')]
+        [string]
+        $ParentGroupId,
 
         [Parameter(Mandatory=$false)]
         [string]
         $SiteUrl,
 
+        [Parameter(Mandatory=$false)]
+        [Alias('r')]
+        [switch]
+        $Recurse,
+
         [switch]
         [Parameter(Mandatory=$false)]
         $WhatIf
     )
-
-    $Group = Invoke-GitlabApi GET "groups/$($GroupId | ConvertTo-UrlEncoded)" @{
-        'with_projects' = 'false'
-    } -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    $MaxPages = 10
+    if($GroupId) {
+        $Group = Invoke-GitlabApi GET "groups/$($GroupId | ConvertTo-UrlEncoded)" @{
+            'with_projects' = 'false'
+        } -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    }
+    elseif($ParentGroupId) {
+        $SubgroupOperation = $Recurse ? 'descendant_groups' : 'subgroups'
+        $Group = Invoke-GitlabApi GET "groups/$($ParentGroupId | ConvertTo-UrlEncoded)/$SubgroupOperation" `
+          -SiteUrl $SiteUrl -WhatIf:$WhatIf -MaxPages $MaxPages
+    }
+    else {
+        $Group = Invoke-GitlabApi GET "groups" @{
+            'top_level_only' = (-not $Recurse).ToString().ToLower()
+        } -MaxPages $MaxPages
+    }
 
     return $Group | New-WrapperObject 'Gitlab.Group'
 }
