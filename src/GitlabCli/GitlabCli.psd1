@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.23.0'
+    ModuleVersion = '1.24.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -241,7 +241,7 @@
             # IconUri = ''
     
             # ReleaseNotes of this module
-            ReleaseNotes = 'Support getting repository files or gitlab CI yml'
+            ReleaseNotes = 'Enhancements to group/project queries and repository file navigation.  NOTE: breaking change to introduce -Recurse to some cmdlets'
     
         } # End of PSData hashtable
     
