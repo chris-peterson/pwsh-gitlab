@@ -118,6 +118,8 @@
         'Remove-GitlabProjectVariable'
 
         # Repository Files
+        'Get-GitlabRepositoryFile'
+        'Get-GitlabRepositoryTree'
         'Get-GitlabRepositoryFileContent'
         'Get-GitlabRepositoryYmlFileContent'
         'Get-GitlabCiYml'

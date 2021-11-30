@@ -191,4 +191,13 @@
     <Members>
     </Members>
   </Type>
+  <Type>
+    <Name>Gitlab.RepositoryFile</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>ItemType</Name>
+        <GetScriptBlock>$this.Type -eq 'tree' ? 'Directory' : 'File'</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
 </Types>
