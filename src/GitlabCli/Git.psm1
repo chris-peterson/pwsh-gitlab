@@ -5,12 +5,16 @@ function Get-LocalGitContext {
         $Path = '.'
     )
     
-    Push-Location
     $Context = [PSCustomObject]@{
         Site = ''
         Project = ''
         Branch = ''
     }
+    if($(Get-Location).Provider.Name -ne 'FileSystem') {
+        return $Context
+    }
+
+    Push-Location
 
     try {
         Set-Location $Path
