@@ -3,6 +3,10 @@
   <Type>
     <Name>Gitlab.Branch</Name>
     <Members>
+      <ScriptProperty>
+        <Name>LastAuthor</Name>
+        <GetScriptBlock>$this.Commit[0].author_name</GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
   <Type>
