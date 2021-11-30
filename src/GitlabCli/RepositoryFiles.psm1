@@ -105,7 +105,7 @@ function Get-GitlabRepositoryTree {
     $RefName = $(Get-GitlabBranch -ProjectId $ProjectId -Ref $Ref).Name
 
     Invoke-GitlabApi GET "projects/$($Project.Id)/repository/tree?ref=$RefName&path=$Path&recursive=$($Recurse.ToString().ToLower())" -MaxPages 10 -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-        New-WrapperObject 'Gitlab.RepositoryFile'
+        New-WrapperObject 'Gitlab.RepositoryTree'
 }
 
 function Get-GitlabCiYml {
