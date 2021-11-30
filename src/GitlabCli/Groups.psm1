@@ -7,7 +7,6 @@ function Get-GitlabGroup {
         $GroupId,
 
         [Parameter(Mandatory=$true, ParameterSetName='ByParentGroup')]
-        [Alias('p')]
         [string]
         $ParentGroupId,
 
