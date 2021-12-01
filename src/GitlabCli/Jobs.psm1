@@ -15,10 +15,6 @@ function Get-GitlabJob {
         [string]
         $PipelineId,
 
-        [Parameter(ParameterSetName='ByPipeline', Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
-        [string]
-        $Ref,
-
         [Parameter(ParameterSetName='ByJobId', Mandatory=$true)]
         [string]
         $JobId,
