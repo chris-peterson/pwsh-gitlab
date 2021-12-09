@@ -233,6 +233,14 @@ function Set-GitlabGroupVariable {
         [string]
         $Value,
 
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $Protect,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $Mask,
+
         [Parameter(Mandatory=$false)]
         [string]
         $SiteUrl,
@@ -246,6 +254,13 @@ function Set-GitlabGroupVariable {
 
     $Query = @{
         value = $Value
+    }
+
+    if ($Protect) {
+        $Query['protected'] = 'true'
+    }
+    if ($Mask) {
+        $Query['masked'] = 'true'
     }
 
     try {
