@@ -327,7 +327,7 @@ function Get-GitlabProjectVariable {
     }
 }
 
-# https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
+# https://docs.gitlab.com/ee/api/project_level_variables.html#update-variable
 function Set-GitlabProjectVariable {
 
     [CmdletBinding()]
@@ -344,6 +344,14 @@ function Set-GitlabProjectVariable {
         [string]
         $Value,
 
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $Protect,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $Mask,
+
         [Parameter(Mandatory=$false)]
         [string]
         $SiteUrl,
@@ -355,6 +363,12 @@ function Set-GitlabProjectVariable {
 
     $Query = @{
         value = $Value
+    }
+    if ($Protect) {
+        $Query['protected'] = 'true'
+    }
+    if ($Mask) {
+        $Query['masked'] = 'true'
     }
 
     $ProjectId = $(Get-GitlabProject $ProjectId).Id
