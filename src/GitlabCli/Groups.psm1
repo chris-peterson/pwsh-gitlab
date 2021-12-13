@@ -134,7 +134,7 @@ function Copy-GitlabGroupToLocalFileSystem {
         Write-Host "WhatIf: setting local directory to '$LocalPath'"
     }
 
-    Get-GitlabProject -GroupId $GroupId |
+    Get-GitlabProject -GroupId $GroupId -Recurse -MaxPages 100 |
         ForEach-Object {
             $Path="$LocalPath/$($_.Group)"
 

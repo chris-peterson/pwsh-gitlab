@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.24.3'
+    ModuleVersion = '1.24.4'
 
     GUID = '220fdbee-bea7-4951-9375-f6e76bd981b4'
 
@@ -164,8 +164,7 @@
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Enhancements to group/project queries and repository file navigation.  NOTE: breaking change to introduce -Recurse to some cmdlets'
-    
+            ReleaseNotes = 'Bugfix -- cloning a group should recurse and iterate more pages'
         }
     }
 }

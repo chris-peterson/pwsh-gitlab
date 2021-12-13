@@ -24,6 +24,10 @@ function Get-GitlabProject {
         $IncludeArchived = $false,
 
         [Parameter(Mandatory=$false)]
+        [int]
+        $MaxPages = 10,
+
+        [Parameter(Mandatory=$false)]
         [string]
         $SiteUrl,
 
@@ -50,7 +54,7 @@ function Get-GitlabProject {
             if (-not $IncludeArchived) {
                 $Query['archived'] = 'false'
             }
-            Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPage 10 -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+            Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
                 Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
                 New-WrapperObject 'Gitlab.Project' |
                 Sort-Object -Property 'Name'
