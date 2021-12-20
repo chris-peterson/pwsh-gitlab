@@ -24,7 +24,8 @@ function Get-LocalGitContext {
             try {
                 $Uri = [Uri]::new($OriginUrl)
                 $Context.Site = $Uri.Host
-                $Context.Project = $Uri.AbsolutePath -replace '.git$', ''
+                $Uri.AbsolutePath -match '/?(?<Project>.*)'
+                $Context.Project = $Matches.Project -replace '.git$', ''
             }
             catch {
                 # git
