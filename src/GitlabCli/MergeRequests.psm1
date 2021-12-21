@@ -48,6 +48,11 @@ function Get-GitlabMergeRequest {
         [switch]
         $IncludeApprovals,
 
+        [Parameter(Position=0, Mandatory=$false)]
+        [switch]
+        $IncludeChanges,
+
+
         [Parameter(Position=0, Mandatory=$true, ParameterSetName='Mine')]
         [switch]
         $Mine,
@@ -135,6 +140,20 @@ function Get-GitlabMergeRequest {
                 $ThumbsUp = $Null
             }
             $_ | Add-Member -MemberType 'NoteProperty' -Name 'ThumbsUp' -Value $($ThumbsUp.user | New-WrapperObject 'Gitlab.User')
+        }
+    }
+    if ($IncludeChanges) {
+        $MergeRequests | ForEach-Object {
+            try {
+                $LatestDiffVersion = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.Iid)/versions" -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+                    Sort-Object CreatedAt |
+                    Select-Object -Last 1 -ExpandProperty id
+                $Changes = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.Iid)/versions/$LatestDiffVersion" -SiteUrl $SiteUrl -WhatIf:$WhatIf
+            }
+            catch {
+                $Changes = $Null
+            }
+            $_ | Add-Member -MemberType 'NoteProperty' -Name 'Changes' -Value $($Changes | New-WrapperObject)
         }
     }
 

@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.24.4'
+    ModuleVersion = '1.25.0'
 
     GUID = '220fdbee-bea7-4951-9375-f6e76bd981b4'
 
@@ -164,7 +164,7 @@
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Bugfix -- cloning a group should recurse and iterate more pages'
+            ReleaseNotes = 'Changes for an MR'
         }
     }
 }
