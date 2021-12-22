@@ -20,6 +20,11 @@ function Get-GitlabPipeline {
         $PipelineId,
 
         [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
+        [ValidateSet('running', 'pending', 'finished', 'branches', 'tags')]
+        [string]
+        $Scope,
+
+        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
         [ValidateSet('created', 'waiting_for_resource', 'preparing', 'pending', 'running', 'success', 'failed', 'canceled', 'skipped', 'manual', 'scheduled')]
         [string]
         $Status,
@@ -79,6 +84,9 @@ function Get-GitlabPipeline {
                     $Ref = $LocalContext.Branch
                 }
                 $Query['ref'] = $Ref
+            }
+            if ($Scope) {
+                $Query['scope'] = $Scope
             }
             if ($Status) {
                 $Query['status'] = $Status
