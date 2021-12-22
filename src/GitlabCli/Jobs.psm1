@@ -175,3 +175,27 @@ function Start-GitlabJob {
         }
     }
 }
+
+# https://docs.gitlab.com/ee/api/lint.html
+function Test-PipelineDefinition {
+
+    [CmdletBinding()]
+    param (
+
+        [Parameter(Mandatory=$False)]
+        [string]
+        $ProjectId = '.'
+    )
+
+    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = $Project.Id
+
+    $GitlabApiArguments = @{
+        HttpMethod = "GET"
+        Query      = @{}
+        Path       = "projects/$ProjectId/ci/lint"
+        SiteUrl    = $SiteUrl
+    }
+
+    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineDefinition'
+}

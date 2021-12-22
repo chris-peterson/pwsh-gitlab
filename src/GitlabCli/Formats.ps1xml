@@ -297,6 +297,34 @@
         </TableRowEntries>
       </TableControl>
     </View>
+      <View>
+      <Name>GitlabPipelineDefinition</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.PipelineDefinition</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Valid</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Errors</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Warnings</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
     <View>
       <Name>GitlabEnivironment</Name>
       <ViewSelectedBy>

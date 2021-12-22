@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.26.2'
+    ModuleVersion = '1.27.0'
 
     GUID = '220fdbee-bea7-4951-9375-f6e76bd981b4'
 
@@ -111,6 +111,7 @@
         'Get-GitlabJob'
         'Get-GitlabJobTrace'
         'Start-GitlabJob'
+        'Test-PipelineDefinition'
 
         # Search
         'Search-Gitlab'
@@ -164,7 +165,7 @@
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Scope filter for pipelines'
+            ReleaseNotes = 'validate CI definition'
         }
     }
 }
