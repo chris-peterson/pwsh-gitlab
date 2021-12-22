@@ -1,3 +1,4 @@
+# https://docs.gitlab.com/ee/api/pipelines.html#list-project-pipelines
 function Get-GitlabPipeline {
 
     [Alias('pipeline')]
@@ -22,6 +23,11 @@ function Get-GitlabPipeline {
         [ValidateSet('created', 'waiting_for_resource', 'preparing', 'pending', 'running', 'success', 'failed', 'canceled', 'skipped', 'manual', 'scheduled')]
         [string]
         $Status,
+
+        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
+        [ValidateSet('push', 'web', 'trigger', 'schedule', 'api', 'external', 'pipeline', 'chat', 'webide', 'merge_request_event', 'external_pull_request_event', 'parent_pipeline', 'ondemand_dast_scan', 'ondemand_dast_validation')]
+        [string]
+        $Source,
 
         [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
         [string]
@@ -76,6 +82,9 @@ function Get-GitlabPipeline {
             }
             if ($Status) {
                 $Query['status'] = $Status
+            }
+            if ($Source) {
+                $Query['source'] = $Source
             }
             if ($Mine) {
                 $Query['username'] = $(Get-GitlabUser -Me).Username
@@ -213,6 +222,7 @@ function Update-GitlabPipelineSchedule {
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineSchedule'
 }
 
+# https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-bridges
 function Get-GitlabPipelineBridges {
     [CmdletBinding()]
     param (
