@@ -13,7 +13,7 @@ function Get-GitlabPipeline {
         [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
         [Alias("Branch")]
         [string]
-        $Ref = '.',
+        $Ref,
 
         [Parameter(ParameterSetName="ByPipelineId", Position=1, Mandatory=$false)]
         [string]
