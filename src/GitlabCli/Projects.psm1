@@ -194,7 +194,7 @@ function New-GitlabProject {
         namespace_id = $Group.Id
     } -SiteUrl $SiteUrl -WhatIf:$WhatIf -WhatIfContext @{
         DestinationGroupName = $Group.Name
-    }
+    } | New-WrapperObject 'Gitlab.Project'
 }
 
 # https://docs.gitlab.com/ee/api/projects.html#edit-project
