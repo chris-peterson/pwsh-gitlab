@@ -2,9 +2,8 @@
 function Get-GitlabJob {
     [Alias('job')]
     [Alias('jobs')]
-    [CmdletBinding(DefaultParameterSetName='ByProjectId')]
+    [CmdletBinding()]
     param (
-
         [Parameter(ParameterSetName='ByJobId', Mandatory=$false)]
         [Parameter(ParameterSetName='ByProjectId', Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Parameter(ParameterSetName='ByPipeline', Mandatory=$false, ValueFromPipelineByPropertyName=$true)]

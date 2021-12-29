@@ -234,11 +234,11 @@ function Update-GitlabPipelineSchedule {
 function Get-GitlabPipelineBridges {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true,Position=0)]
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
-        [Parameter(Mandatory=$true,Position=1)]
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
         $PipelineId,
 
