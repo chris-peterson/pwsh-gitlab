@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.27.2'
+    ModuleVersion = '1.27.3'
 
     GUID = '220fdbee-bea7-4951-9375-f6e76bd981b4'
 
@@ -165,7 +165,7 @@
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'fix #17'
+            ReleaseNotes = 'PR #19'
         }
     }
 }
