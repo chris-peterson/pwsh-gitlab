@@ -24,12 +24,13 @@ function Get-LocalGitContext {
             try {
                 $Uri = [Uri]::new($OriginUrl)
                 $Context.Site = $Uri.Host
-                $Uri.AbsolutePath -match '/?(?<Project>.*)'
+                $Uri.AbsolutePath -match '/?(?<Project>.*)' | Out-Null
                 $Context.Project = $Matches.Project -replace '.git$', ''
+              
             }
             catch {
                 # git
-                $OriginUrl -match '@(?<Site>.*?)(/|:)(?<Project>[a-zA-Z0-9/-]+)'
+                $OriginUrl -match '@(?<Site>.*?)(/|:)(?<Project>[a-zA-Z0-9/-]+)' | Out-Null
                 $Context.Site = $Matches.Site
                 $Context.Project = $Matches.Project
             }
