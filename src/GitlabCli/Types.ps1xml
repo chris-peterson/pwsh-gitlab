@@ -72,6 +72,14 @@
         <Name>UserName</Name>
         <GetScriptBlock>$this.User.username</GetScriptBlock>
       </ScriptProperty>
+      <ScriptProperty>
+        <Name>Duration</Name>
+        <GetScriptBlock>$this.FinishedAt - $this.CreatedAt</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Runtime</Name>
+        <GetScriptBlock>$this.Duration - $this.QueuedDuration</GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
     <Type>
