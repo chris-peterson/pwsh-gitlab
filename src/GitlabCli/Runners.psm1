@@ -131,7 +131,7 @@ function Update-GitlabRunner {
 
         [Parameter(Mandatory=$false)]
         [uint]
-        $MaximumTimeoutMinutes,
+        $MaximumTimeoutSeconds,
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -154,14 +154,14 @@ function Update-GitlabRunner {
         SiteUrl = $SiteUrl
         WhatIf = $WhatIf
     }
-    if ($MaximumTimeoutMinutes) {
-        if ($MaximumTimeoutMinutes -lt 10) {
-            throw "maximum_timeout must be >= 10"
+    if ($MaximumTimeoutSeconds) {
+        if ($MaximumTimeoutSeconds -lt 600) {
+            throw "maximum_timeout must be >= 600"
         }
-        if ($MaximumTimeoutMinutes -gt [int]::MaxValue) {
+        if ($MaximumTimeoutSeconds -gt [int]::MaxValue) {
             throw "maximum_timeout must be <= $([int]::MaxValue)"
         }
-        $Params.Query.maximum_timeout = $MaximumTimeoutMinutes
+        $Params.Query.maximum_timeout = $MaximumTimeoutSeconds
     }
 
     if ($Active -ne $null) {
