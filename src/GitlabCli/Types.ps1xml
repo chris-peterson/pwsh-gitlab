@@ -217,4 +217,26 @@
       </ScriptProperty>
     </Members>
   </Type>
+  <Type>
+    <Name>Gitlab.Runner</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Tags</Name>
+        <GetScriptBlock>$this.TagList</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Gitlab.RunnerJob</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>ProjectPath</Name>
+        <GetScriptBlock>$this.Project.path_with_namespace</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Username</Name>
+        <GetScriptBlock>$this.User.username</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
 </Types>

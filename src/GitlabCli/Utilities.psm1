@@ -86,10 +86,13 @@ function Invoke-GitlabApi {
     $Delimiter = '?'
     if($Query.Count -gt 0) {
         foreach($Name in $Query.Keys) {
-            $SerializedQuery += $Delimiter
-            $SerializedQuery += "$Name="
-            $SerializedQuery += [System.Net.WebUtility]::UrlEncode($Query[$Name])
-            $Delimiter = '&'
+            $Value = $Query[$Name]
+            if ($Value) {
+                $SerializedQuery += $Delimiter
+                $SerializedQuery += "$Name="
+                $SerializedQuery += [System.Net.WebUtility]::UrlEncode($Value)
+                $Delimiter = '&'
+            }
         }
     }
     $Uri = "$GitlabUrl/api/v4/$Path$SerializedQuery"

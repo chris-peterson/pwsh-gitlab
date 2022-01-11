@@ -1,6 +1,6 @@
 # https://docs.gitlab.com/ee/api/deployments.html#list-project-deployments
 function Get-GitlabDeployment {
-    [CmdletBinding(DefaultParameterSetName='ProjectId')]
+    [CmdletBinding()]
     [Alias('deploys')]
     param (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]

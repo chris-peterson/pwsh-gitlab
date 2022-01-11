@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.28.0'
+    ModuleVersion = '1.29.0'
 
     GUID = '220fdbee-bea7-4951-9375-f6e76bd981b4'
 
@@ -27,6 +27,7 @@
         'Pipelines.psm1'
         'Projects.psm1'
         'RepositoryFiles.psm1'
+        'Runners.psm1'
         'Search.psm1'
         'Users.psm1'
         'Utilities.psm1'
@@ -113,6 +114,13 @@
         'Start-GitlabJob'
         'Test-PipelineDefinition'
 
+        #Runners
+        'Get-GitlabRunner'
+        'Get-GitlabRunnerJobs'
+        'Update-GitlabRunner'
+        'Suspend-GitlabRunner'
+        'Resume-GitlabRunner'
+
         # Search
         'Search-Gitlab'
 
@@ -165,7 +173,7 @@
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Add duration to pipeline object'
+            ReleaseNotes = 'Implement runner APIs'
         }
     }
 }
