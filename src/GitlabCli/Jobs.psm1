@@ -183,7 +183,15 @@ function Test-PipelineDefinition {
 
         [Parameter(Mandatory=$False)]
         [string]
-        $ProjectId = '.'
+        $ProjectId = '.',
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
     )
 
     $Project = Get-GitlabProject $ProjectId
@@ -194,7 +202,8 @@ function Test-PipelineDefinition {
         Query      = @{}
         Path       = "projects/$ProjectId/ci/lint"
         SiteUrl    = $SiteUrl
+        WhatIf     = $WhatIf
     }
 
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineDefinition'
+    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineDefinition'
 }
