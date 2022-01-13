@@ -175,15 +175,21 @@ function Start-GitlabJob {
     }
 }
 
-# https://docs.gitlab.com/ee/api/lint.html
 function Test-PipelineDefinition {
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='Project')]
     param (
-
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory=$false, ParameterSetName='Project')]
         [string]
         $ProjectId = '.',
+
+        [Parameter(Mandatory=$true, ParameterSetName='Content')]
+        [string]
+        $Content,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Select = '*',
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -197,13 +203,36 @@ function Test-PipelineDefinition {
     $Project = Get-GitlabProject $ProjectId
     $ProjectId = $Project.Id
 
-    $GitlabApiArguments = @{
-        HttpMethod = "GET"
+    $Params = @{
         Query      = @{}
-        Path       = "projects/$ProjectId/ci/lint"
         SiteUrl    = $SiteUrl
         WhatIf     = $WhatIf
     }
 
-    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineDefinition'
+    switch ($PSCmdlet.ParameterSetName) {
+        Content {
+            if (Test-Path $Content) {
+                $Content = Get-Content -Raw -Path $Content
+            }
+            # https://docs.gitlab.com/ee/api/lint.html#validate-the-ci-yaml-configuration
+            $Params.HttpMethod = 'POST'
+            $Params.Path = 'ci/lint'
+            $Params.Query.include_merged_yaml = 'true'
+            $Params.Query.content = $Content
+        }
+        Default {
+            # https://docs.gitlab.com/ee/api/lint.html#validate-a-projects-ci-configuration
+            $Params.HttpMethod = 'GET'
+            $Params.Path = "projects/$ProjectId/ci/lint"
+        }
+    }
+
+    $Result = Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.PipelineDefinition'
+    if ($Select -eq '*') {
+        $Result
+    } elseif ($Select.Contains(',')) {
+        $Result | Select-Object $($Select -split ',')
+    } else {
+        $Result | Select-Object -ExpandProperty $Select
+    }
 }
