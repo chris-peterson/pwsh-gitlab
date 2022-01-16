@@ -108,30 +108,6 @@ function Get-GitlabRepositoryTree {
         New-WrapperObject 'Gitlab.RepositoryTree'
 }
 
-function Get-GitlabCiYml {
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory=$false)]
-        [string]
-        $ProjectId = '.',
-
-        [Parameter(Mandatory=$false)]
-        [Alias("Branch")]
-        [string]
-        $Ref,
-
-        [Parameter(Mandatory=$false)]
-        [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
-    )
-
-    Get-GitlabRepositoryYmlFileContent -ProjectId $ProjectId -FilePath '.gitlab-ci.yml' -Ref $Ref -SiteUrl $SiteUrl -WhatIf:$WhatIf
-}
-
 function Get-GitlabRepositoryYmlFileContent {
     [CmdletBinding()]
     param (

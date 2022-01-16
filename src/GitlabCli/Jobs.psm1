@@ -175,7 +175,7 @@ function Start-GitlabJob {
     }
 }
 
-function Test-PipelineDefinition {
+function Test-GitlabPipelineDefinition {
 
     [CmdletBinding(DefaultParameterSetName='Project')]
     param (
@@ -204,9 +204,10 @@ function Test-PipelineDefinition {
     $ProjectId = $Project.Id
 
     $Params = @{
-        Query      = @{}
-        SiteUrl    = $SiteUrl
-        WhatIf     = $WhatIf
+        Body    = @{}
+        Query   = @{}
+        SiteUrl = $SiteUrl
+        WhatIf  = $WhatIf
     }
 
     switch ($PSCmdlet.ParameterSetName) {
@@ -215,10 +216,10 @@ function Test-PipelineDefinition {
                 $Content = Get-Content -Raw -Path $Content
             }
             # https://docs.gitlab.com/ee/api/lint.html#validate-the-ci-yaml-configuration
-            $Params.HttpMethod = 'POST'
-            $Params.Path = 'ci/lint'
+            $Params.HttpMethod                = 'POST'
+            $Params.Path                      = 'ci/lint'
+            $Params.Body.content              = $Content
             $Params.Query.include_merged_yaml = 'true'
-            $Params.Query.content = $Content
         }
         Default {
             # https://docs.gitlab.com/ee/api/lint.html#validate-a-projects-ci-configuration
@@ -235,4 +236,28 @@ function Test-PipelineDefinition {
     } else {
         $Result | Select-Object -ExpandProperty $Select
     }
+}
+
+function Get-GitlabPipelineDefinition {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$false)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory=$false)]
+        [Alias("Branch")]
+        [string]
+        $Ref,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    Get-GitlabRepositoryYmlFileContent -ProjectId $ProjectId -FilePath '.gitlab-ci.yml' -Ref $Ref -SiteUrl $SiteUrl -WhatIf:$WhatIf
 }

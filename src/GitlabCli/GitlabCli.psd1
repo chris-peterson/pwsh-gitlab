@@ -1,11 +1,19 @@
 @{
-    ModuleVersion = '1.30.0'
+    ModuleVersion = '1.31.0'
+
+    PrivateData = @{
+        PSData = @{
+            LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
+            ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
+            ReleaseNotes = 'Send large content (e.g. a yml file) via json body'
+        }
+    }
 
     GUID = '220fdbee-bea7-4951-9375-f6e76bd981b4'
 
     Author = 'Chris Peterson'
     CompanyName = 'Chris Peterson'
-    Copyright = '(c) 2021'
+    Copyright = '(c) 2021-2022'
 
     Description = 'Interact with GitLab via PowerShell'
     PowerShellVersion = '7.1'
@@ -77,7 +85,6 @@
         'Get-GitlabRepositoryTree'
         'Get-GitlabRepositoryFileContent'
         'Get-GitlabRepositoryYmlFileContent'
-        'Get-GitlabCiYml'
 
         # Environments
         'Get-GitlabEnvironment'
@@ -112,7 +119,8 @@
         'Get-GitlabJob'
         'Get-GitlabJobTrace'
         'Start-GitlabJob'
-        'Test-PipelineDefinition'
+        'Get-GitlabPipelineDefinition'
+        'Test-GitlabPipelineDefinition'
 
         #Runners
         'Get-GitlabRunner'
@@ -168,12 +176,4 @@
         'mrs'
         'var'
     )
-
-    PrivateData = @{
-        PSData = @{
-            LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
-            ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Implement runner APIs'
-        }
-    }
 }

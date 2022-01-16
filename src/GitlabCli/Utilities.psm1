@@ -43,6 +43,10 @@ function Invoke-GitlabApi {
         [hashtable]
         $Query = @{},
 
+        [Parameter(Mandatory=$false)]
+        [hashtable]
+        $Body = @{},
+
         [Parameter()]
         [int]
         $MaxPages = 1,
@@ -101,6 +105,10 @@ function Invoke-GitlabApi {
     if($MaxPages -gt 1) {
         $RestMethodParams['FollowRelLink'] = $true
         $RestMethodParams['MaximumFollowRelLink'] = $MaxPages
+    }
+    if ($Body) {
+        $RestMethodParams.ContentType = 'application/json'
+        $RestMethodParams.Body        = $Body | ConvertTo-Json
     }
 
     if($WhatIf) {
