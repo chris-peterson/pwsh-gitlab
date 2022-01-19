@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.31.0'
+    ModuleVersion = '1.32.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Send large content (e.g. a yml file) via json body'
+            ReleaseNotes = 'Add more functions for project/group members'
         }
     }
 
@@ -31,6 +31,7 @@
         'Groups.psm1'
         'Issues.psm1'
         'Jobs.psm1'
+        'Members.psm1'
         'MergeRequests.psm1'
         'Pipelines.psm1'
         'Projects.psm1'
@@ -122,7 +123,7 @@
         'Get-GitlabPipelineDefinition'
         'Test-GitlabPipelineDefinition'
 
-        #Runners
+        # Runners
         'Get-GitlabRunner'
         'Get-GitlabRunnerJobs'
         'Update-GitlabRunner'
@@ -135,7 +136,12 @@
         # User
         'Get-GitlabUser'
         'Get-GitlabCurrentUser'
-        'Get-GitlabGroupMembership'
+
+        # Members
+        'Get-GitlabGroupMember'
+        'Get-GitlabProjectMember'
+        'Remove-GitlabProjectMember'
+        'Get-GitlabUserMembership'
         'Add-GitlabUserToGroup'
 
         # Utilities
