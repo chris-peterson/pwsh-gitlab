@@ -53,6 +53,10 @@ function Invoke-GitlabApi {
 
         [Parameter()]
         [string]
+        $Api = 'v4',
+
+        [Parameter()]
+        [string]
         $SiteUrl,
 
         [Parameter()]
@@ -99,7 +103,7 @@ function Invoke-GitlabApi {
             }
         }
     }
-    $Uri = "$GitlabUrl/api/v4/$Path$SerializedQuery"
+    $Uri = "$GitlabUrl/api/$Api/$Path$SerializedQuery"
 
     $RestMethodParams = @{}
     if($MaxPages -gt 1) {

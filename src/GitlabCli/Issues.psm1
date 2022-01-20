@@ -1,4 +1,4 @@
-function Get-GitlabIssues {
+function Get-GitlabIssue {
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     [Alias('issue')]
     [Alias('issues')]

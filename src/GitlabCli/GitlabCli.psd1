@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.32.0'
+    ModuleVersion = '1.33.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Add more functions for project/group members'
+            ReleaseNotes = 'Better support for parent/child pipelines'
         }
     }
 
@@ -28,6 +28,7 @@
         'Deployments.psm1'
         'Environments.psm1'
         'Git.psm1'
+        'GraphQL.psm1'
         'Groups.psm1'
         'Issues.psm1'
         'Jobs.psm1'
@@ -58,7 +59,10 @@
         'Remove-GitlabSite'
         'Get-DefaultGitlabSite'
         'Set-DefaultGitlabSite'
-        
+
+        # GraphQL
+        'Invoke-GitlabGraphQL'
+
         # Groups
         'Get-GitlabGroup'
         'New-GitlabGroup'
@@ -94,7 +98,7 @@
         'Get-GitlabDeployment'
 
         # Issues
-        'Get-GitlabIssues'
+        'Get-GitlabIssue'
         'New-GitlabIssue'
         'Close-GitlabIssue'
 
@@ -112,7 +116,7 @@
         'Get-GitlabPipeline'
         'Get-GitlabPipelineSchedule'
         'Update-GitlabPipelineSchedule'
-        'Get-GitlabPipelineBridges'
+        'Get-GitlabPipelineBridge'
         'New-GitlabPipeline'
         'Remove-GitlabPipeline'
 

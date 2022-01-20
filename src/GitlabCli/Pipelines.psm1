@@ -50,6 +50,11 @@ function Get-GitlabPipeline {
         [switch]
         $IncludeTestReport,
 
+        [Parameter(Mandatory=$false)]
+        [Alias('FetchUpstream')]
+        [switch]
+        $FetchDownstream,
+
         [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
         [int]
         $MaxPages = 1,
@@ -128,10 +133,54 @@ function Get-GitlabPipeline {
     }
 
     if ($Latest) {
-        $Pipelines | Sort-Object -Descending Id | Select-Object -First 1
-    } else {
-        $Pipelines
+        $Pipelines = $Pipelines | Sort-Object -Descending Id | Select-Object -First 1
     }
+
+    if ($FetchDownstream) {
+        # the API doesn't currently expose this, so working around using GraphQL
+        # https://gitlab.com/gitlab-org/gitlab/-/issues/21495
+        foreach ($Pipeline in $Pipelines) {
+
+            # NOTE: have to stitch this together because of https://gitlab.com/gitlab-org/gitlab/-/issues/350686
+            $Bridges = Get-GitlabPipelineBridge -ProjectId $Project.Id  -PipelineId $Pipeline.Id -SiteUrl $SiteUrl -WhatIf:$WhatIf
+
+            # NOTE: once 14.6 is more available, iid is included in pipeline APIs which would make this simpler (not have to search by sha)
+            $Query = @"
+            { project(fullPath: "$($Project.PathWithNamespace)") { id pipelines (sha: "$($Pipeline.Sha)") { nodes { id downstream { nodes { id project { fullPath } } } upstream { id project { fullPath } } } } } }
+"@
+            $Nodes = $(Invoke-GitlabGraphQL -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf).Project.pipelines.nodes
+            $MatchingResult = $Nodes | Where-Object id -Match "gid://gitlab/Ci::Pipeline/$($Pipeline.Id)"
+            if ($MatchingResult.downstream) {
+                $DownstreamList = $MatchingResult.downstream.nodes | ForEach-Object {
+                    if ($_.id -match "/(?<PipelineId>\d+)") {
+                        try {
+                            Get-GitlabPipeline -ProjectId $_.project.fullPath -PipelineId $Matches.PipelineId -SiteUrl $SiteUrl -WhatIf:$WhatIf
+                        }
+                        catch {
+                            $Null
+                        }
+                    }
+                } | Where-Object { $_ }
+                $DownstreamMap = @{}
+
+                foreach ($Downstream in $DownstreamList) {
+                    $MatchingBridge = $Bridges | Where-Object { $_.DownstreamPipeline.id -eq $Downstream.Id }
+                    $DownstreamMap[$MatchingBridge.Name] = $Downstream
+                }
+                $Pipeline | Add-Member -MemberType 'NoteProperty' -Name 'Downstream' -Value $DownstreamMap
+            }
+            if ($MatchingResult.upstream.id -match '\/(?<PipelineId>\d+)') {
+                try {
+                    $Upstream = Get-GitlabPipeline -ProjectId $MatchingResult.upstream.project.fullPath -PipelineId $Matches.PipelineId -SiteUrl $SiteUrl -WhatIf:$WhatIf
+                    $Pipeline | Add-Member -MemberType 'NoteProperty' -Name 'Upstream' -Value $Upstream
+                }
+                catch {
+                }
+            }
+        }
+    }
+
+    $Pipelines
 }
 
 function Get-GitlabPipelineSchedule {
@@ -231,7 +280,7 @@ function Update-GitlabPipelineSchedule {
 }
 
 # https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-bridges
-function Get-GitlabPipelineBridges {
+function Get-GitlabPipelineBridge {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
