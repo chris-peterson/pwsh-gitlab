@@ -93,6 +93,8 @@
 
         # Environments
         'Get-GitlabEnvironment'
+        'Stop-GitlabEnvironment'
+        'Remove-GitlabEnvironment'
 
         # Deployments
         'Get-GitlabDeployment'
