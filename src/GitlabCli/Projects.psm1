@@ -219,6 +219,10 @@ function Update-GitlabProject {
         $Path,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $DefaultBranch,
+
+        [Parameter(Mandatory=$false)]
         [string []]
         $Topics,
 
@@ -250,25 +254,28 @@ function Update-GitlabProject {
     $Query = @{}
 
     if($PSBoundParameters.ContainsKey("CiForwardDeployment")){
-        $Query['ci_forward_deployment_enabled'] = $CiForwardDeployment
+        $Query.ci_forward_deployment_enabled = $CiForwardDeployment
     }
     if ($Visibility) {
-        $Query['visibility'] = $Visibility
+        $Query.visibility = $Visibility
     }
     if ($Name) {
-        $Query['name'] = $Name
+        $Query.name = $Name
     }
     if ($Path) {
-        $Query['path'] = $Path
+        $Query.path = $Path
+    }
+    if ($DefaultBranch) {
+        $Query.default_branch = $DefaultBranch
     }
     if ($Topics) {
-        $Query['topics'] = $Topics -join ','
+        $Query.topics = $Topics -join ','
     }
     if ($RepositoryAccessLevel) {
-        $Query['repository_access_level'] = $RepositoryAccessLevel
+        $Query.repository_access_level = $RepositoryAccessLevel
     }
     if ($BuildsAccessLevel) {
-        $Query['builds_access_level'] = $BuildsAccessLevel
+        $Query.builds_access_level = $BuildsAccessLevel
     }
 
     Invoke-GitlabApi PUT "projects/$($Project.Id)" $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf |
