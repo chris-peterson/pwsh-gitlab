@@ -37,7 +37,7 @@ function Get-GitlabGroup {
     else {
         $Group = Invoke-GitlabApi GET "groups" @{
             'top_level_only' = (-not $Recurse).ToString().ToLower()
-        } -MaxPages $MaxPages
+        } -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf
     }
 
     return $Group | New-WrapperObject 'Gitlab.Group'
@@ -75,7 +75,6 @@ function New-GitlabGroup {
         return Get-GitlabGroup -GroupId $GroupId
     }
 }
-
 
 function Remove-GitlabGroup {
     [CmdletBinding()]

@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.34.2'
+    ModuleVersion = '1.35.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Add member bug fixes'
+            ReleaseNotes = 'Convenience method for changing the default branch for a gitlab repository'
         }
     }
 
@@ -79,6 +79,7 @@
         'Update-GitlabProject'
         'Move-GitlabProject'
         'Rename-GitlabProject'
+        'Rename-GitlabProjectDefaultBranch'
         'Copy-GitlabProject'
         'Invoke-GitlabProjectArchival'
         'Get-GitlabProjectVariable'

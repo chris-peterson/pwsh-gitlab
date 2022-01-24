@@ -81,6 +81,7 @@ function Get-GitlabProtectedBranches {
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.ProtectedBranch'
 }
 
+# https://docs.gitlab.com/ee/api/protected_branches.html#protect-repository-branches
 function Protect-GitlabBranch {
     [CmdletBinding()]
     param (
@@ -88,13 +89,17 @@ function Protect-GitlabBranch {
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true)]
         [string]
         $Name,
 
         [bool]
         [Parameter(Mandatory=$false)]
         $AllowForcePush = $false,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
 
         [switch]
         [Parameter(Mandatory=$false)]
@@ -113,13 +118,10 @@ function Protect-GitlabBranch {
         }
     }
 
-    if ($AllowForcePush) {
-        $GitlabApiArguments.Query[''] = $AllowForcePush
-    }
-
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.ProtectedBranch'
 }
 
+# https://docs.gitlab.com/ee/api/protected_branches.html#unprotect-repository-branches
 function UnProtect-GitlabBranch {
     [CmdletBinding()]
     param (
@@ -127,9 +129,13 @@ function UnProtect-GitlabBranch {
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true)]
         [string]
         $Name,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
 
         [switch]
         [Parameter(Mandatory=$false)]
@@ -143,10 +149,6 @@ function UnProtect-GitlabBranch {
         HttpMethod = 'DELETE'
         Path       = "projects/$($Project.Id)/protected_branches/$($Branch.Name)"
         SiteUrl    = $SiteUrl
-    }
-
-    if ($AllowForcePush) {
-        $GitlabApiArguments.Query[''] = $AllowForcePush
     }
 
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf

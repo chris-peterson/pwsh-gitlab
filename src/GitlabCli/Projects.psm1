@@ -40,6 +40,9 @@ function Get-GitlabProject {
         ById {
             if ($ProjectId -eq '.') {
                 $ProjectId = $(Get-LocalGitContext).Project
+                if (-not $ProjectId) {
+                    throw "Could not infer project based on current directory ($(Get-Location))"
+                }
             }
             $Project = Invoke-GitlabApi GET "projects/$($ProjectId | ConvertTo-UrlEncoded)" -SiteUrl $SiteUrl -WhatIf:$WhatIf
             if ($Project) {
@@ -426,4 +429,52 @@ function Remove-GitlabProjectVariable {
     $Project = Get-GitlabProject $ProjectId
 
     Invoke-GitlabApi DELETE "projects/$($Project.Id)/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+}
+
+
+function Rename-GitlabProjectDefaultBranch {
+    param (
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $NewDefaultBranch,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Project = Get-GitlabProject -ProjectId '.'
+    if (-not $Project) {
+        throw "This cmdlet requires being run from within a gitlab project"
+    }
+
+    if ($Project.DefaultBranch -ieq $NewDefaultBranch) {
+        throw "Default branch for $($Project.Name) is already $($Project.DefaultBranch)"
+    }
+    $OldDefaultBranch = $Project.DefaultBranch
+
+    if ($WhatIf) {
+        Write-Host "WhatIf: would change default branch for $($Project.Name) from $OldDefaultBranch to $NewDefaultBranch"
+    } else {
+        git checkout $OldDefaultBranch
+        git pull -p
+        git branch -m $OldDefaultBranch $NewDefaultBranch
+        git push -u origin $NewDefaultBranch -o ci.skip
+    }
+    Update-GitlabProject -DefaultBranch $NewDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    try {
+        UnProtect-GitlabBranch -Name $OldDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    }
+    catch {}
+    Protect-GitlabBranch -Name $NewDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    if ($WhatIf) {
+        Write-Host "WhatIf: would delete $OldDefaultBranch"
+    } else {
+        git push --delete origin $OldDefaultBranch
+        git remote set-head origin -a
+    }
 }
