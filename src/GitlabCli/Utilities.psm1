@@ -167,7 +167,9 @@ function Add-AliasedProperty {
         $To
     )
     
-    $On | Add-Member -MemberType NoteProperty -Name $From -Value $On.$To
+    if ($null -ne $On.$To -and -NOT (Get-Member -Name $On.$To -InputObject $On)) {
+        $On | Add-Member -MemberType NoteProperty -Name $From -Value $On.$To
+    }
 }
 
 function New-WrapperObject {
@@ -189,8 +191,11 @@ function New-WrapperObject {
                 ForEach-Object {
                     $Wrapper | Add-Member -MemberType NoteProperty -Name $($_.Name | ConvertTo-PascalCase) -Value $_.Value
                 }
+            
             # aliases for common property names
             Add-AliasedProperty -On $Wrapper -From 'Url' -To 'WebUrl'
+            
+            
             if ($DisplayType) {
                 $Wrapper.PSTypeNames.Insert(0, $DisplayType)
                 $TypeShortName = $DisplayType.Split('.') | Select-Object -Last 1
