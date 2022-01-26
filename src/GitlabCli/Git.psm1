@@ -18,7 +18,7 @@ function Get-LocalGitContext {
 
     try {
         Set-Location $Path
-        if (Get-ChildItem -Filter '.git' -Hidden -Directory) {
+        if (Test-Path -Path '.git') {
             $OriginUrl = git config --get remote.origin.url
             # https
             try {
