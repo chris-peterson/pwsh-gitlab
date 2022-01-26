@@ -295,6 +295,15 @@ function Update-GitlabProject {
         $Topics,
 
         [Parameter(Mandatory=$false)]
+        [ValidateSet('fetch', 'clone')]
+        [string]
+        $BuildGitStrategy,
+
+        [Parameter(Mandatory=$false)]
+        [uint]
+        $CiDefaultGitDepth,
+
+        [Parameter(Mandatory=$false)]
         [bool]
         $CiForwardDeployment,
 
@@ -323,6 +332,12 @@ function Update-GitlabProject {
 
     if($PSBoundParameters.ContainsKey("CiForwardDeployment")){
         $Query.ci_forward_deployment_enabled = $CiForwardDeployment
+    }
+    if ($BuildGitStrategy) {
+        $Query.build_git_strategy = $BuildGitStrategy
+    }
+    if ($CiDefaultGitDepth) {
+        $Query.ci_default_git_depth = $CiDefaultGitDepth
     }
     if ($Visibility) {
         $Query.visibility = $Visibility
