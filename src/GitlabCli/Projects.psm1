@@ -1,3 +1,68 @@
+<#
+.SYNOPSIS
+Get one or more Gitlab projects
+
+.DESCRIPTION
+Lookup metadata about Gitlab projects by one or more identifiers
+
+.PARAMETER ProjectId
+Project id - can be an integer, or a full path
+
+.PARAMETER GroupId
+Group id - can be an integer, or a full path
+
+.PARAMETER Recurse
+Whether or not to recurse specified group (default: false)
+Alias: -r
+
+.PARAMETER Url
+Get a project by URL
+
+.PARAMETER IncludeArchived
+Whether or not to return archived projects (default: false)
+
+.PARAMETER MaxPages
+Maximum pages to return (default: 10)
+
+.PARAMETER SiteUrl
+Which Gitlab instance to query.  This is optional, if not provided, will
+first attempt to use the remote associated with the local git context.
+If there is no established context (or no matching configuration), the default
+site is used.
+
+.PARAMETER WhatIf
+Preview Gitlab API requests
+
+.EXAMPLE
+Get-GitlabProject
+
+Get a project from local git context
+
+.EXAMPLE
+Get-GitlabProject -ProjectId 'mygroup/myproject'
+OR
+PS > Get-GitlabProject 'mygroup/myproject'
+OR 
+PS > Get-GitlabProject 42
+
+Get a single project by id
+
+.EXAMPLE
+Get-GitlabProject -GroupId 'mygroup' [-Recurse]
+
+Get multiple projects by containing group
+
+.EXAMPLE
+Get-GitlabGroup 'mygroup' | Get-GitlabProject
+
+Enumerate projects within a group
+
+.LINK
+https://github.com/chris-peterson/pwsh-gitlab#projects
+
+.LINK
+https://docs.gitlab.com/ee/api/projects.html
+#>
 function Get-GitlabProject {
 
     [CmdletBinding(DefaultParameterSetName='ById')]

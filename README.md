@@ -109,7 +109,7 @@ Get-GitlabProject 'mygroup/myproject'
 # OR
 Get-GitlabProject 42
 # OR
-Get-GitlabProject . # use local context
+Get-GitlabProject # use local context
 ```
 
 ```plaintext

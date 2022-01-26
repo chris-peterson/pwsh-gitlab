@@ -69,10 +69,17 @@ function Invoke-GitlabApi {
     )
 
     if ($SiteUrl) {
+        Write-Debug "Attempting to resolve site using $SiteUrl"
         $Site = Get-GitlabConfiguration | Select-Object -ExpandProperty Sites | Where-Object Url -eq $SiteUrl | Select-Object -First 1
     }
     if (-not $Site) {
-        $Site = Get-DefaultGitlabSite
+        Write-Debug "Attempting to resolve site using local git context"
+        $Site = Get-GitlabConfiguration | Select-Object -ExpandProperty Sites | Where-Object Url -eq $(Get-LocalGitContext).Site | Select-Object -First 1
+   
+        if (-not $Site) {
+            $Site = Get-DefaultGitlabSite
+            Write-Debug "Using default site ($($Site.Url))"
+        }
     }
     $GitlabUrl = $Site.Url
     $AccessToken = $Site.AccessToken
