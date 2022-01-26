@@ -143,6 +143,7 @@
         # User
         'Get-GitlabUser'
         'Get-GitlabCurrentUser'
+        'Get-GitlabUserEvent'
 
         # Members
         'Get-GitlabGroupMember'
