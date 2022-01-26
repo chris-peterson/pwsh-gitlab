@@ -75,6 +75,10 @@ function Get-GitlabProject {
         [string]
         $GroupId,
 
+        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByTopics')]
+        [string []]
+        $Topics,
+
         [Parameter(Mandatory=$false, ParameterSetName='ByGroup')]
         [Alias('r')]
         [switch]
@@ -126,6 +130,12 @@ function Get-GitlabProject {
                 Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
                 New-WrapperObject 'Gitlab.Project' |
                 Sort-Object -Property 'Name'
+        }
+        ByTopics {
+            Invoke-GitlabApi GET "projects" -Query @{
+                topic = $Topics -join ','
+            } -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+            New-WrapperObject 'Gitlab.Project'
         }
         ByUrl {
             $Url -match "$($(Get-DefaultGitlabSite).Url)/(?<ProjectId>.*)" | Out-Null
