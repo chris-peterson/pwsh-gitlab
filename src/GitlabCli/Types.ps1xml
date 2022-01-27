@@ -184,6 +184,25 @@
     </Members>
   </Type>
   <Type>
+    <Name>Gitlab.UserEvent</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Summary</Name>
+        <GetScriptBlock>
+        if (($this.TargetType -eq 'Issue') -or ($this.TargetType -eq 'Note')) {
+          "$($this.TargetType): $($this.TargetTitle)"
+        } else {
+          $this.PushData.commit_title
+        }
+        </GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Created</Name>
+        <GetScriptBlock>$this.CreatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Gitlab.Configuration</Name>
     <Members>
       <ScriptProperty>

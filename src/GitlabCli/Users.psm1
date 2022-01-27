@@ -132,6 +132,10 @@ function Get-GitlabUserEvent {
         $Sort,
 
         [Parameter(Mandatory=$False)]
+        [uint]
+        $MaxPages = 1,
+
+        [Parameter(Mandatory=$False)]
         [string]
         $SiteUrl,
 
@@ -171,7 +175,8 @@ function Get-GitlabUserEvent {
         $query.sort = $Sort
     }
 
-    Invoke-GitlabApi GET "users/$($user.Id)/events" -Query $query -MaxPages 10 -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.UserEvent'
+    Invoke-GitlabApi GET "users/$($user.Id)/events" -Query $query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+        New-WrapperObject 'Gitlab.UserEvent'
 
 }
 
