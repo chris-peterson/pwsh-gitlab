@@ -189,10 +189,15 @@
       <ScriptProperty>
         <Name>Summary</Name>
         <GetScriptBlock>
-        if (($this.TargetType -eq 'Issue') -or ($this.TargetType -eq 'Note')) {
-          "$($this.TargetType): $($this.TargetTitle)"
+        if ($this.PushData) {
+          $RefEvents = @('created', 'pushed', 'removed')
+          if ($RefEvents.Contains($this.PushData.action)) {
+            "$($this.PushData.ref_type) $($this.PushData.ref)"
+          } else {
+            $this.PushData.commit_title
+          }
         } else {
-          $this.PushData.commit_title
+          "$($this.TargetType): $($this.TargetTitle)"
         }
         </GetScriptBlock>
       </ScriptProperty>
