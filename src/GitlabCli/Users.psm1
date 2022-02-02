@@ -42,21 +42,6 @@ function Get-GitlabUser {
     }
 }
 
-
-
-function ValidateEventDateFormat {
-    param(
-        [Parameter(Mandatory=$true,Position=0)]
-        [string]
-        $DateString
-    )
-    if($DateString -match "\d\d\d\d-\d\d-\d\d") {
-        $true
-    } else {
-        throw "$DateString is invalid. The date format expected is YYYY-MM-DD"
-    }
-}
-
 <#
 .SYNOPSIS
 Returns Gitlab User Events
@@ -176,7 +161,7 @@ function Get-GitlabUserEvent {
     }
 
     Invoke-GitlabApi GET "users/$($user.Id)/events" -Query $query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-        New-WrapperObject 'Gitlab.UserEvent'
+        New-WrapperObject 'Gitlab.Event'
 
 }
 

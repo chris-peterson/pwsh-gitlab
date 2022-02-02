@@ -184,7 +184,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>Gitlab.UserEvent</Name>
+    <Name>Gitlab.Event</Name>
     <Members>
       <ScriptProperty>
         <Name>Summary</Name>
@@ -197,7 +197,9 @@
             $this.PushData.commit_title
           }
         } else {
-          "$($this.TargetType): $($this.TargetTitle)"
+          if ($this.TargetType -and $this.TargetTitle) {
+            "$($this.TargetType): $($this.TargetTitle)"
+          }
         }
         </GetScriptBlock>
       </ScriptProperty>

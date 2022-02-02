@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.38.1'
+    ModuleVersion = '1.39.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'User events'
+            ReleaseNotes = 'Project events'
         }
     }
 
@@ -143,7 +143,10 @@
         # User
         'Get-GitlabUser'
         'Get-GitlabCurrentUser'
+
+        # Events
         'Get-GitlabUserEvent'
+        'Get-GitlabProjectEvent'
 
         # Members
         'Get-GitlabGroupMember'
@@ -158,6 +161,7 @@
         'ConvertTo-UrlEncoded'
         'Invoke-GitlabApi'
         'Open-InBrowser'
+        'ValidateEventDateFormat'
 
         # Variables
         'Resolve-GitlabVariable'

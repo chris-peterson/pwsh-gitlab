@@ -618,9 +618,9 @@
       </TableControl>
     </View>
     <View>
-      <Name>GitlabUserEvent</Name>
+      <Name>GitlabEvent</Name>
       <ViewSelectedBy>
-        <TypeName>Gitlab.UserEvent</TypeName>
+        <TypeName>Gitlab.Event</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
