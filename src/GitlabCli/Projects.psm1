@@ -105,6 +105,7 @@ function Get-GitlabProject {
         $WhatIf
     )
 
+    $Projects = @()
     switch ($PSCmdlet.ParameterSetName) {
         ById {
             if ($ProjectId -eq '.') {
@@ -113,10 +114,7 @@ function Get-GitlabProject {
                     throw "Could not infer project based on current directory ($(Get-Location))"
                 }
             }
-            $Project = Invoke-GitlabApi GET "projects/$($ProjectId | ConvertTo-UrlEncoded)" -SiteUrl $SiteUrl -WhatIf:$WhatIf
-            if ($Project) {
-                return $Project | New-WrapperObject 'Gitlab.Project'
-            }
+            $Projects = Invoke-GitlabApi GET "projects/$($ProjectId | ConvertTo-UrlEncoded)" -SiteUrl $SiteUrl -WhatIf:$WhatIf
         }
         ByGroup {
             $Group = Get-GitlabGroup $GroupId
@@ -126,25 +124,27 @@ function Get-GitlabProject {
             if (-not $IncludeArchived) {
                 $Query['archived'] = 'false'
             }
-            Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+            $Projects = Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
                 Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
-                New-WrapperObject 'Gitlab.Project' |
                 Sort-Object -Property 'Name'
         }
         ByTopics {
-            Invoke-GitlabApi GET "projects" -Query @{
+            $Projects = Invoke-GitlabApi GET "projects" -Query @{
                 topic = $Topics -join ','
-            } -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-            New-WrapperObject 'Gitlab.Project'
+            } -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf
         }
         ByUrl {
             $Url -match "$($(Get-DefaultGitlabSite).Url)/(?<ProjectId>.*)" | Out-Null
             if ($Matches) {
                 $ProjectId = $Matches.ProjectId
                 Get-GitlabProject -ProjectId $ProjectId
+            } else {
+                throw "Url didn't match expected format"
             }
         }
     }
+
+    $Projects | New-WrapperObject 'Gitlab.Project'
 }
 
 function Move-GitlabProject {

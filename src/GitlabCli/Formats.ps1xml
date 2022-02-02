@@ -40,15 +40,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader>
-          </TableColumnHeader>
-          <TableColumnHeader>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>Group</Label>
-          </TableColumnHeader>
-          <TableColumnHeader>
-          </TableColumnHeader>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
         </TableHeaders>
         <TableRowEntries>
           <TableRowEntry>
@@ -61,7 +56,7 @@
                 <PropertyName>Name</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Group</PropertyName>
+                <PropertyName>LastActivityAt</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Url</PropertyName>
