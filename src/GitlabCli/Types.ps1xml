@@ -5,7 +5,17 @@
     <Members>
       <ScriptProperty>
         <Name>LastAuthor</Name>
-        <GetScriptBlock>$this.Commit[0].author_name</GetScriptBlock>
+        <GetScriptBlock>$this.Commit.author_name</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>LastUpdated</Name>
+        <GetScriptBlock>
+        $LastUpdated = $this.Commit.authored_date
+        if ($this.Commit.committed_date -gt $LastUpdated) {
+          $LastUpdated = $this.Commit.committed_date
+        }
+        $LastUpdated
+        </GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
