@@ -1,37 +1,37 @@
 function Get-GitlabIssue {
-    [CmdletBinding(DefaultParameterSetName="ByProjectId")]
+    [CmdletBinding(DefaultParameterSetName='ByProjectId')]
     [Alias('issue')]
     [Alias('issues')]
     param(
-        [Parameter(Position=0, Mandatory=$false, ParameterSetName="ByProjectId")]
+        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName=$true)]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
-        [Parameter(Position=1, Mandatory=$false, ParameterSetName="ByProjectId")]
+        [Parameter(Position=0, Mandatory=$false, ParameterSetName='ByProjectId')]
         [string]
         $IssueId,
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName="ByGroupId")]
+        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByGroupId', ValueFromPipelineByPropertyName=$true)]
         [string]
         $GroupId,
 
-        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
-        [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
-        [ValidateSet("opened", "closed")]
+        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
+        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
+        [ValidateSet('opened', 'closed')]
         [string]
         $State,
 
-        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
-        [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
+        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
+        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
         [string]
         $CreatedAfter,
 
-        [Parameter(Mandatory=$false, ParameterSetName="ByGroupId")]
-        [Parameter(Mandatory=$false, ParameterSetName="ByProjectId")]
+        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
+        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
         [string]
         $CreatedBefore,
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName="Mine")]
+        [Parameter(Mandatory=$true, ParameterSetName='Mine')]
         [switch]
         $Mine,
 
@@ -54,56 +54,50 @@ function Get-GitlabIssue {
         if ($ProjectId) {
             $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
         }
-
         if ($GroupId) {
             $GroupId = $(Get-GitlabGroup -GroupId $GroupId).Id
         }
-
         if ($IssueId) {
             $Path = "projects/$ProjectId/issues/$IssueId"
         } elseif ($GroupId) {
             $Path = "groups/$GroupId/issues"
             $MaxPages = 10
         } else {
-            if (-not $ProjectId) {
-                $ProjectId = $(Get-GitlabProject -ProjectId '.').Id
-            }
             $Path = "projects/$ProjectId/issues"
             $MaxPages = 10
         }
     }
 
     if ($Visibility) {
-        $Query['visibility'] = $State
+        $Query.visibility = $State
     }
-
     if ($State) {
-        $Query['state'] = $State
+        $Query.state = $State
     }
-
     if ($CreatedBefore) {
-        $Query['created_before'] = $CreatedBefore
+        $Query.created_before = $CreatedBefore
     }
-
     if ($CreatedAfter) {
-        $Query['created_after'] = $CreatedAfter
+        $Query.created_after = $CreatedAfter
     }
 
-    return Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Issue'
+    Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+        New-WrapperObject 'Gitlab.Issue'
 }
 
+# https://docs.gitlab.com/ee/api/issues.html#new-issue
 function New-GitlabIssue {
     [CmdletBinding()]
     param(
-        [Parameter(Position=0, Mandatory=$false)]
+        [Parameter(Mandatory=$false)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true)]
         [string]
         $Title,
 
-        [Parameter(Position=2, Mandatory=$true)]
+        [Parameter(Position=1, Mandatory=$false)]
         [string]
         $Description,
 
@@ -118,10 +112,12 @@ function New-GitlabIssue {
 
     $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
 
-    return Invoke-GitlabApi POST "projects/$ProjectId/issues" @{
+    Invoke-GitlabApi POST "projects/$ProjectId/issues" -Body @{
         title = $Title
         description = $Description
-    } -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Issue'
+        assignee_id = $(Get-GitlabUser -Me).Id
+    } -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+        New-WrapperObject 'Gitlab.Issue'
 }
 
 function Close-GitlabIssue {
