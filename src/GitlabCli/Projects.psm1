@@ -578,12 +578,12 @@ function Get-GitlabProjectEvent {
         $ProjectId = '.',
 
         [Parameter(Mandatory=$False)]
-        [ValidateScript({ValidateEventDateFormat $_})]
+        [ValidateScript({ValidateGitlabDateFormat $_})]
         [string]
         $Before,
 
         [Parameter(Mandatory=$False)]
-        [ValidateScript({ValidateEventDateFormat $_})]
+        [ValidateScript({ValidateGitlabDateFormat $_})]
         [string]
         $After,
 

@@ -45,6 +45,10 @@
         <GetScriptBlock>$this.Author.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
+        <Name>IssueId</Name>
+        <GetScriptBlock>$this.Iid</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
         <Name>AssigneeName</Name>
         <GetScriptBlock>$this.Assignee.Name</GetScriptBlock>
       </ScriptProperty>

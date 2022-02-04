@@ -120,14 +120,144 @@ function New-GitlabIssue {
         New-WrapperObject 'Gitlab.Issue'
 }
 
-function Close-GitlabIssue {
+# https://docs.gitlab.com/ee/api/issues.html#edit-issue
+function Update-GitlabIssue {
     [CmdletBinding()]
     param(
-        [Parameter(Position=0, Mandatory=$false)]
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $IssueId,
+
+        [Parameter(Mandatory=$false)]
+        [string []]
+        $AssigneeId,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $Confidential,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Description,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $DiscussionLocked,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        [ValidateScript({ValidateGitlabDateFormat $_})]
+        $DueDate,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        [ValidateSet('issue', 'incident', 'test_case')]
+        $IssueType,
+
+        [Parameter(Mandatory=$false)]
+        [string []]
+        $Label,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $LabelBehaviorAdd,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $LabelBehaviorRemove,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $MilestoneId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        [ValidateSet('close', 'reopen')]
+        $StateEvent,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Title,
+
+        [Parameter(Mandatory=$false)]
+        [nullable[uint]]
+        $Weight,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Body = @{}
+
+    if ($AssigneeId) {
+        if ($AssigneeId -is [array]) {
+            $Body.assignee_ids = $AssigneeId -join ','
+        } else {
+            $Body.assignee_id = $AssigneeId
+        }
+    }
+    if ($Confidential.IsPresent) {
+        $Body.confidential = $Confidential.ToBool().ToString().ToLower()
+    }
+    if ($Description) {
+        $Body.description = $Description
+    }
+    if ($DiscussionLocked.IsPresent) {
+        $Body.discussion_locked = $DiscussionLocked.ToBool().ToString().ToLower()
+    }
+    if ($DueDate) {
+        $Body.due_date = $DueDate
+    }
+    if ($IssueType) {
+        $Body.issue_type = $IssueType
+    }
+    if ($Label) {
+        $Labels = $Label -join ','
+        if ($LabelBehaviorAdd) {
+            $Body.add_labels = $Labels
+        } elseif ($LabelBehaviorRemove) {
+            $Body.remove_labels = $Labels
+        } else {
+            $Body.labels = $Labels
+        }
+    }
+    if ($MilestoneId) {
+        $Body.milestone_id = $MilestoneId
+    }
+    if ($StateEvent) {
+        $Body.state_event = $StateEvent
+    }
+    if ($Title) {
+        $Body.title = $Title
+    }
+    if ($Weight.HasValue) {
+        $Body.weight = $Weight.Value
+    }
+
+    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+
+    return Invoke-GitlabApi PUT "projects/$ProjectId/issues/$IssueId" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+        New-WrapperObject 'Gitlab.Issue'
+}
+
+function Open-GitlabIssue {
+    [Alias('Reopen-GitlabIssue')]
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
         $IssueId,
 
@@ -140,9 +270,28 @@ function Close-GitlabIssue {
         $WhatIf
     )
 
-    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+    Update-GitlabIssue -ProjectId $ProjectId $IssueId -StateEvent 'reopen' -SiteUrl $SiteUrl -WhatIf:$WhatIf
+}
 
-    return Invoke-GitlabApi PUT "projects/$ProjectId/issues/$IssueId" @{
-        state_event = 'close'
-    } -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Issue'
+function Close-GitlabIssue {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $IssueId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    Update-GitlabIssue -ProjectId $ProjectId $IssueId -StateEvent 'close' -SiteUrl $SiteUrl -WhatIf:$WhatIf
 }

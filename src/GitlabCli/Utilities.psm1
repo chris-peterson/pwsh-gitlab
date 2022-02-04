@@ -231,7 +231,7 @@ function Open-InBrowser {
     }
 }
 
-function ValidateEventDateFormat {
+function ValidateGitlabDateFormat {
     param(
         [Parameter(Mandatory=$true,Position=0)]
         [string]

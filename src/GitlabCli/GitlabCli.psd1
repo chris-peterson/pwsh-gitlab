@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.40.1'
+    ModuleVersion = '1.41.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Issues usability enhancements'
+            ReleaseNotes = 'Update issues'
         }
     }
 
@@ -104,6 +104,8 @@
         # Issues
         'Get-GitlabIssue'
         'New-GitlabIssue'
+        'Update-GitlabIssue'
+        'Open-GitlabIssue'
         'Close-GitlabIssue'
 
         # MergeRequests
@@ -162,7 +164,7 @@
         'ConvertTo-UrlEncoded'
         'Invoke-GitlabApi'
         'Open-InBrowser'
-        'ValidateEventDateFormat'
+        'ValidateGitlabDateFormat'
 
         # Variables
         'Resolve-GitlabVariable'
