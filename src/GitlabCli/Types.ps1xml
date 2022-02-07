@@ -56,6 +56,16 @@
         <Name>ProjectName</Name>
         <GetScriptBlock>$this.WebUrl -match '://[\w\.]+/(?&lt;ProjectPath&gt;.*)/-' | Out-Null; $Matches['ProjectPath']</GetScriptBlock>
       </ScriptProperty>
+      <ScriptProperty>
+        <Name>SortKey</Name>
+        <GetScriptBlock>
+        if ($this.DueDate) {
+          $this.DueDate
+        } else {
+          "$($this.ProjectName)/$($this.IssueId)"
+        }
+        </GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
   <Type>

@@ -17,23 +17,31 @@ function Get-GitlabIssue {
 
         [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
         [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
-        [ValidateSet('opened', 'closed')]
+        [Parameter(Mandatory=$false, ParameterSetName='Mine')]
+        [ValidateSet($null, 'opened', 'closed')]
         [string]
-        $State,
+        $State = 'opened',
 
         [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
         [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
+        [Parameter(Mandatory=$false, ParameterSetName='Mine')]
         [string]
         $CreatedAfter,
 
         [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
         [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
+        [Parameter(Mandatory=$false, ParameterSetName='Mine')]
         [string]
         $CreatedBefore,
 
         [Parameter(Mandatory=$true, ParameterSetName='Mine')]
         [switch]
         $Mine,
+
+
+        [Parameter(Mandatory=$false)]
+        [uint]
+        $MaxPages = 1,
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -45,7 +53,6 @@ function Get-GitlabIssue {
     )
 
     $Path = $null
-    $MaxPages = 1
     $Query = @{}
 
     if ($Mine) {
@@ -82,7 +89,8 @@ function Get-GitlabIssue {
     }
 
     Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-        New-WrapperObject 'Gitlab.Issue'
+        New-WrapperObject 'Gitlab.Issue' |
+        Sort-Object SortKey
 }
 
 # https://docs.gitlab.com/ee/api/issues.html#new-issue
