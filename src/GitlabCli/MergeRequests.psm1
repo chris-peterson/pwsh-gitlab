@@ -1,3 +1,4 @@
+
 function Get-GitlabMergeRequest {
     [CmdletBinding(DefaultParameterSetName='ByProjectId')]
     [Alias('mrs')]
@@ -86,11 +87,14 @@ function Get-GitlabMergeRequest {
         }
 
         if ($MergeRequestId) {
+            # https://docs.gitlab.com/ee/api/merge_requests.html#get-single-mr
             $Path = "projects/$ProjectId/merge_requests/$MergeRequestId"
         } elseif ($ProjectId) {
+            # https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
             $Path = "projects/$ProjectId/merge_requests"
             $MaxPages = 10
         } elseif ($GroupId) {
+            # https://docs.gitlab.com/ee/api/merge_requests.html#list-group-merge-requests
             $Path = "groups/$GroupId/merge_requests"
             $MaxPages = 10
         } else {
@@ -144,7 +148,7 @@ function Get-GitlabMergeRequest {
         }
     }
 
-    $MergeRequests | Sort-Object PathWithNamespace
+    $MergeRequests | Sort-Object ProjectPath
 }
 
 function Get-GitlabMergeRequestChangeSummary {
