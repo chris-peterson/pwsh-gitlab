@@ -61,11 +61,7 @@ function Invoke-GitlabApi {
 
         [Parameter()]
         [switch]
-        $WhatIf,
-
-        [Parameter()]
-        [hashtable]
-        $WhatIfContext = @{}
+        $WhatIf
     )
 
     if ($SiteUrl) {
@@ -132,18 +128,7 @@ function Invoke-GitlabApi {
                 Join-String -Separator " "
             $SerializedParams += " "
         }
-        
-        $SerializedContext = ""
-        if($WhatIfContext.Count -gt 0) {
-            $SerializedContext = $WhatIfContext.Keys |
-                ForEach-Object {
-                    "$_=`"$($WhatIfContext[$_])`""
-                } |
-                Join-String -Separator " "
-            $SerializedContext = "($SerializedContext)"
-        }
-        
-        Write-Host "$HttpMethod $Uri $SerializedParams$SerializedContext"
+        Write-Host "$HttpMethod $Uri $SerializedParams"
     }
     else {
         $Result = Invoke-RestMethod -Method $HttpMethod -Uri $Uri -Header $Headers @RestMethodParams
@@ -206,7 +191,7 @@ function New-WrapperObject {
                 $Wrapper.PSTypeNames.Insert(0, $DisplayType)
                 $TypeShortName = $DisplayType.Split('.') | Select-Object -Last 1
                 $IdentityPropertyName = $Wrapper.Iid ? 'Iid' : 'Id'
-                Add-AliasedProperty -On $Wrapper -From "$($TypeShortName)$IdentityPropertyName" -To 'Id'
+                Add-AliasedProperty -On $Wrapper -From "$($TypeShortName)Id" -To $IdentityPropertyName
             }
             Write-Output $Wrapper
         }

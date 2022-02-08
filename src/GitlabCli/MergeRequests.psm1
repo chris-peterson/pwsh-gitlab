@@ -2,11 +2,12 @@ function Get-GitlabMergeRequest {
     [CmdletBinding(DefaultParameterSetName='ByProjectId')]
     [Alias('mrs')]
     param(
-        [Parameter(Position=0, Mandatory=$false, ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName=$true)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=1, Mandatory=$false, ParameterSetName='ByProjectId')]
+        [Parameter(Position=0, Mandatory=$false, ParameterSetName='ByProjectId')]
+        [Alias("Id")]
         [string]
         $MergeRequestId,
 
@@ -44,16 +45,15 @@ function Get-GitlabMergeRequest {
         [string]
         $Branch,
 
-        [Parameter(Position=0, Mandatory=$false)]
+        [Parameter(Mandatory=$false)]
         [switch]
         $IncludeApprovals,
 
-        [Parameter(Position=0, Mandatory=$false)]
+        [Parameter(Mandatory=$false)]
         [switch]
-        $IncludeChanges,
+        $IncludeChangeSummary,
 
-
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName='Mine')]
+        [Parameter(Mandatory=$true, ParameterSetName='Mine')]
         [switch]
         $Mine,
 
@@ -124,40 +124,27 @@ function Get-GitlabMergeRequest {
     $MergeRequests = Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.MergeRequest'
 
     if ($IncludeApprovals) {
+        # GraphQL currently doesn't support award emoji.  as and when it does, we could merge IncludeApprovals and IncludeChangeSummary to both use GraphQL
         $MergeRequests | ForEach-Object {
-            try {
-                $Approvals = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.Iid)/approval_state" -SiteUrl $SiteUrl -WhatIf:$WhatIf
+            $Approvals = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.MergeRequestId)/approval_state" -SiteUrl $SiteUrl -WhatIf:$WhatIf
+            
+            if ($Approvals.rules.approved_by) {
+                $_ | Add-Member -MemberType 'NoteProperty' -Name 'Approvals' -Value $($Approvals.rules.approved_by | New-WrapperObject 'Gitlab.User')
             }
-            catch {
-                $Approvals = $Null
-            }
-            $_ | Add-Member -MemberType 'NoteProperty' -Name 'Approvals' -Value $($Approvals.rules.approved_by | New-WrapperObject 'Gitlab.User')
 
-            try {
-                $ThumbsUp = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.Iid)/award_emoji" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Where-Object name -ieq 'thumbsup'
+            $ThumbsUp = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.MergeRequestId)/award_emoji" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Where-Object name -ieq 'thumbsup'
+            if ($ThumbsUp.user) {
+                $_ | Add-Member -MemberType 'NoteProperty' -Name 'ThumbsUp' -Value $($ThumbsUp.user | New-WrapperObject 'Gitlab.User')
             }
-            catch {
-                $ThumbsUp = $Null
-            }
-            $_ | Add-Member -MemberType 'NoteProperty' -Name 'ThumbsUp' -Value $($ThumbsUp.user | New-WrapperObject 'Gitlab.User')
         }
     }
-    if ($IncludeChanges) {
+    if ($IncludeChangeSummary) {
         $MergeRequests | ForEach-Object {
-            try {
-                $LatestDiffVersion = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.Iid)/versions" -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-                    Sort-Object CreatedAt |
-                    Select-Object -Last 1 -ExpandProperty id
-                $Changes = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.Iid)/versions/$LatestDiffVersion" -SiteUrl $SiteUrl -WhatIf:$WhatIf
-            }
-            catch {
-                $Changes = $Null
-            }
-            $_ | Add-Member -MemberType 'NoteProperty' -Name 'Changes' -Value $($Changes | New-WrapperObject)
+            $_ | Add-Member -MemberType 'NoteProperty' -Name 'ChangeSummary' -Value $($_ | Get-GitlabMergeRequestChangeSummary)
         }
     }
 
-    $MergeRequests
+    $MergeRequests | Sort-Object PathWithNamespace
 }
 
 function Get-GitlabMergeRequestChangeSummary {
@@ -165,27 +152,33 @@ function Get-GitlabMergeRequestChangeSummary {
         [Parameter(Position=0, Mandatory=$true, ValueFromPipeline=$true)]
         $MergeRequest
     )
-    $MrDiff = gitlab -o json project-merge-request-diff list --project-id $MergeRequest.ProjectId --mr-iid $MergeRequest.Iid |
-        ConvertFrom-Json |
-        Where-Object state -ieq 'collected'
-    $Summary = gitlab -o json project-merge-request-diff get --project-id $MergeRequest.ProjectId --mr-iid $MergeRequest.Iid --id $MrDiff.id |
-        ConvertFrom-Json |
-        Select-Object -ExpandProperty commits |
-        ForEach-Object {
-            $Commit = gitlab -o json project-commit get --project-id $MergeRequest.ProjectId --id $_.id | ConvertFrom-Json
-            [PSCustomObject]@{
-                AuthorName = $Commit.author_name
-                AuthoredDate = $Commit.authored_date
-                Stats = $Commit.stats
+
+    $Data = Invoke-GitlabGraphQL -Query @"
+    {
+        project(fullPath: "$($MergeRequest.ProjectPath)") {
+            mergeRequest(iid: "$($MergeRequest.MergeRequestId)") {
+                diffStatsSummary {
+                    additions
+                    deletions
+                    files: fileCount
+                }
+                commitsWithoutMergeCommits {
+                    nodes {
+                      author {
+                          username
+                      }
+                      authoredDate
+                    }
+                }
             }
         }
+    }
+"@
+
     [PSCustomObject]@{
-        Authors = [string]::Join(', ', $($Summary.AuthorName | Select-Object -Unique | Sort-Object))
-        OldestChange = $Summary.AuthoredDate | Sort-Object | Select-Object -First 1
-        Commits = $Summary.Stats | Measure-Object | Select-Object -ExpandProperty Count
-        Additions = $Summary.Stats.additions | Measure-Object -Sum | Select-Object -ExpandProperty Sum
-        Deletions = $Summary.Stats.deletions | Measure-Object -Sum | Select-Object -ExpandProperty Sum
-        Total = $Summary.Stats.total | Measure-Object -Sum | Select-Object -ExpandProperty Sum
+        Authors      = $Data.Project.mergeRequest.commitsWithoutMergeCommits.nodes.author.username | Select-Object -Unique
+        Changes      = $Data.Project.mergeRequest.diffStatsSummary | New-WrapperObject
+        OldestChange = $Data.Project.mergeRequest.commitsWithoutMergeCommits.nodes.authoredDate | Sort-Object | Select-Object -First 1
     }
 }
 
@@ -399,7 +392,7 @@ function Approve-GitlabMergeRequest {
     if (-not $MergeRequestId) {
         $MergeRequest = Get-GitlabMergeRequest -ProjectId $ProjectId -Branch '.' -State 'opened' -SiteUrl $SiteUrl
         if ($MergeRequest) {
-            $MergeRequestId = $MergeRequest.Iid
+            $MergeRequestId = $MergeRequest.MergeRequestId
         }
     }
 

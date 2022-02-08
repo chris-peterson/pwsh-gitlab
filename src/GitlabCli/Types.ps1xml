@@ -45,16 +45,12 @@
         <GetScriptBlock>$this.Author.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
-        <Name>IssueId</Name>
-        <GetScriptBlock>$this.Iid</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
         <Name>AssigneeName</Name>
         <GetScriptBlock>$this.Assignee.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
-        <Name>ProjectName</Name>
-        <GetScriptBlock>$this.WebUrl -match '://[\w\.]+/(?&lt;ProjectPath&gt;.*)/-' | Out-Null; $Matches['ProjectPath']</GetScriptBlock>
+        <Name>ProjectPath</Name>
+        <GetScriptBlock>$this.WebUrl -match '://[\w\.]+/(?&lt;ProjectPath&gt;.*)/-' | Out-Null; $Matches.ProjectPath</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>SortKey</Name>
@@ -62,7 +58,7 @@
         if ($this.DueDate) {
           $this.DueDate
         } else {
-          "$($this.ProjectName)/$($this.IssueId)"
+          "$($this.ProjectPath)/$($this.IssueId)"
         }
         </GetScriptBlock>
       </ScriptProperty>
@@ -80,12 +76,8 @@
         <GetScriptBlock>$this.Assignee.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
-        <Name>ProjectName</Name>
-        <GetScriptBlock>$this.WebUrl -match '://[\w\.]+/(?&lt;ProjectPath&gt;.*)/-' | Out-Null; $Matches['ProjectPath']</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>ChangeSummary</Name>
-        <GetScriptBlock>$this | Get-GitlabMergeRequestChangeSummary</GetScriptBlock>
+        <Name>ProjectPath</Name>
+        <GetScriptBlock>$this.WebUrl -match '://[\w\.]+/(?&lt;ProjectPath&gt;.*)/-' | Out-Null; $Matches.ProjectPath</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>

@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.41.1'
+    ModuleVersion = '1.42.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Update issues'
+            ReleaseNotes = 'Merge request enhancements.  NOTE: removes whatifcontext as it is not used much (and whatif previews query/body params now)'
         }
     }
 
@@ -112,7 +112,6 @@
         'Get-GitlabMergeRequest'
         'New-GitlabMergeRequest'
         'Set-GitlabMergeRequest'
-        'Get-GitlabMergeRequestChangeSummary'
         'Invoke-GitlabMergeRequestReview'
         'Approve-GitlabMergeRequest'
         'Update-GitlabMergeRequest'

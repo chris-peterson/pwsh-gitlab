@@ -173,10 +173,7 @@ function Move-GitlabProject {
 
     Invoke-GitlabApi PUT "projects/$($SourceProject.Id)/transfer" @{
         namespace = $Group.Id
-    } -SiteUrl $SiteUrl -WhatIf:$WhatIf -WhatIfContext @{
-        SourceProjectName = $SourceProject.Name
-        NamespacePath = $Group.FullPath
-    } | New-WrapperObject 'Gitlab.Project'
+    } -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Project'
 }
 
 function Rename-GitlabProject {
@@ -270,9 +267,8 @@ function New-GitlabProject {
     Invoke-GitlabApi POST "projects" @{
         name = $ProjectName
         namespace_id = $Group.Id
-    } -SiteUrl $SiteUrl -WhatIf:$WhatIf -WhatIfContext @{
-        DestinationGroupName = $Group.Name
-    } | New-WrapperObject 'Gitlab.Project'
+    } -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+        New-WrapperObject 'Gitlab.Project'
 }
 
 # https://docs.gitlab.com/ee/api/projects.html#edit-project
@@ -394,9 +390,8 @@ function Invoke-GitlabProjectArchival {
 
     $Project = $(Get-GitlabProject -ProjectId $ProjectId)
     
-    Invoke-GitlabApi POST "projects/$($Project.Id)/archive" -SiteUrl $SiteUrl -WhatIf:$WhatIf -WhatIfContext @{
-        ProjectName = $Project.Name
-    } | New-WrapperObject 'Gitlab.Project'
+    Invoke-GitlabApi POST "projects/$($Project.Id)/archive" -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+        New-WrapperObject 'Gitlab.Project'
 }
 
 # https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables

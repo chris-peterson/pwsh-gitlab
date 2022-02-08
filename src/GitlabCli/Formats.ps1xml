@@ -121,7 +121,7 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Iid</PropertyName>
+                <PropertyName>IssueId</PropertyName>
                 <Alignment>Right</Alignment>
               </TableColumnItem>
               <TableColumnItem>
@@ -163,7 +163,7 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Iid</PropertyName>
+                <PropertyName>MergeRequestId</PropertyName>
                 <Alignment>Right</Alignment>
               </TableColumnItem>
               <TableColumnItem>
@@ -549,7 +549,7 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Iid</PropertyName>
+                <PropertyName>MergeRequestSearchResultId</PropertyName>
                 <Alignment>Right</Alignment>
               </TableColumnItem>
               <TableColumnItem>
