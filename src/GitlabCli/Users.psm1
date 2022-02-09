@@ -1,6 +1,7 @@
 function Get-GitlabUser {
+    [CmdletBinding(DefaultParameterSetName='ByUserId')]
     param (
-        [Parameter(ParameterSetName='ByUserId', Mandatory=$false)]
+        [Parameter(Position=0, ParameterSetName='ByUserId', Mandatory=$false)]
         [Alias("Username")]
         [string]
         $UserId,
@@ -24,9 +25,13 @@ function Get-GitlabUser {
 
     if ($UserId) {
         if (-not [uint]::TryParse($UserId, [ref] $null)) {
+            $ErrorMessage = "$UserId not found" # pre-compute as we re-assign below
             $UserId = Invoke-GitlabApi GET "users" @{
                 username = $UserId
             } | Select-Object -First 1 -ExpandProperty id
+            if (-not $UserId) {
+                throw $ErrorMessage
+            }
         }
         Invoke-GitlabApi GET "users/$UserId" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.User'
     }

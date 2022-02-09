@@ -53,14 +53,11 @@ function Get-GitlabProjectMember {
 
 # https://docs.gitlab.com/ee/api/users.html#user-memberships-admin-only
 function Get-GitlabUserMembership {
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
         $Username,
-
-        [Parameter(Mandatory=$false)]
-        [string]
-        $EmailAddress,
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -70,45 +67,47 @@ function Get-GitlabUserMembership {
         [Parameter(Mandatory=$false)]
         $WhatIf
     )
-    $User = Get-GitlabUser -Username $Username -EmailAddress $EmailAddress -SiteUrl $SiteUrl -WhatIf:$WhatIf
+
+    $User = Get-GitlabUser -Username $Username -SiteUrl $SiteUrl -WhatIf:$WhatIf
 
     Invoke-GitlabApi GET "users/$($User.Id)/memberships" -MaxPages 10 -SiteUrl $SiteUrl -WhatIf:$WhatIf |
         New-WrapperObject "Gitlab.GroupMembership"
 }
 
 # https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project
-function Add-GitlabUserToGroup {
+function Add-GitlabUserMembership {
+    [CmdletBinding()]
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $Username,
+
+        [Parameter(Position=1, Mandatory=$true)]
         [string]
         $GroupId,
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Position=2, Mandatory=$true)]
         [string]
         [ValidateSet('developer', 'maintainer')]
         $AccessLevel,
 
         [Parameter(Mandatory=$false)]
         [string]
-        $Username,
-
-        [Parameter(Mandatory=$false)]
-        [string]
-        $EmailAddress,
+        $SiteUrl,
 
         [Parameter()]
         [switch]
         $WhatIf
     )
+
     $Group = Get-GitlabGroup -GroupId $GroupId
-    $User = Get-GitlabUser -Username $Username -EmailAddress $EmailAddress
+    $User = Get-GitlabUser -UserId $Username
 
     Invoke-GitlabApi POST "groups/$($Group.Id)/members" @{
         user_id = $User.Id
         access_level = $global:GitlabAccessLevels[$AccessLevel]
-    } -WhatIf:$WhatIf | Out-Null
-
-    Get-GitlabUserMembership -Username $Username -EmailAddress $EmailAddress -WhatIf:$WhatIf
+    }  -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+    Write-Host "$($User.Username) added to $($Group.FullPath)"
 }
 
 # https://docs.gitlab.com/ee/api/members.html#remove-a-member-from-a-group-or-project

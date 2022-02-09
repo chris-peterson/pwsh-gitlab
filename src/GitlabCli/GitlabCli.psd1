@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.42.1'
+    ModuleVersion = '1.43.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Merge request enhancements.  NOTE: removes whatifcontext as it is not used much (and whatif previews query/body params now)'
+            ReleaseNotes = 'Tweaks to adding user membership'
         }
     }
 
@@ -155,7 +155,7 @@
         'Get-GitlabProjectMember'
         'Remove-GitlabProjectMember'
         'Get-GitlabUserMembership'
-        'Add-GitlabUserToGroup'
+        'Add-GitlabUserMembership'
 
         # Utilities
         'ConvertTo-PascalCase'
