@@ -23,16 +23,15 @@ function Resolve-GitlabVariable {
     if ($Context.ProjectId) {
         Write-Verbose "...project id: $($Context.ProjectId)"
         try {
-            $ProjectVar = Get-GitlabProjectVariable $Context.ProjectId $Key -SiteUrl $SiteUrl -WhatIf:$WhatIf
+            $ProjectVar = Get-GitlabProjectVariable -ProjectId $Context.ProjectId $Key -SiteUrl $SiteUrl -WhatIf:$WhatIf
         }
         catch {
-            Write-Debug $_.Exception.Message
+            Write-Warning "Error looking for project variable: $($_.Exception.Message)"
         }
         if ($ProjectVar) {
             return $ProjectVar.Value
         } else {
-            $Context = Get-GitlabGroup $Context.Group
-            Resolve-GitlabVariable -Context $Context -Key $Key -SiteUrl $Site -WhatIf:$WhatIf
+            Get-GitlabGroup $Context.Group | Resolve-GitlabVariable -Key $Key -SiteUrl $Site -WhatIf:$WhatIf
         }
     } elseif ($Context.GroupId) {
         Write-Verbose "...group id: $($Context.GroupId)"
@@ -40,7 +39,7 @@ function Resolve-GitlabVariable {
             $GroupVar = Get-GitlabGroupVariable $Context.GroupId $Key -SiteUrl $SiteUrl -WhatIf:$WhatIf
         }
         catch {
-            Write-Debug $_.Exception.Message
+            Write-Warning "Error looking for group variable: $($_.Exception.Message)"
         }
         Write-Verbose "...$GroupVar"
         if ($GroupVar) {
@@ -49,8 +48,7 @@ function Resolve-GitlabVariable {
             $GroupId = $Context.FullPath
             if ($GroupId.Contains('/')) {
                 $Parent = $GroupId.Substring(0, $GroupId.LastIndexOf('/'))
-                $Context = Get-GitLabGroup -GroupId $Parent
-                Resolve-GitlabVariable -Context $Context -Key $Key -SiteUrl $Site -WhatIf:$WhatIf
+                Get-GitLabGroup -GroupId $Parent | Resolve-GitlabVariable $Key -SiteUrl $Site -WhatIf:$WhatIf
             }
         }
     }
