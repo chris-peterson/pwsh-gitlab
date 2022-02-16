@@ -69,6 +69,55 @@ function Get-GitlabRepositoryFile {
         New-WrapperObject 'Gitlab.RepositoryFile'
 }
 
+function Update-GitlabRepositoryFile {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$false)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $FilePath,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Branch,
+
+        [Parameter(Mandatory=$true)]
+        [string]
+        $Content,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $CommitMessage,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Project = Get-GitlabProject $ProjectId
+    if (-not $Branch) {
+        $Branch = $Project.DefaultBranch
+    }
+    if (-not $CommitMessage) {
+        $CommitMessage = "Update $FilePath"
+    }
+    $Body = @{
+        branch         = $Branch
+        content        = $Content
+        commit_message = $CommitMessage
+    }
+
+    Invoke-GitlabApi PUT "projects/$($Project.Id)/repository/files/$FilePath" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+    Write-Host "Updated $FilePath in $($Project.Name) ($Branch)"
+}
+
 function Get-GitlabRepositoryTree {
     param(
         [Parameter(Mandatory=$false)]

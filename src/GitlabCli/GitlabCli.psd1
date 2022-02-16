@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.43.0'
+    ModuleVersion = '1.44.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Tweaks to adding user membership'
+            ReleaseNotes = 'Update repository file'
         }
     }
 
@@ -92,6 +92,7 @@
         'Get-GitlabRepositoryTree'
         'Get-GitlabRepositoryFileContent'
         'Get-GitlabRepositoryYmlFileContent'
+        'Update-GitlabRepositoryFile'
 
         # Environments
         'Get-GitlabEnvironment'
