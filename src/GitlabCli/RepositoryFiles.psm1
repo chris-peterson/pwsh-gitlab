@@ -69,28 +69,33 @@ function Get-GitlabRepositoryFile {
         New-WrapperObject 'Gitlab.RepositoryFile'
 }
 
+# https://docs.gitlab.com/ee/api/repository_files.html#update-existing-file-in-repository
 function Update-GitlabRepositoryFile {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false)]
         [string]
         $ProjectId = '.',
+        
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Branch,
 
         [Parameter(Position=0, Mandatory=$true)]
         [string]
         $FilePath,
 
-        [Parameter(Mandatory=$false)]
-        [string]
-        $Branch,
-
         [Parameter(Mandatory=$true)]
         [string]
         $Content,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory=$true)]
         [string]
         $CommitMessage,
+
+        [bool]
+        [Parameter(Mandatory=$false)]
+        $SkipCi = $true,
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -105,17 +110,18 @@ function Update-GitlabRepositoryFile {
     if (-not $Branch) {
         $Branch = $Project.DefaultBranch
     }
-    if (-not $CommitMessage) {
-        $CommitMessage = "Update $FilePath"
-    }
     $Body = @{
         branch         = $Branch
         content        = $Content
         commit_message = $CommitMessage
     }
+    if ($SkipCi) {
+        $Body.commit_message += "`n[skip ci]"
+    }
 
-    Invoke-GitlabApi PUT "projects/$($Project.Id)/repository/files/$FilePath" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
-    Write-Host "Updated $FilePath in $($Project.Name) ($Branch)"
+    if (Invoke-GitlabApi PUT "projects/$($Project.Id)/repository/files/$FilePath" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf) {
+        Write-Host "Updated $FilePath in $($Project.Name) ($Branch)"
+    }
 }
 
 function Get-GitlabRepositoryTree {
