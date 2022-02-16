@@ -19,7 +19,7 @@ function Resolve-GitlabVariable {
         $WhatIf
     )
 
-    Write-Verbose "checking for $Key on $($Context.GetType().ToString()) context..."
+    Write-Verbose "checking for $Key on $($Context.psobject.TypeNames | Select-Object -First 1)..."
     if ($Context.ProjectId) {
         Write-Verbose "...project id: $($Context.ProjectId)"
         try {
