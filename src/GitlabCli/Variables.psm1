@@ -19,11 +19,15 @@ function Resolve-GitlabVariable {
         $WhatIf
     )
 
+    Write-Verbose "checking for $Key on $($Context.GetType().ToString()) context..."
     if ($Context.ProjectId) {
+        Write-Verbose "...project id: $($Context.ProjectId)"
         try {
             $ProjectVar = Get-GitlabProjectVariable $Context.ProjectId $Key -SiteUrl $SiteUrl -WhatIf:$WhatIf
         }
-        catch {}
+        catch {
+            Write-Debug $_.Exception.Message
+        }
         if ($ProjectVar) {
             return $ProjectVar.Value
         } else {
@@ -31,11 +35,13 @@ function Resolve-GitlabVariable {
             Resolve-GitlabVariable -Context $Context -Key $Key -SiteUrl $Site -WhatIf:$WhatIf
         }
     } elseif ($Context.GroupId) {
-        Write-Verbose "checking for $Key on group $($Context.GroupId)..."
+        Write-Verbose "...group id: $($Context.GroupId)"
         try {
             $GroupVar = Get-GitlabGroupVariable $Context.GroupId $Key -SiteUrl $SiteUrl -WhatIf:$WhatIf
         }
-        catch {}
+        catch {
+            Write-Debug $_.Exception.Message
+        }
         Write-Verbose "...$GroupVar"
         if ($GroupVar) {
             return $GroupVar.Value
