@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.44.3'
+    ModuleVersion = '1.45.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'tweak variable resolution'
+            ReleaseNotes = 'membership enhancements'
         }
     }
 
@@ -157,6 +157,8 @@
         'Remove-GitlabProjectMember'
         'Get-GitlabUserMembership'
         'Add-GitlabUserMembership'
+        'Update-GitlabUserMembership'
+        'Get-GitlabMemberAccessLevel'
 
         # Utilities
         'ConvertTo-PascalCase'

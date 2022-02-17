@@ -200,6 +200,18 @@
     </Members>
   </Type>
   <Type>
+    <Name>Gitlab.Member</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>AccessLevelFriendly</Name>
+        <GetScriptBlock>
+          $Levels = Get-GitlabMemberAccessLevel
+          $Levels.psobject.Properties | Where-Object Value -eq $this.AccessLevel | Select-Object -ExpandProperty Name
+        </GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Gitlab.Event</Name>
     <Members>
       <ScriptProperty>
