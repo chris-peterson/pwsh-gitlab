@@ -422,11 +422,12 @@ function New-GitlabPipeline {
 
 function Remove-GitlabPipeline {
 
-    [CmdletBinding()]
     param (
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
         $ProjectId = '.',
 
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
         $PipelineId,
 
