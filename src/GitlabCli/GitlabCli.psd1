@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.45.1'
+    ModuleVersion = '1.46.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'allow piping pipeline to delete'
+            ReleaseNotes = 'pipeline schedule enhancements'
         }
     }
 
@@ -120,11 +120,14 @@
 
         # Pipelines
         'Get-GitlabPipeline'
-        'Get-GitlabPipelineSchedule'
-        'Update-GitlabPipelineSchedule'
-        'Get-GitlabPipelineBridge'
         'New-GitlabPipeline'
         'Remove-GitlabPipeline'
+        'Get-GitlabPipelineSchedule'
+        'New-GitlabPipelineSchedule'
+        'Update-GitlabPipelineSchedule'
+        'Remove-GitlabPipelineSchedule'
+        'New-GitlabScheduledPipeline'
+        'Get-GitlabPipelineBridge'
 
         # Jobs
         'Get-GitlabJob'

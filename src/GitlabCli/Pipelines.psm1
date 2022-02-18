@@ -194,8 +194,8 @@ function Get-GitlabPipelineSchedule {
         [string]
         $ProjectId = '.',
 
-        [Parameter(ParameterSetName='ByProjectId', Mandatory=$false)]
         [Parameter(ParameterSetName='ByPipelineScheduleId', Mandatory=$true)]
+        [Alias('Id')]
         [int]
         $PipelineScheduleId,
 
@@ -216,19 +216,19 @@ function Get-GitlabPipelineSchedule {
     $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
 
     $GitlabApiArguments = @{
-        HttpMethod = "GET"
+        HttpMethod = 'GET'
         Path       = "projects/$ProjectId/pipeline_schedules"
         Query      = @{}
         SiteUrl    = $SiteUrl
     }
 
     switch ($PSCmdlet.ParameterSetName) {
-        ByPipelineId { 
-            $GitlabApiArguments["Path"] += "/$PipelineScheduleId" 
+        ByPipelineScheduleId {
+            $GitlabApiArguments.Path += "/$PipelineScheduleId"
         }
         ByProjectId {
             if($Scope) {
-                $GitlabApiArguments["Query"]["scope"] = $Scope
+                $GitlabApiArguments.Query.scope = $Scope
             }
         }
         default { throw "Parameterset $($PSCmdlet.ParameterSetName) is not implemented"}
@@ -239,10 +239,64 @@ function Get-GitlabPipelineSchedule {
     $Wrapper
 }
 
+# https://docs.gitlab.com/ee/api/pipeline_schedules.html#create-a-new-pipeline-schedule
+function New-GitlabPipelineSchedule {
+    param (
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory=$true)]
+        [Alias('Branch')]
+        [string]
+        $Ref,
+
+        [Parameter(Mandatory=$true)]
+        [string]
+        $Description,
+
+        [Parameter(Mandatory=$true)]
+        [string]
+        $Cron,
+
+        [Parameter(Mandatory=$false)]
+        [bool]
+        $Active,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Project = Get-GitlabProject -SiteUrl $SiteUrl
+    if ($Ref -eq '.') {
+        $Ref = $(Get-LocalGitContext).Branch
+    }
+
+    $GitlabApiArguments = @{
+        HttpMethod = 'POST'
+        Path       = "projects/$($Project.Id)/pipeline_schedules"
+        Body       = @{
+            ref         = $Ref
+            description = $Description
+            cron        = $Cron
+        }
+        SiteUrl    = $SiteUrl
+    }
+
+    if ($PSBoundParameters.ContainsKey("Active")) {
+        $GitlabApiArguments.Body.active = $Active.ToString().ToLower()
+    }
+
+    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineSchedule'
+}
+
 # https://docs.gitlab.com/ee/api/pipeline_schedules.html#edit-a-pipeline-schedule
 function Update-GitlabPipelineSchedule {
-
-    [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -265,18 +319,83 @@ function Update-GitlabPipelineSchedule {
         $WhatIf
     )
 
+    $Project = Get-GitlabProject -SiteUrl $SiteUrl
+
     $GitlabApiArguments = @{
-        HttpMethod = "PUT"
-        Path       = "projects/$ProjectId/pipeline_schedules/$PipelineScheduleId"
+        HttpMethod = 'PUT'
+        Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId"
         Query      = @{}
         SiteUrl    = $SiteUrl
     }
 
     if ($PSBoundParameters.ContainsKey("Active")) {
-        $GitlabApiArguments.Query['active'] = $Active.ToString().ToLower()
+        $GitlabApiArguments.Query.active = $Active.ToString().ToLower()
     }
 
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineSchedule'
+}
+
+# https://docs.gitlab.com/ee/api/pipeline_schedules.html#delete-a-pipeline-schedule
+function Remove-GitlabPipelineSchedule {
+    param (
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Alias('Id')]
+        [int]
+        $PipelineScheduleId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Project = Get-GitlabProject -SiteUrl $SiteUrl
+
+    $GitlabApiArguments = @{
+        HttpMethod = 'DELETE'
+        Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId"
+        SiteUrl    = $SiteUrl
+    }
+
+    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf
+}
+
+# https://docs.gitlab.com/ee/api/pipeline_schedules.html#run-a-scheduled-pipeline-immediately
+function New-GitlabScheduledPipeline {
+    param (
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [int]
+        $PipelineScheduleId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Project = Get-GitlabProject -SiteUrl $SiteUrl
+
+    $GitlabApiArguments = @{
+        HttpMethod = 'POST'
+        Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId/play"
+        SiteUrl    = $SiteUrl
+    }
+
+    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | Select-Object -ExpandProperty 'message'
 }
 
 # https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-bridges
