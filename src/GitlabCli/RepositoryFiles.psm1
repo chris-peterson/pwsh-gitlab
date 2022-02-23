@@ -28,7 +28,7 @@ function Get-GitlabRepositoryFileContent {
     )
 
     $File = Get-GitlabRepositoryFile -ProjectId $ProjectId -FilePath $FilePath -Ref $Ref -SiteUrl $SiteUrl -WhatIf:$WhatIf
-    
+
     if ($File -and $File.Encoding -eq 'base64') {
         return [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($File.Content))
     }
@@ -76,7 +76,7 @@ function Update-GitlabRepositoryFile {
         [Parameter(Mandatory=$false)]
         [string]
         $ProjectId = '.',
-        
+
         [Parameter(Mandatory=$false)]
         [string]
         $Branch,
@@ -119,7 +119,7 @@ function Update-GitlabRepositoryFile {
         $Body.commit_message += "`n[skip ci]"
     }
 
-    if (Invoke-GitlabApi PUT "projects/$($Project.Id)/repository/files/$FilePath" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf) {
+    if (Invoke-GitlabApi PUT "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf) {
         Write-Host "Updated $FilePath in $($Project.Name) ($Branch)"
     }
 }
