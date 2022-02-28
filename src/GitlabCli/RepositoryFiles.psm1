@@ -97,6 +97,10 @@ function Update-GitlabRepositoryFile {
         [Parameter(Mandatory=$false)]
         $SkipCi = $true,
 
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $SkipEqualityCheck = $false,
+
         [Parameter(Mandatory=$false)]
         [string]
         $SiteUrl,
@@ -118,7 +122,13 @@ function Update-GitlabRepositoryFile {
     if ($SkipCi) {
         $Body.commit_message += "`n[skip ci]"
     }
-
+    if (-not $SkipEqualityCheck) {
+        $CurrentContent = Get-GitlabRepositoryFileContent -ProjectId $Project.Id -Ref $Branch -FilePath $FilePath -SiteUrl $SiteUrl
+        if ($CurrentContent -eq $Content) {
+            Write-Host "$FilePath contents is identical, skipping update"
+            return
+        }
+    }
     if (Invoke-GitlabApi PUT "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf) {
         Write-Host "Updated $FilePath in $($Project.Name) ($Branch)"
     }
