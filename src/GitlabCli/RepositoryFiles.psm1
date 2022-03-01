@@ -59,6 +59,10 @@ function Get-GitlabRepositoryFile {
         $WhatIf
     )
 
+
+    if ($FilePath.StartsWith('./')) {
+        $FilePath = $FilePath.Substring(2);
+    }
     $Project = Get-GitlabProject $ProjectId
     if (-not $Ref) {
         $Ref = $Project.DefaultBranch
