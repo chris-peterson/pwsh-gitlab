@@ -246,7 +246,8 @@ function New-GitlabProject {
         [string]
         $ProjectName,
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Position=1, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Alias('GroupId')]
         [string]
         $DestinationGroup,
 
