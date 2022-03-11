@@ -544,25 +544,22 @@ function Rename-GitlabProjectDefaultBranch {
     $OldDefaultBranch = $Project.DefaultBranch
 
     if ($WhatIf) {
-        Write-Host "WhatIf: would change default branch for $($Project.Name) from $OldDefaultBranch to $NewDefaultBranch"
-    } else {
-        git checkout $OldDefaultBranch
-        git pull -p
-        git branch -m $OldDefaultBranch $NewDefaultBranch
-        git push -u origin $NewDefaultBranch -o ci.skip
+        Write-Host "WhatIf: would change default branch for $($Project.PathWithNamespace) from $OldDefaultBranch to $NewDefaultBranch"
+        return
     }
+
+    git checkout $OldDefaultBranch
+    git pull -p
+    git branch -m $OldDefaultBranch $NewDefaultBranch
+    git push -u origin $NewDefaultBranch -o ci.skip
     Update-GitlabProject -DefaultBranch $NewDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf
     try {
         UnProtect-GitlabBranch -Name $OldDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf
     }
     catch {}
     Protect-GitlabBranch -Name $NewDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf
-    if ($WhatIf) {
-        Write-Host "WhatIf: would delete $OldDefaultBranch"
-    } else {
-        git push --delete origin $OldDefaultBranch
-        git remote set-head origin -a
-    }
+    git push --delete origin $OldDefaultBranch
+    git remote set-head origin -a
 }
 
 function Get-GitlabProjectEvent {
