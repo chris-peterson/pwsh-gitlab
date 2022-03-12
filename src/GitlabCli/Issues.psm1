@@ -38,7 +38,6 @@ function Get-GitlabIssue {
         [switch]
         $Mine,
 
-
         [Parameter(Mandatory=$false)]
         [uint]
         $MaxPages = 1,

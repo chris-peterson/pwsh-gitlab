@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.47.3'
+    ModuleVersion = '1.48.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'bugfix for dryrun of default branch rename'
+            ReleaseNotes = 'introduce notes'
         }
     }
 
@@ -34,6 +34,7 @@
         'Jobs.psm1'
         'Members.psm1'
         'MergeRequests.psm1'
+        'Notes.psm1'
         'Pipelines.psm1'
         'Projects.psm1'
         'RepositoryFiles.psm1'
@@ -108,6 +109,11 @@
         'Update-GitlabIssue'
         'Open-GitlabIssue'
         'Close-GitlabIssue'
+
+        # Notes
+        'Get-GitlabIssueNote'
+        'New-GitlabIssueNote'
+        'Get-GitlabMergeRequestNote'
 
         # MergeRequests
         'Get-GitlabMergeRequest'
