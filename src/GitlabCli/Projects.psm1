@@ -179,11 +179,11 @@ function Move-GitlabProject {
 function Rename-GitlabProject {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true)]
         [string]
         $NewName,
 
