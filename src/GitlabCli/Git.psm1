@@ -30,7 +30,7 @@ function Get-LocalGitContext {
             }
             catch {
                 # git
-                $OriginUrl -match '@(?<Site>.*?)(/|:)(?<Project>[a-zA-Z0-9/-]+)' | Out-Null
+                $OriginUrl -match '@(?<Site>.*?)(/|:)(?<Project>[a-zA-Z0-9/-_]+)' | Out-Null
                 $Context.Site = $Matches.Site
                 $Context.Project = $Matches.Project
             }
