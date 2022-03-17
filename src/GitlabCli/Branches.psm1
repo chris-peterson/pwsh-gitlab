@@ -41,7 +41,7 @@ function Get-GitlabBranch {
         ByProjectId {
             if($Search) {
                 $GitlabApiArguments.Query["search"] = $Search
-            }        
+            }
         }
         ByRef {
             $GitlabApiArguments.Path += "/$($Ref)"
@@ -82,6 +82,34 @@ function Get-GitlabProtectedBranches {
     }
 
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.ProtectedBranch'
+}
+
+function New-GitlabBranch {
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory=$false)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [string]
+        $Branch,
+
+        [Parameter(Position=2, Mandatory=$true)]
+        [string]
+        $Ref,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+
+    Invoke-GitlabApi POST "projects/$ProjectId/repository/branches" @{
+        branch = $Branch
+        ref = $Ref
+    } -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Branch'
 }
 
 # https://docs.gitlab.com/ee/api/protected_branches.html#protect-repository-branches

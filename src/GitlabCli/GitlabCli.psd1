@@ -51,6 +51,7 @@
         # Branches
         'Get-GitlabBranch'
         'Get-GitlabProtectedBranches'
+        'New-GitlabBranch'
         'Protect-GitlabBranch'
         'UnProtect-GitlabBranch'
         'Remove-GitlabBranch'
