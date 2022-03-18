@@ -232,8 +232,21 @@
         </GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
-        <Name>Created</Name>
+        <Name>CreatedAtSortable</Name>
         <GetScriptBlock>$this.CreatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Gitlab.Note</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>AuthorUsername</Name>
+        <GetScriptBlock>$this.Author.Username</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>UpdatedAtSortable</Name>
+        <GetScriptBlock>$this.UpdatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>

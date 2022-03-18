@@ -22,7 +22,7 @@ function Get-GitlabIssueNote {
 
     $Project = Get-GitlabProject $ProjectId
 
-    Invoke-GitlabApi GET "projects/$($Project.Id)/issues/$IssueId/notes" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject
+    Invoke-GitlabApi GET "projects/$($Project.Id)/issues/$IssueId/notes" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Note'
 }
 
 # https://docs.gitlab.com/ee/api/notes.html#create-new-issue-note
@@ -51,7 +51,7 @@ function New-GitlabIssueNote {
 
     $Project = Get-GitlabProject $ProjectId
 
-    Invoke-GitlabApi POST "projects/$($Project.Id)/issues/$IssueId/notes" -Body @{body = $Note} -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject
+    Invoke-GitlabApi POST "projects/$($Project.Id)/issues/$IssueId/notes" -Body @{body = $Note} -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Note'
 }
 
 # https://docs.gitlab.com/ee/api/notes.html#list-all-merge-request-notes
@@ -65,6 +65,10 @@ function Get-GitlabMergeRequestNote {
         [string]
         $MergeRequestId,
 
+        [Parameter(Position=1, Mandatory=$false)]
+        [string]
+        $NoteId,
+
         [Parameter(Mandatory=$false)]
         [string]
         $SiteUrl,
@@ -76,5 +80,10 @@ function Get-GitlabMergeRequestNote {
 
     $Project = Get-GitlabProject $ProjectId
 
-    Invoke-GitlabApi GET "projects/$($Project.Id)/merge_requests/$MergeRequestId/notes" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject
+    $Url = "projects/$($Project.Id)/merge_requests/$MergeRequestId/notes"
+    if ($NoteId) {
+        $Url += "/$NoteId"
+    }
+
+    Invoke-GitlabApi GET $Url -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Note'
 }

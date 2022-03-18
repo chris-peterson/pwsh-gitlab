@@ -654,7 +654,9 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader/>
-          <TableColumnHeader/>
+          <TableColumnHeader>
+            <Label>Created</Label>
+          </TableColumnHeader>
           <TableColumnHeader/>
           <TableColumnHeader/>
           <TableColumnHeader/>
@@ -667,7 +669,7 @@
                 <Alignment>Right</Alignment>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Created</PropertyName>
+                <PropertyName>CreatedAtSortable</PropertyName>
                 <Alignment>Right</Alignment>
               </TableColumnItem>
               <TableColumnItem>
@@ -678,6 +680,42 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Summary</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>GitlabNote</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.Note</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader/>
+          <TableColumnHeader>
+            <Label>Updated</Label>
+          </TableColumnHeader>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+                <Alignment>Right</Alignment>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>UpdatedAtSortable</PropertyName>
+                <Alignment>Right</Alignment>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>AuthorUsername</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Body</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>
