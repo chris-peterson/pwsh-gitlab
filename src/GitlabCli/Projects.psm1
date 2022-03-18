@@ -251,6 +251,10 @@ function New-GitlabProject {
         [string]
         $DestinationGroup,
 
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $CloneNow,
+
         [Parameter(Mandatory=$false)]
         [string]
         $SiteUrl,
@@ -265,11 +269,18 @@ function New-GitlabProject {
         throw "DestinationGroup '$DestinationGroup' not found"
     }
 
-    Invoke-GitlabApi POST "projects" @{
+    $Project = Invoke-GitlabApi POST "projects" @{
         name = $ProjectName
         namespace_id = $Group.Id
     } -SiteUrl $SiteUrl -WhatIf:$WhatIf |
         New-WrapperObject 'Gitlab.Project'
+    
+    if ($CloneNow) {
+        git clone $Project.SshUrlToRepo
+        Set-Location $ProjectName
+    } else {
+        $Project
+    }
 }
 
 # https://docs.gitlab.com/ee/api/projects.html#edit-project
