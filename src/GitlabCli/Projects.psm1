@@ -251,6 +251,11 @@ function New-GitlabProject {
         [string]
         $DestinationGroup,
 
+        [Parameter(Mandatory=$false)]
+        [ValidateSet('private', 'internal', 'public')]
+        [string]
+        $Visibility = 'internal',
+
         [switch]
         [Parameter(Mandatory=$false)]
         $CloneNow,
@@ -272,6 +277,7 @@ function New-GitlabProject {
     $Project = Invoke-GitlabApi POST "projects" @{
         name = $ProjectName
         namespace_id = $Group.Id
+        visibility = $Visibility
     } -SiteUrl $SiteUrl -WhatIf:$WhatIf |
         New-WrapperObject 'Gitlab.Project'
     
