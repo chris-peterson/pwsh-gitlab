@@ -174,6 +174,12 @@ function Get-GitlabMergeRequestChangeSummary {
                       authoredDate
                     }
                 }
+                notes {
+                    nodes {
+                      body
+                      updatedAt
+                    }
+                }
             }
         }
     }
@@ -182,6 +188,7 @@ function Get-GitlabMergeRequestChangeSummary {
     [PSCustomObject]@{
         Authors      = $Data.Project.mergeRequest.commitsWithoutMergeCommits.nodes.author.username | Select-Object -Unique
         Changes      = $Data.Project.mergeRequest.diffStatsSummary | New-WrapperObject
+        AssignedAt   = $Data.Project.mergeRequest.notes.nodes | Where-Object body -Match '^assigned to @' | Sort-Object updatedAt | Select-Object -First 1 -ExpandProperty updatedAt
         OldestChange = $Data.Project.mergeRequest.commitsWithoutMergeCommits.nodes.authoredDate | Sort-Object | Select-Object -First 1
     }
 }

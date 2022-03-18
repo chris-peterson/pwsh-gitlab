@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.50.1'
+    ModuleVersion = '1.50.2'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Default new projects to internal'
+            ReleaseNotes = 'Extract assigned time of an MR (when including summary)'
         }
     }
 
