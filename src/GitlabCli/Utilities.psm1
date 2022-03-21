@@ -81,6 +81,13 @@ function ConvertTo-UrlEncoded {
     [System.Net.WebUtility]::UrlEncode($Value)
 }
 
+$global:GitlabApiStats = [PSCustomObject]@{
+    FirstCall = $null
+    LastCall = $null
+    SuccessCount = 0
+    TotalCallCount = 0
+    Errors = @{}
+}
 function Invoke-GitlabApi {
     param(
         [Parameter(Position=0, Mandatory=$true)]
@@ -188,7 +195,26 @@ function Invoke-GitlabApi {
     }
     else {
         Write-Debug "$HttpMethod $Uri"
-        $Result = Invoke-RestMethod -Method $HttpMethod -Uri $Uri -Header $Headers @RestMethodParams
+        if (-not $global:GitlabApiStats.FirstCall) {
+            $global:GitlabApiStats.FirstCall = [datetime]::Now
+        }
+        $global:GitlabApiStats.LastCall = [datetime]::Now
+        $global:GitlabApiStats.TotalCallCount++
+        try {
+            $Result = Invoke-RestMethod -Method $HttpMethod -Uri $Uri -Header $Headers @RestMethodParams
+            $global:GitlabApiStats.SuccessCount++
+        }
+        catch {
+            $global:GitlabApiStats.Errors["$HttpMethod $Uri"] = $_.Exception
+            if ([int] $_.Exception.Response.StatusCode -eq 429) {
+                $Interval = [Math]::Round($($global:GitlabApiStats.LastCall - $global:GitlabApiStats.FirstCall).TotalSeconds)
+                Write-Host "You've been rate limited`nCall statistics: $($global:GitlabApiStats.TotalCallCount) over a $($Interval) second period ($([Math]::Round($global:GitlabApiStats.TotalCallCount / $Interval, 1)) / sec)"
+                Read-Host "Press Enter to continue"
+                $Result = Invoke-RestMethod -Method $HttpMethod -Uri $Uri -Header $Headers @RestMethodParams
+            } else {
+                throw
+            }
+        }
         if($MaxPages -gt 1) {
             # Unwrap pagination container
             $Result | ForEach-Object { 
