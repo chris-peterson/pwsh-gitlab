@@ -116,11 +116,11 @@ function New-GitlabBranch {
 function Protect-GitlabBranch {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
         $Name,
 
@@ -138,13 +138,14 @@ function Protect-GitlabBranch {
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
+    $Branch = Get-GitlabBranch -ProjectId $Project.Id -Branch $Name
 
     $GitlabApiArguments = @{
         HttpMethod = 'POST'
         Path       = "projects/$($Project.Id)/protected_branches"
         SiteUrl    = $SiteUrl
         Query      = @{
-            name = $Name
+            name = $Branch.Name
             allow_force_push = $AllowForcePush
         }
     }
@@ -156,11 +157,11 @@ function Protect-GitlabBranch {
 function UnProtect-GitlabBranch {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
         $Name,
 
