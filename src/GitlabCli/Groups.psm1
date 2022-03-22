@@ -79,7 +79,7 @@ function Get-GitlabGroup {
 
     return $Group |
         Where-Object -Not marked_for_deletion_on |
-        New-WrapperObject 'Gitlab.Group'
+        New-WrapperObject 'Gitlab.Group' -IdentityPropertyName 'Id'
 }
 
 function New-GitlabGroup {
