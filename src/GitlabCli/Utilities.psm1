@@ -128,7 +128,7 @@ function Invoke-GitlabApi {
                 Join-String -Separator " "
             $SerializedParams += " "
         }
-        Write-Host "$HttpMethod $Uri $SerializedParams"
+        Write-Host "WhatIf: $HttpMethod $Uri $SerializedParams"
     }
     else {
         $Result = Invoke-RestMethod -Method $HttpMethod -Uri $Uri -Header $Headers @RestMethodParams
@@ -170,9 +170,13 @@ function New-WrapperObject {
         [Parameter(ValueFromPipeline)]
         $InputObject,
 
-        [Parameter(Position=0,Mandatory=$false)]
+        [Parameter(Position=0, Mandatory=$false)]
         [string]
-        $DisplayType
+        $DisplayType,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $IdentityPropertyName = 'Iid' # https://docs.gitlab.com/ee/api/#id-vs-iid
     )
     Begin{}
     Process {
@@ -189,9 +193,15 @@ function New-WrapperObject {
             
             if ($DisplayType) {
                 $Wrapper.PSTypeNames.Insert(0, $DisplayType)
-                $TypeShortName = $DisplayType.Split('.') | Select-Object -Last 1
-                $IdentityPropertyName = $Wrapper.Iid ? 'Iid' : 'Id'
-                Add-AliasedProperty -On $Wrapper -From "$($TypeShortName)Id" -To $IdentityPropertyName
+
+                if ($IdentityPropertyName) {
+                    $TypeShortName = $DisplayType.Split('.') | Select-Object -Last 1
+                    if (-not $Wrapper.$IdentityPropertyName) {
+                        Write-Warning "Identifier field $IdentityPropertyName not found on $DisplayType, defaulting to 'Id'"
+                        $IdentityPropertyName = 'Id'
+                    }
+                    Add-AliasedProperty -On $Wrapper -From "$($TypeShortName)Id" -To $IdentityPropertyName
+                }
             }
             Write-Output $Wrapper
         }

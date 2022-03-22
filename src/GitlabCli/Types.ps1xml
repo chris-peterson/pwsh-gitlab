@@ -163,6 +163,11 @@
     <Name>Gitlab.Project</Name>
     <Members>
       <ScriptProperty>
+        <!-- for whatever reason this object does not include an Iid so proxy to Id -->
+        <Name>Iid</Name>
+        <GetScriptBlock>$this.Id</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
         <Name>Group</Name>
         <GetScriptBlock>$($($this.PathWithNamespace -split '/') | Select-Object -SkipLast 1) -join '/'</GetScriptBlock>
       </ScriptProperty>

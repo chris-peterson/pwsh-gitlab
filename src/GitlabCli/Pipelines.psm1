@@ -5,8 +5,8 @@ function Get-GitlabPipeline {
     [Alias('pipelines')]
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     param (
-        [Parameter(ParameterSetName="ByProjectId", Position=0, Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [Parameter(ParameterSetName="ByPipelineId", Position=0, Mandatory=$false)]
+        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ParameterSetName="ByPipelineId", Mandatory=$false)]
         [string]
         $ProjectId=".",
 
@@ -15,7 +15,7 @@ function Get-GitlabPipeline {
         [string]
         $Ref,
 
-        [Parameter(ParameterSetName="ByPipelineId", Position=1, Mandatory=$false)]
+        [Parameter(ParameterSetName="ByPipelineId", Position=0, Mandatory=$false)]
         [string]
         $PipelineId,
 
@@ -117,7 +117,7 @@ function Get-GitlabPipeline {
     if ($WhatIf) {
         $GitlabApiParameters["WhatIf"] = $True
     }
-    $Pipelines = Invoke-GitlabApi @GitlabApiParameters -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Pipeline'
+    $Pipelines = Invoke-GitlabApi @GitlabApiParameters -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Pipeline' -IdentityPropertyName 'Id'
 
     if ($IncludeTestReport) {
         $Pipelines | ForEach-Object {
@@ -562,5 +562,9 @@ function Remove-GitlabPipeline {
     $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
     $Pipeline = Get-GitlabPipeline -ProjectId $ProjectId -PipelineId $PipelineId -SiteUrl $SiteUrl
 
-    Invoke-GitlabApi DELETE "projects/$($Project.Id)/pipelines/$($Pipeline.Id)" -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    Invoke-GitlabApi DELETE "projects/$($Project.Id)/pipelines/$($Pipeline.Id)" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+
+    if (-not $WhatIf) {
+        Write-Host "$PipelineId deleted from $($Project.Name)"
+    }
 }
