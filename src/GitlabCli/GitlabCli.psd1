@@ -119,6 +119,7 @@
         # MergeRequests
         'Get-GitlabMergeRequest'
         'New-GitlabMergeRequest'
+        'Merge-GitlabMergeRequest'
         'Set-GitlabMergeRequest'
         'Invoke-GitlabMergeRequestReview'
         'Approve-GitlabMergeRequest'
