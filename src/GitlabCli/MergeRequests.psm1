@@ -124,14 +124,14 @@ function Get-GitlabMergeRequest {
         }
         $Query['source_branch'] = $Branch
     }
-    
+
     $MergeRequests = Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.MergeRequest'
 
     if ($IncludeApprovals) {
         # GraphQL currently doesn't support award emoji.  as and when it does, we could merge IncludeApprovals and IncludeChangeSummary to both use GraphQL
         $MergeRequests | ForEach-Object {
             $Approvals = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.MergeRequestId)/approval_state" -SiteUrl $SiteUrl -WhatIf:$WhatIf
-            
+
             if ($Approvals.rules.approved_by) {
                 $_ | Add-Member -MemberType 'NoteProperty' -Name 'Approvals' -Value $($Approvals.rules.approved_by | New-WrapperObject 'Gitlab.User')
             }
@@ -257,6 +257,64 @@ function New-GitlabMergeRequest {
     $MergeRequest
 }
 
+function Merge-GitlabMergeRequest {
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [string]
+        $MergeRequestId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $MergeCommitMessage,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SquashCommitMessage,
+
+        [Parameter(Mandatory=$false)]
+        [bool]
+        $Squash = $false,
+
+        [Parameter(Mandatory=$false)]
+        [bool]
+        $ShouldRemoveSourceBranch = $true,
+
+        [Parameter(Mandatory=$false)]
+        [bool]
+        $MergeWhenPipelineSucceeds = $false,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Sha,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Project = Get-GitlabProject -ProjectId $ProjectId
+
+    $MergeRequest = $(Invoke-GitlabApi PUT "projects/$($Project.Id)/merge_requests/$MergeRequestId/merge" @{
+        merge_commit_message = $MergeCommitMessage
+        squash_commit_message = $SquashCommitMessage
+        squash = $Squash
+        should_remove_source_branch = $ShouldRemoveSourceBranch
+        merge_when_pipeline_succeeds = $MergeWhenPipelineSucceeds
+        sha = $Sha
+    } -SiteUrl $SiteUrl -WhatIf:$WhatIf) | New-WrapperObject 'Gitlab.MergeRequest'
+
+    $MergeRequest
+}
+
 function Set-GitlabMergeRequest {
     [CmdletBinding()]
     [Alias("mr")]
@@ -321,7 +379,7 @@ function Update-GitlabMergeRequest {
     if ($Reopen) {
         $Query['state_event'] = 'reopen'
     }
-    
+
     if ($Title) {
         $Query['title'] = $Title
     }
