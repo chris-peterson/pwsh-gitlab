@@ -72,7 +72,7 @@ function Get-GitlabJob {
         $GitlabApiArguments['Query']['include_retried'] = $true
     }
 
-    $Jobs = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Job'
+    $Jobs = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Job' -IdentityPropertyName 'Id'
 
     if ($Stage) {
         $Jobs = $Jobs |
