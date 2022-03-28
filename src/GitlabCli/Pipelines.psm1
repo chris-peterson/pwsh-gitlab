@@ -487,7 +487,7 @@ function New-GitlabPipeline {
         SiteUrl    = $SiteUrl
     }
 
-    $Pipeline = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Pipeline'
+    $Pipeline = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Pipeline' -IdentityPropertyName 'Id'
 
     if ($Wait) {
         Write-Host "$($Pipeline.Id) created..."
