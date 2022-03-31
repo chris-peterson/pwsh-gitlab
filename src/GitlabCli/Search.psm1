@@ -83,8 +83,12 @@ function Search-Gitlab {
 
     if ($OpenInBrowser) {
         $Results | ForEach-Object {
-            $Project = Get-GitlabProject $_.ProjectId
-            "$($Project.Url)/-/blob/$($Project.DefaultBranch)/$($_.Path)#L$($_.LineNumber)" | Open-InBrowser
+            if ($_.Url) {
+                $_ | Open-InBrowser
+            } else {
+                $Project = Get-GitlabProject $_.ProjectId
+                "$($Project.Url)/-/blob/$($Project.DefaultBranch)/$($_.Path)#L$($_.LineNumber)" | Open-InBrowser
+            }
         }
     } else {
         $Results
