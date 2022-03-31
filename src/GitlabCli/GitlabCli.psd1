@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.53.0'
+    ModuleVersion = '1.54.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Internalize identity column concerns, rename non-idiomatic function, implement table view for usermembership'
+            ReleaseNotes = 'Open search results in browser'
         }
     }
 

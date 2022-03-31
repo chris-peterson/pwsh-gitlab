@@ -29,6 +29,10 @@ function Search-Gitlab {
         $All,
 
         [Parameter(Mandatory=$false)]
+        [switch]
+        $OpenInBrowser,
+
+        [Parameter(Mandatory=$false)]
         [string]
         $SiteUrl,
 
@@ -75,5 +79,14 @@ function Search-Gitlab {
         }
     }
 
-    Invoke-GitlabApi GET $Resource $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject $DisplayType
+    $Results = Invoke-GitlabApi GET $Resource $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject $DisplayType
+
+    if ($OpenInBrowser) {
+        $Results | ForEach-Object {
+            $Project = Get-GitlabProject $_.ProjectId
+            "$($Project.Url)/-/blob/$($Project.DefaultBranch)/$($_.Path)#L$($_.LineNumber)" | Open-InBrowser
+        }
+    } else {
+        $Results
+    }
 }
