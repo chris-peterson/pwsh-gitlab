@@ -1,3 +1,29 @@
+# https://docs.gitlab.com/ee/api/#id-vs-iid
+# TL;DR; it's a mess and we have to special-case specific entity types
+$global:GitlabIdentityPropertyNameExemptions=@{
+    'Gitlab.BlobSearchResult' = ''
+    'Gitlab.Branch'           = ''
+    'Gitlab.Configuration'    = ''
+    'Gitlab.Environment'      = 'Id'
+    'Gitlab.Event'            = 'Id'
+    'Gitlab.Group'            = 'Id'
+    'Gitlab.Job'              = 'Id'
+    'Gitlab.Member'           = 'Id'
+    'Gitlab.Note'             = 'Id'
+    'Gitlab.Pipeline'         = 'Id'
+    'Gitlab.PipelineBridge'   = 'Id'
+    'Gitlab.PipelineSchedule' = 'Id'
+    'Gitlab.Project'          = 'Id'
+    'Gitlab.ProtectedBranch'  = 'Id'
+    'Gitlab.RepositoryFile'   = ''
+    'Gitlab.RepositoryTree'   = ''
+    'Gitlab.Runner'           = 'Id'
+    'Gitlab.RunnerJob'        = 'Id'
+    'Gitlab.User'             = 'Id'
+    'Gitlab.UserMembership'   = ''
+    'Gitlab.Variable'         = ''
+}
+
 # Inspired by https://gist.github.com/awakecoding/acc626741704e8885da8892b0ac6ce64
 function ConvertTo-PascalCase
 {
@@ -173,11 +199,7 @@ function New-WrapperObject {
 
         [Parameter(Position=0, Mandatory=$false)]
         [string]
-        $DisplayType,
-
-        [Parameter(Mandatory=$false)]
-        [string]
-        $IdentityPropertyName = 'Iid' # https://docs.gitlab.com/ee/api/#id-vs-iid
+        $DisplayType
     )
     Begin{}
     Process {
@@ -195,13 +217,17 @@ function New-WrapperObject {
             if ($DisplayType) {
                 $Wrapper.PSTypeNames.Insert(0, $DisplayType)
 
-                if ($IdentityPropertyName) {
-                    $TypeShortName = $DisplayType.Split('.') | Select-Object -Last 1
-                    if (-not $Wrapper.$IdentityPropertyName) {
-                        Write-Warning "Identifier field $IdentityPropertyName not found on $DisplayType, defaulting to 'Id'"
-                        $IdentityPropertyName = 'Id'
+                $IdentityPropertyName = $global:GitlabIdentityPropertyNameExemptions[$DisplayType]
+                if ($IdentityPropertyName -eq $null) {
+                    $IdentityPropertyName = 'Iid' # default for anything that isn't explicitly mapped
+                }
+                if ($IdentityPropertyName -ne '') {
+                    if ($Wrapper.$IdentityPropertyName) {
+                        $TypeShortName = $DisplayType.Split('.') | Select-Object -Last 1
+                        Add-AliasedProperty -On $Wrapper -From "$($TypeShortName)Id" -To $IdentityPropertyName
+                    } else {
+                        Write-Warning "$DisplayType does not have an identity field"
                     }
-                    Add-AliasedProperty -On $Wrapper -From "$($TypeShortName)Id" -To $IdentityPropertyName
                 }
             }
             Write-Output $Wrapper

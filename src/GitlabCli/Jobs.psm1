@@ -72,7 +72,7 @@ function Get-GitlabJob {
         $GitlabApiArguments['Query']['include_retried'] = $true
     }
 
-    $Jobs = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Job' -IdentityPropertyName 'Id'
+    $Jobs = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Job'
 
     if ($Stage) {
         $Jobs = $Jobs |
@@ -104,11 +104,11 @@ function Get-GitlabJobTrace {
     [CmdletBinding()]
     param (
 
-        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
-        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
         $JobId,
 

@@ -57,7 +57,7 @@ function Get-GitlabBranch {
         | Sort-Object -Descending LastUpdated
 }
 
-function Get-GitlabProtectedBranches {
+function Get-GitlabProtectedBranch {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false)]

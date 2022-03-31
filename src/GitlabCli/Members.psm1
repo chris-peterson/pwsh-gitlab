@@ -16,9 +16,9 @@ function Get-GitlabMemberAccessLevel {
 # https://docs.gitlab.com/ee/api/members.html#list-all-members-of-a-group-or-project
 function Get-GitlabGroupMember {
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0)]
         [string]
-        $GroupId,
+        $GroupId = '.',
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -103,10 +103,10 @@ function Get-GitlabUserMembership {
         $WhatIf
     )
 
-    $User = Get-GitlabUser -Username $Username -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    $User = Get-GitlabUser -Username $Username -SiteUrl $SiteUrl
 
     Invoke-GitlabApi GET "users/$($User.Id)/memberships" -MaxPages 10 -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-        New-WrapperObject "Gitlab.Member"
+        New-WrapperObject 'Gitlab.UserMembership'
 }
 
 # https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project

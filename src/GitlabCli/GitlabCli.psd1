@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.52.2'
+    ModuleVersion = '1.53.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Bugfix when waiting for new pipeline'
+            ReleaseNotes = 'Internalize identity column concerns, rename non-idiomatic function, implement table view for usermembership'
         }
     }
 
@@ -50,7 +50,7 @@
 
         # Branches
         'Get-GitlabBranch'
-        'Get-GitlabProtectedBranches'
+        'Get-GitlabProtectedBranch'
         'New-GitlabBranch'
         'Protect-GitlabBranch'
         'UnProtect-GitlabBranch'

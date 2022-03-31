@@ -117,7 +117,7 @@ function Get-GitlabPipeline {
     if ($WhatIf) {
         $GitlabApiParameters["WhatIf"] = $True
     }
-    $Pipelines = Invoke-GitlabApi @GitlabApiParameters -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Pipeline' -IdentityPropertyName 'Id'
+    $Pipelines = Invoke-GitlabApi @GitlabApiParameters -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Pipeline'
 
     if ($IncludeTestReport) {
         $Pipelines | ForEach-Object {
@@ -487,7 +487,7 @@ function New-GitlabPipeline {
         SiteUrl    = $SiteUrl
     }
 
-    $Pipeline = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Pipeline' -IdentityPropertyName 'Id'
+    $Pipeline = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Pipeline'
 
     if ($Wait) {
         Write-Host "$($Pipeline.Id) created..."

@@ -163,11 +163,6 @@
     <Name>Gitlab.Project</Name>
     <Members>
       <ScriptProperty>
-        <!-- for whatever reason this object does not include an Iid so proxy to Id -->
-        <Name>Iid</Name>
-        <GetScriptBlock>$this.Id</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
         <Name>Group</Name>
         <GetScriptBlock>$($($this.PathWithNamespace -split '/') | Select-Object -SkipLast 1) -join '/'</GetScriptBlock>
       </ScriptProperty>
@@ -206,6 +201,18 @@
   </Type>
   <Type>
     <Name>Gitlab.Member</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>AccessLevelFriendly</Name>
+        <GetScriptBlock>
+          $Levels = Get-GitlabMemberAccessLevel
+          $Levels.psobject.Properties | Where-Object Value -eq $this.AccessLevel | Select-Object -ExpandProperty Name
+        </GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Gitlab.UserMembership</Name>
     <Members>
       <ScriptProperty>
         <Name>AccessLevelFriendly</Name>
