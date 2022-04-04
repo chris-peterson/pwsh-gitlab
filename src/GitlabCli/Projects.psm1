@@ -355,7 +355,7 @@ function Update-GitlabProject {
     $Query = @{}
 
     if($PSBoundParameters.ContainsKey("CiForwardDeployment")){
-        $Query.ci_forward_deployment_enabled = $CiForwardDeployment
+        $Query.ci_forward_deployment_enabled = $CiForwardDeployment.ToString().ToLower()
     }
     if ($BuildGitStrategy) {
         $Query.build_git_strategy = $BuildGitStrategy
