@@ -30,6 +30,10 @@ function Search-Gitlab {
 
         [Parameter(Mandatory=$false)]
         [switch]
+        $FetchProjects,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
         $OpenInBrowser,
 
         [Parameter(Mandatory=$false)]
@@ -80,6 +84,13 @@ function Search-Gitlab {
     }
 
     $Results = Invoke-GitlabApi GET $Resource $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject $DisplayType
+
+    if ($FetchProjects) {
+        $Projects = $Results.ProjectId | Select-Object -Unique | ForEach-Object { @{Id=$_; Project=Get-GitlabProject $_ } }
+        $Results | ForEach-Object {
+            $_ | Add-Member -MemberType 'NoteProperty' -Name 'Project' -Value $($Projects | Where-Object Id -eq $_.ProjectId | Select-Object -ExpandProperty Project)
+        }
+    }
 
     if ($OpenInBrowser) {
         $Results | ForEach-Object {

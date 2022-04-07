@@ -389,13 +389,14 @@ function Update-GitlabProject {
         New-WrapperObject 'Gitlab.Project'
 }
 
+# https://docs.gitlab.com/ee/api/projects.html#archive-a-project
 function Invoke-GitlabProjectArchival {
     [Alias('Archive-GitlabProject')]
     [CmdletBinding()]
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0)]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -409,6 +410,30 @@ function Invoke-GitlabProjectArchival {
     $Project = $(Get-GitlabProject -ProjectId $ProjectId)
     
     Invoke-GitlabApi POST "projects/$($Project.Id)/archive" -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+        New-WrapperObject 'Gitlab.Project'
+}
+
+# https://docs.gitlab.com/ee/api/projects.html#unarchive-a-project
+function Invoke-GitlabProjectUnarchival {
+    [Alias('Unarchive-GitlabProject')]
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Project = $(Get-GitlabProject -ProjectId $ProjectId)
+    
+    Invoke-GitlabApi POST "projects/$($Project.Id)/unarchive" -SiteUrl $SiteUrl -WhatIf:$WhatIf |
         New-WrapperObject 'Gitlab.Project'
 }
 

@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.54.2'
+    ModuleVersion = '1.55.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'bugfix on update project (ci forward deployment)'
+            ReleaseNotes = 'option to fetch projects in search results.  add unarchive project'
         }
     }
 
@@ -85,6 +85,7 @@
         'Rename-GitlabProjectDefaultBranch'
         'Copy-GitlabProject'
         'Invoke-GitlabProjectArchival'
+        'Invoke-GitlabProjectUnarchival'
         'Get-GitlabProjectVariable'
         'Set-GitlabProjectVariable'
         'Remove-GitlabProjectVariable'
@@ -189,6 +190,7 @@
         'Transfer-GitlabProject'
         'Fork-GitlabProject'
         'Archive-GitlabProject'
+        'Unarchive-GitlabProject'
         'Review-GitlabMergeRequest'
         'Play-GitlabJob'
 
