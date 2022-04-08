@@ -33,6 +33,10 @@ function Search-Gitlab {
         $FetchProjects,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $Select,
+
+        [Parameter(Mandatory=$false)]
         [switch]
         $OpenInBrowser,
 
@@ -102,6 +106,6 @@ function Search-Gitlab {
             }
         }
     } else {
-        $Results
+        $Results | Get-FilteredObject $Select
     }
 }

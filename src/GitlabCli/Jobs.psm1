@@ -189,7 +189,7 @@ function Test-GitlabPipelineDefinition {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $Select = '*',
+        $Select,
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -228,14 +228,9 @@ function Test-GitlabPipelineDefinition {
         }
     }
 
-    $Result = Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.PipelineDefinition'
-    if ($Select -eq '*') {
-        $Result
-    } elseif ($Select.Contains(',')) {
-        $Result | Select-Object $($Select -split ',')
-    } else {
-        $Result | Select-Object -ExpandProperty $Select
-    }
+    Invoke-GitlabApi @Params |
+        New-WrapperObject 'Gitlab.PipelineDefinition' |
+        Get-FilteredObject $Select
 }
 
 function Get-GitlabPipelineDefinition {

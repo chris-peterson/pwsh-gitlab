@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.55.1'
+    ModuleVersion = '1.56.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'squash a warning'
+            ReleaseNotes = 'get projects list as a trigger pipeline'
         }
     }
 
@@ -78,6 +78,7 @@
 
         # Projects
         'Get-GitlabProject'
+        'Get-GitlabProjectAsTriggerPipeline'
         'New-GitlabProject'
         'Update-GitlabProject'
         'Move-GitlabProject'
@@ -174,9 +175,10 @@
 
         # Utilities
         'ConvertTo-PascalCase'
-        'New-WrapperObject'
         'ConvertTo-UrlEncoded'
+        'Get-FilteredObject'
         'Invoke-GitlabApi'
+        'New-WrapperObject'
         'Open-InBrowser'
         'ValidateGitlabDateFormat'
 

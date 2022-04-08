@@ -59,9 +59,11 @@ The following commands can be used to configure your system for use with **multi
 
 The following switches are supported when possible:
 
-`-SiteUrl` : Optional.  By default, site url is inferred from the local git context.  Providing a value overrides this value.  The provided value must match a configured site's url (e.g. `gitlab.com`)
-
 `-WhatIf` : For mutable operations (or for some complex query operations), gives a preview of what actions would be taken
+
+`-Select` : Select into a property of the response.  A shortcut for `| Select-Object -ExpandProperty` or select multiple properties separated by commas
+
+`-SiteUrl` : Optional.  By default, site url is inferred from the local git context.  Providing a value overrides this value.  The provided value must match a configured site's url (e.g. `gitlab.com`)
 
 `-Follow` : For operations that create a resource, follow the the URL after creation
 

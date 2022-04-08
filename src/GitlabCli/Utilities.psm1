@@ -266,3 +266,27 @@ function ValidateGitlabDateFormat {
         throw "$DateString is invalid. The date format expected is YYYY-MM-DD"
     }
 }
+
+function Get-FilteredObject {
+    param (
+        [Parameter(ValueFromPipeline=$true, Mandatory=$true)]
+        $InputObject,
+
+        [Parameter(Position=0, Mandatory=$false)]
+        [string]
+        $Select = '*'
+    )
+    Begin {}
+    Process {
+        foreach ($Object in $InputObject) {
+            if (($Select -eq '*') -or (-not $Select)) {
+                $Object
+            } elseif ($Select.Contains(',')) {
+                $Object | Select-Object $($Select -split ',')
+            } else {
+                $Object | Select-Object -ExpandProperty $Select
+            }
+        }
+    }
+    End {}
+}

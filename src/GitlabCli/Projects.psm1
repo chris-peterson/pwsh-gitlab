@@ -88,6 +88,10 @@ function Get-GitlabProject {
         [string]
         $Url,
 
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Select,
+
         [switch]
         [Parameter(Mandatory=$false, ParameterSetName='ByGroup')]
         $IncludeArchived = $false,
@@ -137,6 +141,7 @@ function Get-GitlabProject {
             $Url -match "$($(Get-DefaultGitlabSite).Url)/(?<ProjectId>.*)" | Out-Null
             if ($Matches) {
                 $ProjectId = $Matches.ProjectId
+                $ProjectId = $Matches.ProjectId
                 Get-GitlabProject -ProjectId $ProjectId
             } else {
                 throw "Url didn't match expected format"
@@ -144,7 +149,42 @@ function Get-GitlabProject {
         }
     }
 
-    $Projects | New-WrapperObject 'Gitlab.Project'
+    $Projects |
+        New-WrapperObject 'Gitlab.Project' |
+        Get-FilteredObject $Select
+}
+
+function Get-GitlabProjectAsTriggerPipeline {
+    param (
+        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        $InputObject
+    )
+    Begin {
+        $Yaml = @"
+stages:
+  - trigger
+"@
+        $Projects = @()
+    }
+    Process {
+        foreach ($Object in $InputObject) {
+            if ($Projects.Contains($Object.ProjectId)) {
+                continue
+            }
+            $Projects += $Object.ProjectId
+            $Yaml += "`n`n"
+            $Yaml += @"
+$($Object.Name):
+  stage: trigger
+  trigger:
+    project: $($Object.PathWithNamespace)
+    strategy: depend
+"@
+        }
+    }
+    End {
+        $Yaml
+    }
 }
 
 function Move-GitlabProject {
