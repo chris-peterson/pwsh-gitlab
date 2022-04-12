@@ -96,6 +96,7 @@
         'Get-GitlabRepositoryTree'
         'Get-GitlabRepositoryFileContent'
         'Get-GitlabRepositoryYmlFileContent'
+        'New-GitlabRepositoryFile'
         'Update-GitlabRepositoryFile'
 
         # Environments
