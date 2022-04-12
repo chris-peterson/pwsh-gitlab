@@ -173,7 +173,24 @@
     </Members>
   </Type>
   <Type>
-    <Name>Gitlab.MergeRequestSearchResult</Name>
+    <Name>Gitlab.SearchResult.Blob</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>LineNumber</Name>
+        <GetScriptBlock>$this.Startline</GetScriptBlock>
+      </ScriptProperty>
+        <ScriptProperty>
+        <Name>ProjectPath</Name>
+        <GetScriptBlock>$this.Project.PathWithNamespace</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Url</Name>
+        <GetScriptBlock>"$($this.Project.Url)/-/blob/$($this.Project.DefaultBranch)/$($this.Path)#L$($this.Startline)"</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Gitlab.SearchResult.MergeRequest</Name>
     <Members>
       <ScriptProperty>
         <Name>AuthorName</Name>
@@ -182,11 +199,11 @@
     </Members>
   </Type>
   <Type>
-    <Name>Gitlab.BlobSearchResult</Name>
+    <Name>Gitlab.SearchResult.Project</Name>
     <Members>
       <ScriptProperty>
-        <Name>LineNumber</Name>
-        <GetScriptBlock>$this.Startline</GetScriptBlock>
+        <Name>ProjectId</Name>
+        <GetScriptBlock>$this.Id</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>

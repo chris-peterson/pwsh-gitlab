@@ -486,29 +486,24 @@
       </TableControl>
     </View>
     <View>
-      <Name>GitlabBlobSearchResult</Name>
+      <Name>GitlabSearchResultBlob</Name>
       <ViewSelectedBy>
-        <TypeName>Gitlab.BlobSearchResult</TypeName>
+        <TypeName>Gitlab.SearchResult.Blob</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader>
-          </TableColumnHeader>
-          <TableColumnHeader>
-          </TableColumnHeader>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
           <TableColumnHeader>
             <Label>Line</Label>
           </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>Data</Label>
-          </TableColumnHeader>
+          <TableColumnHeader/>
         </TableHeaders>
         <TableRowEntries>
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>ProjectId</PropertyName>
-                <Alignment>Right</Alignment>
+                <PropertyName>ProjectPath</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Path</PropertyName>
@@ -518,7 +513,7 @@
                 <Alignment>Right</Alignment>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Data</PropertyName>
+                <PropertyName>Url</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>
@@ -526,32 +521,22 @@
       </TableControl>
     </View>
     <View>
-      <Name>GitlabMergeRequestSearchResult</Name>
+      <Name>GitlabSearchResultMergeRequest</Name>
       <ViewSelectedBy>
-        <TypeName>Gitlab.MergeRequestSearchResult</TypeName>
+        <TypeName>Gitlab.SearchResult.MergeRequest</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader>
-            <Label>Id</Label>
-          </TableColumnHeader>
-          <TableColumnHeader>
-          </TableColumnHeader>
+          <TableColumnHeader/>
           <TableColumnHeader>
             <Label>Author</Label>
           </TableColumnHeader>
-          <TableColumnHeader>
-          </TableColumnHeader>
-          <TableColumnHeader>
-          </TableColumnHeader>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
         </TableHeaders>
         <TableRowEntries>
           <TableRowEntry>
             <TableColumnItems>
-              <TableColumnItem>
-                <PropertyName>MergeRequestSearchResultId</PropertyName>
-                <Alignment>Right</Alignment>
-              </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>ProjectId</PropertyName>
                 <Alignment>Right</Alignment>
@@ -561,6 +546,34 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Title</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Url</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>GitlabSearchResultProject</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.SearchResult.Project</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>ProjectId</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>PathWithNamespace</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Url</PropertyName>

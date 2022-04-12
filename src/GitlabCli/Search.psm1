@@ -1,36 +1,23 @@
+$global:GitlabSearchResultsDefaultLimit = 100
+
 function Search-Gitlab {
     param(
-        [Parameter(Position=0)]
+        [Parameter(Mandatory=$false)]
+        [ValidateSet('blobs', 'merge_requests', 'projects')]
         [string]
-        $Phrase,
+        $Scope = 'blobs',
 
-        [Parameter(Mandatory=$false)]
-        [switch]
-        $Blobs,
-
-        [Parameter(Mandatory=$false)]
-        [switch]
-        $MergeRequests,
-
-        [Parameter(Mandatory=$false)]
+        [Parameter(Position=0, Mandatory=$true)]
         [string]
-        $ProjectId,
-
-        [Parameter(Mandatory=$false)]
-        [string]
-        $Filename,
+        $Search,
 
         [Parameter(Mandatory=$false)]
         [uint]
-        $MaxResults = 100,
+        $MaxResults = $global:GitlabSearchResultsDefaultLimit,
 
         [Parameter(Mandatory=$false)]
         [switch]
         $All,
-
-        [Parameter(Mandatory=$false)]
-        [switch]
-        $FetchProjects,
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -50,7 +37,7 @@ function Search-Gitlab {
     )
 
     if ($All) {
-        if ($MaxResults) {
+        if ($MaxResults -ne $global:GitlabSearchResultsDefaultLimit) {
             Write-Warning -Message "Ignoring -MaxResults in favor of -All"
         }
         $MaxResults = [int]::MaxValue
@@ -59,37 +46,27 @@ function Search-Gitlab {
     $PageSize = 20
     $MaxPages = [Math]::Max(1, $MaxResults / $PageSize)
     $Query = @{
-        'per_page' = $PageSize
-        'search' = $Phrase
+        scope = $Scope
+        per_page = $PageSize
+        search = $Search
     }
 
-    if ($Blobs -and $MergeRequests) {
-        throw "Can't use blobs and merge request scopes at the same time"
-    }
-    elseif ($MergeRequests) {
-        $Query['scope'] = 'merge_requests'
-        $DisplayType = 'Gitlab.MergeRequestSearchResult'
-    } else {
-        $Query['scope'] = 'blobs'
-        $DisplayType = 'Gitlab.BlobSearchResult'
-    }
-
-    $Resource = 'search'
-    if ($ProjectId) {
-        if ($ProjectId -eq '.') {
-            $ProjectId = $(Get-LocalGitContext).Project
+    switch ($Scope) {
+        blobs {
+            $DisplayType = 'Gitlab.SearchResult.Blob'
         }
-        # https://docs.gitlab.com/ee/api/search.html#project-search-api
-        $Resource = "projects/$($ProjectId | ConvertTo-UrlEncoded)/search"
-
-        if ($Filename) {
-            $Query.search = "filename:$Filename"
+        merge_requests {
+            $DisplayType = 'Gitlab.SearchResult.MergeRequest'
+        }
+        projects {
+            $DisplayType = 'Gitlab.SearchResult.Project'
         }
     }
 
-    $Results = Invoke-GitlabApi GET $Resource $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject $DisplayType
+    $Results = Invoke-GitlabApi GET 'search' $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject $DisplayType
 
-    if ($FetchProjects) {
+    if ($Scope -eq 'blobs') {
+        # the response object is too anemic to be useful.  enrich with project data
         $Projects = $Results.ProjectId | Select-Object -Unique | ForEach-Object { @{Id=$_; Project=Get-GitlabProject $_ } }
         $Results | ForEach-Object {
             $_ | Add-Member -MemberType 'NoteProperty' -Name 'Project' -Value $($Projects | Where-Object Id -eq $_.ProjectId | Select-Object -ExpandProperty Project)
@@ -97,15 +74,52 @@ function Search-Gitlab {
     }
 
     if ($OpenInBrowser) {
-        $Results | ForEach-Object {
-            if ($_.Url) {
-                $_ | Open-InBrowser
-            } else {
-                $Project = Get-GitlabProject $_.ProjectId
-                "$($Project.Url)/-/blob/$($Project.DefaultBranch)/$($_.Path)#L$($_.LineNumber)" | Open-InBrowser
-            }
+        $Results | Where-Object Url | ForEach-Object {
+            $_ | Open-InBrowser
         }
-    } else {
-        $Results | Get-FilteredObject $Select
     }
+
+    $Results | Get-FilteredObject $Select
+}
+
+# https://docs.gitlab.com/ee/api/search.html#project-search-api
+function Search-GitlabProject {
+    param(
+        [Parameter(Mandatory=$false)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Search,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Filename,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Query = @{
+        scope = 'blobs'
+    }
+
+    $Project = Get-GitlabProject $ProjectId
+    
+    if ($Filename) {
+        $Query.search = "filename:$Filename"
+    } else {
+        $Query.search = $Search
+    }
+    
+    $Resource = "projects/$($ProjectId | ConvertTo-UrlEncoded)/search"
+    Invoke-GitlabApi GET $Resource $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+        New-WrapperObject 'Gitlab.SearchResult.Blob' |
+        Add-Member -MemberType 'NoteProperty' -Name 'Project' -Value $Project -PassThru
 }
