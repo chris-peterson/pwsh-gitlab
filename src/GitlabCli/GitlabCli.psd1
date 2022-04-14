@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.58.0'
+    ModuleVersion = '1.59.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Refactor search interface -- split out project search to its own method, add support for additional search scopes.  improve pretty-printing of results'
+            ReleaseNotes = 'Add gitlab version'
         }
     }
 
@@ -179,6 +179,7 @@
         'ConvertTo-PascalCase'
         'ConvertTo-UrlEncoded'
         'Get-FilteredObject'
+        'Get-GitlabVersion'
         'Invoke-GitlabApi'
         'New-WrapperObject'
         'Open-InBrowser'

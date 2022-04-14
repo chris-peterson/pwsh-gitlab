@@ -293,3 +293,20 @@ function Get-FilteredObject {
     }
     End {}
 }
+
+function Get-GitlabVersion {
+    param(
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Select = 'Version',
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+    Invoke-GitlabApi GET 'version' -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject | Get-FilteredObject $Select
+}
