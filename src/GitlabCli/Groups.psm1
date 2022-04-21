@@ -344,3 +344,74 @@ function Remove-GitlabGroupVariable {
 
     Invoke-GitlabApi DELETE "groups/$GroupId/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
 }
+
+
+# https://docs.gitlab.com/ee/api/groups.html#update-group
+function Update-GitlabGroup {
+
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $GroupId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Name,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Path,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateSet('private', 'internal', 'public')]
+        [string]
+        $Visibility,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $GroupId = $GroupId | ConvertTo-UrlEncoded
+
+    $Body = @{}
+
+    if ($Name) {
+        $Body.name = $Name
+    }
+    if ($Path) {
+        $Body.path = $Path
+    }
+    if ($Visibility) {
+        $Body.visibility = $Visibility
+    }
+
+    Invoke-GitlabApi PUT "groups/$GroupId" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Group'
+}
+
+function Rename-GitlabGroup {
+    param (
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $GroupId = '.',
+
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $NewName,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    Update-GitlabGroup $GroupId -Name $NewName -Path $NewName -SiteUrl $SiteUrl -WhatIf:$WhatIf
+}
