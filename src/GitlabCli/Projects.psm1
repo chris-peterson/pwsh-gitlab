@@ -75,6 +75,14 @@ function Get-GitlabProject {
         [string]
         $GroupId,
 
+        [Parameter(Mandatory=$false, ParameterSetName='ByUser')]
+        [string]
+        $UserId,
+
+        [Parameter(Mandatory=$false, ParameterSetName='ByUser')]
+        [switch]
+        $Mine,
+
         [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByTopics')]
         [string []]
         $Topics,
@@ -131,6 +139,18 @@ function Get-GitlabProject {
             $Projects = Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
                 Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
                 Sort-Object -Property 'Name'
+        }
+        ByUser {
+            # https://docs.gitlab.com/ee/api/projects.html#list-user-projects
+
+            if ($Mine) {
+                if ($UserId) {
+                    Write-Warning "Ignoring '-UserId $UserId' parameter since -Mine was also provided"
+                }
+                $UserId = Get-GitlabUser -Me | Select-Object -ExpandProperty Username
+            }
+
+            $Projects = Invoke-GitlabApi GET "users/$UserId/projects"
         }
         ByTopics {
             $Projects = Invoke-GitlabApi GET "projects" -Query @{
