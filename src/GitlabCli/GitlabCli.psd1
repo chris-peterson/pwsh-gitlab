@@ -78,7 +78,7 @@
 
         # Projects
         'Get-GitlabProject'
-        'Get-GitlabProjectAsTriggerPipeline'
+        'ConvertTo-Triggers'
         'New-GitlabProject'
         'Update-GitlabProject'
         'Move-GitlabProject'

@@ -154,10 +154,15 @@ function Get-GitlabProject {
         Get-FilteredObject $Select
 }
 
-function Get-GitlabProjectAsTriggerPipeline {
+function ConvertTo-Triggers {
     param (
         [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
-        $InputObject
+        $InputObject,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateSet('', 'depend')]
+        [string]
+        $Strategy = 'depend'
     )
     Begin {
         $Yaml = @"
@@ -172,14 +177,20 @@ stages:
                 continue
             }
             $Projects += $Object.ProjectId
-            $Yaml += "`n`n"
             $Yaml += @"
+
+
 $($Object.Name):
   stage: trigger
   trigger:
     project: $($Object.PathWithNamespace)
-    strategy: depend
 "@
+            if ($Strategy) {
+                $Yaml += @"
+
+    strategy: $Strategy
+"@
+            }
         }
     }
     End {
