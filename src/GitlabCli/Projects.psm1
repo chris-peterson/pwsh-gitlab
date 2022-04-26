@@ -75,6 +75,14 @@ function Get-GitlabProject {
         [string]
         $GroupId,
 
+        [Parameter(Mandatory=$false, ParameterSetName='ByUser')]
+        [string]
+        $UserId,
+
+        [Parameter(Mandatory=$false, ParameterSetName='ByUser')]
+        [switch]
+        $Mine,
+
         [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByTopics')]
         [string []]
         $Topics,
@@ -132,6 +140,18 @@ function Get-GitlabProject {
                 Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
                 Sort-Object -Property 'Name'
         }
+        ByUser {
+            # https://docs.gitlab.com/ee/api/projects.html#list-user-projects
+
+            if ($Mine) {
+                if ($UserId) {
+                    Write-Warning "Ignoring '-UserId $UserId' parameter since -Mine was also provided"
+                }
+                $UserId = Get-GitlabUser -Me | Select-Object -ExpandProperty Username
+            }
+
+            $Projects = Invoke-GitlabApi GET "users/$UserId/projects"
+        }
         ByTopics {
             $Projects = Invoke-GitlabApi GET "projects" -Query @{
                 topic = $Topics -join ','
@@ -154,10 +174,15 @@ function Get-GitlabProject {
         Get-FilteredObject $Select
 }
 
-function Get-GitlabProjectAsTriggerPipeline {
+function ConvertTo-Triggers {
     param (
         [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
-        $InputObject
+        $InputObject,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateSet('', 'depend')]
+        [string]
+        $Strategy = 'depend'
     )
     Begin {
         $Yaml = @"
@@ -172,14 +197,20 @@ stages:
                 continue
             }
             $Projects += $Object.ProjectId
-            $Yaml += "`n`n"
             $Yaml += @"
+
+
 $($Object.Name):
   stage: trigger
   trigger:
     project: $($Object.PathWithNamespace)
-    strategy: depend
 "@
+            if ($Strategy) {
+                $Yaml += @"
+
+    strategy: $Strategy
+"@
+            }
         }
     }
     End {

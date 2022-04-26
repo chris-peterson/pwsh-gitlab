@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.59.0'
+    ModuleVersion = '1.60.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Add gitlab version'
+            ReleaseNotes = 'https://github.com/chris-peterson/pwsh-gitlab/pull/43'
         }
     }
 
@@ -70,7 +70,9 @@
         'Get-GitlabGroup'
         'New-GitlabGroup'
         'Remove-GitlabGroup'
+        'Rename-GitlabGroup'
         'Copy-GitlabGroupToLocalFileSystem'
+        'Update-GitlabGroup'
         'Update-LocalGitlabGroup'
         'Get-GitlabGroupVariable'
         'Set-GitlabGroupVariable'
@@ -78,7 +80,7 @@
 
         # Projects
         'Get-GitlabProject'
-        'Get-GitlabProjectAsTriggerPipeline'
+        'ConvertTo-Triggers'
         'New-GitlabProject'
         'Update-GitlabProject'
         'Move-GitlabProject'
