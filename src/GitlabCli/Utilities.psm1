@@ -244,16 +244,20 @@ function Open-InBrowser {
     [CmdletBinding()]
     [Alias('go')]
     param(
-        [Parameter(ValueFromPipeline=$True)]
-        $Object
+        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        $InputObject
     )
 
-    if (-not $Object) {
-        # do nothing
-    } elseif ($Object -is [string]) {
-        Start-Process $Object
-    } elseif ($Object.WebUrl -and $Object.WebUrl -is [string]) {
-        Start-Process $Object.WebUrl
+    Process {
+        if (-not $InputObject) {
+            # do nothing
+        } elseif ($InputObject -is [string]) {
+            Start-Process $InputObject
+        } elseif ($InputObject.Url -and $InputObject.Url -is [string]) {
+            Start-Process $InputObject.Url
+        } elseif ($InputObject.WebUrl -and $InputObject.WebUrl -is [string]) {
+            Start-Process $InputObject.WebUrl
+        }
     }
 }
 

@@ -74,6 +74,8 @@ The following switches are supported when possible:
 
 If invoking commands from within a git repository, `.` can be used for `ProjectId` / `BranchName` to use the local context.
 
+Most objects returned from commands have a `Url` property.  This makes it so you can pipe one or more objects to `Open-InBrowser` (aka `go`)
+
 ## Examples
 
 ### Groups
