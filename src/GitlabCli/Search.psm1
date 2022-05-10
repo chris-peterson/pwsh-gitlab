@@ -79,7 +79,7 @@ function Search-Gitlab {
         }
     }
 
-    $Results | Get-FilteredObject $Select
+    $Results | Get-FilteredObject $Select | Sort-Object ProjectPath
 }
 
 # https://docs.gitlab.com/ee/api/search.html#project-search-api
