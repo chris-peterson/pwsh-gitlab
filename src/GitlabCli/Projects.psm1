@@ -463,9 +463,12 @@ function Update-GitlabProject {
 # https://docs.gitlab.com/ee/api/projects.html#archive-a-project
 function Invoke-GitlabProjectArchival {
     [Alias('Archive-GitlabProject')]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='ByProjectId')]
     param (
-        [Parameter(Position=0)]
+        [Parameter(ValueFromPipeline=$true, ParameterSetName='ByProject')]
+        $Project,
+
+        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
         [string]
         $ProjectId = '.',
 
@@ -478,17 +481,25 @@ function Invoke-GitlabProjectArchival {
         $WhatIf
     )
 
-    $Project = $(Get-GitlabProject -ProjectId $ProjectId)
-    
-    Invoke-GitlabApi POST "projects/$($Project.Id)/archive" -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-        New-WrapperObject 'Gitlab.Project'
+    Process {
+
+        if ($PSCmdlet.ParameterSetName -eq 'ByProjectId') {
+            $Project = $(Get-GitlabProject -ProjectId $ProjectId)
+        }
+
+        Invoke-GitlabApi POST "projects/$($Project.Id)/archive" -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+            New-WrapperObject 'Gitlab.Project'
+    }
 }
 
 # https://docs.gitlab.com/ee/api/projects.html#unarchive-a-project
 function Invoke-GitlabProjectUnarchival {
     [Alias('Unarchive-GitlabProject')]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='ByProjectId')]
     param (
+        [Parameter(ValueFromPipeline=$true, ParameterSetName='ByProject')]
+        $Project,
+
         [Parameter(Position=0)]
         [string]
         $ProjectId = '.',
@@ -502,10 +513,14 @@ function Invoke-GitlabProjectUnarchival {
         $WhatIf
     )
 
-    $Project = $(Get-GitlabProject -ProjectId $ProjectId)
+    Process {
+        if ($PSCmdlet.ParameterSetName -eq 'ByProjectId') {
+            $Project = $(Get-GitlabProject -ProjectId $ProjectId)
+        }
     
-    Invoke-GitlabApi POST "projects/$($Project.Id)/unarchive" -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-        New-WrapperObject 'Gitlab.Project'
+        Invoke-GitlabApi POST "projects/$($Project.Id)/unarchive" -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+            New-WrapperObject 'Gitlab.Project'
+    }
 }
 
 # https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
