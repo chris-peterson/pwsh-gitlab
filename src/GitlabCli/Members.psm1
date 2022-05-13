@@ -12,17 +12,20 @@ function Get-GitlabMemberAccessLevel {
     }
 }
 
-
 # https://docs.gitlab.com/ee/api/members.html#list-all-members-of-a-group-or-project
 function Get-GitlabGroupMember {
     param (
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ValueFromPipelineByPropertyName=$true)]
         [string]
         $GroupId = '.',
 
         [Parameter(Mandatory=$false)]
         [string]
         $UserId,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $All,
 
         [Parameter(Mandatory=$false)]
         [int]
@@ -43,10 +46,79 @@ function Get-GitlabGroupMember {
         $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl -WhatIf:$false
     }
 
-    $Resource = $User ? "groups/$($Group.Id)/members/$($User.Id)" : "groups/$($Group.Id)/members"
+    $Members = $All ? "members/all" : "members"
+    $Resource = $User ? "groups/$($Group.Id)/$Members/$($User.Id)" : "groups/$($Group.Id)/$Members"
 
     Invoke-GitlabApi GET $Resource -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
         New-WrapperObject 'Gitlab.Member'
+}
+
+# https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project
+function Add-GitlabGroupMember {
+    param (
+        [Parameter(Mandatory=$false)]
+        [string]
+        $GroupId = '.',
+
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $UserId,
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [ValidateSet('guest', 'reporter', 'developer', 'maintainer')]
+        [string]
+        $AccessLevel,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl -WhatIf:$false
+    $Group = Get-GitlabGroup -GroupId $GroupId -SiteUrl $SiteUrl -WhatIf:$false
+
+    $Query = @{
+        user_id = $User.Id
+        access_level = $(Get-GitlabMemberAccessLevel).$AccessLevel
+    }
+    Invoke-GitlabApi POST "group/$($Group.Id)/members" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+        New-WrapperObject 'Gitlab.Member'
+}
+
+# https://docs.gitlab.com/ee/api/members.html#remove-a-member-from-a-group-or-project
+function Remove-GitlabGroupMember {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]
+        $GroupId,
+
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $UserId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl -WhatIf:$false
+    $Group = Get-GitlabGroup -GroupId $GroupId -SiteUrl $SiteUrl -WhatIf:$false
+
+    try {
+        Invoke-GitlabApi DELETE "groups/$($Group.Id)/members/$($User.Id)" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+        Write-Host "Removed $($User.Username) from $($Group.Name)"
+    }
+    catch {
+        Write-Error "Error removing $($User.Username) from $($Group.Name): $_"
+    }
 }
 
 
@@ -60,6 +132,10 @@ function Get-GitlabProjectMember {
         [Parameter(Mandatory=$false)]
         [string]
         $UserId,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $All,
 
         [Parameter(Mandatory=$false)]
         [int]
@@ -80,10 +156,79 @@ function Get-GitlabProjectMember {
         $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl -WhatIf:$false
     }
 
-    $Resource = $User ? "projects/$($Project.Id)/members/$($User.Id)" : "projects/$($Project.Id)/members"
+    $Members = $All ? "members/all" : "members"
+    $Resource = $User ? "projects/$($Project.Id)/$Members/$($User.Id)" : "projects/$($Project.Id)/$Members"
 
     Invoke-GitlabApi GET $Resource -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
         New-WrapperObject 'Gitlab.Member'
+}
+
+# https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project
+function Add-GitlabProjectMember {
+    param (
+        [Parameter(Mandatory=$false)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $UserId,
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [ValidateSet('guest', 'reporter', 'developer', 'maintainer')]
+        [string]
+        $AccessLevel,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl -WhatIf:$false
+    $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl -WhatIf:$false
+
+    $Query = @{
+        user_id = $User.Id
+        access_level = $(Get-GitlabMemberAccessLevel).$AccessLevel
+    }
+    Invoke-GitlabApi POST "projects/$($Project.Id)/members" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+        New-WrapperObject 'Gitlab.Member'
+}
+
+# https://docs.gitlab.com/ee/api/members.html#remove-a-member-from-a-group-or-project
+function Remove-GitlabProjectMember {
+    param (
+        [Parameter(Mandatory=$false)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $UserId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl -WhatIf:$false
+    $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl -WhatIf:$false
+
+    try {
+        Invoke-GitlabApi DELETE "projects/$($Project.Id)/members/$($User.Id)" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+        Write-Host "Removed $($User.Username) from $($Project.Name)"
+    }
+    catch {
+        Write-Error "Error removing $($User.Username) from $($Project.Name): $_"
+    }
 }
 
 # https://docs.gitlab.com/ee/api/users.html#user-memberships-admin-only
@@ -177,26 +322,4 @@ function Update-GitlabUserMembership {
         access_level = $(Get-GitlabMemberAccessLevel)."$AccessLevel"
     }  -SiteUrl $SiteUrl -WhatIf:$WhatIf |
     New-WrapperObject 'Gitlab.Member'
-}
-
-# https://docs.gitlab.com/ee/api/members.html#remove-a-member-from-a-group-or-project
-function Remove-GitlabProjectMember {
-    param (
-        [Parameter(Position=0, Mandatory=$true)]
-        [string]
-        $ProjectId,
-
-        [Parameter(Mandatory=$true)]
-        [string]
-        $UserId,
-
-        [Parameter()]
-        [switch]
-        $WhatIf
-    )
-
-    $Project = Get-GitlabProject -ProjectId $ProjectId
-    $User = Get-GitlabUser -Username $UserId
-
-    Invoke-GitlabApi DELETE "projects/$($Project.Id)/members/$($User.Id)" -SiteUrl $SiteUrl -WhatIf:$WhatIf
 }

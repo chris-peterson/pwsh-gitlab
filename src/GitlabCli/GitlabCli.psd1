@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.60.3'
+    ModuleVersion = '1.61.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'https://github.com/chris-peterson/pwsh-gitlab/issues/34'
+            ReleaseNotes = 'add/remove gitlab project/group members'
         }
     }
 
@@ -170,8 +170,13 @@
 
         # Members
         'Get-GitlabGroupMember'
+        'Add-GitlabGroupMember'
+        'Remove-GitlabGroupMember'
+
         'Get-GitlabProjectMember'
+        'Add-GitlabProjectMember'
         'Remove-GitlabProjectMember'
+
         'Get-GitlabUserMembership'
         'Add-GitlabUserMembership'
         'Update-GitlabUserMembership'
