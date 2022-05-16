@@ -950,6 +950,10 @@
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/>
+          <TableColumnHeader>
+            <Label>AccessLevel</Label>
+          </TableColumnHeader>
+          <TableColumnHeader/>
           <TableColumnHeader/>
           <TableColumnHeader/>
           <TableColumnHeader/>
@@ -964,13 +968,19 @@
                 <PropertyName>Name</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
+                <PropertyName>AccessLevelFriendly</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Scopes</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
                 <PropertyName>Active</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>CreatedAt</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>LastUsed</PropertyName>
+                <PropertyName>LastUsedAt</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

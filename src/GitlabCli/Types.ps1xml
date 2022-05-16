@@ -335,4 +335,16 @@
       </ScriptProperty>
     </Members>
   </Type>
+  <Type>
+    <Name>Gitlab.AccessToken</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>AccessLevelFriendly</Name>
+        <GetScriptBlock>
+          $Levels = Get-GitlabMemberAccessLevel
+          $Levels.psobject.Properties | Where-Object Value -eq $this.AccessLevel | Select-Object -ExpandProperty Name
+        </GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
 </Types>
