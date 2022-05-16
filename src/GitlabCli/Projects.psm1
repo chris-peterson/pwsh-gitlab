@@ -602,7 +602,7 @@ function Set-GitlabProjectVariable {
     $ProjectId = $(Get-GitlabProject $ProjectId).Id
 
     try {
-        Get-GitlabProjectVariable $ProjectId $Key
+        Get-GitlabProjectVariable -ProjectId $ProjectId -Key $Key | Out-Null
         $IsExistingVariable = $True
     }
     catch {

@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.61.0'
+    ModuleVersion = '1.62.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'add/remove gitlab project/group members'
+            ReleaseNotes = 'group access tokens'
         }
     }
 
@@ -29,6 +29,7 @@
         'Environments.psm1'
         'Git.psm1'
         'GraphQL.psm1'
+        'GroupAccessTokens.psm1'
         'Groups.psm1'
         'Issues.psm1'
         'Jobs.psm1'
@@ -65,6 +66,11 @@
 
         # GraphQL
         'Invoke-GitlabGraphQL'
+
+        # Group Access Tokens
+        'Get-GitlabGroupAccessToken'
+        'New-GitlabGroupAccessToken'
+        'Remove-GitlabGroupAccessToken'
 
         # Groups
         'Get-GitlabGroup'
@@ -205,6 +211,7 @@
         'Unarchive-GitlabProject'
         'Review-GitlabMergeRequest'
         'Play-GitlabJob'
+        'Revoke-GitlabGroupAccessToken'
 
         # short form
         'go'

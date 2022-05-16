@@ -1,6 +1,7 @@
 # https://docs.gitlab.com/ee/api/#id-vs-iid
 # TL;DR; it's a mess and we have to special-case specific entity types
 $global:GitlabIdentityPropertyNameExemptions=@{
+    'Gitlab.AccessToken'               = 'Id'
     'Gitlab.BlobSearchResult'          = ''
     'Gitlab.Branch'                    = ''
     'Gitlab.Configuration'             = ''

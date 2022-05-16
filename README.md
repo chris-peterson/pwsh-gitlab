@@ -70,6 +70,7 @@ The following switches are supported when possible:
 `-MaxPages`: For query operations, maximum number of pages to return.  Typically defaults to 1
 
 `-Recurse`: For tree-based operations, opt-in to recurse children (e.g. `Get-GitlabProject -GroupId 'mygroup' -Recurse`)
+
 ## Global Behaviors
 
 If invoking commands from within a git repository, `.` can be used for `ProjectId` / `BranchName` to use the local context.

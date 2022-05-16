@@ -26,13 +26,13 @@ function Get-GitlabGroup {
         $ParentGroupId,
 
         [Parameter(Mandatory=$false)]
-        [string]
-        $SiteUrl,
-
-        [Parameter(Mandatory=$false)]
         [Alias('r')]
         [switch]
         $Recurse,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
 
         [switch]
         [Parameter(Mandatory=$false)]
