@@ -71,7 +71,7 @@ function New-GitlabGroupAccessToken {
     if ($CopyToClipboard) {
         $Response.token | Set-Clipboard
     } else {
-        $Response.token
+        $Response
     }
 }
 
