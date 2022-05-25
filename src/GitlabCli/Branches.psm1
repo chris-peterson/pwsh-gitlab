@@ -124,9 +124,40 @@ function Protect-GitlabBranch {
         [string]
         $Name,
 
-        [bool]
         [Parameter(Mandatory=$false)]
+        [ValidateSet("0","30","40","60")]
+        [string]
+        $PushAccessLevel,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateSet("0","30","40","60")]
+        [string]
+        $MergeAccessLevel,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateSet("0","30","40","60")]
+        [string]
+        $UnprotectAccessLevel,
+
+        [Parameter(Mandatory=$false)]
+        [bool]
         $AllowForcePush = $false,
+
+        [Parameter(Mandatory=$false)]
+        [array]
+        $AllowedToPush,
+
+        [Parameter(Mandatory=$false)]
+        [array]
+        $AllowedToMerge,
+
+        [Parameter(Mandatory=$false)]
+        [array]
+        $AllowedToUnprotect,
+
+        [Parameter(Mandatory=$false)]
+        [bool]
+        $CodeOwnerApprovalRequired = $false,
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -144,9 +175,16 @@ function Protect-GitlabBranch {
         HttpMethod = 'POST'
         Path       = "projects/$($Project.Id)/protected_branches"
         SiteUrl    = $SiteUrl
-        Query      = @{
+        Body      = @{
             name = $Branch.Name
+            push_access_level = $PushAccessLevel
+            merge_access_level = $MergeAccessLevel
+            unprotect_access_level = $UnprotectAccessLevel
             allow_force_push = $AllowForcePush
+            allowed_to_push = $AllowedToPush
+            allowed_to_merge = $AllowedToMerge
+            allowed_to_unprotect = $AllowedToUnprotect
+            code_owner_approval_required = $CodeOwnerApprovalRequired
         }
     }
 
