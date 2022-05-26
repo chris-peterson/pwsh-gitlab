@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.62.2'
+    ModuleVersion = '1.63.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'group access tokens'
+            ReleaseNotes = 'https://github.com/chris-peterson/pwsh-gitlab/pull/45'
         }
     }
 
@@ -191,6 +191,7 @@
 
         # Utilities
         'ConvertTo-PascalCase'
+        'ConvertTo-SnakeCase'
         'ConvertTo-UrlEncoded'
         'Get-FilteredObject'
         'Get-GitlabVersion'

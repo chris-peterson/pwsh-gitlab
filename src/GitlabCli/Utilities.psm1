@@ -45,11 +45,27 @@ function ConvertTo-SnakeCase
 {
     param(
         [Parameter(Position=0, ValueFromPipeline=$true)]
-        [string] $Value
+        $InputObject
     )
 
-    return [regex]::replace($Value, '(?<=.)(?=[A-Z])', '_').ToLower()
+    Process {
+        foreach ($Value in $InputObject) {
+            if ($Value -is [string]) {
+                return [regex]::replace($Value, '(?<=.)(?=[A-Z])', '_').ToLower()
+            }
+        
+            if ($Value -is [hashtable]) {
+                $Value.Keys | ForEach-Object {
+                    $OriginalValue = $Value[$_]
+                    $Value.Remove($_)
+                    $Value[$($_ | ConvertTo-SnakeCase)] = $OriginalValue
+                }
+                $Value
+            }
+        }
+    }
 }
+
 
 function ConvertTo-UrlEncoded {
     param (

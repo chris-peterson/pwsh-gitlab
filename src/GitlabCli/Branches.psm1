@@ -192,9 +192,9 @@ function Protect-GitlabBranch {
             merge_access_level = $(Get-GitlabProtectedBranchAccessLevel).$MergeAccessLevel
             unprotect_access_level = $(Get-GitlabProtectedBranchAccessLevel).$UnprotectAccessLevel
             allow_force_push = $AllowForcePush
-            allowed_to_push = $AllowedToPush
-            allowed_to_merge = $AllowedToMerge
-            allowed_to_unprotect = $AllowedToUnprotect
+            allowed_to_push = $AllowedToPush | ConvertTo-SnakeCase
+            allowed_to_merge = $AllowedToMerge | ConvertTo-SnakeCase
+            allowed_to_unprotect = $AllowedToUnprotect | ConvertTo-SnakeCase
             code_owner_approval_required = $CodeOwnerApprovalRequired
         }
     }
