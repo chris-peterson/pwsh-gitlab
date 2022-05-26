@@ -55,7 +55,7 @@ function ConvertTo-SnakeCase
             }
         
             if ($Value -is [hashtable]) {
-                $Value.Keys | ForEach-Object {
+                $Value.Keys.Clone() | ForEach-Object {
                     $OriginalValue = $Value[$_]
                     $Value.Remove($_)
                     $Value[$($_ | ConvertTo-SnakeCase)] = $OriginalValue
