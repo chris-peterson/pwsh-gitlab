@@ -415,3 +415,74 @@ function Rename-GitlabGroup {
 
     Update-GitlabGroup $GroupId -Name $NewName -Path $NewName -SiteUrl $SiteUrl -WhatIf:$WhatIf
 }
+
+# https://docs.gitlab.com/ee/api/groups.html#create-a-link-to-share-a-group-with-another-group
+function New-GitlabGroupLink {
+
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory=$true)]
+        [string]
+        $GroupId,
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [string]
+        $GroupShareId,
+
+        [Parameter(Position=2, Mandatory=$true)]
+        [ValidateSet('noaccess','minimalaccess','guest','reporter','developer','maintainer','owner')]
+        [string]
+        $AccessLevel,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateScript({ValidateGitlabDateFormat $_})]
+        [string]
+        $ExpiresAt,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $GroupId = $GroupId | ConvertTo-UrlEncoded
+
+    $Body = @{
+
+        group_id = $GroupShareId
+        group_access = $(Get-GitlabMemberAccessLevel).$AccessLevel
+        expires_at = $ExpiresAt
+    }
+
+    Invoke-GitlabApi POST "groups/$GroupId/share" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Group'
+}
+
+# https://docs.gitlab.com/ee/api/groups.html#delete-link-sharing-group-with-another-group
+function Remove-GitlabGroupLink {
+
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $GroupId,
+
+        [Parameter(Mandatory=$true, Position=1)]
+        [string]
+        $GroupShareId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $GroupId = $GroupId | ConvertTo-UrlEncoded
+
+    Invoke-GitlabApi DELETE "groups/$GroupId/share/$GroupShareId" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+}
