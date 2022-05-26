@@ -1,3 +1,14 @@
+# https://docs.gitlab.com/ee/api/protected_branches.html
+function Get-GitlabProtectedBranchAccessLevel {
+
+    [PSCustomObject]@{
+        NoAccess = 0
+        Developer = 30
+        Maintainer = 40
+        Admin = 60
+    }
+}
+
 function Get-GitlabBranch {
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     param (
@@ -124,9 +135,40 @@ function Protect-GitlabBranch {
         [string]
         $Name,
 
-        [bool]
         [Parameter(Mandatory=$false)]
+        [ValidateSet('noaccess','developer','maintainer','admin')]
+        [string]
+        $PushAccessLevel,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateSet('noaccess','developer','maintainer','admin')]
+        [string]
+        $MergeAccessLevel,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateSet('noaccess','developer','maintainer','admin')]
+        [string]
+        $UnprotectAccessLevel,
+
+        [Parameter(Mandatory=$false)]
+        [bool]
         $AllowForcePush = $false,
+
+        [Parameter(Mandatory=$false)]
+        [array]
+        $AllowedToPush,
+
+        [Parameter(Mandatory=$false)]
+        [array]
+        $AllowedToMerge,
+
+        [Parameter(Mandatory=$false)]
+        [array]
+        $AllowedToUnprotect,
+
+        [Parameter(Mandatory=$false)]
+        [bool]
+        $CodeOwnerApprovalRequired = $false,
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -144,9 +186,16 @@ function Protect-GitlabBranch {
         HttpMethod = 'POST'
         Path       = "projects/$($Project.Id)/protected_branches"
         SiteUrl    = $SiteUrl
-        Query      = @{
+        Body      = @{
             name = $Branch.Name
+            push_access_level = $(Get-GitlabProtectedBranchAccessLevel).$PushAccessLevel
+            merge_access_level = $(Get-GitlabProtectedBranchAccessLevel).$MergeAccessLevel
+            unprotect_access_level = $(Get-GitlabProtectedBranchAccessLevel).$UnprotectAccessLevel
             allow_force_push = $AllowForcePush
+            allowed_to_push = $AllowedToPush
+            allowed_to_merge = $AllowedToMerge
+            allowed_to_unprotect = $AllowedToUnprotect
+            code_owner_approval_required = $CodeOwnerApprovalRequired
         }
     }
 

@@ -56,6 +56,7 @@
         'Protect-GitlabBranch'
         'UnProtect-GitlabBranch'
         'Remove-GitlabBranch'
+        'Get-GitlabProtectedBranchAccessLevel'
 
         # Configuration
         'Get-GitlabConfiguration'
