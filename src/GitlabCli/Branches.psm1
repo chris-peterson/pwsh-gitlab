@@ -1,3 +1,14 @@
+# https://docs.gitlab.com/ee/api/protected_branches.html
+function Get-GitlabProtectedBranchAccessLevel {
+
+    [PSCustomObject]@{
+        NoAccess = 0
+        Developer = 30
+        Maintainer = 40
+        Admin = 60
+    }
+}
+
 function Get-GitlabBranch {
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     param (
@@ -125,17 +136,17 @@ function Protect-GitlabBranch {
         $Name,
 
         [Parameter(Mandatory=$false)]
-        [ValidateSet("0","30","40","60")]
+        [ValidateSet('noaccess','developer','maintainer','admin')]
         [string]
         $PushAccessLevel,
 
         [Parameter(Mandatory=$false)]
-        [ValidateSet("0","30","40","60")]
+        [ValidateSet('noaccess','developer','maintainer','admin')]
         [string]
         $MergeAccessLevel,
 
         [Parameter(Mandatory=$false)]
-        [ValidateSet("0","30","40","60")]
+        [ValidateSet('noaccess','developer','maintainer','admin')]
         [string]
         $UnprotectAccessLevel,
 
@@ -177,9 +188,9 @@ function Protect-GitlabBranch {
         SiteUrl    = $SiteUrl
         Body      = @{
             name = $Branch.Name
-            push_access_level = $PushAccessLevel
-            merge_access_level = $MergeAccessLevel
-            unprotect_access_level = $UnprotectAccessLevel
+            push_access_level = $(Get-GitlabProtectedBranchAccessLevel).$PushAccessLevel
+            merge_access_level = $(Get-GitlabProtectedBranchAccessLevel).$MergeAccessLevel
+            unprotect_access_level = $(Get-GitlabProtectedBranchAccessLevel).$UnprotectAccessLevel
             allow_force_push = $AllowForcePush
             allowed_to_push = $AllowedToPush
             allowed_to_merge = $AllowedToMerge
