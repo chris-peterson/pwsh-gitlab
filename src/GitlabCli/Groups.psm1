@@ -417,7 +417,7 @@ function Rename-GitlabGroup {
 }
 
 # https://docs.gitlab.com/ee/api/groups.html#create-a-link-to-share-a-group-with-another-group
-function New-GitlabGroupLink {
+function New-GitlabGroupShareLink {
 
     [CmdletBinding()]
     param (
@@ -461,7 +461,7 @@ function New-GitlabGroupLink {
 }
 
 # https://docs.gitlab.com/ee/api/groups.html#delete-link-sharing-group-with-another-group
-function Remove-GitlabGroupLink {
+function Remove-GitlabGroupShareLink {
 
     [CmdletBinding()]
     param (

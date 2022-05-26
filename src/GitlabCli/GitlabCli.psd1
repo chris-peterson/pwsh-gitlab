@@ -84,8 +84,8 @@
         'Get-GitlabGroupVariable'
         'Set-GitlabGroupVariable'
         'Remove-GitlabGroupVariable'
-        'New-GitlabGroupLink'
-        'Remove-GitlabGroupLink'
+        'New-GitlabGroupShareLink'
+        'Remove-GitlabGroupShareLink'
 
         # Projects
         'Get-GitlabProject'
