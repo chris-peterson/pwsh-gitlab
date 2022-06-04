@@ -63,6 +63,7 @@ https://github.com/chris-peterson/pwsh-gitlab#projects
 .LINK
 https://docs.gitlab.com/ee/api/projects.html
 #>
+$global:GitlabGetProjectDefaultPages = 10
 function Get-GitlabProject {
 
     [CmdletBinding(DefaultParameterSetName='ById')]
@@ -104,9 +105,13 @@ function Get-GitlabProject {
         [Parameter(Mandatory=$false, ParameterSetName='ByGroup')]
         $IncludeArchived = $false,
 
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $All,
+
         [Parameter(Mandatory=$false)]
         [int]
-        $MaxPages = 10,
+        $MaxPages = $global:GitlabGetProjectDefaultPages,
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -116,6 +121,13 @@ function Get-GitlabProject {
         [Parameter(Mandatory=$false)]
         $WhatIf
     )
+
+    if ($All) {
+        if ($MaxPages -ne $global:GitlabGetProjectDefaultPages) {
+            Write-Warning -Message "Ignoring -MaxPages in favor of -All"
+        }
+        $MaxPages = [int]::MaxValue
+    }
 
     $Projects = @()
     switch ($PSCmdlet.ParameterSetName) {
@@ -174,7 +186,7 @@ function Get-GitlabProject {
         Get-FilteredObject $Select
 }
 
-function ConvertTo-Triggers {
+function ConvertTo-GitlabTriggerYaml {
     param (
         [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
         $InputObject,

@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.64.0'
+    ModuleVersion = '1.64.1'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'https://github.com/chris-peterson/pwsh-gitlab/pull/46'
+            ReleaseNotes = 'Rename ConvertTo-Triggers, add switch to get all projects'
         }
     }
 
@@ -89,7 +89,7 @@
 
         # Projects
         'Get-GitlabProject'
-        'ConvertTo-Triggers'
+        'ConvertTo-GitlabTriggerYaml'
         'New-GitlabProject'
         'Update-GitlabProject'
         'Move-GitlabProject'
