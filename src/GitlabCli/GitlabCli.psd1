@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.64.1'
+    ModuleVersion = '1.64.2'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Rename ConvertTo-Triggers, add switch to get all projects'
+            ReleaseNotes = 'Some convert to trigger enhancements'
         }
     }
 

@@ -192,16 +192,25 @@ function ConvertTo-GitlabTriggerYaml {
         $InputObject,
 
         [Parameter(Mandatory=$false)]
-        [ValidateSet('', 'depend')]
+        [ValidateSet($null, 'depend')]
         [string]
-        $Strategy = 'depend'
+        $Strategy = $null,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $StageName = 'trigger'
     )
     Begin {
         $Yaml = @"
 stages:
-  - trigger
+  - $StageName
 "@
         $Projects = @()
+        if ([string]::IsNullOrWhiteSpace($Strategy)) {
+            $StrategyYaml = ''
+        } else {
+            $StrategyYaml = "`n    strategy: $Strategy"
+        }
     }
     Process {
         foreach ($Object in $InputObject) {
@@ -213,16 +222,10 @@ stages:
 
 
 $($Object.Name):
-  stage: trigger
+  stage: $StageName
   trigger:
-    project: $($Object.PathWithNamespace)
+    project: $($Object.PathWithNamespace)$StrategyYaml
 "@
-            if ($Strategy) {
-                $Yaml += @"
-
-    strategy: $Strategy
-"@
-            }
         }
     }
     End {
