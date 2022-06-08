@@ -691,18 +691,20 @@ function Rename-GitlabProjectDefaultBranch {
         return
     }
 
-    git checkout $OldDefaultBranch
-    git pull -p
-    git branch -m $OldDefaultBranch $NewDefaultBranch
-    git push -u origin $NewDefaultBranch -o ci.skip
-    Update-GitlabProject -DefaultBranch $NewDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    git checkout $OldDefaultBranch | Out-Null
+    git pull -p | Out-Null
+    git branch -m $OldDefaultBranch $NewDefaultBranch | Out-Null
+    git push -u origin $NewDefaultBranch -o ci.skip | Out-Null
+    Update-GitlabProject -DefaultBranch $NewDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
     try {
-        UnProtect-GitlabBranch -Name $OldDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf
+        UnProtect-GitlabBranch -Name $OldDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
     }
     catch {}
-    Protect-GitlabBranch -Name $NewDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf
-    git push --delete origin $OldDefaultBranch
-    git remote set-head origin -a
+    Protect-GitlabBranch -Name $NewDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+    git push --delete origin $OldDefaultBranch | Out-Null
+    git remote set-head origin -a | Out-Null
+
+    Get-GitlabProject -ProjectId $Project.Id
 }
 
 function Get-GitlabProjectEvent {

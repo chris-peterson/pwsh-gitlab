@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.64.2'
+    ModuleVersion = '1.64.3'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Some convert to trigger enhancements'
+            ReleaseNotes = 'Add some more properties to update pipleine schedule.  Make output for rename branch less verbose'
         }
     }
 

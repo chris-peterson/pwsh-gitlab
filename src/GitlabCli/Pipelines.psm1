@@ -307,6 +307,24 @@ function Update-GitlabPipelineSchedule {
         $PipelineScheduleId,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $Description,
+
+        [Parameter(Mandatory=$false)]
+        [Alias("Branch")]
+        [string]
+        $Ref,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Cron,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateSet($null, 'America/Los_Angeles')]
+        [string]
+        $CronTimezone,
+
+        [Parameter(Mandatory=$false)]
         [bool]
         $Active,
 
@@ -324,12 +342,24 @@ function Update-GitlabPipelineSchedule {
     $GitlabApiArguments = @{
         HttpMethod = 'PUT'
         Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId"
-        Query      = @{}
+        Body       = @{}
         SiteUrl    = $SiteUrl
     }
 
     if ($PSBoundParameters.ContainsKey("Active")) {
-        $GitlabApiArguments.Query.active = $Active.ToString().ToLower()
+        $GitlabApiArguments.Body.active = $Active.ToString().ToLower()
+    }
+    if ($Description) {
+        $GitlabApiArguments.Body.description = $Description
+    }
+    if ($Ref) {
+        $GitlabApiArguments.Body.ref = $Ref
+    }
+    if ($Cron) {
+        $GitlabApiArguments.Body.cron = $Cron
+    }
+    if ($CronTimezone) {
+        $GitlabApiArguments.Body.cron_timezone = $CronTimezone
     }
 
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineSchedule'
