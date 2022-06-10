@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.65.0'
+    ModuleVersion = '1.66.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Enhancements to merge request stats'
+            ReleaseNotes = 'Get pipeline variables'
         }
     }
 
@@ -142,6 +142,7 @@
 
         # Pipelines
         'Get-GitlabPipeline'
+        'Get-GitlabPipelineVariable'
         'New-GitlabPipeline'
         'Remove-GitlabPipeline'
         'Get-GitlabPipelineSchedule'
