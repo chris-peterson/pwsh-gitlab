@@ -48,10 +48,6 @@ function Get-GitlabMergeRequest {
 
         [Parameter(Mandatory=$false)]
         [switch]
-        $IncludeApprovals,
-
-        [Parameter(Mandatory=$false)]
-        [switch]
         $IncludeChangeSummary,
 
         [Parameter(Mandatory=$true, ParameterSetName='Mine')]
@@ -127,21 +123,6 @@ function Get-GitlabMergeRequest {
 
     $MergeRequests = Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.MergeRequest'
 
-    if ($IncludeApprovals) {
-        # GraphQL currently doesn't support award emoji.  as and when it does, we could merge IncludeApprovals and IncludeChangeSummary to both use GraphQL
-        $MergeRequests | ForEach-Object {
-            $Approvals = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.MergeRequestId)/approval_state" -SiteUrl $SiteUrl -WhatIf:$WhatIf
-
-            if ($Approvals.rules.approved_by) {
-                $_ | Add-Member -MemberType 'NoteProperty' -Name 'Approvals' -Value $($Approvals.rules.approved_by | New-WrapperObject 'Gitlab.User')
-            }
-
-            $ThumbsUp = Invoke-GitlabApi GET "projects/$($_.ProjectId)/merge_requests/$($_.MergeRequestId)/award_emoji" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Where-Object name -ieq 'thumbsup'
-            if ($ThumbsUp.user) {
-                $_ | Add-Member -MemberType 'NoteProperty' -Name 'ThumbsUp' -Value $($ThumbsUp.user | New-WrapperObject 'Gitlab.User')
-            }
-        }
-    }
     if ($IncludeChangeSummary) {
         $MergeRequests | ForEach-Object {
             $_ | Add-Member -MemberType 'NoteProperty' -Name 'ChangeSummary' -Value $($_ | Get-GitlabMergeRequestChangeSummary)
@@ -176,6 +157,9 @@ function Get-GitlabMergeRequestChangeSummary {
                 }
                 notes {
                     nodes {
+                      author {
+                          username
+                      }
                       body
                       updatedAt
                     }
@@ -185,12 +169,31 @@ function Get-GitlabMergeRequestChangeSummary {
     }
 "@
 
-    [PSCustomObject]@{
-        Authors      = $Data.Project.mergeRequest.commitsWithoutMergeCommits.nodes.author.username | Select-Object -Unique
-        Changes      = $Data.Project.mergeRequest.diffStatsSummary | New-WrapperObject
-        AssignedAt   = $Data.Project.mergeRequest.notes.nodes | Where-Object body -Match '^assigned to @' | Sort-Object updatedAt | Select-Object -First 1 -ExpandProperty updatedAt
-        OldestChange = $Data.Project.mergeRequest.commitsWithoutMergeCommits.nodes.authoredDate | Sort-Object | Select-Object -First 1
+    $Mr = $Data.Project.mergeRequest
+    $Notes = $Mr.notes.nodes | Where-Object body -NotMatch "^assigned to @$($MergeRequest.Author.username)" # filter out self-assignment
+    $Summary = [PSCustomObject]@{
+        Changes           = $Mr.diffStatsSummary | New-WrapperObject
+        Authors           = $Mr.commitsWithoutMergeCommits.nodes.author.username        | Select-Object -Unique | Sort-Object
+        FirstCommittedAt  = $Mr.commitsWithoutMergeCommits.nodes.authoredDate           | Sort-Object | Select-Object -First 1
+        ReviewRequestedAt = $Notes | Where-Object body -Match '^requested review from @' | Sort-Object updatedAt | Select-Object -First 1 -ExpandProperty updatedAt
+        AssignedAt        = $Notes | Where-Object body -Match '^assigned to @' | Sort-Object updatedAt | Select-Object -First 1 -ExpandProperty updatedAt
+        MarkedReadyAt     = $Notes | Where-Object body -Match '^marked this merge request as \*\*ready\*\*' | Sort-Object updatedAt | Select-Object -First 1 -ExpandProperty updatedAt
+        ApprovedAt        = $Notes | Where-Object body -Match '^approved this merge request' |
+                                Sort-Object updatedAt | Select-Object -First 1 -ExpandProperty updatedAt
+        TimeToMerge       = '(computed below)'
     }
+
+    $MergedAt = $MergeRequest.MergedAt
+    if ($Summary.ReviewRequestedAt) {
+        $Summary.TimeToMerge = @{ Duration = $MergedAt - $Summary.ReviewRequestedAt; Measure='FromReviewRequested' }
+    } elseif ($Summary.AssignedAt) {
+        $Summary.TimeToMerge = @{ Duration = $MergedAt - $Summary.AssignedAt; Measure='FromAssigned' }
+    } elseif ($Summary.MarkedReadyAt) {
+        $Summary.TimeToMerge = @{ Duration = $MergedAt - $Summary.MarkedReadyAt; Measure='FromMarkedReady' }
+    } else {
+        $Summary.TimeToMerge = @{ Duration = $MergedAt - $MergeRequest.CreatedAt; Measure='FromCreated'}
+    }
+    $Summary
 }
 
 function New-GitlabMergeRequest {
