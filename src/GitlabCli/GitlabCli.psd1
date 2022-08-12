@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.67.0'
+    ModuleVersion = '1.68.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'https://github.com/chris-peterson/pwsh-gitlab/pull/48'
+            ReleaseNotes = 'Start to wrap integrations API'
         }
     }
 
@@ -31,6 +31,7 @@
         'GraphQL.psm1'
         'GroupAccessTokens.psm1'
         'Groups.psm1'
+        'Integrations.psm1'
         'Issues.psm1'
         'Jobs.psm1'
         'Members.psm1'
@@ -177,6 +178,9 @@
         # Events
         'Get-GitlabUserEvent'
         'Get-GitlabProjectEvent'
+
+        # Integrations
+        'Get-GitlabProjectIntegration'
 
         # Members
         'Get-GitlabGroupMember'

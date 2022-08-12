@@ -347,4 +347,21 @@
       </ScriptProperty>
     </Members>
   </Type>
+  <Type>
+    <Name>Gitlab.ProjectIntegration</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>EventProperties</Name>
+        <GetScriptBlock>
+          $($this | Select-Object -ExcludeProperty 'Events' '*Events').PSObject.properties
+        </GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Events</Name>
+        <GetScriptBlock>
+          $($this.EventProperties | ForEach-Object { if ($_.Value) { $_.Name -replace 'Events', '' } }) -join ', '
+        </GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
 </Types>

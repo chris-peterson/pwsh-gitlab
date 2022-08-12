@@ -8,6 +8,7 @@ $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.Environment'               = 'Id'
     'Gitlab.Event'                     = 'Id'
     'Gitlab.Group'                     = 'Id'
+    'Gitlab.ProjectIntegration'        = 'Id'
     'Gitlab.Job'                       = 'Id'
     'Gitlab.Member'                    = 'Id'
     'Gitlab.Note'                      = 'Id'
