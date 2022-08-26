@@ -233,13 +233,17 @@ function Remove-GitlabProjectMember {
 
 # https://docs.gitlab.com/ee/api/users.html#user-memberships-admin-only
 function Get-GitlabUserMembership {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='ByUsername')]
     param (
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ParameterSetName='ByUsername', Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
         $Username,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(ParameterSetName='Me')]
+        [switch]
+        $Me,
+
+        [Parameter]
         [string]
         $SiteUrl,
 
@@ -247,6 +251,10 @@ function Get-GitlabUserMembership {
         [Parameter(Mandatory=$false)]
         $WhatIf
     )
+
+    if ($Me) {
+        $Username = $(Get-GitlabUser -Me).Username
+    }
 
     $User = Get-GitlabUser -Username $Username -SiteUrl $SiteUrl
 

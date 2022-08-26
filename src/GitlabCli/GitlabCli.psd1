@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.69.0'
+    ModuleVersion = '1.69.1'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Enhancements to set project variable'
+            ReleaseNotes = 'Add a -Me flag to get user memberships'
         }
     }
 
