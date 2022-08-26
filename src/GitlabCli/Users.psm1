@@ -47,41 +47,8 @@ function Get-GitlabUser {
     }
 }
 
-<#
-.SYNOPSIS
-Returns Gitlab User Events
-
-.PARAMETER UserId
-User Id either as an integer or Gitlab username
-
-.PARAMETER EmailAddress
-User email address
-
-.PARAMETER Me
-Get your events
-
-.PARAMETER TargetType
-Filters to specific Target Types of the Gitlab API @ https://docs.gitlab.com/ee/api/events.html#target-types
-
-.PARAMETER Before
-Return events before this data
-
-.PARAMETER After
-Return events after this data
-
-.PARAMETER SiteUrl
-Alternate Gitlab API url
-
-.PARAMETER WhatIf
-shows calls
-
-.EXAMPLE
-Get-GitlabUserEvent -Me
-
-.NOTES
-Date formatting is YYYY-MM-DD as defined at https://docs.gitlab.com/ee/api/events.html#date-formatting
-#>
 function Get-GitlabUserEvent {
+    [CmdletBinding(DefaultParameterSetName='ByUserId')]
     param (
         [Parameter(ParameterSetName='ByUserId', Mandatory=$false)]
         [Alias("Username")]
@@ -97,7 +64,7 @@ function Get-GitlabUserEvent {
         $Me,
 
         [Parameter(Mandatory=$False)]
-        [ValidateSet("approved","closed","commented","created","destroyed","expired","joined","left","merged","pushed","reopened","updated")]
+        [ValidateSet('approved', 'closed', 'commented', 'created', 'destroyed', 'expired', 'joined', 'left', 'merged', 'pushed', 'reopened', 'updated')]
         [string]
         $Action,
 
