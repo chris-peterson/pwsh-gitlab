@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.69.3'
+    ModuleVersion = '1.69.4'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Allow creating a sub group with implicit context'
+            ReleaseNotes = 'Should process for transfer group'
         }
     }
 
