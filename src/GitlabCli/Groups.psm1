@@ -119,25 +119,25 @@ function New-GitlabGroup {
     }
 }
 
+# https://docs.gitlab.com/ee/api/groups.html#remove-group
 function Remove-GitlabGroup {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$false)]
         [string]
         $GroupId,
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Group = Get-GitlabGroup -GroupId $GroupId
 
-    Invoke-GitlabApi DELETE "groups/$($Group.Id)" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+    if ($PSCmdlet.ShouldProcess($Group.FullPath, "delete group")) {
+        Invoke-GitlabApi DELETE "groups/$($Group.Id)" -SiteUrl $SiteUrl | Out-Null
+        Write-Host "$($Group.FullPath) deleted"
+    }
 }
 
 function Copy-GitlabGroupToLocalFileSystem {
