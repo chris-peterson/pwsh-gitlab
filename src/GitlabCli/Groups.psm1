@@ -84,34 +84,38 @@ function Get-GitlabGroup {
 
 function New-GitlabGroup {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Position=0, Mandatory=$true)]
         [string]
         $GroupName,
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Mandatory=$false)]
         [string]
         $ParentGroupName,
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $ParentGroup = Get-GitlabGroup -GroupId $ParentGroupName
-    $GroupId = Invoke-GitlabApi POST "groups" @{
-        name = $GroupName
-        path = $GroupName
-        parent_id = $ParentGroup.Id
-        visibility = $ParentGroup.Visibility
-    } -SiteUrl $SiteUrl -WhatIf:$WhatIf | Select-Object -ExpandProperty id
-    if(-not $WhatIf) {
-        return Get-GitlabGroup -GroupId $GroupId
+    if ($ParentGroupName) {
+        $ParentGroup = Get-GitlabGroup -GroupId $ParentGroupName
+    }
+    else {
+        $ParentGroup = Get-GitlabGroup '.'
+        if (-not $ParentGroup) {
+            throw "Unknown parent group (use -ParentGroupName)"
+        }
+    }
+
+    if ($PSCmdlet.ShouldProcess($ParentGroup.FullPath, "create new group '$($ParentGroup.FullPath)/$($GroupName)'" )) {
+        Invoke-GitlabApi POST "groups" @{
+            name = $GroupName
+            path = $GroupName
+            parent_id = $ParentGroup.Id
+            visibility = $ParentGroup.Visibility
+        } -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.Group'
     }
 }
 
