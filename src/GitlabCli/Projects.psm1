@@ -284,44 +284,49 @@ function Rename-GitlabProject {
     Update-GitlabProject -ProjectId $ProjectId -Name $NewName -Path $NewName -SiteUrl $SiteUrl -WhatIf:$WhatIf
 }
 
+# https://docs.gitlab.com/ee/api/projects.html#fork-project
 function Copy-GitlabProject {
     [Alias("Fork-GitlabProject")]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Mandatory=$false)]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true)]
         [string]
         $DestinationGroup,
 
+        [Parameter(Mandatory=$false)]
+        [string]
+        $DestinationProjectName,
+
+
+        # https://docs.gitlab.com/ee/api/projects.html#delete-an-existing-forked-from-relationship
         [bool]
         [Parameter(Mandatory=$false)]
         $PreserveForkRelationship = $true,
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $SourceProject = Get-GitlabProject -ProjectId $ProjectId
     $Group = Get-GitlabGroup -GroupId $DestinationGroup
 
-    if ($WhatIf) {
-        Write-Host "WhatIf: forking '$($SourceProject.Name)' (project id: $($SourceProject.Id)) to '$($Group.FullPath)' (group id: $($Group.Id))"
-    } else {
+    if ($PSCmdlet.ShouldProcess("$($Group.FullPath)", "$($PreserveForkRelationship ? "fork" : "copy") $($SourceProject.Path)")) {
         $NewProject = Invoke-GitlabApi POST "projects/$($SourceProject.Id)/fork" @{
-            namespace_id = $Group.Id
-        } -SiteUrl $SiteUrl -WhatIf:$WhatIf
-    }
+            namespace_id           = $Group.Id
+            name                   = $DestinationProjectName ?? $SourceProject.Name
+            path                   = $DestinationProjectName ?? $SourceProject.Name
+            mr_default_target_self = 'true'
+        } -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference
 
-    if (-not $PreserveForkRelationship) {
-        Invoke-GitlabApi DELETE "projects/$($NewProject.id)/fork" -SiteUrl $SiteUrl -WhatIf:$WhatIf
+        if (-not $PreserveForkRelationship) {
+            Invoke-GitlabApi DELETE "projects/$($NewProject.id)/fork" -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference | Out-Null
+            Write-Host "Removed fork relationship between $($SourceProject.Name) and $($NewProject.PathWithNamespace)"
+        }
     }
 }
 function New-GitlabProject {
