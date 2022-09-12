@@ -142,63 +142,44 @@ function Remove-GitlabGroup {
 
 function Copy-GitlabGroupToLocalFileSystem {
     [Alias("Clone-GitlabGroup")]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    Push-Location
-
     $Group = Get-GitlabGroup $GroupId
-    $GroupSplit = $Group.FullPath -split '/'
 
-    $LocalPath = $(Get-Location).Path
-    for ($i = 0; $i -lt $GroupSplit.Count; $i++)
-    {
-        $ToMatch = $($GroupSplit | Select-Object -First $($GroupSplit.Count - $i)) -join '/'
-        if ($LocalPath -imatch "$ToMatch$") {
-            $LocalPath = $LocalPath.Replace($ToMatch, "").TrimEnd('/')
-            break;
-        }
-    }
+    if ($PSCmdlet.ShouldProcess($Group.FullPath, "clone group" )) {
+        $GroupSplit = $Group.FullPath -split '/'
 
-    if ($WhatIf) {
-        Write-Host "WhatIf: setting local directory to '$LocalPath'"
-    }
-
-    Get-GitlabProject -GroupId $GroupId -Recurse -MaxPages 100 |
-        ForEach-Object {
-            $Path="$LocalPath/$($_.Group)"
-
-            if ($WhatIf) {
-                Write-Host "WhatIf: cloning $($_.SshUrlToRepo) to $Path"
-            } else {
-                if (-not $(Test-Path $Path)) {
-                    New-Item $Path -Type Directory | Out-Null
-                }
-                Push-Location
-                Set-Location $Path
-                git clone $_.SshUrlToRepo
-                Pop-Location
+        $OriginalPath = $LocalPath = $(Get-Location).Path
+        for ($i = 0; $i -lt $GroupSplit.Count; $i++)
+        {
+            $ToMatch = $($GroupSplit | Select-Object -First $($GroupSplit.Count - $i)) -join '/'
+            if ($LocalPath -imatch "$ToMatch$") {
+                $LocalPath = $LocalPath.Replace($ToMatch, "").TrimEnd('/')
+                break;
             }
         }
 
-    Pop-Location
+        Get-GitlabProject -GroupId $GroupId -Recurse -MaxPages 100 |
+            ForEach-Object {
+                $Path="$LocalPath/$($_.Group)"
 
-    if ($WhatIf) {
-        Write-Host "WhatIf: setting directory to $LocalPath"
-    } else {
-        Set-Location $LocalPath
+                if (-not $(Test-Path $Path)) {
+                    New-Item $Path -Type Directory | Out-Null
+                }
+                Set-Location $Path
+                git clone $_.SshUrlToRepo
+            }
+
+        Set-Location $OriginalPath
     }
 }
 

@@ -329,8 +329,10 @@ function Copy-GitlabProject {
         }
     }
 }
+
+# https://docs.gitlab.com/ee/api/projects.html#create-project
 function New-GitlabProject {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Position=0, Mandatory=$true)]
         [string]
@@ -352,11 +354,7 @@ function New-GitlabProject {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Group = Get-GitlabGroup -GroupId $DestinationGroup
@@ -364,18 +362,19 @@ function New-GitlabProject {
         throw "DestinationGroup '$DestinationGroup' not found"
     }
 
-    $Project = Invoke-GitlabApi POST "projects" @{
-        name = $ProjectName
-        namespace_id = $Group.Id
-        visibility = $Visibility
-    } -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-        New-WrapperObject 'Gitlab.Project'
+    if ($PSCmdlet.ShouldProcess($Group.FullPath, "create new project '$ProjectName'" )) {
+        $Project = Invoke-GitlabApi POST "projects" @{
+            name = $ProjectName
+            namespace_id = $Group.Id
+            visibility = $Visibility
+        } -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.Project'
     
-    if ($CloneNow) {
-        git clone $Project.SshUrlToRepo
-        Set-Location $ProjectName
-    } else {
-        $Project
+        if ($CloneNow) {
+            git clone $Project.SshUrlToRepo
+            Set-Location $ProjectName
+        } else {
+            $Project
+        }
     }
 }
 
