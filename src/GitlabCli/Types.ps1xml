@@ -368,6 +368,10 @@
     <Name>Gitlab.AuditEvent</Name>
     <Members>
       <ScriptProperty>
+        <Name>CreatedAtSortable</Name>
+        <GetScriptBlock>$this.CreatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
         <Name>AuthorUserId</Name>
         <GetScriptBlock>
           if ($this.AuthorId -eq '-1') {

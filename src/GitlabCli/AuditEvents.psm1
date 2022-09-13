@@ -75,7 +75,15 @@ function Get-GitlabAuditEvent {
     $Results = Invoke-GitlabApi GET $Resource -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.AuditEvent'
 
     if ($FetchAuthors) {
-        $Authors = $Results.AuthorId | Select-Object -Unique | Where-Object { $_ -ne '-1' } | ForEach-Object { @{Id=$_; User=Get-GitlabUser $_ } }
+        $Authors = $Results.AuthorId | Select-Object -Unique | Where-Object { $_ -ne '-1' } | ForEach-Object {
+            try {
+                $User = Get-GitlabUser $_
+            }
+            catch {
+                $User = $null
+            }
+            @{Id=$_; User=$User }
+        }
         $Results | ForEach-Object {
             $_ | Add-Member -MemberType 'NoteProperty' -Name 'Author' -Value $($Authors | Where-Object Id -eq $_.AuthorId | Select-Object -ExpandProperty User)
         }

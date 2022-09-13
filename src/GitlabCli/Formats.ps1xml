@@ -1031,8 +1031,12 @@
           <TableColumnHeader>
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader/>
-          <TableColumnHeader/>
+          <TableColumnHeader>
+            <Label>CreatedAt</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>User</Label>
+          </TableColumnHeader>
           <TableColumnHeader/>
         </TableHeaders>
         <TableRowEntries>
@@ -1042,10 +1046,10 @@
                 <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>AuthorUserId</PropertyName>
+                <PropertyName>CreatedAtSortable</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>EntityType</PropertyName>
+                <PropertyName>AuthorUserId</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Summary</PropertyName>
