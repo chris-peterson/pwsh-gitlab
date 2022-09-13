@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.70.1'
+    ModuleVersion = '1.71.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Enhancements for new project, clone group'
+            ReleaseNotes = 'Audit events'
         }
     }
 
@@ -23,6 +23,7 @@
     FormatsToProcess = @('Formats.ps1xml')
 
     NestedModules = @(
+        'AuditEvents.psm1'
         'Branches.psm1'
         'Config.psm1'
         'Deployments.psm1'
@@ -49,6 +50,9 @@
     FunctionsToExport = @(
         # Git
         'Get-LocalGitContext'
+
+        # AuditEvents
+        'Get-GitlabAuditEvents'
 
         # Branches
         'Get-GitlabBranch'

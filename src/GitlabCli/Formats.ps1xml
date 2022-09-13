@@ -1021,5 +1021,39 @@
         </TableRowEntries>
       </TableControl>
     </View>
+    <View>
+      <Name>GitlabAuditEvent</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.AuditEvent</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>AuthorUserId</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>EntityType</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Summary</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
   </ViewDefinitions>
 </Configuration>

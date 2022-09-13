@@ -364,4 +364,47 @@
       </ScriptProperty>
     </Members>
   </Type>
+  <Type>
+    <Name>Gitlab.AuditEvent</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>AuthorUserId</Name>
+        <GetScriptBlock>
+          if ($this.AuthorId -eq '-1') {
+            $null
+          } else {
+            $this.Author.Username ?? $this.AuthorId
+          }
+        </GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Summary</Name>
+        <GetScriptBlock>
+          if ($this.EntityType -eq 'User') {
+            if ($this.Details.failed_login) {
+              "User $($this.Details.target_details) failed login ($($this.Details.failed_login))"
+            } elseif ($this.Details.custom_message) {
+              "User $($this.Details.custom_message) to $($this.Details.target_details)"
+            } elseif ($this.Details.add) {
+              "User $($this.Details.entity_path) added $($this.Details.add)"
+            } else {
+              "User $($this.Details.target_details) ($($this.Details.entity_path ?? $this.Details.target_id)) auth with $($this.Details.with)"
+            }
+            return
+          }
+          if ($this.Details.add) {
+            "Added $($this.Details.add) ($($this.Details.target_details)) in $($this.Details.entity_path)"
+          } elseif ($this.Details.remove) {
+            "Removed $($this.Details.remove) ($($this.Details.target_details)) in $($this.Details.entity_path)"
+          } elseif ($this.Details.change) {
+            "Changed $($this.Details.change) ($($this.Details.target_details)) from $($this.Details.from) to $($this.Details.to) in $($this.Details.entity_path)"
+          } elseif ($this.Details.custom_message) {
+            "$($this.Details.custom_message) in $($this.Details.entity_path)"
+          } else {
+            $this.Details
+          }
+        </GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
 </Types>
