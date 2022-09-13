@@ -1,5 +1,5 @@
 # https://docs.gitlab.com/ee/api/audit_events.html
-function Get-GitlabAuditEvents {
+function Get-GitlabAuditEvent {
 
     [CmdletBinding()]
     param (

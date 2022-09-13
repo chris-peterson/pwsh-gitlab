@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.71.0'
+    ModuleVersion = '1.71.1'
 
     PrivateData = @{
         PSData = @{
@@ -52,7 +52,7 @@
         'Get-LocalGitContext'
 
         # AuditEvents
-        'Get-GitlabAuditEvents'
+        'Get-GitlabAuditEvent'
 
         # Branches
         'Get-GitlabBranch'
