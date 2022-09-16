@@ -29,7 +29,7 @@ function Write-GitlabConfiguration {
 
     $ToSave |
         ConvertTo-Json |
-        Set-Content -Path $global:GitlabConfigurationPath |
+        Set-Content -Path $global:GitlabConfigurationPath -Force |
         Out-Null
 }
 
