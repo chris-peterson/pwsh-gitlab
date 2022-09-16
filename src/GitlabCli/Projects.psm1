@@ -334,38 +334,48 @@ function Copy-GitlabProject {
 function New-GitlabProject {
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory)]
         [string]
         $ProjectName,
 
-        [Parameter(Position=1, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName=$true, ParameterSetName='Group')]
         [Alias('GroupId')]
         [string]
         $DestinationGroup,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(ParameterSetName = 'Personal')]
+        [switch]
+        $Personal,
+
+        [Parameter()]
         [ValidateSet('private', 'internal', 'public')]
         [string]
         $Visibility = 'internal',
 
         [switch]
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         $CloneNow,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
 
-    $Group = Get-GitlabGroup -GroupId $DestinationGroup
-    if(-not $Group) {
-        throw "DestinationGroup '$DestinationGroup' not found"
+    if ($DestinationGroup) {
+        $Group = Get-GitlabGroup -GroupId $DestinationGroup
+        if(-not $Group) {
+            throw "DestinationGroup '$DestinationGroup' not found"
+        }
+        $NamespaceId = $Group.Id
+    }
+    if ($Personal) {
+        $NamespaceId = $null # defaults to current user
     }
 
-    if ($PSCmdlet.ShouldProcess($Group.FullPath, "create new project '$ProjectName'" )) {
+    if ($PSCmdlet.ShouldProcess($NamespaceId, "create new project '$ProjectName'" )) {
         $Project = Invoke-GitlabApi POST "projects" @{
             name = $ProjectName
-            namespace_id = $Group.Id
+            namespace_id = $NamespaceId
             visibility = $Visibility
         } -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.Project'
     
