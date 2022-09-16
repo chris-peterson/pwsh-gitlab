@@ -1,4 +1,9 @@
-$global:GitlabConfigurationPath = "$($env:HOME)/.config/powershell/gitlab.config"
+
+if($PSVersionTable.Platform -like 'Win*') {
+    $env:HOME = Join-Path $env:HOMEDRIVE $env:HOMEPATH
+} 
+
+$global:GitlabConfigurationPath = Join-Path $env:HOME "/.config/powershell/gitlab.config"
 
 function Test-IsConfigurationEnvironmentVariables {
     param (
