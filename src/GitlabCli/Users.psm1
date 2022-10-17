@@ -120,7 +120,7 @@ function Get-GitlabUserEvent {
         $GetUserParams.Me = $true
     }
 
-    $User = Get-GitlabUser @GetUserParams -WhatIf:$WhatIf -SiteUrl $SiteUrl
+    $User = Get-GitlabUser @GetUserParams -SiteUrl $SiteUrl
 
     $Query = @{}
     if($Before) {
