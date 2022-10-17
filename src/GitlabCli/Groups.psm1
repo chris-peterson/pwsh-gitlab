@@ -13,6 +13,7 @@ function Get-PossibleGroupName {
     $($Split | Select-Object -Last $Depth) -join '/'
 }
 
+# https://docs.gitlab.com/ee/api/groups.html#details-of-a-group
 function Get-GitlabGroup {
 
     [CmdletBinding(DefaultParameterSetName='ByGroupId')]

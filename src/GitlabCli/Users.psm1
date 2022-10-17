@@ -47,11 +47,12 @@ function Get-GitlabUser {
     }
 }
 
+# https://docs.gitlab.com/ee/api/events.html#get-user-contribution-events
 function Get-GitlabUserEvent {
     [CmdletBinding(DefaultParameterSetName='ByUserId')]
     param (
         [Parameter(ParameterSetName='ByUserId', Mandatory=$false)]
-        [Alias("Username")]
+        [Alias('Username')]
         [string]
         $UserId,
 
@@ -69,7 +70,7 @@ function Get-GitlabUserEvent {
         $Action,
 
         [Parameter(Mandatory=$False)]
-        [ValidateSet("issue","milestone","merge_request","note","project","snippet","user")]
+        [ValidateSet('issue', 'milestone', 'merge_request', 'note', 'project', 'snippet', 'user')]
         [string]
         $TargetType,
 
@@ -84,13 +85,17 @@ function Get-GitlabUserEvent {
         $After,
 
         [Parameter(Mandatory=$False)]
-        [ValidateSet("asc","desc")]
+        [ValidateSet('asc', 'desc')]
         [string]
         $Sort,
 
         [Parameter(Mandatory=$False)]
         [uint]
         $MaxPages = 1,
+
+        [Parameter(Mandatory=$False)]
+        [switch]
+        $FetchProjects,
 
         [Parameter(Mandatory=$False)]
         [string]
@@ -101,40 +106,55 @@ function Get-GitlabUserEvent {
         $WhatIf
     )
 
-    $getGitlabUserParameters = @{}
+    $GetUserParams = @{}
     
-    if($PSCmdlet.ParameterSetName -eq "ByUserId" ) {
-        $getGitlabUserParameters.UserId = $UserId
+    if($PSCmdlet.ParameterSetName -eq 'ByUserId') {
+        $GetUserParams.UserId = $UserId
     } 
     
-    if ($PSCmdLet.ParameterSetName -eq "ByEmail") {
-        $getGitlabUserParameters.UserId = $EmailAddress
+    if ($PSCmdLet.ParameterSetName -eq 'ByEmail') {
+        $GetUserParams.UserId = $EmailAddress
     }
 
-    if($PSCmdlet.ParameterSetName -eq "ByMe") {
-        $getGitlabUserParameters.Me=$true
+    if($PSCmdlet.ParameterSetName -eq 'ByMe') {
+        $GetUserParams.Me = $true
     }
 
-    $user = Get-GitlabUser @getGitlabUserParameters -WhatIf:$WhatIf -SiteUrl $SiteUrl
+    $User = Get-GitlabUser @GetUserParams -WhatIf:$WhatIf -SiteUrl $SiteUrl
 
-    $query = @{}
+    $Query = @{}
     if($Before) {
-        $query.before = $Before
+        $Query.before = $Before
     }
     if($After) {
-        $query.after = $After
+        $Query.after = $After
     }
-
     if($Action) {
-        $query.action = $Action
+        $Query.action = $Action
     }
     if($Sort) {
-        $query.sort = $Sort
+        $Query.sort = $Sort
     }
 
-    Invoke-GitlabApi GET "users/$($user.Id)/events" -Query $query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+    $Events = Invoke-GitlabApi GET "users/$($User.Id)/events" -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
         New-WrapperObject 'Gitlab.Event'
 
+    if ($FetchProjects) {
+        $ProjectIds = $Events.ProjectId | Select-Object -Unique
+        $Projects = $ProjectIds | ForEach-Object {
+            try {
+                Get-GitlabProject $_ -WhatIf:$WhatIf -SiteUrl $SiteUrl
+            }
+            catch {
+                $null
+            }
+        }
+        $Events | ForEach-Object {
+            $_ | Add-Member -MemberType 'NoteProperty' -Name 'Project' -Value $($Projects | Where-Object Id -eq $_.ProjectId)
+        }
+    }
+
+    $Events
 }
 
 function Get-GitlabCurrentUser {

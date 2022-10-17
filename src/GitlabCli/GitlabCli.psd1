@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.71.3'
+    ModuleVersion = '1.72.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Can now create personal project'
+            ReleaseNotes = 'Add ability to fetch projects while querying user events'
         }
     }
 
