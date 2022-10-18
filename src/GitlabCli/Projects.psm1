@@ -68,7 +68,7 @@ function Get-GitlabProject {
 
     [CmdletBinding(DefaultParameterSetName='ById')]
     param (
-        [Parameter(Position=0, Mandatory=$false, ParameterSetName='ById')]
+        [Parameter(Position=0, Mandatory=$false, ParameterSetName='ById', ValueFromPipelineByPropertyName=$true)]
         [string]
         $ProjectId = '.',
 
