@@ -40,6 +40,9 @@ function Get-GitlabUser {
             scope = 'users'
             search = $EmailAddress
         } -SiteUrl $SiteUrl -WhatIf:$WhatIf | Select-Object -First 1 -ExpandProperty id
+        if (-not $WhatIf -and -not $UserId) {
+            throw "No user found for $EmailAddress"
+        }
         Invoke-GitlabApi GET "users/$UserId" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.User'
     }
     if ($Me) {
