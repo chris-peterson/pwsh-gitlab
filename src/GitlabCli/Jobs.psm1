@@ -256,3 +256,85 @@ function Get-GitlabPipelineDefinition {
 
     Get-GitlabRepositoryYmlFileContent -ProjectId $ProjectId -FilePath '.gitlab-ci.yml' -Ref $Ref -SiteUrl $SiteUrl -WhatIf:$WhatIf
 }
+
+$Global:GitlabJobLogSections=New-Object 'Collections.Generic.Stack[string]'
+
+<#
+.SYNOPSIS
+Produces a section that can be collapsed in the Gitlab CI output
+
+.PARAMETER HeaderText
+Name of the section
+
+.PARAMETER Collapsed
+Whether or not the section is pre-collapsed. Not currently supported. Has no affect
+
+.EXAMPLE
+Start-GitlabJobLogSection "Doing the thing"
+try {
+    #the things
+}
+finally {
+    Stop-GitlabJobLogSection
+}
+
+.NOTES
+for reference: https://docs.gitlab.com/ce/ci/jobs/index.html#custom-collapsible-sections
+#>
+function Start-GitlabJobLogSection {
+    param(
+        [Parameter(Mandatory=$true, Position = 0)]
+        [string]
+        $HeaderText,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $Collapsed
+    )
+    
+    $Timestamp = Get-EpochTimestamp
+    $CollapsedHeader = ''
+    if ($Collapsed) {
+        $CollapsedHeader = '[collapsed=true]'
+    }
+
+    # use timestamp as the section name (since we are hiding that in our API)
+    $SectionId = "$([System.Guid]::NewGuid().ToString("N"))"
+    Write-Host "`e[0Ksection_start:$($Timestamp):$($SectionId)$($CollapsedHeader)`r`e[0K$HeaderText"
+    $Global:GitlabJobLogSections.Push($SectionId)
+}
+
+<#
+.SYNOPSIS
+Closes out a previously declared collapsible section in Gitlab CI output
+
+.DESCRIPTION
+Long description
+
+.EXAMPLE
+Start-GitlabJobLogSection "Doing the thing"
+try {
+    #the things
+}
+finally {
+    Stop-GitlabJobLogSection
+}
+
+.NOTES
+for reference: https://docs.gitlab.com/ce/ci/jobs/index.html#custom-collapsible-sections
+#>
+function Stop-GitlabJobLogSection {
+
+    if ($Global:GitlabJobLogSections.Count -eq 0) {
+        # explicitly do nothing
+        # most likely case is if stop is called more than start
+        return
+    }
+    $PreviousId = $Global:GitlabJobLogSections.Pop()
+    $Timestamp = Get-EpochTimestamp
+    Write-Host "section_end:$($Timestamp):$PreviousId`r`e[0K"
+}
+
+function Get-EpochTimestamp {
+    [int] $(New-TimeSpan -Start $(Get-Date "01/01/1970") -End $(Get-Date)).TotalSeconds
+}

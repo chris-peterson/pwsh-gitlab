@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.72.1'
+    ModuleVersion = '1.73.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Minor enhancements'
+            ReleaseNotes = 'Add collapsible sections'
         }
     }
 
@@ -163,6 +163,8 @@
         'Start-GitlabJob'
         'Get-GitlabPipelineDefinition'
         'Test-GitlabPipelineDefinition'
+        'Start-GitlabJobLogSection'
+        'Stop-GitlabJobLogSection'
 
         # Runners
         'Get-GitlabRunner'
