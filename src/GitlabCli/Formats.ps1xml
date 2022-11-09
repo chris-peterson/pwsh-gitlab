@@ -269,7 +269,9 @@
           <TableColumnHeader/>
           <TableColumnHeader/>
           <TableColumnHeader/>
-          <TableColumnHeader/>
+          <TableColumnHeader>
+            <Label>Url</Label>
+          </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
           <TableRowEntry>
@@ -285,7 +287,7 @@
                 <PropertyName>Status</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Url</PropertyName>
+                <PropertyName>DownstreamPipelineUrl</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

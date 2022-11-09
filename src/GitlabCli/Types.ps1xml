@@ -98,7 +98,16 @@
       </ScriptProperty>
     </Members>
   </Type>
-    <Type>
+  <Type>
+    <Name>Gitlab.PipelineBridge</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>DownstreamPipelineUrl</Name>
+        <GetScriptBlock>$this.DownstreamPipeline.web_url</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Gitlab.PipelineSchedule</Name>
     <Members>
     </Members>
