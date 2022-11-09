@@ -280,6 +280,15 @@
     </Members>
   </Type>
   <Type>
+    <Name>Gitlab.Commit</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>CommittedDateSortable</Name>
+        <GetScriptBlock>$this.CommittedDate.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Gitlab.Configuration</Name>
     <Members>
       <ScriptProperty>

@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.73.0'
+    ModuleVersion = '1.74.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Add collapsible sections'
+            ReleaseNotes = 'Query commits'
         }
     }
 
@@ -25,6 +25,7 @@
     NestedModules = @(
         'AuditEvents.psm1'
         'Branches.psm1'
+        'Commits.psm1'
         'Config.psm1'
         'Deployments.psm1'
         'Environments.psm1'
@@ -62,6 +63,9 @@
         'UnProtect-GitlabBranch'
         'Remove-GitlabBranch'
         'Get-GitlabProtectedBranchAccessLevel'
+
+        # Commits
+        'Get-GitlabCommit'
 
         # Configuration
         'Get-GitlabConfiguration'

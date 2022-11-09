@@ -770,6 +770,44 @@
       </TableControl>
     </View>
     <View>
+      <Name>GitlabCommit</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.Commit</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>Id</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>CommittedAt</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Author</Label>
+          </TableColumnHeader>
+          <TableColumnHeader/>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>ShortId</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>CommittedDateSortable</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>AuthorName</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Title</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>GitlabConfiguration</Name>
       <ViewSelectedBy>
         <TypeName>Gitlab.Configuration</TypeName>

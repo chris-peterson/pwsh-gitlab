@@ -5,6 +5,7 @@ $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.AccessToken'               = 'Id'
     'Gitlab.BlobSearchResult'          = ''
     'Gitlab.Branch'                    = ''
+    'Gitlab.Commit'                    = 'Id'
     'Gitlab.Configuration'             = ''
     'Gitlab.Environment'               = 'Id'
     'Gitlab.Event'                     = 'Id'
