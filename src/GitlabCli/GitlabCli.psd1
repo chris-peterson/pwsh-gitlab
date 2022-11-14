@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.74.2'
+    ModuleVersion = '1.75.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'bugfix: when creating new group, parent should be optional'
+            ReleaseNotes = 'feature: topics API'
         }
     }
 
@@ -44,6 +44,7 @@
         'RepositoryFiles.psm1'
         'Runners.psm1'
         'Search.psm1'
+        'Topics.psm1'
         'Users.psm1'
         'Utilities.psm1'
         'Variables.psm1'
@@ -180,6 +181,10 @@
         # Search
         'Search-Gitlab'
         'Search-GitlabProject'
+
+        # Topics
+        'Get-GitlabTopic'
+        'Remove-GitlabTopic'
 
         # User
         'Get-GitlabUser'

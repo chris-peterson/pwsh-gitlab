@@ -126,7 +126,7 @@ function Get-GitlabProject {
         if ($MaxPages -ne $global:GitlabGetProjectDefaultPages) {
             Write-Warning -Message "Ignoring -MaxPages in favor of -All"
         }
-        $MaxPages = [int]::MaxValue
+        $MaxPages = [uint]::MaxValue
     }
 
     $Projects = @()

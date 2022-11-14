@@ -40,7 +40,7 @@ function Search-Gitlab {
         if ($MaxResults -ne $global:GitlabSearchResultsDefaultLimit) {
             Write-Warning -Message "Ignoring -MaxResults in favor of -All"
         }
-        $MaxResults = [int]::MaxValue
+        $MaxResults = [uint]::MaxValue
     }
 
     $PageSize = 20

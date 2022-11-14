@@ -27,6 +27,7 @@ $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.SearchResult.Blob'         = ''
     'Gitlab.SearchResult.MergeRequest' = ''
     'Gitlab.SearchResult.Project'      = ''
+    'Gitlab.Topic'                     = 'Id'
     'Gitlab.User'                      = 'Id'
     'Gitlab.UserMembership'            = ''
     'Gitlab.Variable'                  = ''
@@ -98,7 +99,7 @@ function Invoke-GitlabApi {
         $Body = @{},
 
         [Parameter()]
-        [int]
+        [uint]
         $MaxPages = 1,
 
         [Parameter()]
@@ -113,6 +114,10 @@ function Invoke-GitlabApi {
         [switch]
         $WhatIf
     )
+
+    if ($MaxPages -gt [int]::MaxValue) {
+         $MaxPages = [int]::MaxValue
+    }
 
     if ($SiteUrl) {
         Write-Debug "Attempting to resolve site using $SiteUrl"
@@ -160,8 +165,8 @@ function Invoke-GitlabApi {
 
     $RestMethodParams = @{}
     if($MaxPages -gt 1) {
-        $RestMethodParams['FollowRelLink'] = $true
-        $RestMethodParams['MaximumFollowRelLink'] = $MaxPages
+        $RestMethodParams.FollowRelLink = $true
+        $RestMethodParams.MaximumFollowRelLink = $MaxPages
     }
     if ($Body.Count -gt 0) {
         $RestMethodParams.ContentType = 'application/json'
