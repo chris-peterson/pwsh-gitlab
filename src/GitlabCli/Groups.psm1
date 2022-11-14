@@ -83,6 +83,7 @@ function Get-GitlabGroup {
         New-WrapperObject 'Gitlab.Group'
 }
 
+# https://docs.gitlab.com/ee/api/groups.html#new-group
 function New-GitlabGroup {
 
     [CmdletBinding(SupportsShouldProcess)]
@@ -91,32 +92,33 @@ function New-GitlabGroup {
         [string]
         $GroupName,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $ParentGroupName,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
+        [ValidateSet('private', 'internal', 'public')]
+        [string]
+        $Visibility = 'internal',
+
+        [Parameter()]
         [string]
         $SiteUrl
     )
+    $Query = @{
+        name       = $GroupName
+        path       = $GroupName
+        visibility = $Visibility
+    }
 
     if ($ParentGroupName) {
         $ParentGroup = Get-GitlabGroup -GroupId $ParentGroupName
-    }
-    else {
-        $ParentGroup = Get-GitlabGroup '.'
-        if (-not $ParentGroup) {
-            throw "Unknown parent group (use -ParentGroupName)"
-        }
+        $Query.parent_id = $ParentGroup.Id
     }
 
-    if ($PSCmdlet.ShouldProcess($ParentGroup.FullPath, "create new group '$($ParentGroup.FullPath)/$($GroupName)'" )) {
-        Invoke-GitlabApi POST "groups" @{
-            name = $GroupName
-            path = $GroupName
-            parent_id = $ParentGroup.Id
-            visibility = $ParentGroup.Visibility
-        } -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.Group'
+    if ($PSCmdlet.ShouldProcess($GroupName, "create new $Visibility group '$GroupName'" )) {
+        Invoke-GitlabApi POST "groups" $Query -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference |
+            New-WrapperObject 'Gitlab.Group'
     }
 }
 

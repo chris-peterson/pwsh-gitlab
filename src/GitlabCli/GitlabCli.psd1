@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.74.1'
+    ModuleVersion = '1.74.2'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Query commits'
+            ReleaseNotes = 'bugfix: when creating new group, parent should be optional'
         }
     }
 
