@@ -110,7 +110,7 @@ function Get-GitlabProject {
         $All,
 
         [Parameter(Mandatory=$false)]
-        [int]
+        [uint]
         $MaxPages = $global:GitlabGetProjectDefaultPages,
 
         [Parameter(Mandatory=$false)]
