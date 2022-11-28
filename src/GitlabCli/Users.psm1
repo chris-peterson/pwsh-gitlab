@@ -1,26 +1,22 @@
 function Get-GitlabUser {
     [CmdletBinding(DefaultParameterSetName='ByUserId')]
     param (
-        [Parameter(Position=0, ParameterSetName='ByUserId', Mandatory=$false)]
+        [Parameter(Position=0, ParameterSetName='ByUserId', ValueFromPipelineByPropertyName=$true)]
         [Alias("Username")]
         [string]
         $UserId,
 
-        [Parameter(ParameterSetName='ByEmail', Mandatory=$false)]
+        [Parameter(ParameterSetName='ByEmail')]
         [string]
         $EmailAddress,
 
-        [Parameter(ParameterSetName='ByMe', Mandatory=$False)]
+        [Parameter(ParameterSetName='ByMe')]
         [switch]
         $Me,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     if ($UserId) {
@@ -33,20 +29,20 @@ function Get-GitlabUser {
                 throw $ErrorMessage
             }
         }
-        Invoke-GitlabApi GET "users/$UserId" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.User'
+        Invoke-GitlabApi GET "users/$UserId" -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.User'
     }
     if ($EmailAddress) {
         $UserId = Invoke-GitlabApi GET "search" @{
             scope = 'users'
             search = $EmailAddress
-        } -SiteUrl $SiteUrl -WhatIf:$WhatIf | Select-Object -First 1 -ExpandProperty id
+        } -SiteUrl $SiteUrl | Select-Object -First 1 -ExpandProperty id
         if (-not $WhatIf -and -not $UserId) {
             throw "No user found for $EmailAddress"
         }
-        Invoke-GitlabApi GET "users/$UserId" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.User'
+        Invoke-GitlabApi GET "users/$UserId" -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.User'
     }
     if ($Me) {
-        Invoke-GitlabApi GET 'user' -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.User'
+        Invoke-GitlabApi GET 'user' -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.User'
     }
 }
 

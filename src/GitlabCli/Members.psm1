@@ -1,7 +1,13 @@
 # https://docs.gitlab.com/ee/api/members.html#valid-access-levels
 function Get-GitlabMemberAccessLevel {
 
-    [PSCustomObject]@{
+    param(
+        [Parameter(Position=0)]
+        [string]
+        $AccessLevel
+    )
+
+    $Levels = [PSCustomObject]@{
         NoAccess = 0
         MinimalAccess = 5
         Guest = 10
@@ -9,6 +15,12 @@ function Get-GitlabMemberAccessLevel {
         Developer = 30
         Maintainer = 40
         Owner = 50
+    }
+
+    if ($AccessLevel) {
+        $Levels.$AccessLevel
+    } else {
+        $Levels
     }
 }
 
@@ -26,6 +38,11 @@ function Get-GitlabGroupMember {
         [switch]
         [Parameter(Mandatory=$false)]
         $All,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        [ValidateSet('guest', 'reporter', 'developer', 'maintainer', 'owner')]
+        $MinAccessLevel,
 
         [Parameter(Mandatory=$false)]
         [int]
@@ -49,8 +66,13 @@ function Get-GitlabGroupMember {
     $Members = $All ? "members/all" : "members"
     $Resource = $User ? "groups/$($Group.Id)/$Members/$($User.Id)" : "groups/$($Group.Id)/$Members"
 
-    Invoke-GitlabApi GET $Resource -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-        New-WrapperObject 'Gitlab.Member'
+    $Members = Invoke-GitlabApi GET $Resource -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    if ($MinAccessLevel) {
+        $MinAccessLevelLiteral = Get-GitlabMemberAccessLevel $MinAccessLevel
+        $Members = $Members | Where-Object access_level -ge $MinAccessLevelLiteral
+    }
+
+    $Members | New-WrapperObject 'Gitlab.Member'
 }
 
 # https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project
@@ -91,33 +113,33 @@ function Add-GitlabGroupMember {
 
 # https://docs.gitlab.com/ee/api/members.html#remove-a-member-from-a-group-or-project
 function Remove-GitlabGroupMember {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory=$true)]
         [string]
         $GroupId,
 
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Alias('Username')]
         [string]
         $UserId,
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl -WhatIf:$false
-    $Group = Get-GitlabGroup -GroupId $GroupId -SiteUrl $SiteUrl -WhatIf:$false
+    $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
+    $Group = Get-GitlabGroup -GroupId $GroupId -SiteUrl $SiteUrl
 
-    try {
-        Invoke-GitlabApi DELETE "groups/$($Group.Id)/members/$($User.Id)" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
-        Write-Host "Removed $($User.Username) from $($Group.Name)"
-    }
-    catch {
-        Write-Error "Error removing $($User.Username) from $($Group.Name): $_"
+    if ($PSCmdlet.ShouldProcess($Group.FullName, "remove $($User.Username)'s group membership")) {
+        try {
+            Invoke-GitlabApi DELETE "groups/$($Group.Id)/members/$($User.Id)" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+            Write-Host "Removed $($User.Username) from $($Group.Name)"
+        }
+        catch {
+            Write-Error "Error removing $($User.Username) from $($Group.Name): $_"
+        }
     }
 }
 
@@ -300,34 +322,54 @@ function Add-GitlabUserMembership {
 
 # https://docs.gitlab.com/ee/api/members.html#edit-a-member-of-a-group-or-project
 function Update-GitlabUserMembership {
+    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName='Group')]
     param (
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $Username,
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(ParameterSetName='Group', Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
 
-        [Parameter(Position=2, Mandatory=$true)]
+        [Parameter(ParameterSetName='Project', Mandatory, ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId,
+
+        [Parameter(Mandatory)]
         [string]
         [ValidateSet('developer', 'maintainer', 'owner')]
         $AccessLevel,
 
-        [Parameter(Mandatory=$false)]
-        [string]
-        $SiteUrl,
-
         [Parameter()]
-        [switch]
-        $WhatIf
+        [string]
+        $SiteUrl
     )
 
-    $Group = Get-GitlabGroup -GroupId $GroupId
     $User = Get-GitlabUser -UserId $Username
 
-    Invoke-GitlabApi PUT "groups/$($Group.Id)/members/$($User.Id)" @{
-        access_level = $(Get-GitlabMemberAccessLevel)."$AccessLevel"
-    }  -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-    New-WrapperObject 'Gitlab.Member'
+    $Rows = @()
+
+    $AccessLevelLiteral = $(Get-GitlabMemberAccessLevel)."$AccessLevel"
+
+    switch ($PSCmdlet.ParameterSetName) {
+        Group {
+            $Group = Get-GitlabGroup -GroupId $GroupId
+            if ($PSCmdLet.ShouldProcess($Group.FullName, "update $($User.Username)'s membership access level to '$AccessLevel' on group")) {
+                $Rows = Invoke-GitlabApi PUT "groups/$($Group.Id)/members/$($User.Id)" @{
+                    access_level = $AccessLevelLiteral
+                } -SiteUrl $SiteUrl
+            }
+         }
+        Project {
+            $Project = Get-GitlabProject -ProjectId $ProjectId
+            if ($PSCmdLet.ShouldProcess($Project.PathWithNamespace, "update $($User.Username)'s membership access level to '$AccessLevel' on project")) {
+                $Rows = Invoke-GitlabApi PUT "projects/$($Project.Id)/members/$($User.Id)" @{
+                    access_level = $AccessLevelLiteral
+                }  -SiteUrl $SiteUrl
+            }
+        }
+    }
+
+    $Rows | New-WrapperObject 'Gitlab.Member'
 }
