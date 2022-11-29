@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.76.0'
+    ModuleVersion = '1.76.1'
 
     PrivateData = @{
         PSData = @{
@@ -198,6 +198,8 @@
         'Get-GitlabProjectIntegration'
 
         # Members
+        'Get-GitlabMemberAccessLevel'
+
         'Get-GitlabGroupMember'
         'Add-GitlabGroupMember'
         'Remove-GitlabGroupMember'
@@ -209,7 +211,6 @@
         'Get-GitlabUserMembership'
         'Add-GitlabUserMembership'
         'Update-GitlabUserMembership'
-        'Get-GitlabMemberAccessLevel'
 
         # Utilities
         'ConvertTo-PascalCase'

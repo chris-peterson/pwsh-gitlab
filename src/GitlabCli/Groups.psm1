@@ -15,7 +15,6 @@ function Get-PossibleGroupName {
 
 # https://docs.gitlab.com/ee/api/groups.html#details-of-a-group
 function Get-GitlabGroup {
-
     [CmdletBinding(DefaultParameterSetName='ByGroupId')]
     param (
         [Parameter(Position=0, Mandatory=$false, ParameterSetName='ByGroupId')]
@@ -39,6 +38,7 @@ function Get-GitlabGroup {
         [Parameter(Mandatory=$false)]
         $WhatIf
     )
+
     $MaxPages = 10
     if($GroupId) {
         if ($GroupId -eq '.') {
@@ -447,7 +447,7 @@ function New-GitlabGroupShareLink {
     $Body = @{
 
         group_id = $GroupShareId
-        group_access = $(Get-GitlabMemberAccessLevel).$AccessLevel
+        group_access = Get-GitlabMemberAccessLevel $AccessLevel
         expires_at = $ExpiresAt
     }
 

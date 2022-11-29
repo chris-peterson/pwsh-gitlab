@@ -157,15 +157,12 @@ function Get-GitlabUserEvent {
 }
 
 function Get-GitlabCurrentUser {
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    Get-GitlabUser -Me -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    Get-GitlabUser -Me -SiteUrl $SiteUrl
 }

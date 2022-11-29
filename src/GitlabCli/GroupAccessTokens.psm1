@@ -65,7 +65,7 @@ function New-GitlabGroupAccessToken {
     $Response = Invoke-GitlabApi POST "groups/$GroupId/access_tokens" -Body @{
         name = $Name
         scopes = $Scope
-        access_level = $(Get-GitlabMemberAccessLevel).$AccessLevel
+        access_level = Get-GitlabMemberAccessLevel $AccessLevel
     } -SiteUrl $SiteUrl -WhatIf:$WhatIf
 
     if ($CopyToClipboard) {

@@ -60,7 +60,7 @@ function Get-GitlabGroupMember {
     $Group = Get-GitlabGroup -GroupId $GroupId -SiteUrl $SiteUrl -WhatIf:$false
 
     if ($UserId) {
-        $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl -WhatIf:$false
+        $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
     }
 
     $Members = $All ? "members/all" : "members"
@@ -77,38 +77,38 @@ function Get-GitlabGroupMember {
 
 # https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project
 function Add-GitlabGroupMember {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]
-        $GroupId = '.',
+        $GroupId,
 
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Mandatory)]
         [string]
         $UserId,
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Mandatory)]
         [ValidateSet('guest', 'reporter', 'developer', 'maintainer')]
         [string]
         $AccessLevel,
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl -WhatIf:$false
+    $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
     $Group = Get-GitlabGroup -GroupId $GroupId -SiteUrl $SiteUrl -WhatIf:$false
 
-    $Query = @{
+    $Request = @{
         user_id = $User.Id
-        access_level = $(Get-GitlabMemberAccessLevel).$AccessLevel
+        access_level = Get-GitlabMemberAccessLevel $AccessLevel
     }
-    Invoke-GitlabApi POST "group/$($Group.Id)/members" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-        New-WrapperObject 'Gitlab.Member'
+
+    if ($PSCmdlet.ShouldProcess($Group.FullName, "grant $($User.Username) '$AccessLevel' membership")) {
+        Invoke-GitlabApi POST "groups/$($Group.Id)/members" -Body $Request -SiteUrl $SiteUrl |
+            New-WrapperObject 'Gitlab.Member'
+    }
 }
 
 # https://docs.gitlab.com/ee/api/members.html#remove-a-member-from-a-group-or-project
@@ -175,7 +175,7 @@ function Get-GitlabProjectMember {
     $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl -WhatIf:$false
 
     if ($UserId) {
-        $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl -WhatIf:$false
+        $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
     }
 
     $Members = $All ? "members/all" : "members"
@@ -210,12 +210,12 @@ function Add-GitlabProjectMember {
         $WhatIf
     )
 
-    $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl -WhatIf:$false
+    $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
     $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl -WhatIf:$false
 
     $Query = @{
         user_id = $User.Id
-        access_level = $(Get-GitlabMemberAccessLevel).$AccessLevel
+        access_level = Get-GitlabMemberAccessLevel $AccessLevel
     }
     Invoke-GitlabApi POST "projects/$($Project.Id)/members" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf |
         New-WrapperObject 'Gitlab.Member'
@@ -241,7 +241,7 @@ function Remove-GitlabProjectMember {
         $WhatIf
     )
 
-    $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl -WhatIf:$false
+    $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
     $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl -WhatIf:$false
 
     try {
@@ -315,7 +315,7 @@ function Add-GitlabUserMembership {
 
     Invoke-GitlabApi POST "groups/$($Group.Id)/members" @{
         user_id = $User.Id
-        access_level = $(Get-GitlabMemberAccessLevel)."$AccessLevel"
+        access_level = Get-GitlabMemberAccessLevel $AccessLevel
     }  -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
     Write-Host "$($User.Username) added to $($Group.FullPath)"
 }
@@ -350,7 +350,7 @@ function Update-GitlabUserMembership {
 
     $Rows = @()
 
-    $AccessLevelLiteral = $(Get-GitlabMemberAccessLevel)."$AccessLevel"
+    $AccessLevelLiteral = Get-GitlabMemberAccessLevel $AccessLevel
 
     switch ($PSCmdlet.ParameterSetName) {
         Group {
