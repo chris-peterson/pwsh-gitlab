@@ -149,6 +149,10 @@
         'Approve-GitlabMergeRequest'
         'Update-GitlabMergeRequest'
         'Close-GitlabMergeRequest'
+        # MergeRequest Approvals
+        'Get-GitlabMergeRequestApprovals'
+        'Update-GitlabMergeRequestApprovals'
+        'Get-GitlabMergeRequestApprovalRules'
 
         # Pipelines
         'Get-GitlabPipeline'

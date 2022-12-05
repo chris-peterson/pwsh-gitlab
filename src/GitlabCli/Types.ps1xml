@@ -82,6 +82,21 @@
     </Members>
   </Type>
   <Type>
+    <Name>Gitlab.MergeRequestApprovalRule</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Approvers</Name>
+        <GetScriptBlock>
+        $Users = $this.EligibleApprovers.username -join ', '
+        if ($this.Groups) {
+          "$($this.Groups.full_name -join ', ') ($Users)"
+        } else {
+          $Users
+        }</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Gitlab.Pipeline</Name>
     <Members>
       <ScriptProperty>

@@ -13,6 +13,7 @@ $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.ProjectIntegration'        = 'Id'
     'Gitlab.Job'                       = 'Id'
     'Gitlab.Member'                    = 'Id'
+    'Gitlab.MergeRequestApprovalRule'  = 'Id'
     'Gitlab.Note'                      = 'Id'
     'Gitlab.Pipeline'                  = 'Id'
     'Gitlab.PipelineBridge'            = 'Id'
