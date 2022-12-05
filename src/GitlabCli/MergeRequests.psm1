@@ -468,6 +468,123 @@ function Approve-GitlabMergeRequest {
         }
     }
 
-    Invoke-GitlabApi POST "/projects/$ProjectId/merge_requests/$MergeRequestId/approve" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+    Invoke-GitlabApi POST "projects/$ProjectId/merge_requests/$MergeRequestId/approve" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
     Get-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -IncludeApprovals -SiteUrl $SiteUrl
+}
+
+# https://docs.gitlab.com/ee/api/merge_request_approvals.html#project-level-mr-approvals
+function Get-GitlabMergeRequestApprovals {
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl
+    )
+
+    $Project = Get-GitlabProject $ProjectId
+
+    Invoke-GitlabApi GET "projects/$($Project.Id)/approvals" -SiteUrl $SiteUrl | New-WrapperObject
+}
+
+# https://docs.gitlab.com/ee/api/merge_request_approvals.html#change-configuration
+function Update-GitlabMergeRequestApprovals {
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter()]
+        [ValidateSet($null, 'true', 'false')]
+        [object]
+        $DisableOverridingApproversPerMergeRequest,
+
+        [Parameter()]
+        [ValidateSet($null, 'true', 'false')]
+        [object]
+        $MergeRequestsAuthorApproval,
+
+        [Parameter()]
+        [ValidateSet($null, 'true', 'false')]
+        [object]
+        $MergeRequestsDisableCommittersApproval,
+
+        [Parameter()]
+        [ValidateSet($null, 'true', 'false')]
+        [object]
+        $RequirePasswordToApprove,
+
+        [Parameter()]
+        [ValidateSet($null, 'true', 'false')]
+        [object]
+        $ResetApprovalsOnPush,
+
+        [Parameter()]
+        [ValidateSet($null, $true, $false)]
+        [object]
+        $SelectiveCodeOwnerRemovals,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl
+    )
+
+    $Project = Get-GitlabProject $ProjectId
+
+    $Request = @{}
+    if ($DisableOverridingApproversPerMergeRequest -ne $null) {
+        $Request.disable_overriding_approvers_per_merge_request = $DisableOverridingApproversPerMergeRequest.ToLower()
+    }
+    if ($MergeRequestsAuthorApproval -ne $null) {
+        $Request.merge_requests_author_approval = $MergeRequestsAuthorApproval.ToLower()
+    }
+    if ($MergeRequestsDisableCommittersApproval -ne $null) {
+        $Request.merge_requests_disable_committers_approval = $MergeRequestsDisableCommittersApproval.ToLower()
+    }
+    if ($RequirePasswordToApprove -ne $null) {
+        $Request.require_password_to_approve = $RequirePasswordToApprove.ToLower()
+    }
+    if ($ResetApprovalsOnPush -ne $null) {
+        $Request.reset_approvals_on_push = $ResetApprovalsOnPush.ToLower()
+    }
+    if ($SelectiveCodeOwnerRemovals -ne $null) {
+        $Request.selective_code_owner_removals = $SelectiveCodeOwnerRemovals.ToLower()
+    }
+
+    if ($PSCmdlet.ShouldProcess($Project.PathWithNamespace, "update merge request approval settings to $($Request | ConvertTo-Json)")) {
+        Invoke-GitlabApi POST "projects/$($Project.Id)/approvals" -Body $Request -SiteUrl $SiteUrl | New-WrapperObject
+    }
+}
+
+# https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-project-level-rules
+# https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-a-single-project-level-rule
+function Get-GitlabMergeRequestApprovalRules {
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=1, ValueFromPipelineByPropertyName)]
+        [Alias('Id')]
+        [string]
+        $ApprovalRuleId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl
+    )
+
+    $Project = Get-GitlabProject $ProjectId
+
+    $Resource = "projects/$($Project.Id)/approval_rules"
+    if ($ApprovalRuleId) {
+        $Resource += "/$ApprovalRuleId"
+    }
+
+    Invoke-GitlabApi GET $Resource -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.MergeRequestApprovalRule'
 }
