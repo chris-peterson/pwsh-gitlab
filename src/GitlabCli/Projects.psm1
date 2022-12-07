@@ -238,15 +238,15 @@ function Move-GitlabProject {
     [Alias("Transfer-GitlabProject")]
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [string]
         $DestinationGroup,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
@@ -254,7 +254,7 @@ function Move-GitlabProject {
     $SourceProject = Get-GitlabProject -ProjectId $ProjectId
     $Group = Get-GitlabGroup -GroupId $DestinationGroup
 
-    if ($PSCmdlet.ShouldProcess($Group.FullName, "transfer $($SourceProject.Path)")) {
+    if ($PSCmdlet.ShouldProcess($Group.FullName, "transfer '$($SourceProject.PathWithNamespace)'")) {
         Invoke-GitlabApi PUT "projects/$($SourceProject.Id)/transfer" @{
             namespace = $Group.Id
         } -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.Project'

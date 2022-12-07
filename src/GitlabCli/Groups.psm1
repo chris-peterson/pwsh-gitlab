@@ -89,6 +89,7 @@ function New-GitlabGroup {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Position=0, Mandatory=$true)]
+        [Alias('Name')]
         [string]
         $GroupName,
 
