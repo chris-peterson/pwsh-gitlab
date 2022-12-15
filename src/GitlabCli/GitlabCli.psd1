@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.78.0'
+    ModuleVersion = '1.78.1'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'feature: extend resolve variable for cases where context type is known'
+            ReleaseNotes = 'bug: pipe project to get file'
         }
     }
 

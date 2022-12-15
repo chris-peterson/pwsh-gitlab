@@ -5,29 +5,25 @@
 function Get-GitlabRepositoryFileContent {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory)]
         [string]
         $FilePath,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [Alias("Branch")]
         [string]
         $Ref,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $File = Get-GitlabRepositoryFile -ProjectId $ProjectId -FilePath $FilePath -Ref $Ref -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    $File = Get-GitlabRepositoryFile -ProjectId $ProjectId -FilePath $FilePath -Ref $Ref -SiteUrl $SiteUrl
 
     if ($File -and $File.Encoding -eq 'base64') {
         return [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($File.Content))
@@ -37,26 +33,22 @@ function Get-GitlabRepositoryFileContent {
 function Get-GitlabRepositoryFile {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory)]
         [string]
         $FilePath,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [Alias("Branch")]
         [string]
         $Ref,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
 
@@ -69,7 +61,7 @@ function Get-GitlabRepositoryFile {
     }
     $RefName = $(Get-GitlabBranch -ProjectId $ProjectId -Ref $Ref).Name
 
-    return Invoke-GitlabApi GET "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)?ref=$RefName" -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+    return Invoke-GitlabApi GET "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)?ref=$RefName" -SiteUrl $SiteUrl |
         New-WrapperObject 'Gitlab.RepositoryFile'
 }
 
