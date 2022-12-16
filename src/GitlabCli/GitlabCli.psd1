@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.78.1'
+    ModuleVersion = '1.79.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'bug: pipe project to get file'
+            ReleaseNotes = 'feat: flesh out merge request approval config and rules'
         }
     }
 
@@ -150,9 +150,11 @@
         'Update-GitlabMergeRequest'
         'Close-GitlabMergeRequest'
         # MergeRequest Approvals
-        'Get-GitlabMergeRequestApprovals'
-        'Update-GitlabMergeRequestApprovals'
-        'Get-GitlabMergeRequestApprovalRules'
+        'Get-GitlabMergeRequestApprovalConfiguration'
+        'Update-GitlabMergeRequestApprovalConfiguration'
+        'Get-GitlabMergeRequestApprovalRule'
+        'New-GitlabMergeRequestApprovalRule'
+        'Remove-GitlabMergeRequestApprovalRule'
 
         # Pipelines
         'Get-GitlabPipeline'

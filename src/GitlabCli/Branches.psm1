@@ -68,31 +68,24 @@ function Get-GitlabBranch {
         | Sort-Object -Descending LastUpdated
 }
 
+# https://docs.gitlab.com/ee/api/protected_branches.html#list-protected-branches
 function Get-GitlabProtectedBranch {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
 
-    $GitlabApiArguments = @{
-        HttpMethod='GET'
-        Path="projects/$($Project.Id)/protected_branches"
-        SiteUrl=$SiteUrl
-    }
-
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.ProtectedBranch'
+    Invoke-GitlabApi GET "projects/$($Project.Id)/protected_branches" -SiteUrl $SiteUrl
+        | New-WrapperObject 'Gitlab.ProtectedBranch'
+        | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id -PassThru
 }
 
 function New-GitlabBranch {
@@ -125,114 +118,102 @@ function New-GitlabBranch {
 
 # https://docs.gitlab.com/ee/api/protected_branches.html#protect-repository-branches
 function Protect-GitlabBranch {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('Name')]
         [string]
-        $Name,
+        $Branch,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateSet('noaccess','developer','maintainer','admin')]
         [string]
         $PushAccessLevel,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateSet('noaccess','developer','maintainer','admin')]
         [string]
         $MergeAccessLevel,
 
-        [Parameter(Mandatory=$false)]
-        [ValidateSet('noaccess','developer','maintainer','admin')]
+        [Parameter()]
+        [ValidateSet('developer','maintainer','admin')]
         [string]
         $UnprotectAccessLevel,
 
-        [Parameter(Mandatory=$false)]
-        [bool]
-        $AllowForcePush = $false,
+        [Parameter()]
+        [ValidateSet($null, 'true', 'false')]
+        [object]
+        $AllowForcePush = 'false',
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [array]
         $AllowedToPush,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [array]
         $AllowedToMerge,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [array]
         $AllowedToUnprotect,
 
-        [Parameter(Mandatory=$false)]
-        [bool]
+        [Parameter()]
+        [ValidateSet($null, 'true', 'false')]
+        [object]
         $CodeOwnerApprovalRequired = $false,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
-    $Branch = Get-GitlabBranch -ProjectId $Project.Id -Branch $Name
 
-    $GitlabApiArguments = @{
-        HttpMethod = 'POST'
-        Path       = "projects/$($Project.Id)/protected_branches"
-        SiteUrl    = $SiteUrl
-        Body      = @{
-            name = $Branch.Name
-            push_access_level = $(Get-GitlabProtectedBranchAccessLevel).$PushAccessLevel
-            merge_access_level = $(Get-GitlabProtectedBranchAccessLevel).$MergeAccessLevel
-            unprotect_access_level = $(Get-GitlabProtectedBranchAccessLevel).$UnprotectAccessLevel
-            allow_force_push = $AllowForcePush
-            allowed_to_push = @($AllowedToPush | ConvertTo-SnakeCase)
-            allowed_to_merge = @($AllowedToMerge | ConvertTo-SnakeCase)
-            allowed_to_unprotect = @($AllowedToUnprotect | ConvertTo-SnakeCase)
-            code_owner_approval_required = $CodeOwnerApprovalRequired
-        }
+    $Request = @{
+        name = $Branch
+        push_access_level = $(Get-GitlabProtectedBranchAccessLevel).$PushAccessLevel
+        merge_access_level = $(Get-GitlabProtectedBranchAccessLevel).$MergeAccessLevel
+        unprotect_access_level = $(Get-GitlabProtectedBranchAccessLevel).$UnprotectAccessLevel
+        allow_force_push = $AllowForcePush
+        allowed_to_push = @($AllowedToPush | ConvertTo-SnakeCase)
+        allowed_to_merge = @($AllowedToMerge | ConvertTo-SnakeCase)
+        allowed_to_unprotect = @($AllowedToUnprotect | ConvertTo-SnakeCase)
+        code_owner_approval_required = $CodeOwnerApprovalRequired
     }
 
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.ProtectedBranch'
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)/branches/$Branch", "protect branch $($Request | ConvertTo-Json)")) {
+        Invoke-GitlabApi POST "projects/$($Project.Id)/protected_branches" -Body $Request | New-WrapperObject 'Gitlab.ProtectedBranch'
+    }
 }
 
 # https://docs.gitlab.com/ee/api/protected_branches.html#unprotect-repository-branches
 function UnProtect-GitlabBranch {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('Branch')]
         [string]
         $Name,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
     $Branch = Get-GitlabBranch -ProjectId $Project.Id -Branch $Name
 
-    $GitlabApiArguments = @{
-        HttpMethod = 'DELETE'
-        Path       = "projects/$($Project.Id)/protected_branches/$($Branch.Name)"
-        SiteUrl    = $SiteUrl
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)/branches/$($Branch.Name)", "unprotect branch $($Branch.Name)")) {
+        Invoke-GitlabApi DELETE "projects/$($Project.Id)/protected_branches/$($Branch.Name)" -SiteUrl $SiteUrl
     }
-
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf
 }
 
 function Remove-GitlabBranch {

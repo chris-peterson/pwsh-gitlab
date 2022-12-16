@@ -472,8 +472,8 @@ function Approve-GitlabMergeRequest {
     Get-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -IncludeApprovals -SiteUrl $SiteUrl
 }
 
-# https://docs.gitlab.com/ee/api/merge_request_approvals.html#project-level-mr-approvals
-function Get-GitlabMergeRequestApprovals {
+# https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-configuration
+function Get-GitlabMergeRequestApprovalConfiguration {
     [CmdletBinding()]
     param (
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
@@ -491,7 +491,7 @@ function Get-GitlabMergeRequestApprovals {
 }
 
 # https://docs.gitlab.com/ee/api/merge_request_approvals.html#change-configuration
-function Update-GitlabMergeRequestApprovals {
+function Update-GitlabMergeRequestApprovalConfiguration {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
@@ -562,7 +562,7 @@ function Update-GitlabMergeRequestApprovals {
 
 # https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-project-level-rules
 # https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-a-single-project-level-rule
-function Get-GitlabMergeRequestApprovalRules {
+function Get-GitlabMergeRequestApprovalRule {
     [CmdletBinding()]
     param (
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
@@ -570,7 +570,6 @@ function Get-GitlabMergeRequestApprovalRules {
         $ProjectId = '.',
 
         [Parameter(Position=1, ValueFromPipelineByPropertyName)]
-        [Alias('Id')]
         [string]
         $ApprovalRuleId,
 
@@ -586,5 +585,66 @@ function Get-GitlabMergeRequestApprovalRules {
         $Resource += "/$ApprovalRuleId"
     }
 
-    Invoke-GitlabApi GET $Resource -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.MergeRequestApprovalRule'
+    Invoke-GitlabApi GET $Resource -SiteUrl $SiteUrl
+        | New-WrapperObject 'Gitlab.MergeRequestApprovalRule'
+        | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id -PassThru
+}
+
+# https://docs.gitlab.com/ee/api/merge_request_approvals.html#create-project-level-rule
+function New-GitlabMergeRequestApprovalRule {
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=1, Mandatory)]
+        [string]
+        $Name,
+
+        [Parameter(Position=2, Mandatory)]
+        [uint]
+        $ApprovalsRequired,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    $Project = Get-GitlabProject $ProjectId
+
+    $Resource = "projects/$($Project.Id)/approval_rules"
+    $Rule = @{
+        name                              = $Name
+        approvals_required                = $ApprovalsRequired
+        applies_to_all_protected_branches = 'true'
+    }
+
+    if ($PSCmdlet.ShouldProcess($Project.PathWithNamespace, "create new merge request approval rule $($Rule | ConvertTo-Json)")) {
+        Invoke-GitlabApi POST $Resource -Body $Rule -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.MergeRequestApprovalRule'
+    }
+}
+
+# https://docs.gitlab.com/ee/api/merge_request_approvals.html#delete-project-level-rule
+function Remove-GitlabMergeRequestApprovalRule {
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=1, Mandatory, ValueFromPipelineByPropertyName)]
+        [string]
+        $MergeRequestApprovalRuleId,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    $Project = Get-GitlabProject $ProjectId
+
+    if ($PSCmdlet.ShouldProcess($Project.PathWithNamespace, "remove merge request approval rule '$MergeRequestApprovalRuleId'")) {
+        Invoke-GitlabApi DELETE "projects/$($Project.Id)/approval_rules/$MergeRequestApprovalRuleId" -SiteUrl $SiteUrl
+    }
 }

@@ -254,7 +254,7 @@ function Get-GitlabPipelineDefinition {
         $WhatIf
     )
 
-    Get-GitlabRepositoryYmlFileContent -ProjectId $ProjectId -FilePath '.gitlab-ci.yml' -Ref $Ref -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    Get-GitlabRepositoryYmlFileContent -ProjectId $ProjectId -FilePath '.gitlab-ci.yml' -Ref $Ref -SiteUrl $SiteUrl
 }
 
 $Global:GitlabJobLogSections=New-Object 'Collections.Generic.Stack[string]'
