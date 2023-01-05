@@ -417,28 +417,40 @@
       <ScriptProperty>
         <Name>Summary</Name>
         <GetScriptBlock>
-          if ($this.EntityType -eq 'User') {
-            if ($this.Details.failed_login) {
-              "User $($this.Details.target_details) failed login ($($this.Details.failed_login))"
-            } elseif ($this.Details.custom_message) {
-              "User $($this.Details.custom_message) to $($this.Details.target_details)"
-            } elseif ($this.Details.add) {
-              "User $($this.Details.entity_path) added $($this.Details.add)"
-            } else {
-              "User $($this.Details.target_details) ($($this.Details.entity_path ?? $this.Details.target_id)) auth with $($this.Details.with)"
+          $Details = $this.Details
+          switch ($this.EntityType) {
+            User {
+              if ($Details.failed_login) {
+                "User $($Details.target_details) failed login ($($Details.failed_login))"
+              } elseif ($Details.custom_message) {
+                "User $($Details.custom_message) to $($Details.target_details)"
+              } elseif ($Details.add) {
+                "User $($Details.entity_path) added $($Details.add)"
+              } else {
+                "User $($Details.target_details) ($($Details.entity_path ?? $Details.target_id)) auth with $($Details.with)"
+              }
             }
-            return
-          }
-          if ($this.Details.add) {
-            "Added $($this.Details.add) ($($this.Details.target_details)) in $($this.Details.entity_path)"
-          } elseif ($this.Details.remove) {
-            "Removed $($this.Details.remove) ($($this.Details.target_details)) in $($this.Details.entity_path)"
-          } elseif ($this.Details.change) {
-            "Changed $($this.Details.change) ($($this.Details.target_details)) from $($this.Details.from) to $($this.Details.to) in $($this.Details.entity_path)"
-          } elseif ($this.Details.custom_message) {
-            "$($this.Details.custom_message) in $($this.Details.entity_path)"
-          } else {
-            $this.Details
+            Project {
+              if ($Details.target_type -eq 'Release') {
+                "Release $($Details.target_details)"
+              }
+              else {
+                "$($Details.author_class) $($Details.author_name) changed $($Details.target_type) ($($Details.target_details)): $($Details.custom_message)"
+              }
+            }
+            Default {
+              if ($Details.add) {
+                "Added $($Details.add) ($($Details.target_details)) in $($Details.entity_path)"
+              } elseif ($Details.remove) {
+                "Removed $($Details.remove) ($($Details.target_details)) in $($Details.entity_path)"
+              } elseif ($Details.change) {
+                "Changed $($Details.change) ($($Details.target_details)) from $($Details.from) to $($Details.to) in $($Details.entity_path)"
+              } elseif ($Details.custom_message) {
+                "$($Details.custom_message) in $($Details.entity_path)"
+              } else {
+                $Details
+              }
+            }
           }
         </GetScriptBlock>
       </ScriptProperty>
