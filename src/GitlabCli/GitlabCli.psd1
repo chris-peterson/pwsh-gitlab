@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.81.0'
+    ModuleVersion = '1.82.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'feat: better summary text for project change audit events'
+            ReleaseNotes = 'feat: https://github.com/chris-peterson/pwsh-gitlab/pull/55'
         }
     }
 
@@ -13,7 +13,7 @@
 
     Author = 'Chris Peterson'
     CompanyName = 'Chris Peterson'
-    Copyright = '(c) 2021-2022'
+    Copyright = '(c) 2021-2023'
 
     Description = 'Interact with GitLab via PowerShell'
     PowerShellVersion = '7.1'
