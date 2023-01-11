@@ -50,6 +50,10 @@ function Get-GitlabMergeRequest {
         [switch]
         $IncludeChangeSummary,
 
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $IncludeApprovals,
+
         [Parameter(Mandatory=$true, ParameterSetName='Mine')]
         [switch]
         $Mine,
@@ -129,7 +133,26 @@ function Get-GitlabMergeRequest {
         }
     }
 
+    if ($IncludeApprovals) {
+        $MergeRequests | ForEach-Object {
+            $_ | Add-GitlabMergeRequestApprovals
+        }
+    }
+
     $MergeRequests | Sort-Object ProjectPath
+}
+
+function Add-GitlabMergeRequestApprovals {
+    param(
+        [Parameter(Position=0, Mandatory=$true,ValueFromPipeline=$true)]
+        $MergeRequest
+    )
+    $Path = "projects/$($MergeRequest.SourceProjectId)/merge_requests/$($MergeRequest.MergeRequestId)/approvals"
+    $approvalDetails = Invoke-GitlabApi GET $Path
+
+    $MergeRequest | Add-Member -MemberType NoteProperty -Name ApprovalsRequired -Value $approvalDetails.approvals_required -Force
+    $MergeRequest | Add-Member -MemberType NoteProperty -Name ApprovalsLeft -Value $approvalDetails.approvals_left -Force
+    $MergeRequest | Add-Member -MemberType NoteProperty -Name ApprovedBy -Value $approvalDetails.approved_by.user.name
 }
 
 function Get-GitlabMergeRequestChangeSummary {

@@ -155,7 +155,7 @@
         'Get-GitlabMergeRequestApprovalRule'
         'New-GitlabMergeRequestApprovalRule'
         'Remove-GitlabMergeRequestApprovalRule'
-
+        
         # Pipelines
         'Get-GitlabPipeline'
         'Get-GitlabPipelineVariable'
