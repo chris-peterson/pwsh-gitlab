@@ -49,7 +49,7 @@ function Resolve-GitlabVariable {
                     $GroupVar = Get-GitlabGroupVariable $Context.GroupId $Key -SiteUrl $SiteUrl
                 }
                 catch {
-                    if ($_.Exception.Response.StatusCode -eq 'NotFound') {
+                    if ($_.Exception.Response.StatusCode.ToString() -eq 'NotFound') {
                         Write-Debug "Didn't find group variables for $($Context.GroupId)"
                     } else {
                         Write-Warning "Error looking for group variable: $($_.Exception.Message)"

@@ -78,14 +78,31 @@ function Get-GitlabProtectedBranch {
 
         [Parameter()]
         [string]
+        $Name,
+
+        [Parameter()]
+        [string]
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $Project  = Get-GitlabProject -ProjectId $ProjectId
+    $Resource = "projects/$($Project.Id)/protected_branches"
 
-    Invoke-GitlabApi GET "projects/$($Project.Id)/protected_branches" -SiteUrl $SiteUrl
-        | New-WrapperObject 'Gitlab.ProtectedBranch'
-        | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id -PassThru
+    if (-not [string]::IsNullOrWhiteSpace($Name)) {
+        $Resource += "/$Name"
+    }
+
+    try {
+        Invoke-GitlabApi GET $Resource -Query $Query -SiteUrl $SiteUrl
+            | New-WrapperObject 'Gitlab.ProtectedBranch'
+            | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id -PassThru
+    } catch {
+        if ($_.Exception.Response.StatusCode.ToString() -eq 'NotFound') {
+            @()
+        } else {
+            throw
+        }
+    }
 }
 
 function New-GitlabBranch {
