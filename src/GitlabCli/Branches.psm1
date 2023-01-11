@@ -12,8 +12,8 @@ function Get-GitlabProtectedBranchAccessLevel {
 function Get-GitlabBranch {
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     param (
-        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
-        [Parameter(ParameterSetName="ByRef", Mandatory=$false)]
+        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false, ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName="ByRef", Mandatory=$false, ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
@@ -226,10 +226,9 @@ function UnProtect-GitlabBranch {
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
-    $Branch = Get-GitlabBranch -ProjectId $Project.Id -Branch $Name
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)/branches/$($Branch.Name)", "unprotect branch $($Branch.Name)")) {
-        Invoke-GitlabApi DELETE "projects/$($Project.Id)/protected_branches/$($Branch.Name)" -SiteUrl $SiteUrl
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)/branches/$($Name)", "unprotect branch $($Name)")) {
+        Invoke-GitlabApi DELETE "projects/$($Project.Id)/protected_branches/$($Name)" -SiteUrl $SiteUrl
     }
 }
 
