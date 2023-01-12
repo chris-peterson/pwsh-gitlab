@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.82.2'
+    ModuleVersion = '1.82.3'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'bug: trust branch name when unprotecting as it might not exist'
+            ReleaseNotes = 'bug: avoid weird pipeline termination output message'
         }
     }
 
