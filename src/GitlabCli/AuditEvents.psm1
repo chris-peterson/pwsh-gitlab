@@ -32,6 +32,18 @@ function Get-GitlabAuditEvent {
         [Parameter()]
         $All,
 
+        [Alias('Until')]
+        [Parameter()]
+        [ValidateScript({ValidateGitlabDateFormat $_})]
+        [string]
+        $Before,
+
+        [Alias('Since')]
+        [Parameter()]
+        [ValidateScript({ValidateGitlabDateFormat $_})]
+        [string]
+        $After,
+
         [Parameter()]
         [int]
         $MaxPages = $global:GitlabGetProjectDefaultPages,
@@ -70,6 +82,12 @@ function Get-GitlabAuditEvent {
     }
     if ($EntityType) {
         $Query.entity_type = $EntityType
+    }
+    if ($Before) {
+        $Query.created_before = $Before
+    }
+    if ($After) {
+        $Query.created_after = $After
     }
 
     $Results = Invoke-GitlabApi GET $Resource -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.AuditEvent'

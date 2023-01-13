@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.82.3'
+    ModuleVersion = '1.82.4'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'bug: avoid weird pipeline termination output message'
+            ReleaseNotes = 'bug: add missing date filters to audit events'
         }
     }
 
