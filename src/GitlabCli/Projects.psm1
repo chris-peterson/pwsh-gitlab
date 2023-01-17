@@ -390,9 +390,9 @@ function New-GitlabProject {
 
 # https://docs.gitlab.com/ee/api/projects.html#edit-project
 function Update-GitlabProject {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
@@ -426,8 +426,9 @@ function Update-GitlabProject {
         [uint]
         $CiDefaultGitDepth,
 
-        [Parameter(Mandatory=$false)]
-        [bool]
+        [Parameter()]
+        [ValidateSet($null, 'true', 'false')]
+        [object]
         $CiForwardDeployment,
 
         [Parameter(Mandatory=$false)]
@@ -442,19 +443,15 @@ function Update-GitlabProject {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
 
     $Query = @{}
 
-    if($PSBoundParameters.ContainsKey("CiForwardDeployment")){
-        $Query.ci_forward_deployment_enabled = $CiForwardDeployment.ToString().ToLower()
+    if($CiForwardDeployment){
+        $Query.ci_forward_deployment_enabled = $CiForwardDeployment
     }
     if ($BuildGitStrategy) {
         $Query.build_git_strategy = $BuildGitStrategy
@@ -484,8 +481,10 @@ function Update-GitlabProject {
         $Query.builds_access_level = $BuildsAccessLevel
     }
 
-    Invoke-GitlabApi PUT "projects/$($Project.Id)" $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-        New-WrapperObject 'Gitlab.Project'
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "update project ($($Query | ConvertTo-Json))")) {
+        Invoke-GitlabApi PUT "projects/$($Project.Id)" $Query -SiteUrl $SiteUrl |
+            New-WrapperObject 'Gitlab.Project'
+    }
 }
 
 # https://docs.gitlab.com/ee/api/projects.html#archive-a-project
