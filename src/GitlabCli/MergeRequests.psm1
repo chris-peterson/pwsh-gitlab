@@ -195,6 +195,9 @@ function Get-GitlabMergeRequestChangeSummary {
     $Mr = $Data.Project.mergeRequest
     $Notes = $Mr.notes.nodes | Where-Object body -NotMatch "^assigned to @$($MergeRequest.Author.username)" # filter out self-assignment
     $Summary = [PSCustomObject]@{
+        DiscussionCount   = $Mr.userDiscussionsCount
+        Upvotes           = Mr.upvotes
+        Downvotes         = Mr.downvotes
         Changes           = $Mr.diffStatsSummary | New-WrapperObject
         Authors           = $Mr.commitsWithoutMergeCommits.nodes.author.username        | Select-Object -Unique | Sort-Object
         FirstCommittedAt  = $Mr.commitsWithoutMergeCommits.nodes.authoredDate           | Sort-Object | Select-Object -First 1
