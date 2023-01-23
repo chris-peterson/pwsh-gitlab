@@ -115,16 +115,16 @@ function Add-GitlabGroupMember {
 function Remove-GitlabGroupMember {
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [string]
         $GroupId,
 
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Username')]
         [string]
         $UserId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
@@ -142,7 +142,6 @@ function Remove-GitlabGroupMember {
         }
     }
 }
-
 
 # https://docs.gitlab.com/ee/api/members.html#list-all-members-of-a-group-or-project
 function Get-GitlabProjectMember {
