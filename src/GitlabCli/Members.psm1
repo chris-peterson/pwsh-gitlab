@@ -151,6 +151,7 @@ function Get-GitlabProjectMember {
         $ProjectId = '.',
 
         [Parameter()]
+        [Alias('Username')]
         [string]
         $UserId,
 
@@ -188,6 +189,7 @@ function Add-GitlabProjectMember {
         $ProjectId = '.',
 
         [Parameter(Position=0, Mandatory=$true)]
+        [Alias('Username')]
         [string]
         $UserId,
 
@@ -225,6 +227,7 @@ function Remove-GitlabProjectMember {
         $ProjectId = '.',
 
         [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName)]
+        [Alias('Username')]
         [string]
         $UserId,
 
