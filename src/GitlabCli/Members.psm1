@@ -146,32 +146,28 @@ function Remove-GitlabGroupMember {
 # https://docs.gitlab.com/ee/api/members.html#list-all-members-of-a-group-or-project
 function Get-GitlabProjectMember {
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $UserId,
 
         [switch]
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         $All,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [int]
         $MaxPages = 10,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl -WhatIf:$false
+    $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl
 
     if ($UserId) {
         $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
@@ -180,7 +176,7 @@ function Get-GitlabProjectMember {
     $Members = $All ? "members/all" : "members"
     $Resource = $User ? "projects/$($Project.Id)/$Members/$($User.Id)" : "projects/$($Project.Id)/$Members"
 
-    Invoke-GitlabApi GET $Resource -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+    Invoke-GitlabApi GET $Resource -MaxPages $MaxPages -SiteUrl $SiteUrl |
         New-WrapperObject 'Gitlab.Member'
 }
 
@@ -222,33 +218,32 @@ function Add-GitlabProjectMember {
 
 # https://docs.gitlab.com/ee/api/members.html#remove-a-member-from-a-group-or-project
 function Remove-GitlabProjectMember {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName)]
         [string]
         $UserId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
-    $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl -WhatIf:$false
+    $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl
 
-    try {
-        Invoke-GitlabApi DELETE "projects/$($Project.Id)/members/$($User.Id)" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
-        Write-Host "Removed $($User.Username) from $($Project.Name)"
-    }
-    catch {
-        Write-Error "Error removing $($User.Username) from $($Project.Name): $_"
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "Remove $($User.Username)'s membership")) {
+        try {
+            Invoke-GitlabApi DELETE "projects/$($Project.Id)/members/$($User.Id)" -SiteUrl $SiteUrl | Out-Null
+            Write-Host "Removed $($User.Username) from $($Project.Name)"
+        }
+        catch {
+            Write-Error "Error removing $($User.Username) from $($Project.Name): $_"
+        }
     }
 }
 
