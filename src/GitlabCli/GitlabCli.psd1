@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.83.3'
+    ModuleVersion = '1.83.4'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'feature: allow username as alias for user id'
+            ReleaseNotes = 'https://github.com/chris-peterson/pwsh-gitlab/pull/64'
         }
     }
 
