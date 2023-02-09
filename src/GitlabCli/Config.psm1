@@ -22,9 +22,20 @@ function Write-GitlabConfiguration {
     $ToSave = $Configuration |
         Select-Object -ExcludeProperty '*Display'
 
-    # fun with cardinality
-    if (-not ($ToSave.Sites -is [array])) {
-        $ToSave.Sites = @($ToSave.Sites)
+    try {
+        # fun with cardinality
+        if (-not ($ToSave.Sites -is [array])) {
+            $ToSave.Sites = @($ToSave.Sites)
+        }
+    } catch [System.Management.Automation.PropertyNotFoundException] {
+        # if there is no Sites yet (and $ToSave is $null, probably), make an empty config
+        $ToSave = @{Sites = @()}
+    }
+
+    $ConfigContainer = Split-Path -Parent $global:GitlabConfigurationPath
+
+    if (-not (Test-Path -Type Container $ConfigContainer)) {
+        New-Item -Type Directory $ConfigContainer | Out-Null
     }
 
     $ToSave |
@@ -142,7 +153,7 @@ function Add-GitlabSite {
         AccessToken = $AccessToken
         IsDefault = 'false'
     }
-    
+
     $Config | Write-GitlabConfiguration
 
     if ($IsDefault) {
