@@ -41,6 +41,7 @@
         'Notes.psm1'
         'Pipelines.psm1'
         'Projects.psm1'
+        'ProjectHooks.psm1'
         'RepositoryFiles.psm1'
         'Runners.psm1'
         'Search.psm1'
@@ -111,6 +112,10 @@
         'Get-GitlabProjectVariable'
         'Set-GitlabProjectVariable'
         'Remove-GitlabProjectVariable'
+        'Get-GitlabProjectHook'
+        'Remove-GitlabProjectHook'
+        'Update-GitlabProjectHook'
+        'New-GitlabProjectHook'
 
         # Repository Files
         'Get-GitlabRepositoryFile'

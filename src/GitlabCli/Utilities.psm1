@@ -20,6 +20,7 @@ $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.PipelineDefinition'        = ''
     'Gitlab.PipelineSchedule'          = 'Id'
     'Gitlab.Project'                   = 'Id'
+    'Gitlab.ProjectHook'               = 'Id'
     'Gitlab.ProtectedBranch'           = 'Id'
     'Gitlab.RepositoryFile'            = ''
     'Gitlab.RepositoryTree'            = ''
