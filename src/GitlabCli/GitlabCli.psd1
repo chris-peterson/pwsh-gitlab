@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.83.4'
+    ModuleVersion = '1.84.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'https://github.com/chris-peterson/pwsh-gitlab/pull/64'
+            ReleaseNotes = 'https://github.com/chris-peterson/pwsh-gitlab/pull/66 - Thanks Casey!'
         }
     }
 
