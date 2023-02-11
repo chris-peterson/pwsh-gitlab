@@ -85,3 +85,85 @@ function Remove-GitlabProjectIntegration {
         Write-Host "Deleted $Integration integration from $($Project.PathWithNamespace)"
     }
 }
+
+# wraps Update-GitlabProjectIntegration but with an interface tailored for Slack
+# https://docs.gitlab.com/ee/api/integrations.html#createedit-slack-integration
+function Enable-GitlabProjectSlackNotification {
+
+    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName='SpecificEvents')]
+    param (
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=0, Mandatory)]
+        [string]
+        $Channel,
+
+        [Parameter()]
+        [string]
+        $Webhook,
+
+        [Parameter()]
+        [string]
+        $Username = '',
+
+        [Parameter()]
+        [string]
+        [ValidateSet($null, 'true', 'false')]
+        $NotifyOnlyBrokenPipelines = 'true',
+
+        [Parameter()]
+        [string]
+        [ValidateSet('all', 'default', 'protected', 'default_and_protected')]
+        $BranchesToBeNotified = 'default_and_protected',
+
+        [Parameter(ParameterSetName='SpecificEvents', Position=1, Mandatory)]
+        [ValidateSet('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'job', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'wiki_page')]
+        [string []]
+        $OnEvent,
+
+        [Parameter(ParameterSetName='AllEvents')]
+        [switch]
+        $AllEvents,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+
+    if ($AllEvents) {
+        $OnEvent = @('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'job', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'wiki_page')
+    }
+
+    if (-not $Webhook) {
+        $ExistingIntegration = $null
+        try {
+            $ExistingIntegration = Get-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack'
+            $Webhook = $ExistingIntegration.Properties.webhook
+        }
+        catch {
+            Write-Error "Webhook was not supplied and could not be derived from an existing integration"
+        }
+    }
+
+    $Settings = @{
+        channel                      = $Channel
+        webhook                      = $Webhook
+        username                     = $Username
+        notify_only_broken_pipelines = $NotifyOnlyBrokenPipelines
+        branches_to_be_notified      = $BranchesToBeNotified
+    }
+
+    $OnEvent | ForEach-Object {
+        $Settings."$($_)_channel" = $Channel
+        $Settings."$($_)_events"   = 'true'
+        $Settings."$($_)s_events"  = 'true' # this GitLab API has plurality inconsistencies
+    }
+
+    if ($PSCmdlet.ShouldProcess("slack notifications for $($Project.PathWithNamespace)", "notify $Channel on ($($OnEvent -join ', '))")) {
+        Update-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack' -Settings $Settings
+    }
+}

@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.85.0'
+    ModuleVersion = '1.85.1'
 
     PrivateData = @{
         PSData = @{
@@ -209,6 +209,7 @@
         'Get-GitlabProjectIntegration'
         'Update-GitlabProjectIntegration'
         'Remove-GitlabProjectIntegration'
+        'Enable-GitlabProjectSlackNotification'
 
         # Members
         'Get-GitlabMemberAccessLevel'
