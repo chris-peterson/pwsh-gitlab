@@ -110,16 +110,21 @@ function Enable-GitlabProjectSlackNotification {
 
         [Parameter()]
         [string]
-        [ValidateSet($null, 'true', 'false')]
-        $NotifyOnlyBrokenPipelines = 'true',
-
-        [Parameter()]
-        [string]
         [ValidateSet('all', 'default', 'protected', 'default_and_protected')]
         $BranchesToBeNotified = 'default_and_protected',
 
+        [Parameter()]
+        [string]
+        [ValidateSet('true', 'false')]
+        $NotifyOnlyBrokenPipelines = 'true',
+
+        [Parameter()]
+        [ValidateSet('true', 'false')]
+        [string]
+        $JobEvents = 'false',
+
         [Parameter(ParameterSetName='SpecificEvents', Position=1, Mandatory)]
-        [ValidateSet('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'job', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'wiki_page')]
+        [ValidateSet('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'wiki_page')]
         [string []]
         $OnEvent,
 
@@ -135,7 +140,7 @@ function Enable-GitlabProjectSlackNotification {
     $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
 
     if ($AllEvents) {
-        $OnEvent = @('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'job', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'wiki_page')
+        $OnEvent = @('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'wiki_page')
     }
 
     if (-not $Webhook) {
@@ -153,8 +158,9 @@ function Enable-GitlabProjectSlackNotification {
         channel                      = $Channel
         webhook                      = $Webhook
         username                     = $Username
-        notify_only_broken_pipelines = $NotifyOnlyBrokenPipelines
         branches_to_be_notified      = $BranchesToBeNotified
+        notify_only_broken_pipelines = $NotifyOnlyBrokenPipelines
+        job_events                   = $JobEvents
     }
 
     $OnEvent | ForEach-Object {
