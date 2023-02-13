@@ -292,7 +292,8 @@ function New-GitlabPipelineSchedule {
         $CronTimezone = 'UTC',
 
         [Parameter()]
-        [bool]
+        [ValidateSet($null, 'true', 'false')]
+        [string]
         $Active,
 
         [Parameter()]
@@ -312,19 +313,18 @@ function New-GitlabPipelineSchedule {
         cron          = $Cron
         cron_timezone = $CronTimezone
     }
-
-    $GitlabApiArguments = @{
-        HttpMethod = 'POST'
-        Path       = "projects/$($Project.Id)/pipeline_schedules"
-        Body       = $Body
-        SiteUrl    = $SiteUrl
-    }
-
-    if ($PSBoundParameters.ContainsKey("Active")) {
-        $GitlabApiArguments.Body.active = $Active.ToString().ToLower()
+    if ($Active) {
+        $Body.active = $Active
     }
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create new schedule $($Body | ConvertTo-Json)")) {
+
+        $GitlabApiArguments = @{
+            HttpMethod = 'POST'
+            Path       = "projects/$($Project.Id)/pipeline_schedules"
+            Body       = $Body
+            SiteUrl    = $SiteUrl
+        }
         Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
     }
 }
