@@ -297,10 +297,7 @@ function New-GitlabPipelineSchedule {
         $WhatIf
     )
 
-    $Project = Get-GitlabProject -SiteUrl $SiteUrl
-    if ($Ref -eq '.') {
-        $Ref = $(Get-LocalGitContext).Branch
-    }
+    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
 
     $GitlabApiArguments = @{
         HttpMethod = 'POST'
