@@ -266,51 +266,50 @@ function Get-GitlabPipelineSchedule {
 
 # https://docs.gitlab.com/ee/api/pipeline_schedules.html#create-a-new-pipeline-schedule
 function New-GitlabPipelineSchedule {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('Branch')]
         [string]
         $Ref,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [string]
         $Description,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [string]
         $Cron,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [bool]
         $Active,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
     
-    if($Ref -eq '.') {
-        $Ref = $(Get-LocalGitContext).Branch
+    if ([string]::IsNullOrWhiteSpace($Ref)) {
+        $Ref = $ProjectId -eq '.' -or $Ref -eq '.' ? $(Get-LocalGitContext).Branch : $Project.DefaultBranch
+    }
+
+    $Body = @{
+        ref         = $Ref
+        description = $Description
+        cron        = $Cron
     }
 
     $GitlabApiArguments = @{
         HttpMethod = 'POST'
         Path       = "projects/$($Project.Id)/pipeline_schedules"
-        Body       = @{
-            ref         = $Ref
-            description = $Description
-            cron        = $Cron
-        }
+        Body       = $Body
         SiteUrl    = $SiteUrl
     }
 
@@ -318,7 +317,9 @@ function New-GitlabPipelineSchedule {
         $GitlabApiArguments.Body.active = $Active.ToString().ToLower()
     }
 
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineSchedule'
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create new schedule $($Body | ConvertTo-Json)")) {
+        Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
+    }
 }
 
 # https://docs.gitlab.com/ee/api/pipeline_schedules.html#edit-a-pipeline-schedule
