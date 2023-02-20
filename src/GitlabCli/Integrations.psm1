@@ -106,7 +106,7 @@ function Enable-GitlabProjectSlackNotification {
 
         [Parameter()]
         [string]
-        $Username = '',
+        $Username,
 
         [Parameter()]
         [string]
@@ -115,18 +115,23 @@ function Enable-GitlabProjectSlackNotification {
 
         [Parameter()]
         [string]
-        [ValidateSet('true', 'false')]
-        $NotifyOnlyBrokenPipelines = 'true',
+        [ValidateSet($null, 'true', 'false')]
+        $NotifyOnlyBrokenPipelines,
 
         [Parameter()]
-        [ValidateSet('true', 'false')]
+        [ValidateSet($null, 'true', 'false')]
         [string]
-        $JobEvents = 'false',
+        $JobEvents,
 
         [Parameter(ParameterSetName='SpecificEvents', Position=1, Mandatory)]
         [ValidateSet('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'wiki_page')]
         [string []]
-        $OnEvent,
+        $Enable,
+
+        [Parameter(ParameterSetName='SpecificEvents', Position=1, Mandatory)]
+        [ValidateSet('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'wiki_page')]
+        [string []]
+        $Disable,
 
         [Parameter(ParameterSetName='AllEvents')]
         [switch]
@@ -140,36 +145,52 @@ function Enable-GitlabProjectSlackNotification {
     $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
 
     if ($AllEvents) {
-        $OnEvent = @('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'wiki_page')
+        $Enable = @('commit', 'confidential_issue', 'confidential_note', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'wiki_page')
     }
 
     if (-not $Webhook) {
-        $ExistingIntegration = $null
         try {
-            $ExistingIntegration = Get-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack'
-            $Webhook = $ExistingIntegration.Properties.webhook
+            $Webhook = $(Get-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack').Properties.webhook
         }
         catch {
-            Write-Error "Webhook was not supplied and could not be derived from an existing integration"
+            throw "Webhook could not be derived from an existing integration (provide via -Webhook parameter)"
         }
     }
 
     $Settings = @{
-        channel                      = $Channel
-        webhook                      = $Webhook
-        username                     = $Username
-        branches_to_be_notified      = $BranchesToBeNotified
-        notify_only_broken_pipelines = $NotifyOnlyBrokenPipelines
-        job_events                   = $JobEvents
+        webhook = $Webhook
+    }
+    if ($PSBoundParameters.ContainsKey('Username')) {
+        $Settings.username = $Username
+    }
+    if ($BranchesToBeNotified) {
+        $Settings.branches_to_be_notified = $BranchesToBeNotified
+    }
+    if ($NotifyOnlyBrokenPipelines) {
+        $Settings.notify_only_broken_pipelines = $NotifyOnlyBrokenPipelines
+    }
+    if ($JobEvents) {
+        $Settings.job_events = $JobEvents
     }
 
-    $OnEvent | ForEach-Object {
-        $Settings."$($_)_channel" = $Channel
-        $Settings."$($_)_events"   = 'true'
-        $Settings."$($_)s_events"  = 'true' # this GitLab API has plurality inconsistencies
+    $ShouldPluralize = @(
+        'confidential_issue',
+        'issue',
+        'merge_request'
+    )
+
+    $Enable | ForEach-Object {
+        $Settings."$_`_channel"  = $Channel
+        $EventProperty           = $ShouldPluralize.Contains($_) ? "$($_)s_events" : "$($_)_events"
+        $Settings.$EventProperty = 'true'
+    }
+    $Disable | ForEach-Object {
+        $Settings."$_`_channel"  = $Channel
+        $EventProperty           = $ShouldPluralize.Contains($_) ? "$($_)s_events" : "$($_)_events"
+        $Settings.$EventProperty = 'false'
     }
 
-    if ($PSCmdlet.ShouldProcess("slack notifications for $($Project.PathWithNamespace)", "notify $Channel on ($($OnEvent -join ', '))")) {
+    if ($PSCmdlet.ShouldProcess("slack notifications for $($Project.PathWithNamespace)", "notify $Channel ($($Settings | ConvertTo-Json)))")) {
         Update-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack' -Settings $Settings
     }
 }
