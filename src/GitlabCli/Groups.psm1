@@ -148,11 +148,19 @@ function Copy-GitlabGroupToLocalFileSystem {
     [Alias("Clone-GitlabGroup")]
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
+        [string]
+        $ProjectLike,
+
+        [Parameter()]
+        [string]
+        $ProjectNotLike,
+
+        [Parameter()]
         [string]
         $SiteUrl
     )
@@ -172,16 +180,25 @@ function Copy-GitlabGroupToLocalFileSystem {
             }
         }
 
-        Get-GitlabProject -GroupId $GroupId -Recurse -MaxPages 100 |
-            ForEach-Object {
-                $Path="$LocalPath/$($_.Group)"
+        $Projects = Get-GitlabProject -GroupId $GroupId -Recurse -All
 
-                if (-not $(Test-Path $Path)) {
-                    New-Item $Path -Type Directory | Out-Null
-                }
-                Set-Location $Path
-                git clone $_.SshUrlToRepo
+        if ($ProjectLike) {
+            $Projects = $Projects | Where-Object PathWithNamespace -Match $ProjectLike
+        }
+        if ($ProjectNotLike) {
+            $Projects = $Projects | Where-Object PathWithNamespace -NotMatch $ProjectNotLike
+        }
+
+        $Projects | ForEach-Object {
+            $Path = "$LocalPath/$($_.Group)"
+
+            if (-not $(Test-Path $Path)) {
+                New-Item $Path -Type Directory | Out-Null
             }
+
+            Set-Location $Path
+            git clone $_.SshUrlToRepo
+        }
 
         Set-Location $OriginalPath
     }
