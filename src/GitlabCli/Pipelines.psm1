@@ -229,6 +229,10 @@ function Get-GitlabPipelineSchedule {
         [ValidateSet('active', 'inactive')]
         $Scope,
 
+        [Parameter(ParameterSetName='ByProjectId', Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [switch]
+        $IncludeVariables,
+
         [Parameter(Mandatory=$false)]
         [string]
         $SiteUrl,
@@ -261,6 +265,13 @@ function Get-GitlabPipelineSchedule {
 
     $Wrapper = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineSchedule'
     $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId
+    
+    #Because the api only includes variables when requesting the pipeline schedule by id. Do a little recursion
+    #Switch is only part of the ByProjectId parameter set
+    if($IncludeVariables) {
+        $Wrapper = $Wrapper | ForEach-Object {Get-GitlabPipelineSchedule -ProjectId $_.ProjectId -PipelineScheduleId $_.Id  }
+    } 
+
     $Wrapper
 }
 
@@ -325,7 +336,9 @@ function New-GitlabPipelineSchedule {
             Body       = $Body
             SiteUrl    = $SiteUrl
         }
-        Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
+        $Wrapper = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineSchedule'
+        $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId
+        $Wrapper
     }
 }
 
@@ -429,6 +442,183 @@ function Remove-GitlabPipelineSchedule {
     }
 
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf
+}
+
+#https://docs.gitlab.com/ee/api/pipeline_schedules.html#pipeline-schedule-variables
+# This behavior isn't part of the api, but a nested structure on getting a PipelineSchedule itself JUST by Id
+function Get-GitlabPipelineScheduleVariable {
+    param (
+        [Parameter(Mandatory=$false)]
+        [string]
+        $ProjectId="." ,
+
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [int]
+        $PipelineScheduleId,
+
+        [Parameter(Mandatory=$false)]
+        $Key,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $PipelineSchedule = Get-GitlabPipelineSchedule -ProjectId $Project.Id -PipelineScheduleId $PipelineScheduleId
+
+    $Wrapper = $PipelineSchedule.Variables | New-WrapperObject "Gitlab.PipelineScheduleVariable"
+    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
+    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
+
+    if($Key) {
+        $Wrapper = $Wrapper | Where-Object { $_.Key -eq $Key } 
+    }
+
+    $Wrapper
+}
+
+function New-GitlabPipelineScheduleVariable {
+    param (
+        [Parameter(Mandatory=$false)]
+        [string]
+        $ProjectId="." ,
+
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [int]
+        $PipelineScheduleId,
+
+        [Parameter(Mandatory=$true)]
+        [ValidatePattern("[A-Za-z0-9_]")]
+        [string]
+        $Key,
+
+        [Parameter(Mandatory=$true)]
+        [string]
+        $Value,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateSet("env_var","file")]
+        [string]
+        $VariableType="env_var",
+     
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $PipelineSchedule = Get-GitlabPipelineSchedule -ProjectId $Project.Id -PipelineScheduleId $PipelineScheduleId
+
+    $Body = @{
+        "key"           = $Key
+        "value"         = $Value
+        "variable_type" = $VariableType
+    }
+
+    $GitlabApiArguments = @{
+        HttpMethod = "POST"
+        Path       = "projects/$($Project.Id)/pipeline_schedules/$($PipelineSchedule.Id)/variables"
+        SiteUrl    = $SiteUrl
+        Body       = $Body
+    }
+
+    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject "Gitlab.PipelineScheduleVariable"
+    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
+    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
+}
+
+function Update-GitlabPipelineScheduleVariable {
+    param (
+        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $ProjectId="." ,
+
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [int]
+        $PipelineScheduleId,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateLength(255)]
+        [ValidatePattern("[A-Za-z0-9_]")]
+        [string]
+        $Key,
+
+        [Parameter(Mandatory=$true)]
+        [string]
+        $Value,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateSet("env_var","file")]
+        [string]
+        $VariableType="env_var",
+     
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl,
+
+        [switch]
+        [Parameter(Mandatory=$false)]
+        $WhatIf
+    )
+
+    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $PipelineSchedule = Get-GitlabPipelineSchedule -ProjectId $ProjectId -PipelineScheduleId $PipelineScheduleId
+
+    $Body = @{
+        "key"           = $Key
+        "value"         = $Value
+        "variable_type" = $VariableType
+    }
+
+    $GitlabApiArguments = @{
+        HttpMethod = "PUT"
+        Path       = "projects/$($Project.Id)/pipeline_schedules/$($PipelineSchedule.Id)/variables/$($Key)"
+        SiteUrl    = $SiteUrl
+        Body       = $Body
+    }
+
+    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject "Gitlab.PipelineScheduleVariable"
+    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
+    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
+}
+
+function Remove-GitlabPipelineScheduleVariable {
+    param (
+        [Parameter(Mandatory=$false)]
+        [string]
+        $ProjectId="." ,
+
+        [Parameter(Mandatory=$true)]
+        [int]
+        $PipelineScheduleId,
+
+        [Parameter(Mandatory=$true)]
+        [string]
+        $Key
+    )
+
+    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $PipelineSchedule = Get-GitlabPipelineSchedule -ProjectId $ProjectId -PipelineScheduleId $PipelineScheduleId
+
+
+    $GitlabApiArguments = @{
+        HttpMethod = "DELETE"
+        Path       = "projects/$($Project.Id)/pipeline_schedules/$($PipelineSchedule.Id)/$($Key)"
+        SiteUrl    = $SiteUrl
+    }
+
+    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject "Gitlab.PipelineScheduleVariable"
+    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
+    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
 }
 
 # https://docs.gitlab.com/ee/api/pipeline_schedules.html#run-a-scheduled-pipeline-immediately
