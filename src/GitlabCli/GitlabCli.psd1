@@ -170,6 +170,10 @@
         'New-GitlabPipelineSchedule'
         'Update-GitlabPipelineSchedule'
         'Remove-GitlabPipelineSchedule'
+        'Get-GitlabPipelineScheduleVariable'
+        'New-GitlabPipelineScheduleVariable'
+        'Remove-GitlabPipelineScheduleVariable'
+        'Update-GitlabPipelineScheduleVariable'
         'New-GitlabScheduledPipeline'
         'Get-GitlabPipelineBridge'
 
