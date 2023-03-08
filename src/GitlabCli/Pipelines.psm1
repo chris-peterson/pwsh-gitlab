@@ -707,6 +707,10 @@ function New-GitlabPipeline {
         $Ref = '.',
 
         [Parameter(Mandatory=$false)]
+        [System.Object[]]
+        $Variables,
+
+        [Parameter(Mandatory=$false)]
         [switch]
         $Wait,
 
@@ -734,10 +738,16 @@ function New-GitlabPipeline {
         $Ref = $Project.DefaultBranch
     }
 
+    $RequestBody = @{'ref' = $Ref}
+
+    if($Variables) {
+        $RequestBody.Add("variables",$Variables)
+    } 
+
     $GitlabApiArguments = @{
         HttpMethod = "POST"
         Path       = "projects/$ProjectId/pipeline"
-        Query      = @{'ref' = $Ref}
+        Body       = $RequestBody
         SiteUrl    = $SiteUrl
     }
 
