@@ -96,7 +96,8 @@ function Enable-GitlabProjectSlackNotification {
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory)]
+        [Parameter(Mandatory, ParameterSetName='SpecificEvents')]
+        [Parameter(Mandatory, ParameterSetName='AllEvents')]
         [string]
         $Channel,
 
@@ -123,13 +124,13 @@ function Enable-GitlabProjectSlackNotification {
         [string]
         $JobEvents,
 
-        [Parameter(ParameterSetName='SpecificEvents', Position=1, Mandatory)]
-        [ValidateSet('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'wiki_page')]
+        [Parameter(ParameterSetName='SpecificEvents')]
+        [ValidateSet('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')]
         [string []]
         $Enable,
 
-        [Parameter(ParameterSetName='SpecificEvents', Position=1, Mandatory)]
-        [ValidateSet('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'wiki_page')]
+        [Parameter(ParameterSetName='SpecificEvents')]
+        [ValidateSet('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')]
         [string []]
         $Disable,
 
@@ -137,15 +138,22 @@ function Enable-GitlabProjectSlackNotification {
         [switch]
         $AllEvents,
 
+        [Parameter(ParameterSetName='NoEvents')]
+        [switch]
+        $NoEvents,
+
         [Parameter()]
         [string]
         $SiteUrl
     )
-
     $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
 
+    $KnownEvents = @('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')
     if ($AllEvents) {
-        $Enable = @('commit', 'confidential_issue', 'confidential_note', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'wiki_page')
+        $Enable = $KnownEvents
+    }
+    if ($NoEvents) {
+        $Disable = $KnownEvents
     }
 
     if (-not $Webhook) {
@@ -179,15 +187,19 @@ function Enable-GitlabProjectSlackNotification {
         'merge_request'
     )
 
-    $Enable | ForEach-Object {
-        $Settings."$_`_channel"  = $Channel
-        $EventProperty           = $ShouldPluralize.Contains($_) ? "$($_)s_events" : "$($_)_events"
-        $Settings.$EventProperty = 'true'
+    if ($Enable) {
+        $Enable | ForEach-Object {
+            $Settings."$_`_channel"  = $Channel
+            $EventProperty           = $ShouldPluralize.Contains($_) ? "$($_)s_events" : "$($_)_events"
+            $Settings.$EventProperty = 'true'
+        }
     }
-    $Disable | ForEach-Object {
-        $Settings."$_`_channel"  = $Channel
-        $EventProperty           = $ShouldPluralize.Contains($_) ? "$($_)s_events" : "$($_)_events"
-        $Settings.$EventProperty = 'false'
+    if ($Disable) {
+        $Disable | ForEach-Object {
+            $Settings."$_`_channel"  = ''
+            $EventProperty           = $ShouldPluralize.Contains($_) ? "$($_)s_events" : "$($_)_events"
+            $Settings.$EventProperty = 'false'
+        }
     }
 
     if ($PSCmdlet.ShouldProcess("slack notifications for $($Project.PathWithNamespace)", "notify $Channel ($($Settings | ConvertTo-Json)))")) {
