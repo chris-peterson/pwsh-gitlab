@@ -1,25 +1,21 @@
-# https://docs.gitlab.com/ee/api/projects.html#hooks
+# https://docs.gitlab.com/ee/api/projects.html#get-project-hook
 function Get-GitlabProjectHook {
   [CmdletBinding()]
   param (
-      [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+      [Parameter(ValueFromPipelineByPropertyName)]
       [string]
       $ProjectId = '.',
 
-      [Parameter(Mandatory=$false)]
+      [Parameter()]
       [int]
       $Id,
 
-      [Parameter(Mandatory=$false)]
+      [Parameter()]
       [string]
-      $SiteUrl,
-
-      [switch]
-      [Parameter(Mandatory=$false)]
-      $WhatIf
+      $SiteUrl
   )
 
-  $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl -WhatIf:$WhatIf
+  $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
 
   $Resource = "projects/$($Project.Id)/hooks"
 
@@ -27,7 +23,7 @@ function Get-GitlabProjectHook {
     $Resource = "$($Resource)/$($Id)"
   }
 
-  Invoke-GitlabApi GET $Resource -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.ProjectHook'
+  Invoke-GitlabApi GET $Resource -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.ProjectHook'
 }
 
 function New-GitlabProjectHook {
@@ -266,29 +262,30 @@ function Update-GitlabProjectHook {
   Invoke-GitlabApi PUT $UpdateRequest $Resource -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.ProjectHook'
 }
 
+# https://docs.gitlab.com/ee/api/projects.html#delete-project-hook
 function Remove-GitlabProjectHook {
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess)]
   param (
-      [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+      [Parameter(ValueFromPipelineByPropertyName)]
       [string]
       $ProjectId = '.',
 
-      [Parameter(Mandatory=$true)]
+      [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+      [Alias('Id')]
       [int]
-      $Id,
+      $HookId,
 
-      [Parameter(Mandatory=$false)]
+      [Parameter()]
       [string]
-      $SiteUrl,
-
-      [switch]
-      [Parameter(Mandatory=$false)]
-      $WhatIf
+      $SiteUrl
   )
 
-  $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl -WhatIf:$WhatIf
+  $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
 
-  $Resource = "projects/$($Project.Id)/hooks/$($Id)"
+  $Resource = "projects/$($Project.Id)/hooks/$($HookId)"
 
-  Invoke-GitlabApi DELETE $Resource -SiteUrl $SiteUrl -WhatIf:$WhatIf
+  if ($PSCmdlet.ShouldProcess($Resource, 'delete')) {
+    Invoke-GitlabApi DELETE $Resource -SiteUrl $SiteUrl | Out-Null
+    Write-Host "Removed project hook ($HookId) from $($Project.PathWithNamespace)"
+  }
 }

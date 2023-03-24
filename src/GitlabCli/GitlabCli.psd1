@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.89.1'
+    ModuleVersion = '1.89.2'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'bugfix: slack notifications - enable and disable parameters should not be required'
+            ReleaseNotes = 'minor tweaks to project hooks'
         }
     }
 
