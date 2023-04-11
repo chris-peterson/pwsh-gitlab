@@ -259,7 +259,7 @@ function Update-GitlabProjectHook {
     }
   }
   
-  Invoke-GitlabApi PUT $UpdateRequest $Resource -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.ProjectHook'
+  Invoke-GitlabApi PUT $Resource $Request -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.ProjectHook'
 }
 
 # https://docs.gitlab.com/ee/api/projects.html#delete-project-hook
