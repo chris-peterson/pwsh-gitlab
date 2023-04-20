@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.89.4'
+    ModuleVersion = '1.90.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'https://github.com/chris-peterson/pwsh-gitlab/pull/78'
+            ReleaseNotes = 'Add some more topic cmdlets'
         }
     }
 
@@ -199,6 +199,8 @@
 
         # Topics
         'Get-GitlabTopic'
+        'New-GitlabTopic'
+        'Update-GitlabTopic'
         'Remove-GitlabTopic'
 
         # User
