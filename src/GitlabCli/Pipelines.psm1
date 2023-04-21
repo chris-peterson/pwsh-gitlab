@@ -694,37 +694,33 @@ function Get-GitlabPipelineBridge {
 }
 
 function New-GitlabPipeline {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     [Alias("build")]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [Alias("Branch")]
         [string]
         $Ref = '.',
 
-        [Parameter(Mandatory=$false)]
-        [System.Object[]]
+        [Parameter()]
+        [Alias('vars')]
         $Variables,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [switch]
         $Wait,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [switch]
         $Follow,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
@@ -738,68 +734,77 @@ function New-GitlabPipeline {
         $Ref = $Project.DefaultBranch
     }
 
-    $RequestBody = @{'ref' = $Ref}
+    $Request = @{'ref' = $Ref}
 
-    if($Variables) {
-        $RequestBody.Add("variables",$Variables)
-    } 
+    if ($Variables) {
+        $ReformattedVariables = $Variables.GetEnumerator() | ForEach-Object {
+            @{
+                variable_type = 'env_var'
+                key           = $_.Name
+                value         = $_.Value
+            }
+        }
+        $Request.variables = @($ReformattedVariables)
+    }
 
     $GitlabApiArguments = @{
         HttpMethod = "POST"
         Path       = "projects/$ProjectId/pipeline"
-        Body       = $RequestBody
+        Body       = $Request
         SiteUrl    = $SiteUrl
     }
 
-    $Pipeline = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Pipeline'
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create new pipeline ($($Request | ConvertTo-Json))")) {
+        $Pipeline = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Pipeline'
 
-    if ($Wait) {
-        Write-Host "$($Pipeline.Id) created..."
-        while ($True) {
-            Start-Sleep -Seconds 5
-            $Jobs = $Pipeline | Get-GitlabJob -IncludeTrace |
-                Where-Object { $_.Status -ne 'manual' -and $_.Status -ne 'skipped' -and $_.Status -ne 'created' } |
-                Sort-Object CreatedAt
-            
-            if ($Jobs) {
-                Clear-Host
-                Write-Host "$($Pipeline.WebUrl)"
-                Write-Host
-                $Jobs |
-                    Where-Object { $_.Status -eq 'success' } |
-                        ForEach-Object {
-                            Write-Host "[$($_.Name)] ✅" -ForegroundColor DarkGreen
-                        }
-                $Jobs |
-                    Where-Object { $_.Status -eq 'failed' } |
-                        ForEach-Object {
-                            Write-Host "[$($_.Name)] ❌" -ForegroundColor DarkRed
-                    }
-                Write-Host
+        if ($Wait) {
+            Write-Host "$($Pipeline.Id) created..."
+            while ($True) {
+                Start-Sleep -Seconds 5
+                $Jobs = $Pipeline | Get-GitlabJob -IncludeTrace |
+                    Where-Object { $_.Status -ne 'manual' -and $_.Status -ne 'skipped' -and $_.Status -ne 'created' } |
+                    Sort-Object CreatedAt
 
-                $InProgress = $Jobs |
-                    Where-Object { $_.Status -ne 'success' -and $_.Status -ne 'failed' }
-                if ($InProgress) {
-                    $InProgress |
-                        ForEach-Object {
-                            Write-Host "[$($_.Name)] ⏳" -ForegroundColor DarkYellow
-                            $RecentProgress = $_.Trace -split "`n" | Select-Object -Last 15
-                            $RecentProgress | ForEach-Object {
-                                Write-Host "  $_"
+                if ($Jobs) {
+                    Clear-Host
+                    Write-Host "$($Pipeline.WebUrl)"
+                    Write-Host
+                    $Jobs |
+                        Where-Object { $_.Status -eq 'success' } |
+                            ForEach-Object {
+                                Write-Host "[$($_.Name)] ✅" -ForegroundColor DarkGreen
+                            }
+                    $Jobs |
+                        Where-Object { $_.Status -eq 'failed' } |
+                            ForEach-Object {
+                                Write-Host "[$($_.Name)] ❌" -ForegroundColor DarkRed
+                        }
+                    Write-Host
+
+                    $InProgress = $Jobs |
+                        Where-Object { $_.Status -ne 'success' -and $_.Status -ne 'failed' }
+                    if ($InProgress) {
+                        $InProgress |
+                            ForEach-Object {
+                                Write-Host "[$($_.Name)] ⏳" -ForegroundColor DarkYellow
+                                $RecentProgress = $_.Trace -split "`n" | Select-Object -Last 15
+                                $RecentProgress | ForEach-Object {
+                                    Write-Host "  $_"
+                            }
                         }
                     }
-                }
-                else {
-                    break;
+                    else {
+                        break;
+                    }
                 }
             }
         }
-    }
 
-    if ($Follow) {
-        Start-Process $Pipeline.WebUrl
-    } else {
-        $Pipeline
+        if ($Follow) {
+            Start-Process $Pipeline.WebUrl
+        } else {
+            $Pipeline
+        }
     }
 }
 
