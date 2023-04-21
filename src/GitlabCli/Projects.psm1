@@ -254,7 +254,7 @@ function Move-GitlabProject {
     $SourceProject = Get-GitlabProject -ProjectId $ProjectId
     $Group = Get-GitlabGroup -GroupId $DestinationGroup
 
-    if ($PSCmdlet.ShouldProcess($Group.FullName, "transfer '$($SourceProject.PathWithNamespace)'")) {
+    if ($PSCmdlet.ShouldProcess("group $($Group.FullName)", "transfer '$($SourceProject.PathWithNamespace)'")) {
         Invoke-GitlabApi PUT "projects/$($SourceProject.Id)/transfer" @{
             namespace = $Group.Id
         } -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.Project'

@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.90.0'
+    ModuleVersion = '1.91.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Add some more topic cmdlets'
+            ReleaseNotes = 'Add Transfer-GitlabGroup'
         }
     }
 
@@ -89,6 +89,7 @@
         'New-GitlabGroup'
         'Remove-GitlabGroup'
         'Rename-GitlabGroup'
+        'Move-GitlabGroup'
         'Copy-GitlabGroupToLocalFileSystem'
         'Update-GitlabGroup'
         'Update-LocalGitlabGroup'
@@ -250,6 +251,7 @@
         # long form
         'Clone-GitlabGroup'
         'Pull-GitlabGroup'
+        'Transfer-GitlabGroup'
         'Transfer-GitlabProject'
         'Fork-GitlabProject'
         'Archive-GitlabProject'

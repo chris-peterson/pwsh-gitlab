@@ -361,32 +361,28 @@ function Remove-GitlabGroupVariable {
 # https://docs.gitlab.com/ee/api/groups.html#update-group
 function Update-GitlabGroup {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Name,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Path,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateSet('private', 'internal', 'public')]
         [string]
         $Visibility,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $GroupId = $GroupId | ConvertTo-UrlEncoded
@@ -403,30 +399,62 @@ function Update-GitlabGroup {
         $Body.visibility = $Visibility
     }
 
-    Invoke-GitlabApi PUT "groups/$GroupId" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Group'
+    if ($PSCmdlet.ShouldProcess("group $GroupId", "update ($($Body | ConvertTo-Json))")) {
+        Invoke-GitlabApi PUT "groups/$GroupId" -Body $Body -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Group'
+    }
 }
 
 function Rename-GitlabGroup {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $GroupId = '.',
 
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory)]
         [string]
         $NewName,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    Update-GitlabGroup $GroupId -Name $NewName -Path $NewName -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    if ($PSCmdlet.ShouldProcess("group $GroupId", "rename to $NewName")) {
+        Update-GitlabGroup $GroupId -Name $NewName -Path $NewName -SiteUrl $SiteUrl
+    }
 }
+
+function Move-GitlabGroup {
+    [Alias("Transfer-GitlabGroup")]
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $GroupId = '.',
+
+        [Parameter()]
+        [string]
+        $DestinationGroupId,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    $Request = @{}
+    if ($DestinationGroupId) {
+        $Request.group_id = Get-GitlabGroup $DestinationGroupId | Select-Object -ExpandProperty Id
+        $DestinationLabel = "group $DestinationGroupId"
+    } else {
+        $DestinationLabel = "top level group"
+    }
+
+    if ($PSCmdlet.ShouldProcess("group $GroupId", "transfer to $DestinationLabel")) {
+        Invoke-GitlabApi POST "groups/$($GroupId)/transfer" $Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Group'
+    }
+}
+
 
 # https://docs.gitlab.com/ee/api/groups.html#create-a-link-to-share-a-group-with-another-group
 function New-GitlabGroupShareLink {
