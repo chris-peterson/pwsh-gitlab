@@ -27,7 +27,7 @@ jobs:
   push:
 
     env:
-      IMAGE_NAME: pwsh-gitlab
+      IMAGE_NAME: gitlab-cli
       VERSION: ${{ github.ref_name }}
 
     runs-on: ubuntu-latest
