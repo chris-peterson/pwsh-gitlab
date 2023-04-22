@@ -11,8 +11,16 @@ Interact with [GitLab](https://about.gitlab.com/) via [PowerShell](https://githu
 
 ## Getting Started
 
+### Module
+
 ```powershell
 Install-Module -Name GitlabCli
+```
+
+### Docker Image
+
+```sh
+docker run -it ghcr.io/chris-peterson/pwsh-gitlab/gitlab-cli
 ```
 
 ### Configuration
