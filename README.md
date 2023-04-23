@@ -20,7 +20,7 @@ Install-Module -Name GitlabCli
 ### Docker Image
 
 ```sh
-docker run -it ghcr.io/chris-peterson/pwsh-gitlab/gitlab-cli:main
+docker run -it ghcr.io/chris-peterson/pwsh-gitlab/gitlab-cli
 ```
 
 ### Configuration
