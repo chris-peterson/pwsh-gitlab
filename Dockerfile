@@ -1,5 +1,7 @@
 FROM mcr.microsoft.com/powershell:lts-debian-10
 
+RUN apt-get update && apt-get install -y git
+
 ADD ./src/GitlabCli /opt/microsoft/powershell/7-lts/Modules/GitlabCli
 
 RUN mkdir root/.config && mkdir root/.config/powershell
