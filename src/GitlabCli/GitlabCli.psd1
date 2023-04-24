@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.92.0'
+    ModuleVersion = '1.92.1'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Produce a docker image as well as a module'
+            ReleaseNotes = 'https://github.com/chris-peterson/pwsh-gitlab/pull/80'
         }
     }
 
