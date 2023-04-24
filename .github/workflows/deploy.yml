@@ -1,6 +1,8 @@
 name: CI
 
-on: [ push, workflow_dispatch ]
+on:
+  push:
+    branches: [main]
 
 jobs:
   build:
@@ -26,8 +28,6 @@ jobs:
       IMAGE_VERSION: ${{ github.ref_name }}
 
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' }}
-
     steps:
       - uses: actions/checkout@v3
 
