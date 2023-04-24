@@ -167,28 +167,28 @@ function Copy-GitlabGroupToLocalFileSystem {
 
     $Group = Get-GitlabGroup $GroupId
 
-    if ($PSCmdlet.ShouldProcess($Group.FullPath, "clone group" )) {
-        $GroupSplit = $Group.FullPath -split '/'
+    $GroupSplit = $Group.FullPath -split '/'
 
-        $OriginalPath = $LocalPath = $(Get-Location).Path
-        for ($i = 0; $i -lt $GroupSplit.Count; $i++)
-        {
-            $ToMatch = $($GroupSplit | Select-Object -First $($GroupSplit.Count - $i)) -join '/'
-            if ($LocalPath -imatch "$ToMatch$") {
-                $LocalPath = $LocalPath.Replace($ToMatch, "").TrimEnd('/')
-                break;
-            }
+    $OriginalPath = $LocalPath = $(Get-Location).Path
+    for ($i = 0; $i -lt $GroupSplit.Count; $i++)
+    {
+        $ToMatch = $($GroupSplit | Select-Object -First $($GroupSplit.Count - $i)) -join '/'
+        if ($LocalPath -imatch "$ToMatch$") {
+            $LocalPath = $LocalPath.Replace($ToMatch, "").TrimEnd('/')
+            break;
         }
+    }
 
-        $Projects = Get-GitlabProject -GroupId $GroupId -Recurse -All
+    $Projects = Get-GitlabProject -GroupId $GroupId -Recurse -All
 
-        if ($ProjectLike) {
-            $Projects = $Projects | Where-Object PathWithNamespace -Match $ProjectLike
-        }
-        if ($ProjectNotLike) {
-            $Projects = $Projects | Where-Object PathWithNamespace -NotMatch $ProjectNotLike
-        }
+    if ($ProjectLike) {
+        $Projects = $Projects | Where-Object PathWithNamespace -Match $ProjectLike
+    }
+    if ($ProjectNotLike) {
+        $Projects = $Projects | Where-Object PathWithNamespace -NotMatch $ProjectNotLike
+    }
 
+    if ($PSCmdlet.ShouldProcess("local file system ($LocalPath/$($Group.FullPath))", "clone $($Projects.Length) projects from $($Group.FullPath)" )) {
         $Projects | ForEach-Object {
             $Path = "$LocalPath/$($_.Group)"
 
