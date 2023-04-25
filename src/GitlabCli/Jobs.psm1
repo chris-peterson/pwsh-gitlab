@@ -338,3 +338,42 @@ function Stop-GitlabJobLogSection {
 function Get-EpochTimestamp {
     [int] $(New-TimeSpan -Start $(Get-Date "01/01/1970") -End $(Get-Date)).TotalSeconds
 }
+
+$global:GitlabConsoleColors = @{
+    Black       = '0;30'
+    Blue        = '0;34'
+    Cyan        = '0;36'
+    DarkGray    = '1;30'
+    Green       = '0;32'
+    LightBlue   = '1;34'
+    LightCyan   = '1;36'
+    LightGray   = '0;37'
+    LightGreen  = '1;32'
+    LightPurple = '1;35'
+    LightRed    = '1;31'
+    Orange      = '0;33'
+    Purple      = '0;35'
+    Red         = '0;31'
+    White       = '1;37'
+    Yellow      = '1;33'
+}
+
+function Write-GitlabJobTrace {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [string]
+        $Text,
+
+        [Parameter()]
+        [ValidateSet('Black', 'Red', 'Green', 'Orange', 'Blue', 'Purple', 'Cyan', 'LightGray', 'DarkGray', 'LightRed', 'LightGreen', 'Yellow', 'LightBlue', 'LightPurple', 'LightCyan', 'White')]
+        [string]
+        $Color
+    )
+
+    if ($Color) {
+        $Text = "`e[$($global:GitlabConsoleColors[$Color])m$Text"
+    }
+
+    Write-Host $Text
+}

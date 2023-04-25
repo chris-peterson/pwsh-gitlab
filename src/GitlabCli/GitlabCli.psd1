@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.92.1'
+    ModuleVersion = '1.93.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'https://github.com/chris-peterson/pwsh-gitlab/pull/80'
+            ReleaseNotes = 'Add cmdlet to help with job traces'
         }
     }
 
@@ -186,6 +186,7 @@
         'Test-GitlabPipelineDefinition'
         'Start-GitlabJobLogSection'
         'Stop-GitlabJobLogSection'
+        'Write-GitlabJobTrace'
 
         # Runners
         'Get-GitlabRunner'
