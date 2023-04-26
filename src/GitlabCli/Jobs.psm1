@@ -1,51 +1,50 @@
-
+# https://docs.gitlab.com/ee/api/jobs.html
 function Get-GitlabJob {
     [Alias('job')]
     [Alias('jobs')]
     [CmdletBinding()]
     param (
-        [Parameter(ParameterSetName='ByJobId', Mandatory=$false)]
-        [Parameter(ParameterSetName='ByProjectId', Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [Parameter(ParameterSetName='ByPipeline', Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(ParameterSetName='ByPipeline', Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ParameterSetName='ByPipeline', Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $PipelineId,
 
-        [Parameter(ParameterSetName='ByJobId', Mandatory=$true)]
+        [Parameter(ParameterSetName='ByJobId', Mandatory)]
+        [Alias('Id')]
         [string]
         $JobId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        [ValidateSet("created","pending","running","failed","success","canceled","skipped","manual")]
+        [ValidateSet('created', 'pending', 'running', 'failed', 'success', 'canceled', 'skipped', 'manual')]
         $Scope,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Stage,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Name,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [switch]
         $IncludeRetried,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [switch]
         $IncludeTrace,
 
-        [Parameter(Mandatory=$false)]
-        [string]
-        $SiteUrl,
-
+        [Parameter()]
         [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $IncludeVariables,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
@@ -72,7 +71,7 @@ function Get-GitlabJob {
         $GitlabApiArguments['Query']['include_retried'] = $true
     }
 
-    $Jobs = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Job'
+    $Jobs = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Job'
 
     if ($Stage) {
         $Jobs = $Jobs |
@@ -82,16 +81,37 @@ function Get-GitlabJob {
         $Jobs = $Jobs |
             Where-Object Name -match $Name
     }
-
     if ($IncludeTrace) {
         $Jobs | ForEach-Object {
             try {
-                $Trace = $_ | Get-GitlabJobTrace -WhatIf:$WhatIf
+                $Trace = $_ | Get-GitlabJobTrace
             }
             catch {
                 $Trace = $Null
             }
             $_ | Add-Member -MemberType 'NoteProperty' -Name 'Trace' -Value $Trace
+        }
+    }
+    if ($IncludeVariables) {
+        $Jobs | ForEach-Object {
+            $Data = Invoke-GitlabGraphQL @"
+                {
+                    project(fullPath: "$($Project.PathWithNamespace)") {
+                        job(id: "gid://gitlab/Ci::Build/$($_.JobId)") {
+                            manualVariables {
+                                nodes {
+                                  key, value
+                                }
+                            }
+                        }
+                    }
+                }
+"@
+            $Variables = [PSCustomObject]@{}
+            $Data.project.job.manualVariables.nodes | ForEach-Object {
+                $Variables | Add-Member -MemberType 'NoteProperty' -Name $($_.key) -Value $_.value
+            }
+            $_ | Add-Member -MemberType 'NoteProperty' -Name 'Variables' -Value $Variables
         }
     }
 
