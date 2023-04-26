@@ -257,7 +257,26 @@ function Get-GitlabPipelineDefinition {
     Get-GitlabRepositoryYmlFileContent -ProjectId $ProjectId -FilePath '.gitlab-ci.yml' -Ref $Ref -SiteUrl $SiteUrl
 }
 
-$Global:GitlabJobLogSections=New-Object 'Collections.Generic.Stack[string]'
+$global:GitlabConsoleColors = @{
+    Black       = '0;30'
+    Blue        = '0;34'
+    Cyan        = '0;36'
+    DarkGray    = '1;30'
+    Green       = '0;32'
+    LightBlue   = '1;34'
+    LightCyan   = '1;36'
+    LightGray   = '0;37'
+    LightGreen  = '1;32'
+    LightPurple = '1;35'
+    LightRed    = '1;31'
+    Orange      = '0;33'
+    Purple      = '0;35'
+    Red         = '0;31'
+    White       = '1;37'
+    Yellow      = '1;33'
+}
+
+$global:GitlabJobLogSections=New-Object 'Collections.Generic.Stack[string]'
 
 <#
 .SYNOPSIS
@@ -282,16 +301,17 @@ finally {
 for reference: https://docs.gitlab.com/ce/ci/jobs/index.html#custom-collapsible-sections
 #>
 function Start-GitlabJobLogSection {
+    [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true, Position = 0)]
+        [Parameter(Mandatory, Position = 0)]
         [string]
         $HeaderText,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [switch]
         $Collapsed
     )
-    
+
     $Timestamp = Get-EpochTimestamp
     $CollapsedHeader = ''
     if ($Collapsed) {
@@ -300,8 +320,8 @@ function Start-GitlabJobLogSection {
 
     # use timestamp as the section name (since we are hiding that in our API)
     $SectionId = "$([System.Guid]::NewGuid().ToString("N"))"
-    Write-Host "`e[0Ksection_start:$($Timestamp):$($SectionId)$($CollapsedHeader)`r`e[0K$HeaderText"
-    $Global:GitlabJobLogSections.Push($SectionId)
+    Write-Host "`e[$($global:GitlabConsoleColors.White)m[0Ksection_start:$($Timestamp):$($SectionId)$($CollapsedHeader)`r`e[0K$HeaderText"
+    $global:GitlabJobLogSections.Push($SectionId)
 }
 
 <#
@@ -324,38 +344,22 @@ finally {
 for reference: https://docs.gitlab.com/ce/ci/jobs/index.html#custom-collapsible-sections
 #>
 function Stop-GitlabJobLogSection {
+    [CmdletBinding()]
+    param(
+    )
 
-    if ($Global:GitlabJobLogSections.Count -eq 0) {
+    if ($global:GitlabJobLogSections.Count -eq 0) {
         # explicitly do nothing
         # most likely case is if stop is called more than start
         return
     }
-    $PreviousId = $Global:GitlabJobLogSections.Pop()
+    $PreviousId = $global:GitlabJobLogSections.Pop()
     $Timestamp = Get-EpochTimestamp
     Write-Host "section_end:$($Timestamp):$PreviousId`r`e[0K"
 }
 
 function Get-EpochTimestamp {
     [int] $(New-TimeSpan -Start $(Get-Date "01/01/1970") -End $(Get-Date)).TotalSeconds
-}
-
-$global:GitlabConsoleColors = @{
-    Black       = '0;30'
-    Blue        = '0;34'
-    Cyan        = '0;36'
-    DarkGray    = '1;30'
-    Green       = '0;32'
-    LightBlue   = '1;34'
-    LightCyan   = '1;36'
-    LightGray   = '0;37'
-    LightGreen  = '1;32'
-    LightPurple = '1;35'
-    LightRed    = '1;31'
-    Orange      = '0;33'
-    Purple      = '0;35'
-    Red         = '0;31'
-    White       = '1;37'
-    Yellow      = '1;33'
 }
 
 function Write-GitlabJobTrace {
