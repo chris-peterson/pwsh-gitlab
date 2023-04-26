@@ -320,7 +320,7 @@ function Start-GitlabJobLogSection {
 
     # use timestamp as the section name (since we are hiding that in our API)
     $SectionId = "$([System.Guid]::NewGuid().ToString("N"))"
-    Write-Host "`e[$($global:GitlabConsoleColors.White)m[0Ksection_start:$($Timestamp):$($SectionId)$($CollapsedHeader)`r`e[0K$HeaderText"
+    Write-Host "`e[$($global:GitlabConsoleColors.White)m`e[0Ksection_start:$($Timestamp):$($SectionId)$($CollapsedHeader)`r`e[0K$HeaderText"
     $global:GitlabJobLogSections.Push($SectionId)
 }
 
