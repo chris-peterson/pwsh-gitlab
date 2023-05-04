@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.94.0'
+    ModuleVersion = '1.95.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Optionally include variables for a job'
+            ReleaseNotes = 'Enhancements to pipeline scheduling'
         }
     }
 
@@ -170,6 +170,8 @@
         'Get-GitlabPipelineSchedule'
         'New-GitlabPipelineSchedule'
         'Update-GitlabPipelineSchedule'
+        'Enable-GitlabPipelineSchedule'
+        'Disable-GitlabPipelineSchedule'
         'Remove-GitlabPipelineSchedule'
         'Get-GitlabPipelineScheduleVariable'
         'New-GitlabPipelineScheduleVariable'
