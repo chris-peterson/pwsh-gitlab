@@ -1004,7 +1004,7 @@
                 <PropertyName>Status</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Description</PropertyName>
+                <PropertyName>Summary</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

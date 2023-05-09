@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.95.0'
+    ModuleVersion = '1.96.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Enhancements to pipeline scheduling'
+            ReleaseNotes = 'Enhancements to runner APIs'
         }
     }
 
@@ -196,6 +196,7 @@
         'Update-GitlabRunner'
         'Suspend-GitlabRunner'
         'Resume-GitlabRunner'
+        'Remove-GitlabRunner'
 
         # Search
         'Search-Gitlab'

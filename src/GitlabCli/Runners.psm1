@@ -1,43 +1,55 @@
+# https://docs.gitlab.com/ee/api/runners.html
+
 function Get-GitlabRunner {
     [CmdletBinding(DefaultParameterSetName='ListAll')]
     param (
-        [Parameter(Mandatory=$true, Position=0, ParameterSetName='RunnerId')]
+        [Parameter(Mandatory, Position=0, ParameterSetName='RunnerId')]
         [string]
         $RunnerId,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ListAll')]
+        [Parameter(ParameterSetName='ListAll')]
         [ValidateSet('instance_type', 'group_type', 'project_type')]
         [string]
         $Type,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ListAll')]
+        [Parameter(ParameterSetName='ListAll')]
         [ValidateSet('active', 'paused', 'online', 'offline')]
         [string]
         $Status,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ListAll')]
+        [Parameter(ParameterSetName='ListAll')]
         [string []]
         $Tags,
 
-        [Parameter(Mandatory=$false)]
-        [int]
-        $MaxPages = 1,
+        [switch]
+        [Parameter()]
+        $FetchDetails,
 
-        [Parameter(Mandatory=$false)]
-        [string]
-        $SiteUrl,
+        [Parameter()]
+        [uint]
+        $MaxPages = $global:GitlabGetProjectDefaultPages,
 
         [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        [Parameter()]
+        $All,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
+
+    if ($All) {
+        if ($MaxPages -ne $global:GitlabGetProjectDefaultPages) {
+            Write-Warning -Message "Ignoring -MaxPages in favor of -All"
+        }
+        $MaxPages = [uint]::MaxValue
+    }
 
     $Params = @{
         HttpMethod = 'GET'
-        Query = @{}
-        MaxPages = $MaxPages
-        SiteUrl = $SiteUrl
-        WhatIf = $WhatIf
+        Query      = @{}
+        MaxPages   = $MaxPages
+        SiteUrl    = $SiteUrl
     }
 
     switch ($PSCmdlet.ParameterSetName) {
@@ -55,104 +67,108 @@ function Get-GitlabRunner {
         Default { throw "Unsupported parameter combination" }
     }
 
-    Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.Runner'
+    $Runners = Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.Runner'
+    if ($FetchDetails) {
+        $RunnerCount = $Runners.Count
+        $i = 0
+        $Runners | ForEach-Object {
+            $PercentComplete = $($i++ / $RunnerCount * 100)
+            Write-Progress "Fetching runner details ($i of $RunnerCount)" -PercentComplete $PercentComplete
+            Get-GitlabRunner -RunnerId $_.Id -SiteUrl $SiteUrl
+        }
+    }
+    $Runners
 }
 
-# https://docs.gitlab.com/ee/api/runners.html#list-runners-jobs
 function Get-GitlabRunnerJobs {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
         $RunnerId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [int]
-        $MaxPages = 1,
+        $MaxPages = $global:GitlabGetProjectDefaultPages,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Params = @{
         HttpMethod = 'GET'
-        Path = "runners/$RunnerId/jobs"
-        MaxPages = $MaxPages
-        SiteUrl = $SiteUrl
-        WhatIf = $WhatIf
+        Path       = "runners/$RunnerId/jobs"
+        MaxPages   = $MaxPages
+        SiteUrl    = $SiteUrl
     }
 
+    # https://docs.gitlab.com/ee/api/runners.html#list-runners-jobs
     Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.RunnerJob'
 }
 
-# https://docs.gitlab.com/ee/api/runners.html#update-runners-details
 function Update-GitlabRunner {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
         $RunnerId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Id,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Description,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [object]
         [ValidateSet($null, $true, $false)]
         $Active,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Tags,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [object]
         [ValidateSet($null, $true, $false)]
         $RunUntaggedJobs,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [object]
         [ValidateSet($null, $true, $false)]
         $Locked,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         [ValidateSet('not_protected', 'ref_protected')]
         $AccessLevel,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [uint]
         $MaximumTimeoutSeconds,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Params = @{
         HttpMethod = 'PUT'
-        Path = "runners/$RunnerId"
-        Query = @{
-            id = $Id
-            description = $Description
-            tag_list = $Tags
-            access_level = $AccessLevel
-        }
-        SiteUrl = $SiteUrl
-        WhatIf = $WhatIf
+        Path       = "runners/$RunnerId"
+        Query      = @{}
+        SiteUrl    = $SiteUrl
+    }
+    if ($Description) {
+        $Params.Query.description = $Description
+    }
+    if ($Tags) {
+        $Params.Query.tag_list = $Tags
+    }
+    if ($AccessLevel) {
+        $Params.Query.access_level = $Tags
     }
     if ($MaximumTimeoutSeconds) {
         if ($MaximumTimeoutSeconds -lt 600) {
@@ -174,41 +190,60 @@ function Update-GitlabRunner {
         $Params.Query.locked = $Locked.ToString().ToLower()
     }
 
-    Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.Runner'
+    if ($PSCmdlet.ShouldProcess("$($Params.Path)", "update ($($Params.Query | ConvertTo-Json))")) {
+        # https://docs.gitlab.com/ee/api/runners.html#update-runners-details
+        Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.Runner'
+    }
 }
-
 function Suspend-GitlabRunner {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
         $RunnerId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    Update-GitlabRunner $RunnerId -Active $false -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    Update-GitlabRunner $RunnerId -Active $false -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference
 }
 
 function Resume-GitlabRunner {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
         $RunnerId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    Update-GitlabRunner $RunnerId -Active $true -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    Update-GitlabRunner $RunnerId -Active $true -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference
+}
+
+function Remove-GitlabRunner {
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
+        [Alias('Id')]
+        [string]
+        $RunnerId,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    $Runner = Get-GitlabRunner -RunnerId $RunnerId
+
+    if ($PSCmdlet.ShouldProcess("runner $($Runner.Id) [$($Runner.Status)] ($($Runner.Summary))", "delete")) {
+        # https://docs.gitlab.com/ee/api/runners.html#delete-a-runner-by-id
+        if (Invoke-GitlabApi DELETE "runners/$($Runner.Id)") {
+            Write-Host "Runner $($Runner.Id) deleted"
+        }
+    }
 }

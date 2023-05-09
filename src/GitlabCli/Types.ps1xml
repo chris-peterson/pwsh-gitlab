@@ -350,6 +350,17 @@
     <Name>Gitlab.Runner</Name>
     <Members>
       <ScriptProperty>
+        <Name>Summary</Name>
+        <GetScriptBlock>
+          if ($this.TagList) {
+            "tags: $($this.TagList -join ', ')"
+          }
+          else {
+            $this.Description
+          }
+        </GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
         <Name>Tags</Name>
         <GetScriptBlock>$this.TagList</GetScriptBlock>
       </ScriptProperty>
