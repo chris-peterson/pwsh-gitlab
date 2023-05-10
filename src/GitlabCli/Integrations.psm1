@@ -23,7 +23,9 @@ function Get-GitlabProjectIntegration {
     if ($Integration) {
         $Resource += "/$Integration"
     }
-    Invoke-GitlabApi GET $Resource -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.ProjectIntegration'
+    Invoke-GitlabApi GET $Resource -SiteUrl $SiteUrl |
+        New-WrapperObject 'Gitlab.ProjectIntegration' |
+        Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id -PassThru
 }
 
 function Update-GitlabProjectIntegration {
@@ -34,7 +36,8 @@ function Update-GitlabProjectIntegration {
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('Slug')]
         [ValidateSet('slack')]
         [string]
         $Integration,
@@ -66,7 +69,8 @@ function Remove-GitlabProjectIntegration {
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('Slug')]
         [ValidateSet('slack')]
         [string]
         $Integration,
@@ -80,7 +84,7 @@ function Remove-GitlabProjectIntegration {
 
     $Resource = "projects/$($Project.Id)/integrations/$Integration"
 
-    if ($PSCmdlet.ShouldProcess("$Resource", "delete")) {
+    if ($PSCmdlet.ShouldProcess("$Resource", "delete integration")) {
         Invoke-GitlabApi DELETE $Resource -Body $Settings -SiteUrl $SiteUrl | Out-Null
         Write-Host "Deleted $Integration integration from $($Project.PathWithNamespace)"
     }
