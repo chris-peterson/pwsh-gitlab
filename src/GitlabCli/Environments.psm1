@@ -1,60 +1,79 @@
 function Get-GitlabEnvironment {
-    [CmdletBinding(DefaultParameterSetName='List')]
     [Alias('envs')]
+    [CmdletBinding(DefaultParameterSetName='List')]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(ParameterSetName='Name', Mandatory=$true)]
+        [Alias('Id')]
+        [Alias('EnvironmentId')]
+        [Parameter(ParameterSetName='Name')]
         [string]
         $Name,
 
-        [Parameter(ParameterSetName='Search', Mandatory=$true)]
+        [Parameter(ParameterSetName='Search', Mandatory)]
         [string]
         $Search,
 
-        [Parameter(Mandatory=$false)]
-        [switch]
-        $IncludeStopped,
+        [Parameter()]
+        [ValidateSet('available', 'stopping', 'stopped')]
+        [string]
+        $State = 'available',
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
+        [switch]
+        $Enrich,
+
+        [Parameter()]
         [int]
         $MaxPages = 1,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
 
+    # https://docs.gitlab.com/ee/api/environments.html#list-environments
     $GitlabApiArguments = @{
-        HttpMethod='GET'
-        Path="projects/$($Project.Id)/environments"
-        Query=@{}
-        SiteUrl = $SiteUrl
-        MaxPages = $MaxPages
+        HttpMethod = 'GET'
+        Path       = "projects/$($Project.Id)/environments"
+        Query      = @{}
+        SiteUrl    = $SiteUrl
+        MaxPages   = $MaxPages
     }
 
-    switch ($PSCmdlet.ParameterSetName) {
-        Name {
-            $GitlabApiArguments.Query['name'] = $Name
+    $Numeric = 0
+    if ([int]::TryParse($Name, [ref] $Numeric)) {
+        # https://docs.gitlab.com/ee/api/environments.html#get-a-specific-environment
+        $GitlabApiArguments.Path += "/$Numeric"
+    } else {
+        switch ($PSCmdlet.ParameterSetName) {
+            Search {
+                $GitlabApiArguments.Query.search = $Search
+            }
         }
-        Search {
-            $GitlabApiArguments.Query['search'] = $Search
+
+        if ($Name) {
+            $GitlabApiArguments.Query.name = $Name
+        }
+
+        if ($State) {
+            $GitlabApiArguments.Query.states = $State
         }
     }
 
-    if ((-not $IncludeStopped) -and (-not $Name)) {
-        $GitlabApiArguments.Query['states'] = 'available'
+    $Result = Invoke-GitlabApi @GitlabApiArguments
+    if ($Enrich) {
+        # More properties are returned from the single environment API than the batch one (e.g. most recent deployment)
+        $Result | ForEach-Object {
+            Get-GitlabEnvironment -ProjectId $ProjectId -EnvironmentId $_.id
+        }
+    } else {
+        $Result | New-WrapperObject 'Gitlab.Environment'
     }
-
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Environment'
 }
 
 function Stop-GitlabEnvironment {

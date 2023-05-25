@@ -217,7 +217,7 @@ Your application
  ### Get pipeline for latest deployement
  
  ```powershell
- envs -Search prod | deploys -Latest -Pipeline [| go]
+ envs -Search prod | deploys -Latest -Select Pipeline [| go]
  ```
 
 ### Deploy To Production
