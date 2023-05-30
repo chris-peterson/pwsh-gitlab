@@ -330,31 +330,30 @@ function Set-GitlabGroupVariable {
     }
 }
 
-# https://docs.gitlab.com/ee/api/group_level_variables.html#remove-variable
 function Remove-GitlabGroupVariable {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
 
-        [Parameter(Mandatory=$true, Position=1)]
+        [Parameter(Mandatory, Position=0)]
         [string]
         $Key,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $GroupId = $GroupId | ConvertTo-UrlEncoded
+    $Group = Get-GitlabGroup $GroupId
 
-    Invoke-GitlabApi DELETE "groups/$GroupId/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+    if ($PSCmdlet.ShouldProcess("$($Group.FullPath)", "remove variable $Key")) {
+        # https://docs.gitlab.com/ee/api/group_level_variables.html#remove-variable
+        Invoke-GitlabApi DELETE "groups/$($Group.Id)/variables/$Key" -SiteUrl $SiteUrl | Out-Null
+        Write-Host "Removed $Key from $($Group.FullPath)"
+    }
 }
 
 
