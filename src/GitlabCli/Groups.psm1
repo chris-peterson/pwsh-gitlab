@@ -228,89 +228,81 @@ function Update-LocalGitlabGroup {
     }
 }
 
-# https://docs.gitlab.com/ee/api/group_level_variables.html#list-group-variables
 function Get-GitlabGroupVariable {
 
     [CmdletBinding()]
     param (
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
 
-        [Parameter(Position=1, Mandatory=$false)]
+        [Parameter(Position=1)]
         [string]
         $Key,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $GroupId = $GroupId | ConvertTo-UrlEncoded
 
     if ($Key) {
-        Invoke-GitlabApi GET "groups/$GroupId/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
+        # https://docs.gitlab.com/ee/api/group_level_variables.html#show-variable-details
+        Invoke-GitlabApi GET "groups/$GroupId/variables/$Key" -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
     }
     else {
-        Invoke-GitlabApi GET "groups/$GroupId/variables" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
+        # https://docs.gitlab.com/ee/api/group_level_variables.html#list-group-variables
+        Invoke-GitlabApi GET "groups/$GroupId/variables" -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
     }
 }
 
-# https://docs.gitlab.com/ee/api/group_level_variables.html#update-variable
 function Set-GitlabGroupVariable {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
 
-        [Parameter(Mandatory=$true, Position=1)]
+        [Parameter(Mandatory, Position=0)]
         [string]
         $Key,
 
-        [Parameter(Mandatory=$true, Position=2)]
+        [Parameter(Mandatory, Position=1)]
         [string]
         $Value,
 
         [bool]
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         $Protect = $false,
 
         [bool]
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         $Mask = $false,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $GroupId = $GroupId | ConvertTo-UrlEncoded
+    $Group = Get-GitlabGroup $GroupId
 
     $Query = @{
         value = $Value
     }
 
     if ($Protect) {
-        $Query['protected'] = 'true'
+        $Query.protected = 'true'
     }
     else {
-        $Query['protected'] = 'false'
+        $Query.protected = 'false'
     }
     if ($Mask) {
-        $Query['masked'] = 'true'
+        $Query.masked = 'true'
     }
     else {
-        $Query['masked'] = 'false'
+        $Query.masked = 'false'
     }
 
     try {
@@ -321,12 +313,16 @@ function Set-GitlabGroupVariable {
         $IsExistingVariable = $False
     }
 
-    if ($IsExistingVariable) {
-        Invoke-GitlabApi PUT "groups/$GroupId/variables/$Key" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
-    }
-    else {
-        $Query.Add('key', $Key)
-        Invoke-GitlabApi POST "groups/$GroupId/variables" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
+    if ($PSCmdlet.ShouldProcess("$($Group.FullName)", "set $($IsExistingVariable ? 'existing' : 'new') variable $Key to $Value")) {
+        if ($IsExistingVariable) {
+            # https://docs.gitlab.com/ee/api/group_level_variables.html#update-variable
+            Invoke-GitlabApi PUT "groups/$($Group.Id)/variables/$Key" -Query $Query -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
+        }
+        else {
+            $Query.key = $Key
+            # https://docs.gitlab.com/ee/api/group_level_variables.html#create-variable
+            Invoke-GitlabApi POST "groups/$($Group.Id)/variables" -Query $Query -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
+        }
     }
 }
 
@@ -355,7 +351,6 @@ function Remove-GitlabGroupVariable {
         Write-Host "Removed $Key from $($Group.FullPath)"
     }
 }
-
 
 # https://docs.gitlab.com/ee/api/groups.html#update-group
 function Update-GitlabGroup {

@@ -745,16 +745,16 @@ function Get-GitlabPipelineBridge {
 
 function New-GitlabPipeline {
     [CmdletBinding(SupportsShouldProcess)]
-    [Alias("build")]
+    [Alias('build')]
     param (
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
         [Parameter()]
-        [Alias("Branch")]
+        [Alias('Branch')]
         [string]
-        $Ref = '.',
+        $Ref,
 
         [Parameter()]
         [Alias('vars')]
@@ -776,15 +776,18 @@ function New-GitlabPipeline {
     $Project = Get-GitlabProject -ProjectId $ProjectId
     $ProjectId = $Project.Id
 
-    if ($Ref) {
-        if ($Ref -eq '.') {
-            $Ref = $(Get-LocalGitContext).Branch
+    if (-not $Ref) {
+        $Local = Get-LocalGitContext
+        if ($Local.Project -eq $Project.PathWithNamespace) {
+            $Ref = $Local.Branch
+        } else {
+            $Ref = $Project.DefaultBranch
         }
-    } else {
-        $Ref = $Project.DefaultBranch
     }
 
-    $Request = @{'ref' = $Ref}
+    $Request = @{
+        ref = $Ref
+    }
 
     if ($Variables) {
         $ReformattedVariables = $Variables.GetEnumerator() | ForEach-Object {
