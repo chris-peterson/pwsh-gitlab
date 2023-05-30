@@ -487,65 +487,46 @@ function Update-GitlabProject {
     }
 }
 
-# https://docs.gitlab.com/ee/api/projects.html#archive-a-project
 function Invoke-GitlabProjectArchival {
     [Alias('Archive-GitlabProject')]
-    [CmdletBinding(DefaultParameterSetName='ByProjectId')]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(ValueFromPipeline=$true, ParameterSetName='ByProject')]
-        $Project,
-
-        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
-
-        [Parameter(Mandatory=$false)]
+        
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    Process {
+    $Project = Get-GitlabProject $ProjectId
 
-        if ($PSCmdlet.ParameterSetName -eq 'ByProjectId') {
-            $Project = $(Get-GitlabProject -ProjectId $ProjectId)
-        }
-
-        Invoke-GitlabApi POST "projects/$($Project.Id)/archive" -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "archive")) {
+        # https://docs.gitlab.com/ee/api/projects.html#archive-a-project
+        Invoke-GitlabApi POST "projects/$($Project.Id)/archive" -SiteUrl $SiteUrl |
             New-WrapperObject 'Gitlab.Project'
     }
 }
 
-# https://docs.gitlab.com/ee/api/projects.html#unarchive-a-project
 function Invoke-GitlabProjectUnarchival {
     [Alias('Unarchive-GitlabProject')]
-    [CmdletBinding(DefaultParameterSetName='ByProjectId')]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(ValueFromPipeline=$true, ParameterSetName='ByProject')]
-        $Project,
-
-        [Parameter(Position=0)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
-
-        [Parameter(Mandatory=$false)]
+        
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    Process {
-        if ($PSCmdlet.ParameterSetName -eq 'ByProjectId') {
-            $Project = $(Get-GitlabProject -ProjectId $ProjectId)
-        }
-    
-        Invoke-GitlabApi POST "projects/$($Project.Id)/unarchive" -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+    $Project = Get-GitlabProject $ProjectId
+
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "unarchive")) {
+        # https://docs.gitlab.com/ee/api/projects.html#unarchive-a-project
+        Invoke-GitlabApi POST "projects/$($Project.Id)/unarchive" -SiteUrl $SiteUrl |
             New-WrapperObject 'Gitlab.Project'
     }
 }
