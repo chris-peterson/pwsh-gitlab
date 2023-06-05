@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.97.4'
+    ModuleVersion = '1.97.5'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'verbose logging for invoke API'
+            ReleaseNotes = 'Set gitlab project variable standardization'
         }
     }
 

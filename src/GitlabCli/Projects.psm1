@@ -563,32 +563,30 @@ function Get-GitlabProjectVariable {
     }
 }
 
-# https://docs.gitlab.com/ee/api/project_level_variables.html#update-variable
 function Set-GitlabProjectVariable {
-
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
         $Key,
 
-        [Parameter(Mandatory=$true, Position=1, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, Position=1, ValueFromPipelineByPropertyName)]
         [string]
         $Value,
 
         [switch]
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(, ValueFromPipelineByPropertyName)]
         $Protect,
 
         [switch]
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(, ValueFromPipelineByPropertyName)]
         $Mask,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
@@ -607,19 +605,21 @@ function Set-GitlabProjectVariable {
 
     try {
         Get-GitlabProjectVariable -ProjectId $ProjectId -Key $Key | Out-Null
-        $IsExistingVariable = $True
+        $IsExistingVariable = $true
     }
     catch {
-        $IsExistingVariable = $False
+        $IsExistingVariable = $false
     }
 
     if ($PSCmdlet.ShouldProcess($ProjectId, "set $($IsExistingVariable ? 'existing' : 'new') project variable to '$Value'")) {
         if ($IsExistingVariable) {
-            Invoke-GitlabApi PUT "projects/$($ProjectId)/variables/$Key" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.Variable'
+            # https://docs.gitlab.com/ee/api/project_level_variables.html#update-variable
+            Invoke-GitlabApi PUT "projects/$($ProjectId)/variables/$Key" -Query $Query -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
         }
         else {
             $Query.key = $Key
-            Invoke-GitlabApi POST "projects/$($ProjectId)/variables" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.Variable'
+            # https://docs.gitlab.com/ee/api/project_level_variables.html#create-a-variable
+            Invoke-GitlabApi POST "projects/$($ProjectId)/variables" -Query $Query -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
         }
     }
 }
