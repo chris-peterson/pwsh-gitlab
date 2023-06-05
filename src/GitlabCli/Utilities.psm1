@@ -188,7 +188,7 @@ function Invoke-GitlabApi {
         Write-Host "WhatIf: $HttpMethod $Uri $SerializedParams"
     }
     else {
-        Write-Debug "$HttpMethod $Uri"
+        Write-Verbose "$HttpMethod $Uri"
         $Result = Invoke-RestMethod -Method $HttpMethod -Uri $Uri -Header $Headers @RestMethodParams
         if($MaxPages -gt 1) {
             # Unwrap pagination container
