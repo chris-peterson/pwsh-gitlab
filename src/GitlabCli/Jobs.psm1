@@ -157,40 +157,58 @@ function Get-GitlabJobTrace {
 function Start-GitlabJob {
     [Alias('Play-GitlabJob')]
     [Alias('play')]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
         $JobId,
 
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$false)]
-        [string]
-        $SiteUrl,
+        [Parameter()]
+        [Alias('vars')]
+        $Variables,
 
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
-    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+    $Project = Get-GitlabProject -ProjectId $ProjectId
 
     $GitlabApiArguments = @{
         HttpMethod = "POST"
-        Path       = "projects/$ProjectId/jobs/$JobId/play"
+        Path       = "projects/$($Project.Id)/jobs/$JobId/play"
         SiteUrl    = $SiteUrl
+        Body       = @{
+            job_variables_attributes = @{}
+        }
     }
 
-    try {
-        Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject "Gitlab.Job"
+    if ($Variables) {
+        $ReformattedVariables = $Variables.GetEnumerator() | ForEach-Object {
+            @{
+                key           = $_.Name
+                value         = $_.Value
+            }
+        }
+        $GitlabApiArguments.Body.job_variables_attributes = @($ReformattedVariables)
     }
-    catch {
-        if ($_.ErrorDetails.Message -match 'Unplayable Job') {
-            $GitlabApiArguments.Path = $GitlabApiArguments.Path -replace '/play', '/retry'
-            Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject "Gitlab.Job"
+
+    if ($PSCmdlet.ShouldProcess("start job $($Project.PathWithNamespace)", "$($GitlabApiArguments | ConvertTo-Json)")) {
+        try {
+            # https://docs.gitlab.com/ee/api/jobs.html#run-a-job
+            Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.Job"
+        }
+        catch {
+            Write-Verbose $_
+            if ($_.ErrorDetails.Message -match 'Unplayable Job') {
+                # https://docs.gitlab.com/ee/api/jobs.html#retry-a-job
+                $GitlabApiArguments.Path = $GitlabApiArguments.Path -replace '/play', '/retry'
+                Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.Job"
+            }
         }
     }
 }

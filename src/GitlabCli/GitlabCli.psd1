@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.97.5'
+    ModuleVersion = '1.97.6'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Set gitlab project variable standardization'
+            ReleaseNotes = 'Pass variables to jobs'
         }
     }
 
