@@ -335,11 +335,12 @@ function New-GitlabProject {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Position=0, Mandatory)]
+        [Alias('Name')]
         [string]
         $ProjectName,
 
         [Parameter(ValueFromPipelineByPropertyName=$true, ParameterSetName='Group')]
-        [Alias('GroupId')]
+        [Alias('Group')]
         [string]
         $DestinationGroup,
 
@@ -377,7 +378,7 @@ function New-GitlabProject {
             name = $ProjectName
             namespace_id = $NamespaceId
             visibility = $Visibility
-        } -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.Project'
+        } -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Project'
     
         if ($CloneNow) {
             git clone $Project.SshUrlToRepo
