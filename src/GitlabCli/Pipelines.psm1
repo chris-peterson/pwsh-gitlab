@@ -183,29 +183,48 @@ function Get-GitlabPipeline {
     $Pipelines
 }
 
-# https://docs.gitlab.com/ee/api/pipelines.html#get-variables-of-a-pipeline
 function Get-GitlabPipelineVariable {
     param(
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $PipelineId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(Position=1)]
         [string]
-        $SiteUrl,
+        $Variable,
 
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        [Parameter()]
+        [ValidateSet('KeyValuePairs', 'Object')]
+        [string]
+        $As = 'KeyValuePairs',
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
 
-    Invoke-GitlabApi GET "projects/$($Project.Id)/pipelines/$PipelineId/variables" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject
+    # https://docs.gitlab.com/ee/api/pipelines.html#get-variables-of-a-pipeline
+    $KeyValues = Invoke-GitlabApi GET "projects/$($Project.Id)/pipelines/$PipelineId/variables" -SiteUrl $SiteUrl
+
+    if ($Variable) {
+        $KeyValues | Where-Object Key -eq $Variable | Select-Object -ExpandProperty Value
+    } else {
+        if ($As -eq 'KeyValuePairs') {
+            $KeyValues | New-WrapperObject 'Gitlab.PipelineVariable'
+        } elseif ($As -eq 'Object') {
+            $Obj = New-Object PSObject
+            $KeyValues.Key | ForEach-Object {
+                $Obj | Add-Member -NotePropertyName $_ -NotePropertyValue $($KeyValues | Where-Object Key -eq $_ | Select-Object -ExpandProperty Value)
+            }
+            $Obj
+        }
+    }
 }
 
 function Get-GitlabPipelineSchedule {

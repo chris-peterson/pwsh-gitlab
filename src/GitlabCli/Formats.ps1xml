@@ -930,6 +930,30 @@
       </TableControl>
     </View>
     <View>
+      <Name>GitlabPipelineVariable</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.PipelineVariable</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Key</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Value</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>GitlabRepositoryTree</Name>
       <ViewSelectedBy>
         <TypeName>Gitlab.RepositoryTree</TypeName>
