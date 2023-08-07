@@ -86,19 +86,20 @@ function ConvertTo-UrlEncoded {
 
 function Invoke-GitlabApi {
     param(
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory)]
+        [Alias('Method')]
         [string]
         $HttpMethod,
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Position=1, Mandatory)]
         [string]
         $Path,
 
-        [Parameter(Position=2, Mandatory=$false)]
+        [Parameter(Position=2)]
         [hashtable]
         $Query = @{},
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [hashtable]
         $Body = @{},
 

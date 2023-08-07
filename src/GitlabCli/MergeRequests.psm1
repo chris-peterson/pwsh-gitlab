@@ -1,70 +1,67 @@
-
 function Get-GitlabMergeRequest {
     [CmdletBinding(DefaultParameterSetName='ByProjectId')]
     [Alias('mrs')]
     param(
-        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$false, ParameterSetName='ByProjectId')]
+        [Parameter(Position=0, ParameterSetName='ByProjectId')]
         [Alias("Id")]
         [string]
         $MergeRequestId,
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByGroupId')]
+        [Parameter(Position=0, Mandatory, ParameterSetName='ByGroupId')]
         [string]
         $GroupId,
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByUrl')]
+        [Parameter(Position=0, Mandatory, ParameterSetName='ByUrl')]
         [string]
         $Url,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateSet('', 'closed', 'opened', 'merged')]
         [string]
         $State = 'opened',
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
-        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
+        [Parameter(ParameterSetName='ByGroupId')]
+        [Parameter(ParameterSetName='ByProjectId')]
         [string]
         $CreatedAfter,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
-        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
+        [Parameter(ParameterSetName='ByGroupId')]
+        [Parameter(ParameterSetName='ByProjectId')]
         [string]
         $CreatedBefore,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
-        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
+        [Parameter(ParameterSetName='ByGroupId')]
+        [Parameter(ParameterSetName='ByProjectId')]
         [ValidateSet($null, $true, $false)]
         [object]
         $IsDraft,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
-        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
+        [Parameter(ParameterSetName='ByGroupId')]
+        [Parameter(ParameterSetName='ByProjectId')]
         [string]
         $Branch,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
+        [Alias('ChangeSummary')]
         [switch]
         $IncludeChangeSummary,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
+        [Alias('Approvals')]
         [switch]
         $IncludeApprovals,
 
-        [Parameter(Mandatory=$true, ParameterSetName='Mine')]
+        [Parameter(Mandatory, ParameterSetName='Mine')]
         [switch]
         $Mine,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Path = $null
@@ -125,11 +122,11 @@ function Get-GitlabMergeRequest {
         $Query['source_branch'] = $Branch
     }
 
-    $MergeRequests = Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.MergeRequest'
+    $MergeRequests = Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.MergeRequest'
 
     if ($IncludeChangeSummary) {
         $MergeRequests | ForEach-Object {
-            $_ | Add-Member -MemberType 'NoteProperty' -Name 'ChangeSummary' -Value $($_ | Get-GitlabMergeRequestChangeSummary)
+            $_ | Add-GitlabMergeRequestChangeSummary
         }
     }
 
@@ -144,20 +141,22 @@ function Get-GitlabMergeRequest {
 
 function Add-GitlabMergeRequestApprovals {
     param(
-        [Parameter(Position=0, Mandatory=$true,ValueFromPipeline=$true)]
+        [Parameter(Position=0, Mandatory, ValueFromPipeline)]
         $MergeRequest
     )
-    $Path = "projects/$($MergeRequest.SourceProjectId)/merge_requests/$($MergeRequest.MergeRequestId)/approvals"
-    $approvalDetails = Invoke-GitlabApi GET $Path
 
-    $MergeRequest | Add-Member -MemberType NoteProperty -Name ApprovalsRequired -Value $approvalDetails.approvals_required -Force
-    $MergeRequest | Add-Member -MemberType NoteProperty -Name ApprovalsLeft -Value $approvalDetails.approvals_left -Force
-    $MergeRequest | Add-Member -MemberType NoteProperty -Name ApprovedBy -Value $approvalDetails.approved_by.user.name
+    $Approval = Invoke-GitlabApi GET "projects/$($MergeRequest.SourceProjectId)/merge_requests/$($MergeRequest.MergeRequestId)/approvals"
+
+    $MergeRequest | Add-Member -NotePropertyMembers @{
+        ApprovalsRequired = $Approval.approvals_required
+        ApprovalsLeft     = $Approval.approvals_left
+        ApprovedBy        = $Approval.approved_by.user.name
+    }
 }
 
-function Get-GitlabMergeRequestChangeSummary {
+function Add-GitlabMergeRequestChangeSummary {
     param (
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipeline=$true)]
+        [Parameter(Position=0, Mandatory, ValueFromPipeline)]
         $MergeRequest
     )
 
@@ -216,39 +215,38 @@ function Get-GitlabMergeRequestChangeSummary {
     } else {
         $Summary.TimeToMerge = @{ Duration = $MergedAt - $MergeRequest.CreatedAt; Measure='FromCreated'}
     }
-    $Summary
+
+    $MergeRequest | Add-Member -NotePropertyMembers @{
+        ChangeSummary = $Summary
+    }
 }
 
 function New-GitlabMergeRequest {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
-        [Parameter(Position=0, Mandatory=$false)]
+        [Parameter(Position=0)]
         [string]
         $ProjectId,
 
-        [Parameter(Position=1, Mandatory=$false)]
+        [Parameter(Position=1)]
         [string]
         $SourceBranch,
 
-        [Parameter(Position=2, Mandatory=$false)]
+        [Parameter(Position=2)]
         [string]
         $TargetBranch,
 
-        [Parameter(Position=3, Mandatory=$false)]
+        [Parameter(Position=3)]
         [string]
         $Title,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [switch]
         $Follow,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     if (-not $ProjectId) {
@@ -269,61 +267,68 @@ function New-GitlabMergeRequest {
 
     $Me = Get-GitlabCurrentUser
 
-    $MergeRequest = $(Invoke-GitlabApi POST "projects/$($Project.Id)/merge_requests" @{
-        source_branch = $SourceBranch
-        target_branch = $TargetBranch
-        remove_source_branch = 'true'
-        assignee_id = $Me.Id
-        title = $Title
-    } -SiteUrl $SiteUrl -WhatIf:$WhatIf) | New-WrapperObject 'Gitlab.MergeRequest'
-    if ($Follow) {
-        Start-Process $MergeRequest.WebUrl
+    $Request = @{
+        Method = 'POST'
+        Path   = "projects/$($Project.Id)/merge_requests"
+        Body   = @{
+            source_branch        = $SourceBranch
+            target_branch        = $TargetBranch
+            remove_source_branch = 'true'
+            assignee_id          = $Me.Id
+            title                = $Title
+        }
     }
 
-    $MergeRequest
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create merge request ($($Request | ConvertTo-Json))")) {
+        $MergeRequest = Invoke-GitlabApi @Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.MergeRequest'
+        if ($Follow) {
+            Start-Process $MergeRequest.WebUrl
+        }
+        $MergeRequest
+    }
 }
 
 function Merge-GitlabMergeRequest {
     [CmdletBinding()]
     param(
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory)]
         [string]
         $ProjectId,
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Position=1, Mandatory)]
         [string]
         $MergeRequestId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $MergeCommitMessage,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SquashCommitMessage,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [bool]
         $Squash = $false,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [bool]
         $ShouldRemoveSourceBranch = $true,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [bool]
         $MergeWhenPipelineSucceeds = $false,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Sha,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl,
 
         [switch]
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         $WhatIf
     )
 
