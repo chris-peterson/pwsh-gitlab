@@ -122,7 +122,9 @@ function Get-GitlabMergeRequest {
         $Query['source_branch'] = $Branch
     }
 
-    $MergeRequests = Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.MergeRequest'
+    $MergeRequests = Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl |
+        Select-Object -Property '*' -ExcludeProperty approvals_before_merge | # https://docs.gitlab.com/ee/api/merge_requests.html#removals-in-api-v5
+        New-WrapperObject 'Gitlab.MergeRequest'
 
     if ($IncludeChangeSummary) {
         $MergeRequests | ForEach-Object {

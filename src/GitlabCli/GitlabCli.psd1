@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.98.1'
+    ModuleVersion = '1.98.2'
 
     PrivateData = @{
         PSData = @{
