@@ -215,60 +215,54 @@ function Start-GitlabJob {
 
 function Test-GitlabPipelineDefinition {
 
-    [CmdletBinding(DefaultParameterSetName='Project')]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$false, ParameterSetName='Project')]
+        [Parameter()]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$true, ParameterSetName='Content')]
+        [Parameter()]
         [string]
         $Content,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Select,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
     $ProjectId = $Project.Id
 
     $Params = @{
+        Path    = "projects/$ProjectId/ci/lint"
         Body    = @{}
         Query   = @{}
         SiteUrl = $SiteUrl
-        WhatIf  = $WhatIf
     }
 
-    switch ($PSCmdlet.ParameterSetName) {
-        Content {
-            if (Test-Path $Content) {
-                $Content = Get-Content -Raw -Path $Content
-            }
-            # https://docs.gitlab.com/ee/api/lint.html#validate-the-ci-yaml-configuration
-            $Params.HttpMethod                = 'POST'
-            $Params.Path                      = 'ci/lint'
-            $Params.Body.content              = $Content
-            $Params.Query.include_merged_yaml = 'true'
+    if ($Content) {
+        if (Test-Path $Content) {
+            $Content = Get-Content -Raw -Path $Content
         }
-        Default {
-            # https://docs.gitlab.com/ee/api/lint.html#validate-a-projects-ci-configuration
-            $Params.HttpMethod = 'GET'
-            $Params.Path = "projects/$ProjectId/ci/lint"
-        }
+        # https://docs.gitlab.com/ee/api/lint.html#validate-the-ci-yaml-configuration
+        $Params.HttpMethod                = 'POST'
+        $Params.Body.content              = $Content
+        $Params.Query.include_merged_yaml = 'true'
+    }
+    else {
+        # https://docs.gitlab.com/ee/api/lint.html#validate-a-projects-ci-configuration
+        $Params.HttpMethod = 'GET'
     }
 
-    Invoke-GitlabApi @Params |
-        New-WrapperObject 'Gitlab.PipelineDefinition' |
-        Get-FilteredObject $Select
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "Validate CI definition ($($Params | ConvertTo-Json))")) {
+        Invoke-GitlabApi @Params |
+            New-WrapperObject 'Gitlab.PipelineDefinition' |
+            Get-FilteredObject $Select
+    }
 }
 
 function Get-GitlabPipelineDefinition {
