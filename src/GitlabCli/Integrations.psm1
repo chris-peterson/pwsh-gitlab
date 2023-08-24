@@ -105,7 +105,7 @@ function Enable-GitlabProjectSlackNotification {
         [string]
         $Channel,
 
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string]
         $Webhook,
 
@@ -129,12 +129,12 @@ function Enable-GitlabProjectSlackNotification {
         $JobEvents,
 
         [Parameter(ParameterSetName='SpecificEvents')]
-        [ValidateSet('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')]
+        [ValidateSet('alert', 'commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')]
         [string []]
         $Enable,
 
         [Parameter(ParameterSetName='SpecificEvents')]
-        [ValidateSet('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')]
+        [ValidateSet('alert', 'commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')]
         [string []]
         $Disable,
 
@@ -158,15 +158,6 @@ function Enable-GitlabProjectSlackNotification {
     }
     if ($NoEvents) {
         $Disable = $KnownEvents
-    }
-
-    if (-not $Webhook) {
-        try {
-            $Webhook = $(Get-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack').Properties.webhook
-        }
-        catch {
-            throw "Webhook could not be derived from an existing integration (provide via -Webhook parameter)"
-        }
     }
 
     $Settings = @{

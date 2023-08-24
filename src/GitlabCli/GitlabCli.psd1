@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.99.0'
+    ModuleVersion = '1.100.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'testing pipeline definition requires a project scope'
+            ReleaseNotes = 'update slack integration: support alert, require webhook'
         }
     }
 
