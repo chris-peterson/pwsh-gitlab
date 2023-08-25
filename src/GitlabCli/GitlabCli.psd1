@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.101.0'
+    ModuleVersion = '1.101.1'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'membership improvements'
+            ReleaseNotes = 'default sorting for membership cmdlets'
         }
     }
 
@@ -224,6 +224,7 @@
 
         # Members
         'Get-GitlabMemberAccessLevel'
+        'Get-GitlabMembershipSortKey'
 
         'Get-GitlabGroupMember'
         'Add-GitlabGroupMember'

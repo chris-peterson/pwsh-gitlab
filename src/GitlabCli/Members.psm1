@@ -24,6 +24,22 @@ function Get-GitlabMemberAccessLevel {
     }
 }
 
+function Get-GitlabMembershipSortKey {
+    param(
+    )
+
+    @(
+        @{
+            Expression = 'AccessLevel'
+            Descending = $true
+        },
+        @{
+            Expression = 'Username'
+            Descending = $false
+        }
+    )
+}
+
 # https://docs.gitlab.com/ee/api/members.html#list-all-members-of-a-group-or-project
 function Get-GitlabGroupMember {
     param (
@@ -71,7 +87,8 @@ function Get-GitlabGroupMember {
     $Members | New-WrapperObject 'Gitlab.Member' |
         Add-Member -PassThru -NotePropertyMembers @{
             GroupId = $Group.Id
-        }
+        } |
+        Sort-Object -Property $(Get-GitlabMembershipSortKey)
 }
 
 # https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project
@@ -180,7 +197,8 @@ function Get-GitlabProjectMember {
         New-WrapperObject 'Gitlab.Member' |
         Add-Member -PassThru -NotePropertyMembers @{
             ProjectId = $Project.Id
-        }
+        } |
+        Sort-Object -Property $(Get-GitlabMembershipSortKey)
 }
 
 # https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project
