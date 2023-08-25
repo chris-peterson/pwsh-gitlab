@@ -27,34 +27,30 @@ function Get-GitlabMemberAccessLevel {
 # https://docs.gitlab.com/ee/api/members.html#list-all-members-of-a-group-or-project
 function Get-GitlabGroupMember {
     param (
-        [Parameter(Position=0, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
         $GroupId = '.',
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $UserId,
 
         [switch]
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         $All,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         [ValidateSet('guest', 'reporter', 'developer', 'maintainer', 'owner')]
         $MinAccessLevel,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [int]
         $MaxPages = 10,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Group = Get-GitlabGroup -GroupId $GroupId -SiteUrl $SiteUrl -WhatIf:$false
@@ -72,7 +68,10 @@ function Get-GitlabGroupMember {
         $Members = $Members | Where-Object access_level -ge $MinAccessLevelLiteral
     }
 
-    $Members | New-WrapperObject 'Gitlab.Member'
+    $Members | New-WrapperObject 'Gitlab.Member' |
+        Add-Member -PassThru -NotePropertyMembers @{
+            GroupId = $Group.Id
+        }
 }
 
 # https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project
@@ -111,19 +110,18 @@ function Add-GitlabGroupMember {
     }
 }
 
-# https://docs.gitlab.com/ee/api/members.html#remove-a-member-from-a-group-or-project
 function Remove-GitlabGroupMember {
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
-
+        
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Username')]
         [string]
         $UserId,
-
+        
         [Parameter()]
         [string]
         $SiteUrl
@@ -131,9 +129,10 @@ function Remove-GitlabGroupMember {
 
     $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
     $Group = Get-GitlabGroup -GroupId $GroupId -SiteUrl $SiteUrl
-
+        
     if ($PSCmdlet.ShouldProcess($Group.FullName, "remove $($User.Username)'s group membership")) {
         try {
+            # https://docs.gitlab.com/ee/api/members.html#remove-a-member-from-a-group-or-project
             Invoke-GitlabApi DELETE "groups/$($Group.Id)/members/$($User.Id)" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
             Write-Host "Removed $($User.Username) from $($Group.Name)"
         }
@@ -143,26 +142,25 @@ function Remove-GitlabGroupMember {
     }
 }
 
-# https://docs.gitlab.com/ee/api/members.html#list-all-members-of-a-group-or-project
 function Get-GitlabProjectMember {
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
-
+        
         [Parameter()]
         [Alias('Username')]
         [string]
         $UserId,
-
+        
         [switch]
         [Parameter()]
         $All,
-
+        
         [Parameter()]
         [int]
         $MaxPages = 10,
-
+        
         [Parameter()]
         [string]
         $SiteUrl
@@ -177,8 +175,12 @@ function Get-GitlabProjectMember {
     $Members = $All ? "members/all" : "members"
     $Resource = $User ? "projects/$($Project.Id)/$Members/$($User.Id)" : "projects/$($Project.Id)/$Members"
 
+    # https://docs.gitlab.com/ee/api/members.html#list-all-members-of-a-group-or-project
     Invoke-GitlabApi GET $Resource -MaxPages $MaxPages -SiteUrl $SiteUrl |
-        New-WrapperObject 'Gitlab.Member'
+        New-WrapperObject 'Gitlab.Member' |
+        Add-Member -PassThru -NotePropertyMembers @{
+            ProjectId = $Project.Id
+        }
 }
 
 # https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project

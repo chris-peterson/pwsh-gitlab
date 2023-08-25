@@ -68,7 +68,6 @@ function Get-GitlabBranch {
         | Sort-Object -Descending LastUpdated
 }
 
-# https://docs.gitlab.com/ee/api/protected_branches.html#list-protected-branches
 function Get-GitlabProtectedBranch {
     [CmdletBinding()]
     param (
@@ -93,9 +92,12 @@ function Get-GitlabProtectedBranch {
     }
 
     try {
+        # https://docs.gitlab.com/ee/api/protected_branches.html#list-protected-branches
         Invoke-GitlabApi GET $Resource -Query $Query -SiteUrl $SiteUrl
             | New-WrapperObject 'Gitlab.ProtectedBranch'
-            | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id -PassThru
+            | Add-Member -PassThru -NotePropertyMembers @{
+                ProjectId = $Project.Id
+            }
     } catch {
         if ($_.Exception.Response.StatusCode.ToString() -eq 'NotFound') {
             @()
