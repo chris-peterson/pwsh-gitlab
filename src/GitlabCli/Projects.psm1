@@ -63,7 +63,6 @@ https://github.com/chris-peterson/pwsh-gitlab#projects
 .LINK
 https://docs.gitlab.com/ee/api/projects.html
 #>
-$global:GitlabGetProjectDefaultPages = 10
 function Get-GitlabProject {
 
     [CmdletBinding(DefaultParameterSetName='ById')]

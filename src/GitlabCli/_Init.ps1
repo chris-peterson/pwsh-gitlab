@@ -1,3 +1,5 @@
+$global:GitlabGetProjectDefaultPages = 10
+
 # Adapted from
 # https://github.com/cloudbase/powershell-yaml/blob/master/Load-Assemblies.ps1
 
