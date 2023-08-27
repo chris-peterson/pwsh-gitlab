@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.101.1'
+    ModuleVersion = '1.101.2'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'default sorting for membership cmdlets'
+            ReleaseNotes = 'Move global variables to init script'
         }
     }
 

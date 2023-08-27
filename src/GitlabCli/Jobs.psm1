@@ -289,27 +289,6 @@ function Get-GitlabPipelineDefinition {
     Get-GitlabRepositoryYmlFileContent -ProjectId $ProjectId -FilePath '.gitlab-ci.yml' -Ref $Ref -SiteUrl $SiteUrl
 }
 
-$global:GitlabConsoleColors = @{
-    Black       = '0;30'
-    Blue        = '0;34'
-    Cyan        = '0;36'
-    DarkGray    = '1;30'
-    Green       = '0;32'
-    LightBlue   = '1;34'
-    LightCyan   = '1;36'
-    LightGray   = '0;37'
-    LightGreen  = '1;32'
-    LightPurple = '1;35'
-    LightRed    = '1;31'
-    Orange      = '0;33'
-    Purple      = '0;35'
-    Red         = '0;31'
-    White       = '1;37'
-    Yellow      = '1;33'
-}
-
-$global:GitlabJobLogSections=New-Object 'Collections.Generic.Stack[string]'
-
 <#
 .SYNOPSIS
 Produces a section that can be collapsed in the Gitlab CI output
