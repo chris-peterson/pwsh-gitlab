@@ -240,7 +240,7 @@ Your application
 
 ## References / Acknowledgements
 
-* [PSGitLab](https://github.com/ngetchell/PSGitLab)
+* [PSGitLab](https://github.com/ngetchell/PSGitLab) (now archived)
 * [python-gitlab CLI documentation](https://python-gitlab.readthedocs.io/en/stable)
-* [GitLab API docs](https://docs.gitlab.com/ee/api)
+* [GitLab API docs](https://docs.gitlab.com/ee/api/rest/index.html)
 * [powershell-yaml](https://github.com/cloudbase/powershell-yaml)
