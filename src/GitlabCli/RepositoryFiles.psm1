@@ -221,34 +221,3 @@ function Get-GitlabRepositoryTree {
     Invoke-GitlabApi GET "projects/$($Project.Id)/repository/tree?ref=$RefName&path=$Path&recursive=$($Recurse.ToString().ToLower())" -MaxPages 10 -SiteUrl $SiteUrl -WhatIf:$WhatIf |
         New-WrapperObject 'Gitlab.RepositoryTree'
 }
-
-function Get-GitlabRepositoryYmlFileContent {
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory=$false)]
-        [string]
-        $ProjectId = '.',
-
-        [Parameter(Position=0, Mandatory=$true)]
-        [string]
-        $FilePath,
-
-        [Parameter(Mandatory=$false)]
-        [Alias("Branch")]
-        [string]
-        $Ref,
-
-        [Parameter(Mandatory=$false)]
-        [string]
-        $SiteUrl
-    )
-
-    $Yml = $(Get-GitlabRepositoryFileContent -ProjectId $ProjectId -Ref $Ref -FilePath $FilePath -SiteUrl $SiteUrl)
-    $Hash = $([YamlDotNet.Serialization.Deserializer].GetMethods() |
-        Where-Object { $_.Name -eq 'Deserialize' -and $_.ReturnType.Name -eq 'T' -and $_.GetParameters().ParameterType.Name -eq 'String' }). `
-        MakeGenericMethod(
-            [object]). `
-        Invoke($(New-Object 'YamlDotNet.Serialization.Deserializer'), $Yml)
-
-    return $Hash | ConvertTo-Json -Depth 100 | ConvertFrom-Json # the JSON "double-tap" coerces HashTables into PSCustomObject (including nested children)
-}

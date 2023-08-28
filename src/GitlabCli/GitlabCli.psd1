@@ -1,11 +1,15 @@
 @{
-    ModuleVersion = '1.101.2'
+    ModuleVersion = '1.102.0'
+
+    RequiredModules = @(
+        'powershell-yaml'
+    )
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Move global variables to init script'
+            ReleaseNotes = 'Remove custom yaml code - use powershell-yaml instead'
         }
     }
 
