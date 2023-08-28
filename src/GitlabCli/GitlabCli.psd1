@@ -1,5 +1,9 @@
 @{
-    ModuleVersion = '1.113.1'
+    ModuleVersion = '1.114.0'
+
+    RequiredModules = @(
+        'powershell-yaml'
+    )
 
     PrivateData = @{
         PSData = @{
