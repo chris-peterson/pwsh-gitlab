@@ -183,18 +183,17 @@ function Start-GitlabJob {
         Path       = "projects/$($Project.Id)/jobs/$JobId/play"
         SiteUrl    = $SiteUrl
         Body       = @{
-            job_variables_attributes = @{}
+            job_variables_attributes = New-Object -TypeName System.Collections.ArrayList
         }
     }
 
     if ($Variables) {
-        $ReformattedVariables = $Variables.GetEnumerator() | ForEach-Object {
-            @{
+       $Variables.GetEnumerator() | ForEach-Object {
+            $GitlabApiArguments.Body.job_variables_attributes.Add((@{
                 key           = $_.Name
                 value         = $_.Value
-            }
+            }))
         }
-        $GitlabApiArguments.Body.job_variables_attributes = @($ReformattedVariables)
     }
 
     if ($PSCmdlet.ShouldProcess("start job $($Project.PathWithNamespace)", "$($GitlabApiArguments | ConvertTo-Json)")) {
