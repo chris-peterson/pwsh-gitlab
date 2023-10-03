@@ -182,22 +182,14 @@ function Start-GitlabJob {
         HttpMethod = "POST"
         Path       = "projects/$($Project.Id)/jobs/$JobId/play"
         SiteUrl    = $SiteUrl
-        Body       = @{
-            job_variables_attributes = @{}
-        }
+        Body       = @{}
     }
 
     if ($Variables) {
-        $ReformattedVariables = $Variables.GetEnumerator() | ForEach-Object {
-            @{
-                key           = $_.Name
-                value         = $_.Value
-            }
-        }
-        $GitlabApiArguments.Body.job_variables_attributes = @($ReformattedVariables)
+        $GitlabApiArguments.Body.job_variables_attributes = $Variables | ConvertTo-GitlabVariables
     }
 
-    if ($PSCmdlet.ShouldProcess("start job $($Project.PathWithNamespace)", "$($GitlabApiArguments | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "start job $($GitlabApiArguments | ConvertTo-Json)")) {
         try {
             # https://docs.gitlab.com/ee/api/jobs.html#run-a-job
             Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.Job"

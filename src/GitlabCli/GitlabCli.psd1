@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.101.2'
+    ModuleVersion = '1.101.3'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Move global variables to init script'
+            ReleaseNotes = 'Better handling for pipeline and job variables'
         }
     }
 
@@ -242,6 +242,7 @@
         'ConvertTo-PascalCase'
         'ConvertTo-SnakeCase'
         'ConvertTo-UrlEncoded'
+        'ConvertTo-GitlabVariables'
         'Get-FilteredObject'
         'Get-GitlabVersion'
         'Invoke-GitlabApi'

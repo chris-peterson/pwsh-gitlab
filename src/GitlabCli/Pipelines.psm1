@@ -809,14 +809,7 @@ function New-GitlabPipeline {
     }
 
     if ($Variables) {
-        $ReformattedVariables = $Variables.GetEnumerator() | ForEach-Object {
-            @{
-                variable_type = 'env_var'
-                key           = $_.Name
-                value         = $_.Value
-            }
-        }
-        $Request.variables = @($ReformattedVariables)
+        $Request.variables = $Variables | ConvertTo-GitlabVariables -Type 'env_var'
     }
 
     $GitlabApiArguments = @{
@@ -826,7 +819,7 @@ function New-GitlabPipeline {
         SiteUrl    = $SiteUrl
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create new pipeline ($($Request | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create new pipeline $($Request | ConvertTo-Json)")) {
         $Pipeline = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Pipeline'
 
         if ($Wait) {

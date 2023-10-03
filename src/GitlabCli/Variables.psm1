@@ -69,3 +69,39 @@ function Resolve-GitlabVariable {
         }
     }
 }
+function ConvertTo-GitlabVariables {
+    [CmdletBinding()]
+    param (
+        [Parameter(ValueFromPipeline)]
+        $Object,
+
+        [Parameter()]
+        [Alias('Type')]
+        [string]
+        $VariableType
+    )
+
+    if ($Object) {
+        $Enumerator = switch ($Object.GetType().Name) {
+            hashtable {
+                $Object.GetEnumerator()
+            }
+            pscustomobject {
+                $Object.PSObject.Properties
+            }
+            default {
+                throw "Unsupported type for '-Object' (expected [hashtable] or [pscustomobject])"
+            }
+        }
+        $Enumerator | ForEach-Object {
+            $Var = @{
+                key           = $_.Name
+                value         = $_.Value
+            }
+            if ($VariableType) {
+                $Var.variable_type = $VariableType
+            }
+            $Var
+        }
+    }
+}
