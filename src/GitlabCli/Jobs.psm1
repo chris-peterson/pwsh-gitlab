@@ -189,7 +189,7 @@ function Start-GitlabJob {
         $GitlabApiArguments.Body.job_variables_attributes = $Variables | ConvertTo-GitlabVariables
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "start job $($GitlabApiArguments | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "start job $($GitlabApiArguments | ConvertTo-Json -Depth 3)")) {
         try {
             # https://docs.gitlab.com/ee/api/jobs.html#run-a-job
             Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.Job"

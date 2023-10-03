@@ -81,6 +81,7 @@ function ConvertTo-GitlabVariables {
         $VariableType
     )
 
+    $GitlabVars = @()
     if ($Object) {
         $Enumerator = switch ($Object.GetType().Name) {
             hashtable {
@@ -101,7 +102,8 @@ function ConvertTo-GitlabVariables {
             if ($VariableType) {
                 $Var.variable_type = $VariableType
             }
-            $Var
+            $GitlabVars += $Var
         }
     }
+    ,$GitlabVars
 }
