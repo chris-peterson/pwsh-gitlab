@@ -367,61 +367,88 @@ function Set-GitlabMergeRequest {
 }
 
 function Update-GitlabMergeRequest {
-    [CmdletBinding(DefaultParameterSetName="Update")]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId,
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Position=1, Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $MergeRequestId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Title,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Description,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Close")]
+        [Parameter(ParameterSetName="Assign")]
+        [string []]
+        $AssignTo,
+
+        [Parameter(ParameterSetName="Unassign")]
+        [switch]
+        $Unassign,
+
+        [Parameter(ParameterSetName="Reviewers")]
+        [string []]
+        $Reviewers,
+
+        [Parameter(ParameterSetName="UnsetReviewers")]
+        [switch]
+        $UnsetReviewers,
+
+        [Parameter(ParameterSetName="Close")]
         [switch]
         $Close,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Reopen")]
+        [Parameter(ParameterSetName="Reopen")]
         [switch]
         $Reopen,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
-    $Query = @{}
+    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $Request = @{}
 
     if ($Close) {
-        $Query['state_event'] = 'close'
+        $Request.state_event = 'close'
     }
-
-    if ($Reopen) {
-        $Query['state_event'] = 'reopen'
+    elseif ($Reopen) {
+        $Request.state_event = 'reopen'
     }
 
     if ($Title) {
-        $Query['title'] = $Title
+        $Request.title = $Title
     }
-
     if ($Description) {
-        $Query['description'] = $Description
+        $Request.description = $Description
+    }
+    if ($AssignTo) {
+        $Request.assignee_ids = @($AssignTo | ForEach-Object {
+            Get-GitlabUser $_
+        } | Select-Object -ExpandProperty Id)
+    } elseif ($Unassign) {
+        $Request.assignee_ids = @()
+    }
+    if ($Reviewers) {
+        $Request.reviewer_ids = @($Reviewers | ForEach-Object {
+            Get-GitlabUser $_
+        } | Select-Object -ExpandProperty Id)
+    } elseif ($UnsetReviewers) {
+        $Request.reviewer_ids = @()
     }
 
-    Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.MergeRequest'
+    if ($PSCmdlet.ShouldProcess("MR $MergeRequestId in $($Project.PathWithNamespace)", "update $($Request | ConvertTo-Json)")) {
+        # https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
+        Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" -Body $Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.MergeRequest'
+    }
 }
 
 function Close-GitlabMergeRequest {
