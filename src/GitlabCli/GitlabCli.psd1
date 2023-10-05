@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.102.0'
+    ModuleVersion = '1.103.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Allow assigning MRs; make get user easier to use (no need to specify ID vs username vs email address)'
+            ReleaseNotes = 'Toggle MR draft status'
         }
     }
 

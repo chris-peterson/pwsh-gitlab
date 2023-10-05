@@ -382,30 +382,41 @@ function Update-GitlabMergeRequest {
         $Title,
 
         [Parameter()]
+        [Alias('Wip')]
+        [switch]
+        $Draft,
+
+        [Parameter()]
+        [Alias('RemoveDraft')]
+        [Alias('RemoveWip')]
+        [switch]
+        $MarkReady,
+
+        [Parameter()]
         [string]
         $Description,
 
-        [Parameter(ParameterSetName="Assign")]
+        [Parameter()]
         [string []]
         $AssignTo,
 
-        [Parameter(ParameterSetName="Unassign")]
+        [Parameter()]
         [switch]
         $Unassign,
 
-        [Parameter(ParameterSetName="Reviewers")]
+        [Parameter()]
         [string []]
         $Reviewers,
 
-        [Parameter(ParameterSetName="UnsetReviewers")]
+        [Parameter()]
         [switch]
         $UnsetReviewers,
 
-        [Parameter(ParameterSetName="Close")]
+        [Parameter()]
         [switch]
         $Close,
 
-        [Parameter(ParameterSetName="Reopen")]
+        [Parameter()]
         [switch]
         $Reopen,
 
@@ -413,19 +424,24 @@ function Update-GitlabMergeRequest {
         [string]
         $SiteUrl
     )
-
     $Project = Get-GitlabProject -ProjectId $ProjectId
     $Request = @{}
 
-    if ($Close) {
-        $Request.state_event = 'close'
-    }
-    elseif ($Reopen) {
+    if ($Reopen) {
         $Request.state_event = 'reopen'
     }
-
+    elseif ($Close) {
+        $Request.state_event = 'close'
+    }
     if ($Title) {
         $Request.title = $Title
+    } else {
+        $MergeRequest = Get-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId
+        if ($Draft -and -not $MergeRequest.Draft) {
+            $Request.title = "Draft: $($MergeRequest.Title)"
+        } elseif ($MarkReady -and $MergeRequest.Draft) {
+            $Request.title = $MergeRequest.Title -replace '^Draft:\s+', ''
+        }
     }
     if ($Description) {
         $Request.description = $Description
