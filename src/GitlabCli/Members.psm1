@@ -260,12 +260,16 @@ function Remove-GitlabProjectMember {
     $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "Remove $($User.Username)'s membership")) {
-        try {
-            Invoke-GitlabApi DELETE "projects/$($Project.Id)/members/$($User.Id)" -SiteUrl $SiteUrl | Out-Null
-            Write-Host "Removed $($User.Username) from $($Project.Name)"
-        }
-        catch {
-            Write-Error "Error removing $($User.Username) from $($Project.Name): $_"
+        if ($Project.Owner.Username -eq $User.Username) {
+            Write-Warning "Can't remove owner '$($User.Username)' from '$($Project.PathWithNamespace)'"
+        } else {
+            try {
+                Invoke-GitlabApi DELETE "projects/$($Project.Id)/members/$($User.Id)" -SiteUrl $SiteUrl | Out-Null
+                Write-Host "Removed $($User.Username) from $($Project.Name)"
+            }
+            catch {
+                Write-Error "Error removing $($User.Username) from $($Project.Name): $_"
+            }
         }
     }
 }

@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.103.0'
+    ModuleVersion = '1.104.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Toggle MR draft status'
+            ReleaseNotes = 'Upsert protected branches, minor usability improvements'
         }
     }
 
@@ -255,16 +255,17 @@
     )
     AliasesToExport = @(
         # long form
+        'Archive-GitlabProject'
         'Clone-GitlabGroup'
+        'Fork-GitlabProject'
+        'Play-GitlabJob'
         'Pull-GitlabGroup'
+        'Remove-GitlabProtectedBranch'
+        'Review-GitlabMergeRequest'
+        'Revoke-GitlabGroupAccessToken'
         'Transfer-GitlabGroup'
         'Transfer-GitlabProject'
-        'Fork-GitlabProject'
-        'Archive-GitlabProject'
         'Unarchive-GitlabProject'
-        'Review-GitlabMergeRequest'
-        'Play-GitlabJob'
-        'Revoke-GitlabGroupAccessToken'
 
         # short form
         'go'
