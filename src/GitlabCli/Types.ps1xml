@@ -470,7 +470,11 @@
               if ($Details.add) {
                 "Added $($Details.add) ($($Details.target_details)) in $($Details.entity_path)"
               } elseif ($Details.remove) {
-                "Removed $($Details.remove) ($($Details.target_details)) in $($Details.entity_path)"
+                if ($Details.reason) {
+                  "Removed '$($Details.target_details)' ($($Details.reason))"
+                } else {
+                  "Removed $($Details.remove) ($($Details.target_details)) in $($Details.entity_path)"
+                }
               } elseif ($Details.change) {
                 "Changed $($Details.change) ($($Details.target_details)) from $($Details.from) to $($Details.to) in $($Details.entity_path)"
               } elseif ($Details.custom_message) {

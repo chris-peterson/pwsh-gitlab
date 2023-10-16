@@ -45,7 +45,7 @@ function Get-GitlabAuditEvent {
         $After,
 
         [Parameter()]
-        [int]
+        [uint]
         $MaxPages = $global:GitlabGetProjectDefaultPages,
 
         [Parameter()]
