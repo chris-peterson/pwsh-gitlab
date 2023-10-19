@@ -396,33 +396,33 @@ function Update-GitlabProject {
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateSet('private', 'internal', 'public')]
         [string]
         $Visibility,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Name,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Path,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $DefaultBranch,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string []]
         $Topics,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateSet('fetch', 'clone')]
         [string]
         $BuildGitStrategy,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [uint]
         $CiDefaultGitDepth,
 
@@ -431,21 +431,22 @@ function Update-GitlabProject {
         [object]
         $CiForwardDeployment,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateSet('disabled', 'private', 'enabled')]
         [string]
         $RepositoryAccessLevel,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateSet('disabled', 'private', 'enabled')]
         [string]
         $BuildsAccessLevel,
 
-        [Parameter(Mandatory=$false)]
-        [switch]
+        [Parameter()]
+        [ValidateSet($null, 'true', 'false')]
+        [object]
         $OnlyAllowMergeIfAllDiscussionsAreResolved,
         
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
@@ -484,17 +485,11 @@ function Update-GitlabProject {
     if ($BuildsAccessLevel) {
         $Query.builds_access_level = $BuildsAccessLevel
     }
-
-    if($PSBoundParameters.ContainsKey("OnlyAllowMergeIfAllDiscussionsAreResolved") -and `
-       $Project.OnlyAllowMergeIfAllDiscussionsAreResolved -ne $OnlyAllowMergeIfAllDiscussionsAreResolved
-      ) {
+    if ($OnlyAllowMergeIfAllDiscussionsAreResolved) {
         $Query.only_allow_merge_if_all_discussions_are_resolved = $OnlyAllowMergeIfAllDiscussionsAreResolved
     }
 
-    if($Query.Keys.Count -le 0) {
-        Write-Host "Nothing to update"
-        $Project    
-    } elseif ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "update project ($($Query | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "update project ($($Query | ConvertTo-Json))")) {
         Invoke-GitlabApi PUT "projects/$($Project.Id)" $Query -SiteUrl $SiteUrl |
             New-WrapperObject 'Gitlab.Project'
     }
