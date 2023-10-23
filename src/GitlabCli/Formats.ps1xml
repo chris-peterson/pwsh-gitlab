@@ -908,6 +908,7 @@
           <TableColumnHeader/>
           <TableColumnHeader/>
           <TableColumnHeader/>
+          <TableColumnHeader/>
         </TableHeaders>
         <TableRowEntries>
           <TableRowEntry>
@@ -923,6 +924,9 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Masked</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ExpandVariables</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

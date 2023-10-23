@@ -326,6 +326,12 @@
   <Type>
     <Name>Gitlab.Variable</Name>
     <Members>
+      <ScriptProperty>
+        <Name>ExpandVariables</Name>
+        <GetScriptBlock>
+          -not $this.Raw
+        </GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
   <Type>

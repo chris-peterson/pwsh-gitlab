@@ -539,34 +539,30 @@ function Invoke-GitlabProjectUnarchival {
     }
 }
 
-# https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
 function Get-GitlabProjectVariable {
-
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$false)]
+        [Parameter(Position=0)]
         [string]
         $Key,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
 
     if ($Key) {
+        # https://docs.gitlab.com/ee/api/project_level_variables.html#get-a-single-variable
         Invoke-GitlabApi GET "projects/$($Project.Id)/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
     }
     else {
+        # https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
         Invoke-GitlabApi GET "projects/$($Project.Id)/variables" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
     }
 }
@@ -587,47 +583,52 @@ function Set-GitlabProjectVariable {
         $Value,
 
         [switch]
-        [Parameter(, ValueFromPipelineByPropertyName)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         $Protect,
 
         [switch]
-        [Parameter(, ValueFromPipelineByPropertyName)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         $Mask,
+
+        [ValidateSet($null, 'true', 'false')]
+        [Parameter(ValueFromPipelineByPropertyName)]
+        $ExpandVariables = 'true',
 
         [Parameter()]
         [string]
         $SiteUrl
     )
 
-    $Query = @{
+    $Request = @{
         value = $Value
+        raw   = $ExpandVariables -eq 'true' ? 'false' : 'true'
     }
     if ($Protect) {
-        $Query.protected = 'true'
+        $Request.protected = 'true'
     }
     if ($Mask) {
-        $Query.masked = 'true'
+        $Request.masked = 'true'
     }
 
-    $ProjectId = $(Get-GitlabProject $ProjectId).Id
+    $Project = Get-GitlabProject $ProjectId
 
     try {
-        Get-GitlabProjectVariable -ProjectId $ProjectId -Key $Key | Out-Null
+        Get-GitlabProjectVariable -ProjectId $($Project.Id) -Key $Key | Out-Null
         $IsExistingVariable = $true
     }
     catch {
         $IsExistingVariable = $false
     }
 
-    if ($PSCmdlet.ShouldProcess($ProjectId, "set $($IsExistingVariable ? 'existing' : 'new') project variable to '$Value'")) {
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "set $($IsExistingVariable ? 'existing' : 'new') project variable $(($Request | ConvertTo-Json))")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/project_level_variables.html#update-variable
-            Invoke-GitlabApi PUT "projects/$($ProjectId)/variables/$Key" -Query $Query -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
+            Invoke-GitlabApi PUT "projects/$($Project.Id)/variables/$Key" -Body $Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
         }
         else {
-            $Query.key = $Key
+            $Request.key = $Key
             # https://docs.gitlab.com/ee/api/project_level_variables.html#create-a-variable
-            Invoke-GitlabApi POST "projects/$($ProjectId)/variables" -Query $Query -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
+            Invoke-GitlabApi POST "projects/$($Project.Id)/variables" -Body $Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
         }
     }
 }
