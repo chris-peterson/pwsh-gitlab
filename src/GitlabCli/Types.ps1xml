@@ -244,6 +244,12 @@
     <Name>Gitlab.Member</Name>
     <Members>
       <ScriptProperty>
+        <Name>UserId</Name>
+        <GetScriptBlock>
+          $this.Id
+        </GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
         <Name>AccessLevelFriendly</Name>
         <GetScriptBlock>
           $Levels = Get-GitlabMemberAccessLevel
