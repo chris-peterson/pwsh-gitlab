@@ -23,6 +23,8 @@ jobs:
       url: https://www.powershellgallery.com/packages/GitlabCli
 
   push:
+    if: github.repository == 'chris-peterson/pwsh-gitlab'
+    
     env:
       IMAGE_NAME: gitlab-cli
       IMAGE_VERSION: ${{ github.ref_name }}
