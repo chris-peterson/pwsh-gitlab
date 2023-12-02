@@ -254,14 +254,10 @@ function Get-GitlabPipelineSchedule {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+    $Project= Get-GitlabProject -ProjectId $ProjectId
 
     $GitlabApiArguments = @{
         HttpMethod = 'GET'
@@ -282,8 +278,8 @@ function Get-GitlabPipelineSchedule {
         default { throw "Parameterset $($PSCmdlet.ParameterSetName) is not implemented"}
     }
 
-    $Wrapper = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineSchedule'
-    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId
+    $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
+    $Wrapper | Add-Member -NotePropertyMembers @{ Project = $Project }
     
     #Because the api only includes variables when requesting the pipeline schedule by id. Do a little recursion
     #Switch is only part of the ByProjectId parameter set

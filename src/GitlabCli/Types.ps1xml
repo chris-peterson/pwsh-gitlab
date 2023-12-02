@@ -125,6 +125,18 @@
   <Type>
     <Name>Gitlab.PipelineSchedule</Name>
     <Members>
+      <ScriptProperty>
+        <Name>NextRunAtSortable</Name>
+        <GetScriptBlock>$this.NextRunAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>OwnerUsername</Name>
+        <GetScriptBlock>$this.Owner.username</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>ProjectId</Name>
+        <GetScriptBlock>$this.Project.Id</GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
   <Type>
