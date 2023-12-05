@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.105.3'
+    ModuleVersion = '1.106.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Pipeline schedule enhancements'
+            ReleaseNotes = 'Wrap releases'
         }
     }
 
@@ -43,6 +43,7 @@
         'Projects.psm1'
         'ProjectHooks.psm1'
         'RepositoryFiles.psm1'
+        'Releases.psm1'
         'Runners.psm1'
         'Search.psm1'
         'Topics.psm1'
@@ -189,6 +190,9 @@
         'Start-GitlabJobLogSection'
         'Stop-GitlabJobLogSection'
         'Write-GitlabJobTrace'
+
+        # Releases
+        'Get-GitlabRelease'
 
         # Runners
         'Get-GitlabRunner'

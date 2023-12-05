@@ -512,4 +512,21 @@
       </ScriptProperty>
     </Members>
   </Type>
+  <Type>
+    <Name>Gitlab.Release</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>ReleasedAtSortable</Name>
+        <GetScriptBlock>$this.ReleasedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Releaser</Name>
+        <GetScriptBlock>$this.Author.username</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Url</Name>
+        <GetScriptBlock>$this._links.self</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
 </Types>

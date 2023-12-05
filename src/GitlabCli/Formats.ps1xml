@@ -1158,7 +1158,6 @@
         </TableRowEntries>
       </TableControl>
     </View>
-
     <View>
       <Name>GitlabProjectIntegration</Name>
       <ViewSelectedBy>
@@ -1226,6 +1225,41 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Summary</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>GitlabRelease</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.Release</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader/>
+          <TableColumnHeader>
+            <Label>ReleasedAt</Label>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Name</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ReleasedAtSortable</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Releaser</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Url</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

@@ -44,6 +44,7 @@ $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.Project'                   = 'Id'
     'Gitlab.ProjectHook'               = 'Id'
     'Gitlab.ProtectedBranch'           = 'Id'
+    'Gitlab.Release'                   = ''
     'Gitlab.RepositoryFile'            = ''
     'Gitlab.RepositoryTree'            = ''
     'Gitlab.Runner'                    = 'Id'
