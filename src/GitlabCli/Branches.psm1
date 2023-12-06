@@ -190,27 +190,41 @@ function Protect-GitlabBranch {
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
-    
+    $PushAccessLevelLiteral = $(Get-GitlabProtectedBranchAccessLevel).$PushAccessLevel
+    $MergeAccessLevelLiteral = $(Get-GitlabProtectedBranchAccessLevel).$MergeAccessLevel
+    $UnprotectAccessLevelLiteral = $(Get-GitlabProtectedBranchAccessLevel).$UnprotectAccessLevel
+
+    if ($Project | Get-GitlabProtectedBranch | Where-Object Name -eq $Branch) {
+        # NOTE: the PATCH endpoint is crap (https://gitlab.com/gitlab-org/gitlab/-/issues/365520)
+        # $Request = @{
+        #     allow_force_push             = $AllowForcePush
+        #     allowed_to_push              = @($AllowedToPush | ConvertTo-SnakeCase) +      @(@{access_level=$PushAccessLevelLiteral})
+        #     allowed_to_merge             = @($AllowedToMerge | ConvertTo-SnakeCase) +     @(@{access_level=$MergeAccessLevelLiteral})
+        #     allowed_to_unprotect         = @($AllowedToUnprotect | ConvertTo-SnakeCase) + @(@{access_level=$UnprotectAccessLevelLiteral})
+        #     code_owner_approval_required = $CodeOwnerApprovalRequired
+        # }
+        # if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) ($Branch)", "update protected branch $($Request | ConvertTo-Json)")) {
+        #     # https://docs.gitlab.com/ee/api/protected_branches.html#update-a-protected-branch
+        #     Invoke-GitlabApi PATCH "projects/$($Project.Id)/protected_branches/$Branch" -Body $Request | New-WrapperObject 'Gitlab.ProtectedBranch'
+        # }
+        # as a workaround, remove protection
+        Remove-GitlabProtectedBranch -ProjectId $ProjectId -Branch $Branch -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference | Out-Null
+    }
+
     $Request = @{
-        push_access_level = $(Get-GitlabProtectedBranchAccessLevel).$PushAccessLevel
-        merge_access_level = $(Get-GitlabProtectedBranchAccessLevel).$MergeAccessLevel
-        unprotect_access_level = $(Get-GitlabProtectedBranchAccessLevel).$UnprotectAccessLevel
-        allow_force_push = $AllowForcePush
-        allowed_to_push = @($AllowedToPush | ConvertTo-SnakeCase)
-        allowed_to_merge = @($AllowedToMerge | ConvertTo-SnakeCase)
-        allowed_to_unprotect = @($AllowedToUnprotect | ConvertTo-SnakeCase)
+        name                         = $Branch
+        push_access_level            = $PushAccessLevelLiteral
+        merge_access_level           = $MergeAccessLevelLiteral
+        unprotect_access_level       = $UnprotectAccessLevelLiteral
+        allow_force_push             = $AllowForcePush
+        allowed_to_push              = @($AllowedToPush | ConvertTo-SnakeCase)
+        allowed_to_merge             = @($AllowedToMerge | ConvertTo-SnakeCase)
+        allowed_to_unprotect         = @($AllowedToUnprotect | ConvertTo-SnakeCase)
         code_owner_approval_required = $CodeOwnerApprovalRequired
     }
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) ($Branch)", "protect branch $($Request | ConvertTo-Json)")) {
-        if ($Project | Get-GitlabProtectedBranch | Where-Object Name -eq $Branch) {
-            # https://docs.gitlab.com/ee/api/protected_branches.html#update-a-protected-branch
-            Invoke-GitlabApi PATCH "projects/$($Project.Id)/protected_branches/$Branch" -Body $Request | New-WrapperObject 'Gitlab.ProtectedBranch'
-        }
-        else {
-            $Request.name = $Branch
-            # https://docs.gitlab.com/ee/api/protected_branches.html#protect-repository-branches
-            Invoke-GitlabApi POST "projects/$($Project.Id)/protected_branches" -Body $Request | New-WrapperObject 'Gitlab.ProtectedBranch'
-        }
+        # https://docs.gitlab.com/ee/api/protected_branches.html#protect-repository-branches
+        Invoke-GitlabApi POST "projects/$($Project.Id)/protected_branches" -Body $Request | New-WrapperObject 'Gitlab.ProtectedBranch'
     }
 }
 
@@ -230,11 +244,10 @@ function UnProtect-GitlabBranch {
         [Parameter()]
         [string]
         $SiteUrl
-        )
-        
-        $Project = Get-GitlabProject -ProjectId $ProjectId
-        
-        if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)/branches/$($Name)", "unprotect branch $($Name)")) {
+    )
+
+    $Project = Get-GitlabProject -ProjectId $ProjectId
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)/branches/$($Name)", "unprotect branch $($Name)")) {
         # https://docs.gitlab.com/ee/api/protected_branches.html#unprotect-repository-branches
         Invoke-GitlabApi DELETE "projects/$($Project.Id)/protected_branches/$($Name)" -SiteUrl $SiteUrl
     }

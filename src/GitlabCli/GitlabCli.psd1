@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.106.0'
+    ModuleVersion = '1.106.1'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Wrap releases'
+            ReleaseNotes = 'Fix for updating an existing protected branch'
         }
     }
 
