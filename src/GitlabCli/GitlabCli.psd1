@@ -1,11 +1,11 @@
 @{
-    ModuleVersion = '1.106.2'
+    ModuleVersion = '1.107.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Release enhancements'
+            ReleaseNotes = 'Get more resources by Url'
         }
     }
 
@@ -253,6 +253,7 @@
         'New-WrapperObject'
         'Open-InBrowser'
         'ValidateGitlabDateFormat'
+        'Get-GitlabResourceFromUrl'
 
         # Variables
         'Resolve-GitlabVariable'

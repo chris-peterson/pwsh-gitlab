@@ -3,126 +3,122 @@ function Get-GitlabPipeline {
 
     [Alias('pipeline')]
     [Alias('pipelines')]
-    [CmdletBinding(DefaultParameterSetName="ByProjectId")]
+    [CmdletBinding()]
     param (
-        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [Parameter(ParameterSetName="ByPipelineId", Mandatory=$false)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
-        $ProjectId=".",
+        $ProjectId='.',
 
-        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
-        [Alias("Branch")]
+        [Parameter()]
+        [Alias('Branch')]
         [string]
         $Ref,
 
-        [Parameter(ParameterSetName="ByPipelineId", Position=0, Mandatory=$false)]
+        [Parameter(Position=0)]
         [string]
         $PipelineId,
 
-        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
+        [Parameter()]
+        [string]
+        $Url,
+
+        [Parameter()]
         [ValidateSet('running', 'pending', 'finished', 'branches', 'tags')]
         [string]
         $Scope,
 
-        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
+        [Parameter()]
         [ValidateSet('created', 'waiting_for_resource', 'preparing', 'pending', 'running', 'success', 'failed', 'canceled', 'skipped', 'manual', 'scheduled')]
         [string]
         $Status,
 
-        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
+        [Parameter()]
         [ValidateSet('push', 'web', 'trigger', 'schedule', 'api', 'external', 'pipeline', 'chat', 'webide', 'merge_request_event', 'external_pull_request_event', 'parent_pipeline', 'ondemand_dast_scan', 'ondemand_dast_validation')]
         [string]
         $Source,
 
-        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
+        [Parameter()]
         [string]
         $Username,
 
-        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
+        [Parameter()]
         [switch]
         $Mine,
 
-        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
+        [Parameter()]
         [switch]
         $Latest,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [switch]
         $IncludeTestReport,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [Alias('FetchUpstream')]
         [switch]
         $FetchDownstream,
 
-        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false)]
+        [Parameter()]
         [int]
         $MaxPages = 1,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
-
     $GitlabApiParameters = @{
-        HttpMethod = "GET"
-        Path       = "projects/$($Project.Id)/pipelines"
+        HttpMethod = 'GET'
         SiteUrl    = $SiteUrl
     }
 
-    switch ($PSCmdlet.ParameterSetName) {
-        ByPipelineId {
-            $GitlabApiParameters["Path"] += "/$PipelineId"
-        }
-        ByProjectId {
-            $Query = @{}
+    if ($Url) {
+        $Resource   = $Url | Get-GitlabResourceFromUrl
+        $ProjectId  = $Resource.ProjectId
+        $PipelineId = $Resource.ResourceId
+    } else {
+        $Query = @{}
 
-            if($Ref) {
-                if($Ref -eq '.') {
-                    $LocalContext = Get-LocalGitContext
-                    $Ref = $LocalContext.Branch
-                }
-                $Query['ref'] = $Ref
+        if($Ref) {
+            if($Ref -eq '.') {
+                $LocalContext = Get-LocalGitContext
+                $Ref = $LocalContext.Branch
             }
-            if ($Scope) {
-                $Query['scope'] = $Scope
-            }
-            if ($Status) {
-                $Query['status'] = $Status
-            }
-            if ($Source) {
-                $Query['source'] = $Source
-            }
-            if ($Mine) {
-                $Query['username'] = $(Get-GitlabUser -Me).Username
-            } elseif ($Username) {
-                $Query['username'] = $Username
-            }
-    
-            $GitlabApiParameters["Query"] = $Query
-            $GitlabApiParameters["MaxPages"] = $MaxPages
+            $Query.ref = $Ref
+        }
+        if ($Scope) {
+            $Query.scope = $Scope
+        }
+        if ($Status) {
+            $Query.status = $Status
+        }
+        if ($Source) {
+            $Query.source = $Source
+        }
+        if ($Mine) {
+            $Query.username = $(Get-GitlabUser -Me).Username
+        } elseif ($Username) {
+            $Query.username = $Username
+        }
 
-        }
-        default {
-            throw "Parameterset $($PSCmdlet.ParameterSetName) is not implemented"
-        }
+        $GitlabApiParameters.Query = $Query
+        $GitlabApiParameters.MaxPages = $MaxPages
     }
 
-    if ($WhatIf) {
-        $GitlabApiParameters["WhatIf"] = $True
+    $Project = Get-GitlabProject -ProjectId $ProjectId
+
+    $GitlabApiParameters.Path = if ($PipelineId) {
+        "projects/$($Project.Id)/pipelines/$PipelineId"
+    } else {
+        "projects/$($Project.Id)/pipelines"
     }
-    $Pipelines = Invoke-GitlabApi @GitlabApiParameters -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Pipeline'
+
+    $Pipelines = Invoke-GitlabApi @GitlabApiParameters | New-WrapperObject 'Gitlab.Pipeline'
 
     if ($IncludeTestReport) {
         $Pipelines | ForEach-Object {
             try {
-                $TestReport = Invoke-GitlabApi GET "projects/$($_.ProjectId)/pipelines/$($_.Id)/test_report" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.TestReport'
+                $TestReport = Invoke-GitlabApi GET "projects/$($_.ProjectId)/pipelines/$($_.Id)/test_report" -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.TestReport'
             }
             catch {
                 $TestReport = $Null
@@ -142,19 +138,19 @@ function Get-GitlabPipeline {
         foreach ($Pipeline in $Pipelines) {
 
             # NOTE: have to stitch this together because of https://gitlab.com/gitlab-org/gitlab/-/issues/350686
-            $Bridges = Get-GitlabPipelineBridge -ProjectId $Project.Id  -PipelineId $Pipeline.Id -SiteUrl $SiteUrl -WhatIf:$WhatIf
+            $Bridges = Get-GitlabPipelineBridge -ProjectId $Project.Id  -PipelineId $Pipeline.Id -SiteUrl $SiteUrl
 
             # NOTE: once 14.6 is more available, iid is included in pipeline APIs which would make this simpler (not have to search by sha)
             $Query = @"
             { project(fullPath: "$($Project.PathWithNamespace)") { id pipelines (sha: "$($Pipeline.Sha)") { nodes { id downstream { nodes { id project { fullPath } } } upstream { id project { fullPath } } } } } }
 "@
-            $Nodes = $(Invoke-GitlabGraphQL -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf).Project.pipelines.nodes
+            $Nodes = $(Invoke-GitlabGraphQL -Query $Query -SiteUrl $SiteUrl).Project.pipelines.nodes
             $MatchingResult = $Nodes | Where-Object id -Match "gid://gitlab/Ci::Pipeline/$($Pipeline.Id)"
             if ($MatchingResult.downstream) {
                 $DownstreamList = $MatchingResult.downstream.nodes | ForEach-Object {
                     if ($_.id -match "/(?<PipelineId>\d+)") {
                         try {
-                            Get-GitlabPipeline -ProjectId $_.project.fullPath -PipelineId $Matches.PipelineId -SiteUrl $SiteUrl -WhatIf:$WhatIf
+                            Get-GitlabPipeline -ProjectId $_.project.fullPath -PipelineId $Matches.PipelineId -SiteUrl $SiteUrl
                         }
                         catch {
                             $Null
@@ -171,7 +167,7 @@ function Get-GitlabPipeline {
             }
             if ($MatchingResult.upstream.id -match '\/(?<PipelineId>\d+)') {
                 try {
-                    $Upstream = Get-GitlabPipeline -ProjectId $MatchingResult.upstream.project.fullPath -PipelineId $Matches.PipelineId -SiteUrl $SiteUrl -WhatIf:$WhatIf
+                    $Upstream = Get-GitlabPipeline -ProjectId $MatchingResult.upstream.project.fullPath -PipelineId $Matches.PipelineId -SiteUrl $SiteUrl
                     $Pipeline | Add-Member -MemberType 'NoteProperty' -Name 'Upstream' -Value $Upstream
                 }
                 catch {
