@@ -127,7 +127,7 @@ function Add-GitlabGroupMember {
 }
 
 function Remove-GitlabGroupMember {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Medium')]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]
@@ -302,6 +302,55 @@ function Get-GitlabUserMembership {
 
     Invoke-GitlabApi GET "users/$($User.Id)/memberships" -MaxPages 10 -SiteUrl $SiteUrl -WhatIf:$WhatIf |
         New-WrapperObject 'Gitlab.UserMembership'
+}
+
+function Remove-GitlabUserMembership {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    param(
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
+        [string]
+        $Username,
+
+        [Parameter()]
+        $Group,
+
+        [Parameter()]
+        $Project,
+
+        [Parameter()]
+        [switch]
+        $RemoveAllAccess,
+
+        [Parameter]
+        [string]
+        $SiteUrl
+    )
+
+    $User = Get-GitlabUser -Username $Username -SiteUrl $SiteUrl
+
+    if ($Group) {
+        if ($PSCmdlet.ShouldProcess("$($Group -join ',' )", "remove $Username access from groups")) {
+            $Group | ForEach-Object {
+                $User | Remove-GitlabGroupMember -GroupId $_ -SiteUrl $SiteUrl
+            }
+        }
+    }
+    if ($Project) {
+        if ($PSCmdlet.ShouldProcess("$($Project -join ',' )", "remove $Username access from project ")) {
+            $Project | ForEach-Object {
+                $User | Remove-GitlabProjectMember -ProjectId $_ -SiteUrl $SiteUrl
+            }
+        }
+    }
+    if ($RemoveAllAccess) {
+        $CurrentAccess = $User | Get-GitlabUserMembership
+        $Request = @{
+            Group   = $CurrentAccess | Where-Object Sourcetype -eq 'Namespace' | Select-Object -ExpandProperty SourceId
+            Project = $CurrentAccess | Where-Object Sourcetype -eq 'Project' | Select-Object -ExpandProperty SourceId
+            SiteUrl = $SiteUrl
+        }
+        $User | Remove-GitlabUserMembership @Request
+    }
 }
 
 # https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project

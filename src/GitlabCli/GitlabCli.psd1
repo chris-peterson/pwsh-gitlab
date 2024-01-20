@@ -1,11 +1,16 @@
 @{
-    ModuleVersion = '1.107.0'
+    ModuleVersion = '1.108.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
-            ReleaseNotes = 'Get more resources by Url'
+            ReleaseNotes =
+@'
+New CmdLets:
+  * Remove-GitlabUserMembership (https://github.com/chris-peterson/pwsh-gitlab/issues/87)
+  * Block-GitlabUser, Unblock-GitlabUser
+'@
         }
     }
 
@@ -13,7 +18,7 @@
 
     Author = 'Chris Peterson'
     CompanyName = 'Chris Peterson'
-    Copyright = '(c) 2021-2023'
+    Copyright = '(c) 2021-2024'
 
     Description = 'Interact with GitLab via PowerShell'
     PowerShellVersion = '7.1'
@@ -215,6 +220,8 @@
         # User
         'Get-GitlabUser'
         'Get-GitlabCurrentUser'
+        'Block-GitlabUser'
+        'Unblock-GitlabUser'
 
         # Events
         'Get-GitlabUserEvent'
@@ -241,6 +248,7 @@
         'Get-GitlabUserMembership'
         'Add-GitlabUserMembership'
         'Update-GitlabUserMembership'
+        'Remove-GitlabUserMembership'
 
         # Utilities
         'ConvertTo-PascalCase'

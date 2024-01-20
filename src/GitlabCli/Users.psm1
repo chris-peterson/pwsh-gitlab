@@ -39,6 +39,64 @@ function Get-GitlabUser {
     Invoke-GitlabApi @Parameters | New-WrapperObject 'Gitlab.User'
 }
 
+function Block-GitlabUser {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
+    param (
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('Id')]
+        [Alias('Username')]
+        [Alias('EmailAddress')]
+        [string]
+        $UserId,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+    $User = Get-GitlabUser $UserId
+
+    if ($PSCmdlet.ShouldProcess("$($User.Username)", "block user")) {
+        $Parameters = @{
+            # https://docs.gitlab.com/ee/api/users.html#block-user
+            Method  = 'POST'
+            Path    = "users/$($User.Id)/block"
+            SiteUrl = $SiteUrl
+        }
+        if (Invoke-GitlabApi @Parameters) {
+            Write-Host "$($User.Username) blocked"
+        }
+    }
+}
+
+function Unblock-GitlabUser {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
+    param (
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('Id')]
+        [Alias('Username')]
+        [Alias('EmailAddress')]
+        [string]
+        $UserId,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+    $User = Get-GitlabUser $UserId
+
+    if ($PSCmdlet.ShouldProcess("$($User.Username)", "unblock user")) {
+        $Parameters = @{
+            # https://docs.gitlab.com/ee/api/users.html#unblock-user
+            Method  = 'POST'
+            Path    = "users/$($User.Id)/unblock"
+            SiteUrl = $SiteUrl
+        }
+        if (Invoke-GitlabApi @Parameters) {
+            Write-Host "$($User.Username) unblocked"
+        }
+    }
+}
+
 # https://docs.gitlab.com/ee/api/events.html#get-user-contribution-events
 function Get-GitlabUserEvent {
     [CmdletBinding(DefaultParameterSetName='ByUserId')]
