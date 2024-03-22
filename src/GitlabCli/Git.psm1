@@ -30,9 +30,9 @@ function Get-LocalGitContext {
             }
             catch {
                 # git
-                $OriginUrl -match '@(?<Site>.*?)(/|:)(?<Project>[_a-zA-Z0-9/-]+)' | Out-Null
+                $OriginUrl -match '@(?<Site>.*?)(/|:)(?<Project>[\._a-zA-Z0-9/-]+)' | Out-Null
                 $Context.Site = $Matches.Site
-                $Context.Project = $Matches.Project
+                $Context.Project = $Matches.Project -replace '.git$', ''
             }
 
             $Ref = git status | Select-String "^HEAD detached at (?<sha>.{7,40})`|^On branch (?<branch>.*)"
