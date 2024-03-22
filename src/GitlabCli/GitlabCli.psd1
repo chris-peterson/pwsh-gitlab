@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.108.0'
+    ModuleVersion = '1.108.1'
 
     PrivateData = @{
         PSData = @{
@@ -7,9 +7,7 @@
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
             ReleaseNotes =
 @'
-New CmdLets:
-  * Remove-GitlabUserMembership (https://github.com/chris-peterson/pwsh-gitlab/issues/87)
-  * Block-GitlabUser, Unblock-GitlabUser
+  [Add support for . in project paths](https://github.com/chris-peterson/pwsh-gitlab/pull/89)
 '@
         }
     }
