@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.108.1'
+    ModuleVersion = '1.109.0'
 
     PrivateData = @{
         PSData = @{
@@ -7,7 +7,7 @@
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
             ReleaseNotes =
 @'
-  [Add support for . in project paths](https://github.com/chris-peterson/pwsh-gitlab/pull/89)
+  [Add parameter to new group access token](https://github.com/chris-peterson/pwsh-gitlab/pull/90)
 '@
         }
     }
