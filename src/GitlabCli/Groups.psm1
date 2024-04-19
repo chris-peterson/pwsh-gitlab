@@ -26,6 +26,7 @@ function Get-GitlabGroup {
         $ParentGroupId,
 
         [Parameter(Mandatory=$false, ParameterSetName='ByParentGroup')]
+        [Parameter(Mandatory=$false, ParameterSetName='NotByGroupId')]
         [Alias('r')]
         [switch]
         $Recurse,
