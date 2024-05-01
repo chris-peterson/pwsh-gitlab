@@ -213,7 +213,7 @@ function Add-GitlabProjectMember {
         $UserId,
 
         [Parameter(Position=1, Mandatory=$true)]
-        [ValidateSet('guest', 'reporter', 'developer', 'maintainer')]
+        [ValidateSet('guest', 'reporter', 'developer', 'maintainer', 'owner')]
         [string]
         $AccessLevel,
 
