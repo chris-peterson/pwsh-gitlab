@@ -448,19 +448,11 @@
           <TableColumnHeader>
             <Alignment>Right</Alignment>
           </TableColumnHeader>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
           <TableColumnHeader>
-            <Label>Cron</Label>
+            <Label>Next Run (UTC)</Label>
             <Alignment>Right</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>NextRunAt</Label>
-            <Alignment>Right</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>Active</Label>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>Description</Label>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -470,16 +462,13 @@
                 <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Cron</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>NextRunAtSortable</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
                 <PropertyName>Active</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Description</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>NextRunAt</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

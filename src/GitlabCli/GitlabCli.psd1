@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.109.1'
+    ModuleVersion = '1.109.2'
 
     PrivateData = @{
         PSData = @{
@@ -7,7 +7,7 @@
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
             ReleaseNotes =
 @'
-Allow Owner permission for project members
+Tweak pipeline schedule behaviors
 '@
         }
     }
