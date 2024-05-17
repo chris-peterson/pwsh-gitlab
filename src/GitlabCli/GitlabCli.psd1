@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.109.2'
+    ModuleVersion = '1.110.0'
 
     PrivateData = @{
         PSData = @{
@@ -7,7 +7,7 @@
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
             ReleaseNotes =
 @'
-Tweak pipeline schedule behaviors
+Tweak Merge-GitlabMergeRequest parameters
 '@
         }
     }

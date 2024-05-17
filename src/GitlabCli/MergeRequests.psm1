@@ -291,14 +291,16 @@ function New-GitlabMergeRequest {
     }
 }
 
-function Merge-GitlabMergeRequest {
-    [CmdletBinding()]
-    param(
-        [Parameter(Position=0, Mandatory)]
-        [string]
-        $ProjectId,
 
-        [Parameter(Position=1, Mandatory)]
+function Merge-GitlabMergeRequest {
+    [CmdletBinding(SupportsShouldProcess)]
+    param(
+        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=1, Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('Id')]
         [string]
         $MergeRequestId,
 
@@ -311,42 +313,55 @@ function Merge-GitlabMergeRequest {
         $SquashCommitMessage,
 
         [Parameter()]
-        [bool]
-        $Squash = $false,
-
-        [Parameter()]
-        [bool]
-        $ShouldRemoveSourceBranch = $true,
-
-        [Parameter()]
-        [bool]
-        $MergeWhenPipelineSucceeds = $false,
-
-        [Parameter()]
         [string]
-        $Sha,
+        $ConfirmSha,
 
         [Parameter()]
-        [string]
-        $SiteUrl,
-
         [switch]
+        $Squash,
+
         [Parameter()]
-        $WhatIf
+        [switch]
+        $KeepSourceBranch,
+
+        [Parameter()]
+        [switch]
+        $MergeWhenPipelineSucceeds,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
 
-    $MergeRequest = $(Invoke-GitlabApi PUT "projects/$($Project.Id)/merge_requests/$MergeRequestId/merge" @{
-        merge_commit_message = $MergeCommitMessage
-        squash_commit_message = $SquashCommitMessage
-        squash = $Squash
-        should_remove_source_branch = $ShouldRemoveSourceBranch
-        merge_when_pipeline_succeeds = $MergeWhenPipelineSucceeds
-        sha = $Sha
-    } -SiteUrl $SiteUrl -WhatIf:$WhatIf) | New-WrapperObject 'Gitlab.MergeRequest'
-
-    $MergeRequest
+    # https://docs.gitlab.com/ee/api/merge_requests.html#merge-a-merge-request
+    $Request = @{
+        Method = 'PUT'
+        Path   = "projects/$($Project.Id)/merge_requests/$MergeRequestId/merge"
+        Body   = @{}
+    }
+    if ($MergeCommitMessage) {
+        $Request.Body.merge_commit_message = $MergeCommitMessage
+    }
+    if ($SquashCommitMessage) {
+        $Request.Body.squash_commit_message = $SquashCommitMessage
+    }
+    if ($ConfirmSha) {
+        $Request.Body.sha = $Sha
+    }
+    if ($Squash) {
+        $Request.Body.squash = $Squash
+    }
+    if (-not $KeepSourceBranch) {
+        $Request.Body.should_remove_source_branch = 'true'
+    }
+    if ($MergeWhenPipelineSucceeds) {
+        $Request.Body.merge_when_pipeline_succeeds = $MergeWhenPipelineSucceeds
+    }
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "merge ($($Request.Body | ConvertTo-Json))")) {
+        Invoke-GitlabApi @Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.MergeRequest'
+    }
 }
 
 function Set-GitlabMergeRequest {
