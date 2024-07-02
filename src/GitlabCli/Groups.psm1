@@ -26,6 +26,7 @@ function Get-GitlabGroup {
         $ParentGroupId,
 
         [Parameter(Mandatory=$false, ParameterSetName='ByParentGroup')]
+        [Parameter(Mandatory=$false, ParameterSetName='NotByGroupId')]
         [Alias('r')]
         [switch]
         $Recurse,
@@ -34,12 +35,15 @@ function Get-GitlabGroup {
         [string]
         $SiteUrl,
 
+        [Parameter(Mandatory=$false)]
+        [int]
+        $MaxPages = 10,
+
         [switch]
         [Parameter(Mandatory=$false)]
         $WhatIf
     )
 
-    $MaxPages = 10
     if($GroupId) {
         if ($GroupId -eq '.') {
             $LocalPath = Get-Location | Select-Object -ExpandProperty Path
