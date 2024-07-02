@@ -8,6 +8,18 @@ function Get-GitlabUser {
         [string]
         $UserId,
 
+        [Parameter(ParameterSetName='All')]
+        [switch]
+        $All = $False,
+
+        [Parameter(ParameterSetName='All')]
+        [boolean]
+        $Active = $True,
+
+        [Parameter(ParameterSetName='All')]
+        [int]
+        $MaxPages = 20,
+
         [Parameter(ParameterSetName='Me')]
         [switch]
         $Me,
@@ -17,10 +29,11 @@ function Get-GitlabUser {
         $SiteUrl
     )
     $Parameters = @{
-        Method  = 'GET'
-        Path    = 'users' # https://docs.gitlab.com/ee/api/users.html#for-non-administrator-users
-        Query   = @{}
-        SiteUrl = $SiteUrl
+        MaxPages = $MaxPages
+        Method   = 'GET'
+        Path     = 'users' # https://docs.gitlab.com/ee/api/users.html#for-non-administrator-users
+        Query    = @{}
+        SiteUrl  = $SiteUrl
     }
     if ($Me) {
         $Parameters.Path = 'user' # https://docs.gitlab.com/ee/api/users.html#for-non-administrator-users
@@ -28,7 +41,9 @@ function Get-GitlabUser {
     elseif ($UserId -match '@') {
         $Parameters.Query.search = $UserId
     }
-    else {
+    elseif ($All) {
+        $Parameters.Query.active = $Active.ToString().ToLower()
+    } else {
         if ([uint]::TryParse($UserId, [ref] $null)) {
             $Parameters.Path = "users/$UserId" # https://docs.gitlab.com/ee/api/users.html#single-user
         }
