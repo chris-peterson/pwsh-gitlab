@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.110.0'
+    ModuleVersion = '1.111.0'
 
     PrivateData = @{
         PSData = @{
@@ -7,7 +7,7 @@
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
             ReleaseNotes =
 @'
-Tweak Merge-GitlabMergeRequest parameters
+Rename Get-GitlabRunnerJobs to Get-GitlabRunnerJob (powershell naming convention)
 '@
         }
     }
@@ -199,7 +199,7 @@ Tweak Merge-GitlabMergeRequest parameters
 
         # Runners
         'Get-GitlabRunner'
-        'Get-GitlabRunnerJobs'
+        'Get-GitlabRunnerJob'
         'Update-GitlabRunner'
         'Suspend-GitlabRunner'
         'Resume-GitlabRunner'

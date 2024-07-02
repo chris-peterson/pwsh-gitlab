@@ -80,7 +80,7 @@ function Get-GitlabRunner {
     $Runners
 }
 
-function Get-GitlabRunnerJobs {
+function Get-GitlabRunnerJob {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
@@ -96,6 +96,7 @@ function Get-GitlabRunnerJobs {
         $SiteUrl
     )
 
+    # https://docs.gitlab.com/ee/api/runners.html#list-runners-jobs
     $Params = @{
         HttpMethod = 'GET'
         Path       = "runners/$RunnerId/jobs"
@@ -103,7 +104,6 @@ function Get-GitlabRunnerJobs {
         SiteUrl    = $SiteUrl
     }
 
-    # https://docs.gitlab.com/ee/api/runners.html#list-runners-jobs
     Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.RunnerJob'
 }
 
