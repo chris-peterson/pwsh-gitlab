@@ -760,3 +760,43 @@ function Get-GitlabProjectEvent {
         -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | 
         New-WrapperObject 'Gitlab.Event'
 }
+
+function Add-GitlabGroupToProject {
+    [CmdletBinding(SupportsShouldProcess)]
+    [Alias('Share-GitlabProjectWithGroup')]
+    param (
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId,
+
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $GroupId,
+
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [Alias('Access')]
+        [string]
+        [ValidateSet('guest', 'reporter', 'developer', 'maintainer', 'owner')]
+        $GroupAccess
+    )
+
+    $AccessLiteral = Get-GitlabMemberAccessLevel $GroupAccess
+    $Project = Get-GitlabProject $ProjectId
+    $Group = Get-GitlabGroup $GroupId
+
+    # https://docs.gitlab.com/ee/api/projects.html#share-project-with-group
+    $Request = @{
+        Method = 'POST'
+        Path = "projects/$($ProjectId)/share"
+        Body = @{
+            group_id     = $Group.Id
+            group_access = $AccessLiteral
+        }
+    }
+
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "share project with group ($($Request | ConvertTo-Json))")) {
+        if (Invoke-GitlabApi @Request | Out-Null) {
+            Write-Host "Successfully shared $($Project.PathWithNamespace) with $($Group.FullPath)"
+        }
+    }
+}

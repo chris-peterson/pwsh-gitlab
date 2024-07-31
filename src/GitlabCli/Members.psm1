@@ -15,6 +15,7 @@ function Get-GitlabMemberAccessLevel {
         Developer = 30
         Maintainer = 40
         Owner = 50
+        Admin = 60
     }
 
     if ($AccessLevel) {

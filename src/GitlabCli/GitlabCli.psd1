@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.111.0'
+    ModuleVersion = '1.112.0'
 
     PrivateData = @{
         PSData = @{
@@ -7,7 +7,7 @@
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
             ReleaseNotes =
 @'
-Rename Get-GitlabRunnerJobs to Get-GitlabRunnerJob (powershell naming convention)
+new cmdlet: Add-GitlabGroupToProject
 '@
         }
     }
@@ -104,23 +104,24 @@ Rename Get-GitlabRunnerJobs to Get-GitlabRunnerJob (powershell naming convention
         'Remove-GitlabGroupShareLink'
 
         # Projects
-        'Get-GitlabProject'
+        'Add-GitlabGroupToProject'
         'ConvertTo-GitlabTriggerYaml'
-        'New-GitlabProject'
-        'Update-GitlabProject'
-        'Move-GitlabProject'
-        'Rename-GitlabProject'
-        'Rename-GitlabProjectDefaultBranch'
         'Copy-GitlabProject'
+        'Get-GitlabProject'
+        'Get-GitlabProjectHook'
+        'Get-GitlabProjectVariable'
         'Invoke-GitlabProjectArchival'
         'Invoke-GitlabProjectUnarchival'
-        'Get-GitlabProjectVariable'
-        'Set-GitlabProjectVariable'
-        'Remove-GitlabProjectVariable'
-        'Get-GitlabProjectHook'
-        'Remove-GitlabProjectHook'
-        'Update-GitlabProjectHook'
+        'Move-GitlabProject'
+        'New-GitlabProject'
         'New-GitlabProjectHook'
+        'Remove-GitlabProjectHook'
+        'Remove-GitlabProjectVariable'
+        'Rename-GitlabProject'
+        'Rename-GitlabProjectDefaultBranch'
+        'Set-GitlabProjectVariable'
+        'Update-GitlabProject'
+        'Update-GitlabProjectHook'
 
         # Repository Files
         'Get-GitlabRepositoryFile'
@@ -274,6 +275,7 @@ Rename Get-GitlabRunnerJobs to Get-GitlabRunnerJob (powershell naming convention
         'Remove-GitlabProtectedBranch'
         'Review-GitlabMergeRequest'
         'Revoke-GitlabGroupAccessToken'
+        'Share-GitlabProjectWithGroup'
         'Transfer-GitlabGroup'
         'Transfer-GitlabProject'
         'Unarchive-GitlabProject'
