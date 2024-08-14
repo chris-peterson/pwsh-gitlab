@@ -97,6 +97,36 @@
     </Members>
   </Type>
   <Type>
+    <Name>Gitlab.PersonalAccessToken</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>CreatedAtSortable</Name>
+        <GetScriptBlock>$this.CreatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>ExpiresAtSortable</Name>
+        <GetScriptBlock>$this.ExpiresAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>LastUsedAtSortable</Name>
+        <GetScriptBlock>$this.LastUsedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Scope</Name>
+        <GetScriptBlock>$this.Scopes</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Gitlab.NewPersonalAccessToken</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Scope</Name>
+        <GetScriptBlock>$this.Scopes</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Gitlab.Pipeline</Name>
     <Members>
       <ScriptProperty>

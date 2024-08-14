@@ -17,7 +17,6 @@ $global:GitlabConsoleColors     = @{
     White       = '1;37'
     Yellow      = '1;33'
 }
-$global:GitlabGetProjectDefaultPages    = 10
 # https://docs.gitlab.com/ee/api/#id-vs-iid
 # TL;DR; it's a mess and we have to special-case specific entity types
 $global:GitlabIdentityPropertyNameExemptions=@{
@@ -34,7 +33,9 @@ $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.Job'                       = 'Id'
     'Gitlab.Member'                    = 'Id'
     'Gitlab.MergeRequestApprovalRule'  = 'Id'
+    'Gitlab.NewPersonalAccessToken'    = 'Id'
     'Gitlab.Note'                      = 'Id'
+    'Gitlab.PersonalAccessToken'       = 'Id'
     'Gitlab.Pipeline'                  = 'Id'
     'Gitlab.PipelineBridge'            = 'Id'
     'Gitlab.PipelineDefinition'        = ''
@@ -58,7 +59,6 @@ $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.Variable'                  = ''
 }
 $global:GitlabJobLogSections            = New-Object 'Collections.Generic.Stack[string]'
-$global:GitlabSearchResultsDefaultLimit = 100
 
 # Remove the following as part of https://github.com/chris-peterson/pwsh-gitlab/issues/77
 # Adapted from

@@ -67,67 +67,61 @@ function Get-GitlabProject {
 
     [CmdletBinding(DefaultParameterSetName='ById')]
     param (
-        [Parameter(Position=0, Mandatory=$false, ParameterSetName='ById', ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, ParameterSetName='ById', ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByGroup', ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, Mandatory, ParameterSetName='ByGroup', ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByUser')]
+        [Parameter(ParameterSetName='ByUser')]
         [string]
         $UserId,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByUser')]
+        [Parameter(ParameterSetName='ByUser')]
         [switch]
         $Mine,
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByTopics')]
+        [Parameter(Position=0, Mandatory, ParameterSetName='ByTopics')]
         [string []]
         $Topics,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByGroup')]
+        [Parameter(ParameterSetName='ByGroup')]
         [Alias('r')]
         [switch]
         $Recurse,
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByUrl')]
+        [Parameter(Position=0, Mandatory, ParameterSetName='ByUrl')]
         [string]
         $Url,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Select,
 
         [switch]
-        [Parameter(Mandatory=$false, ParameterSetName='ByGroup')]
+        [Parameter(ParameterSetName='ByGroup')]
         $IncludeArchived = $false,
 
+        [Parameter()]
+        [uint]
+        $MaxPages,
+
         [switch]
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         $All,
 
-        [Parameter(Mandatory=$false)]
-        [uint]
-        $MaxPages = $global:GitlabGetProjectDefaultPages,
-
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl,
 
         [switch]
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         $WhatIf
     )
 
-    if ($All) {
-        if ($MaxPages -ne $global:GitlabGetProjectDefaultPages) {
-            Write-Warning -Message "Ignoring -MaxPages in favor of -All"
-        }
-        $MaxPages = [uint]::MaxValue
-    }
-
+    $MaxPages = Get-GitlabMaxPages -MaxPages $MaxPages -All:$All
     $Projects = @()
     switch ($PSCmdlet.ParameterSetName) {
         ById {

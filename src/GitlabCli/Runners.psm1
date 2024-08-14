@@ -27,7 +27,7 @@ function Get-GitlabRunner {
 
         [Parameter()]
         [uint]
-        $MaxPages = $global:GitlabGetProjectDefaultPages,
+        $MaxPages,
 
         [switch]
         [Parameter()]
@@ -38,17 +38,10 @@ function Get-GitlabRunner {
         $SiteUrl
     )
 
-    if ($All) {
-        if ($MaxPages -ne $global:GitlabGetProjectDefaultPages) {
-            Write-Warning -Message "Ignoring -MaxPages in favor of -All"
-        }
-        $MaxPages = [uint]::MaxValue
-    }
-
     $Params = @{
         HttpMethod = 'GET'
         Query      = @{}
-        MaxPages   = $MaxPages
+        MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
         SiteUrl    = $SiteUrl
     }
 
@@ -88,8 +81,12 @@ function Get-GitlabRunnerJob {
         $RunnerId,
 
         [Parameter()]
-        [int]
-        $MaxPages = $global:GitlabGetProjectDefaultPages,
+        [uint]
+        $MaxPages,
+
+        [Parameter()]
+        [switch]
+        $All,
 
         [Parameter()]
         [string]
@@ -100,7 +97,7 @@ function Get-GitlabRunnerJob {
     $Params = @{
         HttpMethod = 'GET'
         Path       = "runners/$RunnerId/jobs"
-        MaxPages   = $MaxPages
+        MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
         SiteUrl    = $SiteUrl
     }
 

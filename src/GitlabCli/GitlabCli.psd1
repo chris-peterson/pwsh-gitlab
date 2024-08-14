@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.112.0'
+    ModuleVersion = '1.113.0'
 
     PrivateData = @{
         PSData = @{
@@ -7,7 +7,7 @@
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
             ReleaseNotes =
 @'
-new cmdlet: Add-GitlabGroupToProject
+cmdlets for PATs
 '@
         }
     }
@@ -42,6 +42,7 @@ new cmdlet: Add-GitlabGroupToProject
         'Members.psm1'
         'MergeRequests.psm1'
         'Notes.psm1'
+        'PersonalAccessTokens.psm1'
         'Pipelines.psm1'
         'Projects.psm1'
         'ProjectHooks.psm1'
@@ -166,7 +167,13 @@ new cmdlet: Add-GitlabGroupToProject
         'Get-GitlabMergeRequestApprovalRule'
         'New-GitlabMergeRequestApprovalRule'
         'Remove-GitlabMergeRequestApprovalRule'
-        
+
+        # PATs
+        'Get-GitlabPersonalAccessToken'
+        'New-GitlabPersonalAccessToken'
+        'Invoke-GitlabPersonalAccessTokenRotation'
+        'Revoke-GitlabPersonalAccessToken'
+
         # Pipelines
         'Get-GitlabPipeline'
         'Get-GitlabPipelineVariable'
@@ -255,6 +262,7 @@ new cmdlet: Add-GitlabGroupToProject
         'ConvertTo-UrlEncoded'
         'ConvertTo-GitlabVariables'
         'Get-FilteredObject'
+        'Get-GitlabMaxPages'
         'Get-GitlabVersion'
         'Invoke-GitlabApi'
         'New-WrapperObject'
@@ -273,6 +281,7 @@ new cmdlet: Add-GitlabGroupToProject
         'Play-GitlabJob'
         'Pull-GitlabGroup'
         'Remove-GitlabProtectedBranch'
+        'Rotate-GitlabPersonalAccessToken'
         'Review-GitlabMergeRequest'
         'Revoke-GitlabGroupAccessToken'
         'Share-GitlabProjectWithGroup'

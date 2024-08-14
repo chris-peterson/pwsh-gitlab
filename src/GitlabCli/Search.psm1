@@ -1,37 +1,36 @@
+$global:GitlabSearchResultsDefaultLimit = 100
+
 function Search-Gitlab {
+    [CmdletBinding(SupportsShouldProcess)]
     param(
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateSet('blobs', 'merge_requests', 'projects')]
         [string]
         $Scope = 'blobs',
 
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory)]
         [string]
         $Search,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [uint]
         $MaxResults = $global:GitlabSearchResultsDefaultLimit,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [switch]
         $All,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Select,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [switch]
         $OpenInBrowser,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     if ($All) {
@@ -61,23 +60,25 @@ function Search-Gitlab {
         }
     }
 
-    $Results = Invoke-GitlabApi GET 'search' $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject $DisplayType
+    if ($PSCmdlet.ShouldProcess("search", "$($Query | ConvertTo-Json)")) {
+        $Results = Invoke-GitlabApi GET 'search' $Query -MaxPages $MaxPages -SiteUrl $SiteUrl | New-WrapperObject $DisplayType
 
-    if ($Scope -eq 'blobs') {
-        # the response object is too anemic to be useful.  enrich with project data
-        $Projects = $Results.ProjectId | Select-Object -Unique | ForEach-Object { @{Id=$_; Project=Get-GitlabProject $_ } }
-        $Results | ForEach-Object {
-            $_ | Add-Member -MemberType 'NoteProperty' -Name 'Project' -Value $($Projects | Where-Object Id -eq $_.ProjectId | Select-Object -ExpandProperty Project)
+        if ($Scope -eq 'blobs') {
+            # the response object is too anemic to be useful.  enrich with project data
+            $Projects = $Results.ProjectId | Select-Object -Unique | ForEach-Object { @{Id=$_; Project=Get-GitlabProject $_ } }
+            $Results | ForEach-Object {
+                $_ | Add-Member -MemberType 'NoteProperty' -Name 'Project' -Value $($Projects | Where-Object Id -eq $_.ProjectId | Select-Object -ExpandProperty Project)
+            }
         }
-    }
 
-    if ($OpenInBrowser) {
-        $Results | Where-Object Url | ForEach-Object {
-            $_ | Open-InBrowser
+        if ($OpenInBrowser) {
+            $Results | Where-Object Url | ForEach-Object {
+                $_ | Open-InBrowser
+            }
         }
-    }
 
-    $Results | Get-FilteredObject $Select | Sort-Object ProjectPath
+        $Results | Get-FilteredObject $Select | Sort-Object ProjectPath
+    }
 }
 
 # https://docs.gitlab.com/ee/api/search.html#project-search-api
