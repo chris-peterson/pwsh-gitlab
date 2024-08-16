@@ -121,12 +121,12 @@ function Get-GitlabPersonalAccessToken {
 function New-GitlabPersonalAccessToken {
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('Username')]
         [string]
         $UserId,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $Name,
 
@@ -139,6 +139,10 @@ function New-GitlabPersonalAccessToken {
         [ValidateScript({ValidateGitlabDateFormat $_})]
         [string]
         $ExpiresAt,
+
+        [Parameter()]
+        [uint]
+        $ExpireInMonths,
 
         [Parameter()]
         [string]
@@ -161,7 +165,10 @@ function New-GitlabPersonalAccessToken {
         }
         SiteUrl  = $SiteUrl
     }
-    if ($ExpiresAt) {
+    if ($ExpireInMonths) {
+        $Request.Body.expires_at = (Get-Date).AddMonths($ExpireInMonths).ToString('yyyy-MM-dd')
+    }
+    elseif ($ExpiresAt) {
         $Request.Body.expires_at = $ExpiresAt
     }
 
@@ -213,6 +220,7 @@ function Invoke-GitlabPersonalAccessTokenRotation {
 
 function Revoke-GitlabPersonalAccessToken {
     [CmdletBinding(SupportsShouldProcess)]
+    [Alias('Remove-GitlabPersonalAccessToken')]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, Position=0)]
         [Alias('Id')]

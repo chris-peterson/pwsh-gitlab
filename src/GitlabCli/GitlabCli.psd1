@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.113.0'
+    ModuleVersion = '1.113.1'
 
     PrivateData = @{
         PSData = @{
@@ -281,6 +281,7 @@ cmdlets for PATs
         'Play-GitlabJob'
         'Pull-GitlabGroup'
         'Remove-GitlabProtectedBranch'
+        'Remove-GitlabPersonalAccessToken'
         'Rotate-GitlabPersonalAccessToken'
         'Review-GitlabMergeRequest'
         'Revoke-GitlabGroupAccessToken'
