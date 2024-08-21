@@ -5,6 +5,23 @@
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
+            IconUri = 'https://raw.githubusercontent.com/chris-peterson/pwsh-gitlab/main/assets/icon.png'
+            Tags = @(
+                'GitLab',
+                'API',
+                'REST',
+                'GraphQL',
+                'CI/CD',
+                'DevOps',
+                'Automation',
+                'PowerShell',
+                'Module',
+                'PSEdition_Desktop',
+                'PSEdition_Core',
+                'Windows',
+                'Linux',
+                'MacOS'
+            )
             ReleaseNotes =
 @'
 cmdlets for PATs
@@ -18,21 +35,9 @@ cmdlets for PATs
     CompanyName = 'Chris Peterson'
     Copyright = '(c) 2021-2024'
 
-    Tags = @(
-        'GitLab',
-        'API',
-        'REST',
-        'GraphQL',
-        'CI/CD',
-        'DevOps',
-        'Automation',
-        'PowerShell',
-        'Module'
-    )
     Description = 'Interact with GitLab via PowerShell'
     PowerShellVersion = '7.1'
-
-    Icon = 'https://raw.githubusercontent.com/chris-peterson/pwsh-gitlab/main/assets/icon.png'
+    CompatiblePSEditions = @('Core', 'Desktop')
 
     ScriptsToProcess = @('_Init.ps1')
     TypesToProcess = @('Types.ps1xml')
