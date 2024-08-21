@@ -32,7 +32,7 @@ cmdlets for PATs
     Description = 'Interact with GitLab via PowerShell'
     PowerShellVersion = '7.1'
 
-    Icon = ''
+    Icon = 'https://raw.githubusercontent.com/chris-peterson/pwsh-gitlab/main/assets/icon.png'
 
     ScriptsToProcess = @('_Init.ps1')
     TypesToProcess = @('Types.ps1xml')
