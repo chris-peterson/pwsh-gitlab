@@ -28,7 +28,7 @@
             )
             ReleaseNotes =
 @'
-cmdlets for PATs
+https://github.com/chris-peterson/pwsh-gitlab/pull/81
 '@
         }
     }
