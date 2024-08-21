@@ -18,8 +18,21 @@ cmdlets for PATs
     CompanyName = 'Chris Peterson'
     Copyright = '(c) 2021-2024'
 
+    Tags = @(
+        'GitLab',
+        'API',
+        'REST',
+        'GraphQL',
+        'CI/CD',
+        'DevOps',
+        'Automation',
+        'PowerShell',
+        'Module'
+    )
     Description = 'Interact with GitLab via PowerShell'
     PowerShellVersion = '7.1'
+
+    Icon = ''
 
     ScriptsToProcess = @('_Init.ps1')
     TypesToProcess = @('Types.ps1xml')
