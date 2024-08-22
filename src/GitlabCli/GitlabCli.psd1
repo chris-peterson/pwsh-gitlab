@@ -1,9 +1,7 @@
 @{
     ModuleVersion = '1.114.0'
 
-    RequiredModules = @(
-        'powershell-yaml'
-    )
+    RequiredModules = @("powershell-yaml", @{ModuleName="powershell-yaml"; ModuleVersion="0.4.7"; GUID="6a75a662-7f53-425a-9777-ee61284407da"})
 
     PrivateData = @{
         PSData = @{
@@ -26,6 +24,7 @@
                 'Linux',
                 'MacOS'
             )
+            ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
 https://github.com/chris-peterson/pwsh-gitlab/pull/81
