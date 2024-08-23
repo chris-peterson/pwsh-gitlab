@@ -17,33 +17,33 @@ function Get-PossibleGroupName {
 function Get-GitlabGroup {
     [CmdletBinding(DefaultParameterSetName='ByGroupId')]
     param (
-        [Parameter(Position=0, Mandatory=$false, ParameterSetName='ByGroupId')]
+        [Parameter(Position=0, ParameterSetName='ByGroupId')]
         [string]
         $GroupId,
 
-        [Parameter(Mandatory=$true, ParameterSetName='ByParentGroup')]
+        [Parameter(Mandatory, ParameterSetName='ByParentGroup')]
         [string]
         $ParentGroupId,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByParentGroup')]
-        [Parameter(Mandatory=$false, ParameterSetName='NotByGroupId')]
+        [Parameter(ParameterSetName='ByParentGroup')]
         [Alias('r')]
         [switch]
         $Recurse,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl,
 
-        [Parameter(Mandatory=$false)]
-        [int]
-        $MaxPages = 10,
+        [Parameter()]
+        [uint]
+        $MaxPages,
 
         [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        [Parameter()]
+        $All
     )
 
+    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
     if($GroupId) {
         if ($GroupId -eq '.') {
             $LocalPath = Get-Location | Select-Object -ExpandProperty Path
@@ -51,7 +51,7 @@ function Get-GitlabGroup {
             for ($i = 1; $i -le $MaxDepth; $i++) {
                 $PossibleGroupName = Get-PossibleGroupName $LocalPath $i
                 try {
-                    $Group = Get-GitlabGroup $PossibleGroupName -SiteUrl $SiteUrl -WhatIf:$false
+                    $Group = Get-GitlabGroup $PossibleGroupName -SiteUrl $SiteUrl
                     if ($Group) {
                         return $Group
                     }
@@ -64,7 +64,7 @@ function Get-GitlabGroup {
             # https://docs.gitlab.com/ee/api/groups.html#details-of-a-group
             $Group = Invoke-GitlabApi GET "groups/$($GroupId | ConvertTo-UrlEncoded)" @{
                 'with_projects' = 'false'
-            } -SiteUrl $SiteUrl -WhatIf:$WhatIf
+            } -SiteUrl $SiteUrl
         }
     }
     elseif($ParentGroupId) {
@@ -73,13 +73,13 @@ function Get-GitlabGroup {
             :
             'subgroups' # https://docs.gitlab.com/ee/api/groups.html#list-a-groups-subgroups
         $Group = Invoke-GitlabApi GET "groups/$($ParentGroupId | ConvertTo-UrlEncoded)/$SubgroupOperation" `
-          -SiteUrl $SiteUrl -WhatIf:$WhatIf -MaxPages $MaxPages
+          -SiteUrl $SiteUrl -MaxPages $MaxPages
     }
     else {
         # https://docs.gitlab.com/ee/api/groups.html#list-groups
         $Group = Invoke-GitlabApi GET "groups" @{
             'top_level_only' = (-not $Recurse).ToString().ToLower()
-        } -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf
+        } -MaxPages $MaxPages -SiteUrl $SiteUrl
     }
 
     return $Group |
