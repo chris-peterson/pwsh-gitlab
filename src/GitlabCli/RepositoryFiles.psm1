@@ -223,7 +223,7 @@ function Get-GitlabRepositoryTree {
 }
 
 function Get-GitlabRepositoryYmlFileContent {
-    [Obsolete("Use Get-GitlabRepositoryFileContent instead")]
+    [Obsolete("Use 'Get-GitlabRepositoryFileContent | ConvertFrom-Yaml' instead")]
     [CmdletBinding()]
     param (
         [Parameter()]
