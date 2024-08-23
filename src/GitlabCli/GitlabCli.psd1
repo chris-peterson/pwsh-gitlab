@@ -1,7 +1,7 @@
 @{
     ModuleVersion = '1.114.0'
 
-    RequiredModules = @('powershell-yaml', @{ModuleName='powershell-yaml'; ModuleVersion='0.4.7'; GUID='6a75a662-7f53-425a-9777-ee61284407da'})
+    RequiredModules = @('powershell-yaml')
 
     PrivateData = @{
         PSData = @{
