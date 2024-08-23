@@ -28,6 +28,10 @@ function Get-GitlabAuditEvent {
         [Parameter()]
         $FetchAuthors,
 
+        [Parameter()]
+        [uint]
+        $MaxPages,
+
         [switch]
         [Parameter()]
         $All,
@@ -45,20 +49,9 @@ function Get-GitlabAuditEvent {
         $After,
 
         [Parameter()]
-        [uint]
-        $MaxPages = $global:GitlabGetProjectDefaultPages,
-
-        [Parameter()]
         [string]
         $SiteUrl
     )
-
-    if ($All) {
-        if ($MaxPages -ne $global:GitlabGetProjectDefaultPages) {
-            Write-Warning -Message "Ignoring -MaxPages in favor of -All"
-        }
-        $MaxPages = [uint]::MaxValue
-    }
 
     if ($GroupId) {
         $Group = Get-GitlabGroup $GroupId
@@ -89,6 +82,7 @@ function Get-GitlabAuditEvent {
     if ($After) {
         $Query.created_after = $After
     }
+    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
     $Results = Invoke-GitlabApi GET $Resource -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.AuditEvent'
 

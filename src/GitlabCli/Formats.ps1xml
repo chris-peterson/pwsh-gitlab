@@ -218,6 +218,84 @@
       </TableControl>
     </View>
     <View>
+      <Name>GitlabPersonalAccessToken</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.PersonalAccessToken</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader>
+            <Label>LastUsedAt</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>ExpiresAt</Label>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+                <Alignment>Right</Alignment>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Name</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Scope</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>LastUsedAtSortable</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ExpiresAtSortable</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>GitlabNewPersonalAccessToken</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.NewPersonalAccessToken</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+                <Alignment>Right</Alignment>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Name</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Scope</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ExpiresAt</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Token</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>GitlabPipeline</Name>
       <ViewSelectedBy>
         <TypeName>Gitlab.Pipeline</TypeName>
@@ -448,19 +526,11 @@
           <TableColumnHeader>
             <Alignment>Right</Alignment>
           </TableColumnHeader>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
           <TableColumnHeader>
-            <Label>Cron</Label>
+            <Label>Next Run (UTC)</Label>
             <Alignment>Right</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>NextRunAt</Label>
-            <Alignment>Right</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>Active</Label>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>Description</Label>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -470,16 +540,13 @@
                 <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Cron</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>NextRunAtSortable</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
                 <PropertyName>Active</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Description</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>NextRunAt</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

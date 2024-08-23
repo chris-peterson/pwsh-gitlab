@@ -15,6 +15,7 @@ function Get-GitlabMemberAccessLevel {
         Developer = 30
         Maintainer = 40
         Owner = 50
+        Admin = 60
     }
 
     if ($AccessLevel) {
@@ -213,7 +214,7 @@ function Add-GitlabProjectMember {
         $UserId,
 
         [Parameter(Position=1, Mandatory=$true)]
-        [ValidateSet('guest', 'reporter', 'developer', 'maintainer')]
+        [ValidateSet('guest', 'reporter', 'developer', 'maintainer', 'owner')]
         [string]
         $AccessLevel,
 

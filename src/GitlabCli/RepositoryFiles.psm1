@@ -223,32 +223,27 @@ function Get-GitlabRepositoryTree {
 }
 
 function Get-GitlabRepositoryYmlFileContent {
+    [Obsolete("Use 'Get-GitlabRepositoryFileContent | ConvertFrom-Yaml' instead")]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory)]
         [string]
         $FilePath,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [Alias("Branch")]
         [string]
         $Ref,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
-
-    $Yml = $(Get-GitlabRepositoryFileContent -ProjectId $ProjectId -Ref $Ref -FilePath $FilePath -SiteUrl $SiteUrl)
-    $Hash = $([YamlDotNet.Serialization.Deserializer].GetMethods() |
-        Where-Object { $_.Name -eq 'Deserialize' -and $_.ReturnType.Name -eq 'T' -and $_.GetParameters().ParameterType.Name -eq 'String' }). `
-        MakeGenericMethod(
-            [object]). `
-        Invoke($(New-Object 'YamlDotNet.Serialization.Deserializer'), $Yml)
-
-    return $Hash | ConvertTo-Json -Depth 100 | ConvertFrom-Json # the JSON "double-tap" coerces HashTables into PSCustomObject (including nested children)
+    
+    Get-GitlabRepositoryFileContent -ProjectId $ProjectId -Ref $Ref -FilePath $FilePath -SiteUrl $SiteUrl |
+        ConvertFrom-Yaml
 }

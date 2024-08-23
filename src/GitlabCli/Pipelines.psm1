@@ -229,35 +229,36 @@ function Get-GitlabPipelineSchedule {
     [Alias('schedule')]
     [Alias('schedules')]
     param (
-        [Parameter(ParameterSetName='ByProjectId', Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [Parameter(ParameterSetName='ByPipelineScheduleId', Mandatory=$false)]
+        [Parameter(ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName='ByPipelineScheduleId')]
         [string]
         $ProjectId = '.',
 
-        [Parameter(ParameterSetName='ByPipelineScheduleId', Mandatory=$true)]
+        [Parameter(ParameterSetName='ByPipelineScheduleId', Mandatory)]
         [Alias('Id')]
         [int]
         $PipelineScheduleId,
 
-        [Parameter(ParameterSetName='ByProjectId', Mandatory=$false)]
+        [Parameter(ParameterSetName='ByProjectId')]
         [string]
         [ValidateSet('active', 'inactive')]
         $Scope,
 
-        [Parameter(ParameterSetName='ByProjectId', Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName)]
         [switch]
         $IncludeVariables,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
 
-    $Project= Get-GitlabProject -ProjectId $ProjectId
+    $Project = Get-GitlabProject -ProjectId $ProjectId
 
     $GitlabApiArguments = @{
         HttpMethod = 'GET'
-        Path       = "projects/$ProjectId/pipeline_schedules"
+        # https://docs.gitlab.com/ee/api/pipeline_schedules.html#get-all-pipeline-schedules
+        Path       = "projects/$($Project.Id)/pipeline_schedules"
         Query      = @{}
         SiteUrl    = $SiteUrl
     }
@@ -276,14 +277,14 @@ function Get-GitlabPipelineSchedule {
 
     $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
     $Wrapper | Add-Member -NotePropertyMembers @{ Project = $Project }
-    
-    #Because the api only includes variables when requesting the pipeline schedule by id. Do a little recursion
-    #Switch is only part of the ByProjectId parameter set
-    if($IncludeVariables) {
-        $Wrapper = $Wrapper | ForEach-Object {Get-GitlabPipelineSchedule -ProjectId $_.ProjectId -PipelineScheduleId $_.Id  }
+
+    if ($IncludeVariables) {
+        # only returned by the single schedule API so have to fetch them individually
+        # (https://docs.gitlab.com/ee/api/pipeline_schedules.html#get-a-single-pipeline-schedule)
+        $Wrapper = $Wrapper | ForEach-Object { Get-GitlabPipelineSchedule -ProjectId $_.ProjectId -PipelineScheduleId $_.Id }
     } 
 
-    $Wrapper
+    $Wrapper | Sort-Object NextRunAtSortable
 }
 
 # https://docs.gitlab.com/ee/api/pipeline_schedules.html#create-a-new-pipeline-schedule

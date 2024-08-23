@@ -77,6 +77,10 @@ function Invoke-GitlabApi {
         $SiteUrl,
 
         [Parameter()]
+        [string]
+        $AccessToken,
+
+        [Parameter()]
         [switch]
         $WhatIf
     )
@@ -84,7 +88,6 @@ function Invoke-GitlabApi {
     if ($MaxPages -gt [int]::MaxValue) {
          $MaxPages = [int]::MaxValue
     }
-
     if ($SiteUrl) {
         Write-Debug "Attempting to resolve site using $SiteUrl"
         $Site = Get-GitlabConfiguration | Select-Object -ExpandProperty Sites | Where-Object Url -eq $SiteUrl
@@ -98,7 +101,9 @@ function Invoke-GitlabApi {
         Write-Debug "Using default site ($($Site.Url))"
     }
     $GitlabUrl = $Site.Url
-    $AccessToken = $Site.AccessToken
+    if (-not $AccessToken) {
+        $AccessToken = $Site.AccessToken 
+    }
 
     $Headers = @{
         'Accept' = 'application/json'
@@ -327,4 +332,45 @@ function Get-GitlabResourceFromUrl {
         throw "Could not extract a GitLab resource from '$Url'"
     }
     $Match
+}
+
+$global:GitlabDefaultMaxPages = 10
+
+# Helper function for consistency of paging parameters
+# Add these parameters to your cmdlet
+<#
+    [Parameter()]
+    [uint]
+    $MaxPages,
+
+    [switch]
+    [Parameter()]
+    $All,
+#>
+# then call
+<#
+    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+#>
+
+function Get-GitlabMaxPages {
+    param (
+        [Parameter()]
+        [uint]
+        $MaxPages,
+
+        [switch]
+        [Parameter()]
+        $All
+    )
+    if ($MaxPages -eq 0) {
+        $MaxPages = $global:GitlabDefaultMaxPages
+    }
+    if ($All) {
+        if ($MaxPages -ne $global:GitlabDefaultMaxPages) {
+            Write-Warning -Message "Ignoring -MaxPages in favor of -All"
+        }
+        $MaxPages = [uint]::MaxValue
+    }
+    Write-Debug "MaxPages: $MaxPages"
+    $MaxPages
 }

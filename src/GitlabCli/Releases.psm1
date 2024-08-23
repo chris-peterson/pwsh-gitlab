@@ -20,7 +20,7 @@ function Get-GitlabRelease {
 
         [Parameter()]
         [uint]
-        $MaxPages = $global:GitlabGetProjectDefaultPages,
+        $MaxPages,
 
         [switch]
         [Parameter()]
@@ -40,10 +40,7 @@ function Get-GitlabRelease {
     if ($IncludeHtml) {
         $Query.include_html_description = 'true';
     }
-    if ($All) {
-        $MaxPages = [uint]::MaxValue
-    }
-
+    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
     Invoke-GitlabApi GET $Path -Query $Query -MaxPages $MaxPages | New-WrapperObject 'Gitlab.Release' | ForEach-Object {
         $_ | Add-Member -PassThru -NotePropertyMembers @{ ProjectId = $Project.Id }
     }

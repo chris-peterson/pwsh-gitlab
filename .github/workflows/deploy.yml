@@ -13,11 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Publish Module to PowerShell Gallery
-        uses: pcgeek86/publish-powershell-module-action@v20
-        id: publish-module
+      - name: Publish PowerShell Module
+        uses: natescherer/publish-powershell-action@v1.1.1
         with:
-          NuGetApiKey: ${{ secrets.PS_GALLERY_KEY }}
+          token: ${{ secrets.PS_GALLERY_KEY }}
+          target: gallery
+          path: src/GitlabCli
     environment:
       name: PowerShell Gallery
       url: https://www.powershellgallery.com/packages/GitlabCli

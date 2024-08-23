@@ -1,13 +1,33 @@
 @{
-    ModuleVersion = '1.109.0'
+    ModuleVersion = '1.114.0'
+
+    RequiredModules = @('powershell-yaml')
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
+            IconUri = 'https://raw.githubusercontent.com/chris-peterson/pwsh-gitlab/main/assets/icon.png'
+            Tags = @(
+                'GitLab',
+                'API',
+                'REST',
+                'GraphQL',
+                'CI/CD',
+                'DevOps',
+                'Automation',
+                'PowerShell',
+                'Module',
+                'PSEdition_Desktop',
+                'PSEdition_Core',
+                'Windows',
+                'Linux',
+                'MacOS'
+            )
+            ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-  [Add parameter to new group access token](https://github.com/chris-peterson/pwsh-gitlab/pull/90)
+https://github.com/chris-peterson/pwsh-gitlab/pull/81
 '@
         }
     }
@@ -20,6 +40,7 @@
 
     Description = 'Interact with GitLab via PowerShell'
     PowerShellVersion = '7.1'
+    CompatiblePSEditions = @('Core', 'Desktop')
 
     ScriptsToProcess = @('_Init.ps1')
     TypesToProcess = @('Types.ps1xml')
@@ -42,6 +63,7 @@
         'Members.psm1'
         'MergeRequests.psm1'
         'Notes.psm1'
+        'PersonalAccessTokens.psm1'
         'Pipelines.psm1'
         'Projects.psm1'
         'ProjectHooks.psm1'
@@ -104,23 +126,24 @@
         'Remove-GitlabGroupShareLink'
 
         # Projects
-        'Get-GitlabProject'
+        'Add-GitlabGroupToProject'
         'ConvertTo-GitlabTriggerYaml'
-        'New-GitlabProject'
-        'Update-GitlabProject'
-        'Move-GitlabProject'
-        'Rename-GitlabProject'
-        'Rename-GitlabProjectDefaultBranch'
         'Copy-GitlabProject'
+        'Get-GitlabProject'
+        'Get-GitlabProjectHook'
+        'Get-GitlabProjectVariable'
         'Invoke-GitlabProjectArchival'
         'Invoke-GitlabProjectUnarchival'
-        'Get-GitlabProjectVariable'
-        'Set-GitlabProjectVariable'
-        'Remove-GitlabProjectVariable'
-        'Get-GitlabProjectHook'
-        'Remove-GitlabProjectHook'
-        'Update-GitlabProjectHook'
+        'Move-GitlabProject'
+        'New-GitlabProject'
         'New-GitlabProjectHook'
+        'Remove-GitlabProjectHook'
+        'Remove-GitlabProjectVariable'
+        'Rename-GitlabProject'
+        'Rename-GitlabProjectDefaultBranch'
+        'Set-GitlabProjectVariable'
+        'Update-GitlabProject'
+        'Update-GitlabProjectHook'
 
         # Repository Files
         'Get-GitlabRepositoryFile'
@@ -165,7 +188,13 @@
         'Get-GitlabMergeRequestApprovalRule'
         'New-GitlabMergeRequestApprovalRule'
         'Remove-GitlabMergeRequestApprovalRule'
-        
+
+        # PATs
+        'Get-GitlabPersonalAccessToken'
+        'New-GitlabPersonalAccessToken'
+        'Invoke-GitlabPersonalAccessTokenRotation'
+        'Revoke-GitlabPersonalAccessToken'
+
         # Pipelines
         'Get-GitlabPipeline'
         'Get-GitlabPipelineVariable'
@@ -199,7 +228,7 @@
 
         # Runners
         'Get-GitlabRunner'
-        'Get-GitlabRunnerJobs'
+        'Get-GitlabRunnerJob'
         'Update-GitlabRunner'
         'Suspend-GitlabRunner'
         'Resume-GitlabRunner'
@@ -254,6 +283,7 @@
         'ConvertTo-UrlEncoded'
         'ConvertTo-GitlabVariables'
         'Get-FilteredObject'
+        'Get-GitlabMaxPages'
         'Get-GitlabVersion'
         'Invoke-GitlabApi'
         'New-WrapperObject'
@@ -272,8 +302,11 @@
         'Play-GitlabJob'
         'Pull-GitlabGroup'
         'Remove-GitlabProtectedBranch'
+        'Remove-GitlabPersonalAccessToken'
+        'Rotate-GitlabPersonalAccessToken'
         'Review-GitlabMergeRequest'
         'Revoke-GitlabGroupAccessToken'
+        'Share-GitlabProjectWithGroup'
         'Transfer-GitlabGroup'
         'Transfer-GitlabProject'
         'Unarchive-GitlabProject'
