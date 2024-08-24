@@ -1,5 +1,5 @@
 function Get-GitlabUser {
-    [CmdletBinding(DefaultParameterSetName='Id')]
+    [CmdletBinding(DefaultParameterSetName='Filter')]
     param (
         [Parameter(ParameterSetName='Id', Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]
@@ -8,17 +8,33 @@ function Get-GitlabUser {
         [string]
         $UserId,
 
-        [Parameter(ParameterSetName='All')]
+        [Parameter(ParameterSetName='Filter')]
         [switch]
-        $All = $False,
+        $Active,
 
-        [Parameter(ParameterSetName='All')]
-        [boolean]
-        $Active = $True,
+        [Parameter(ParameterSetName='Filter')]
+        [switch]
+        $External,
 
-        [Parameter(ParameterSetName='All')]
-        [int]
-        $MaxPages = 20,
+        [Parameter(ParameterSetName='Filter')]
+        [switch]
+        $Blocked,
+
+        [Parameter(ParameterSetName='Filter')]
+        [switch]
+        $ExcludeActive,
+
+        [Parameter(ParameterSetName='Filter')]
+        [switch]
+        $ExcludeExternal,
+
+        [Parameter()]
+        [uint]
+        $MaxPages = 1,
+    
+        [switch]
+        [Parameter()]
+        $All,
 
         [Parameter(ParameterSetName='Me')]
         [switch]
@@ -28,29 +44,46 @@ function Get-GitlabUser {
         [string]
         $SiteUrl
     )
+
     $Parameters = @{
-        MaxPages = $MaxPages
+        MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
         Method   = 'GET'
         Path     = 'users' # https://docs.gitlab.com/ee/api/users.html#for-non-administrator-users
         Query    = @{}
         SiteUrl  = $SiteUrl
     }
-    if ($Me) {
-        $Parameters.Path = 'user' # https://docs.gitlab.com/ee/api/users.html#for-non-administrator-users
+
+    if ($Active) {
+        $Parameters.Query.active = 'true'
     }
-    elseif ($UserId -match '@') {
-        $Parameters.Query.search = $UserId
+    elseif ($ExcludeActive) {
+        $Parameters.Query.exclude_active = 'true'
     }
-    elseif ($All) {
-        $Parameters.Query.active = $Active.ToString().ToLower()
-    } else {
-        if ([uint]::TryParse($UserId, [ref] $null)) {
-            $Parameters.Path = "users/$UserId" # https://docs.gitlab.com/ee/api/users.html#single-user
+    if ($External) {
+        $Parameters.Query.external = 'true'
+    }
+    if ($ExcludeExternal) {
+        $Parameters.Query.exclude_external = 'true'
+    }
+    if ($Blocked) {
+        $Parameters.Query.blocked = 'true'
+    }
+    if ($PSCmdlet.ParameterSetName -eq 'Id') {
+        if ($UserId -match '@') {
+            $Parameters.Query.search = $UserId
         }
         else {
-            $Parameters.Query.username = $UserId
+            if ([uint]::TryParse($UserId, [ref] $null)) {
+                $Parameters.Path = "users/$UserId" # https://docs.gitlab.com/ee/api/users.html#single-user
+            }
+            else {
+                $Parameters.Query.username = $UserId
+            }
         }
+    } elseif ($Me) {
+        $Parameters.Path = 'user' # https://docs.gitlab.com/ee/api/users.html#for-non-administrator-users
     }
+
     Invoke-GitlabApi @Parameters | New-WrapperObject 'Gitlab.User'
 }
 

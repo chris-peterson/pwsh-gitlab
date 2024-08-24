@@ -67,67 +67,61 @@ function Get-GitlabProject {
 
     [CmdletBinding(DefaultParameterSetName='ById')]
     param (
-        [Parameter(Position=0, Mandatory=$false, ParameterSetName='ById', ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, ParameterSetName='ById', ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByGroup', ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, Mandatory, ParameterSetName='ByGroup', ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByUser')]
+        [Parameter(ParameterSetName='ByUser')]
         [string]
         $UserId,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByUser')]
+        [Parameter(ParameterSetName='ByUser')]
         [switch]
         $Mine,
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByTopics')]
+        [Parameter(Position=0, Mandatory, ParameterSetName='ByTopics')]
         [string []]
         $Topics,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByGroup')]
+        [Parameter(ParameterSetName='ByGroup')]
         [Alias('r')]
         [switch]
         $Recurse,
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByUrl')]
+        [Parameter(Position=0, Mandatory, ParameterSetName='ByUrl')]
         [string]
         $Url,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $Select,
 
         [switch]
-        [Parameter(Mandatory=$false, ParameterSetName='ByGroup')]
+        [Parameter(ParameterSetName='ByGroup')]
         $IncludeArchived = $false,
 
+        [Parameter()]
+        [uint]
+        $MaxPages,
+
         [switch]
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         $All,
 
-        [Parameter(Mandatory=$false)]
-        [uint]
-        $MaxPages = $global:GitlabGetProjectDefaultPages,
-
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl,
 
         [switch]
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         $WhatIf
     )
 
-    if ($All) {
-        if ($MaxPages -ne $global:GitlabGetProjectDefaultPages) {
-            Write-Warning -Message "Ignoring -MaxPages in favor of -All"
-        }
-        $MaxPages = [uint]::MaxValue
-    }
-
+    $MaxPages = Get-GitlabMaxPages -MaxPages $MaxPages -All:$All
     $Projects = @()
     switch ($PSCmdlet.ParameterSetName) {
         ById {
@@ -759,4 +753,44 @@ function Get-GitlabProjectEvent {
     Invoke-GitlabApi GET "projects/$($Project.Id)/events" `
         -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | 
         New-WrapperObject 'Gitlab.Event'
+}
+
+function Add-GitlabGroupToProject {
+    [CmdletBinding(SupportsShouldProcess)]
+    [Alias('Share-GitlabProjectWithGroup')]
+    param (
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId,
+
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $GroupId,
+
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [Alias('Access')]
+        [string]
+        [ValidateSet('guest', 'reporter', 'developer', 'maintainer', 'owner')]
+        $GroupAccess
+    )
+
+    $AccessLiteral = Get-GitlabMemberAccessLevel $GroupAccess
+    $Project = Get-GitlabProject $ProjectId
+    $Group = Get-GitlabGroup $GroupId
+
+    # https://docs.gitlab.com/ee/api/projects.html#share-project-with-group
+    $Request = @{
+        Method = 'POST'
+        Path = "projects/$($ProjectId)/share"
+        Body = @{
+            group_id     = $Group.Id
+            group_access = $AccessLiteral
+        }
+    }
+
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "share project with group ($($Request | ConvertTo-Json))")) {
+        if (Invoke-GitlabApi @Request | Out-Null) {
+            Write-Host "Successfully shared $($Project.PathWithNamespace) with $($Group.FullPath)"
+        }
+    }
 }

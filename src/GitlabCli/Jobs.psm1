@@ -260,25 +260,22 @@ function Test-GitlabPipelineDefinition {
 function Get-GitlabPipelineDefinition {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [Alias("Branch")]
         [string]
         $Ref,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    Get-GitlabRepositoryYmlFileContent -ProjectId $ProjectId -FilePath '.gitlab-ci.yml' -Ref $Ref -SiteUrl $SiteUrl
+    Get-GitlabRepositoryFileContent -ProjectId $ProjectId -Ref $Ref -FilePath '.gitlab-ci.yml' -SiteUrl $SiteUrl |
+        ConvertFrom-Yaml
 }
 
 <#

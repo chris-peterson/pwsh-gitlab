@@ -27,7 +27,7 @@ function Get-GitlabRunner {
 
         [Parameter()]
         [uint]
-        $MaxPages = $global:GitlabGetProjectDefaultPages,
+        $MaxPages,
 
         [switch]
         [Parameter()]
@@ -38,17 +38,10 @@ function Get-GitlabRunner {
         $SiteUrl
     )
 
-    if ($All) {
-        if ($MaxPages -ne $global:GitlabGetProjectDefaultPages) {
-            Write-Warning -Message "Ignoring -MaxPages in favor of -All"
-        }
-        $MaxPages = [uint]::MaxValue
-    }
-
     $Params = @{
         HttpMethod = 'GET'
         Query      = @{}
-        MaxPages   = $MaxPages
+        MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
         SiteUrl    = $SiteUrl
     }
 
@@ -80,7 +73,7 @@ function Get-GitlabRunner {
     $Runners
 }
 
-function Get-GitlabRunnerJobs {
+function Get-GitlabRunnerJob {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
@@ -88,22 +81,26 @@ function Get-GitlabRunnerJobs {
         $RunnerId,
 
         [Parameter()]
-        [int]
-        $MaxPages = $global:GitlabGetProjectDefaultPages,
+        [uint]
+        $MaxPages,
+
+        [Parameter()]
+        [switch]
+        $All,
 
         [Parameter()]
         [string]
         $SiteUrl
     )
 
+    # https://docs.gitlab.com/ee/api/runners.html#list-runners-jobs
     $Params = @{
         HttpMethod = 'GET'
         Path       = "runners/$RunnerId/jobs"
-        MaxPages   = $MaxPages
+        MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
         SiteUrl    = $SiteUrl
     }
 
-    # https://docs.gitlab.com/ee/api/runners.html#list-runners-jobs
     Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.RunnerJob'
 }
 
