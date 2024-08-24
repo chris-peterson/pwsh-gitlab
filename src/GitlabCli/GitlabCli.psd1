@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.115.1'
+    ModuleVersion = '1.116.0'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,8 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* https://github.com/chris-peterson/pwsh-gitlab/pull/91
-* https://github.com/chris-peterson/pwsh-gitlab/pull/92
+https://github.com/chris-peterson/pwsh-gitlab/issues/82
 '@
         }
     }
@@ -138,6 +137,7 @@
         'Move-GitlabProject'
         'New-GitlabProject'
         'New-GitlabProjectHook'
+        'Remove-GitlabProject'
         'Remove-GitlabProjectHook'
         'Remove-GitlabProjectVariable'
         'Rename-GitlabProject'

@@ -794,3 +794,24 @@ function Add-GitlabGroupToProject {
         }
     }
 }
+
+function Remove-GitlabProject {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    param (
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    $Project = Get-GitlabProject -ProjectId $ProjectId
+
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "remove project")) {
+        # https://docs.gitlab.com/ee/api/projects.html#delete-project
+        Invoke-GitlabApi DELETE "projects/$($ProjectId)" -SiteUrl $SiteUrl | Out-Null
+        Write-Host "Removed $($Project.PathWithNamespace)"
+    }
+}
