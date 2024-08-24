@@ -1,13 +1,13 @@
-# Overview
+# GitlabCli
 
-Interact with [GitLab](https://about.gitlab.com/) via [PowerShell](https://github.com/powershell/powershell#-powershell)
-
-## Status
-
+<img src="assets/icon.png" width="64">&zwnj;
 [![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/GitlabCli)](https://www.powershellgallery.com/packages/GitlabCli)
+[![Platforms](https://img.shields.io/powershellgallery/p/GitlabCli)](https://www.powershellgallery.com/packages/GitlabCli)
 [![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/GitlabCli?color=green)](https://www.powershellgallery.com/packages/GitlabCli)
 [![GitHub license](https://img.shields.io/github/license/chris-peterson/pwsh-gitlab.svg)](LICENSE)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/chris-peterson/pwsh-gitlab/deploy.yml?branch=main&label=ci)](https://github.com/chris-peterson/pwsh-gitlab/actions/workflows/deploy.yml)
+
+ Interact with [GitLab](https://about.gitlab.com/) via [PowerShell](https://github.com/powershell/powershell#-powershell)
 
 ## Getting Started
 
