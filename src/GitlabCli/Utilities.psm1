@@ -120,6 +120,7 @@ function Invoke-GitlabApi {
     if (-not $GitlabUrl.StartsWith('http')) {
         $GitlabUrl = "https://$GitlabUrl"
     }
+    $GitlabUrl = $GitlabUrl.TrimEnd('/')
 
     $SerializedQuery = ''
     $Delimiter = '?'
