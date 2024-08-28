@@ -116,15 +116,19 @@ function Set-DefaultGitlabSite {
 function Add-GitlabSite {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter()]
         [string]
         $Url,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter()]
         [string]
         $AccessToken,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
+        [string]
+        $ProxyUrl,
+
+        [Parameter()]
         [switch]
         $IsDefault
     )
@@ -147,9 +151,10 @@ function Add-GitlabSite {
     }
 
     $Config.Sites += @{
-        Url = $Url
+        Url         = $Url
         AccessToken = $AccessToken
-        IsDefault = 'false'
+        ProxyUrl    = $ProxyUrl
+        IsDefault   = 'false'
     }
 
     $Config | Write-GitlabConfiguration

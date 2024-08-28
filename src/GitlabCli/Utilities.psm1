@@ -81,6 +81,10 @@ function Invoke-GitlabApi {
         $AccessToken,
 
         [Parameter()]
+        [string]
+        $ProxyUrl,
+
+        [Parameter()]
         [switch]
         $WhatIf
     )
@@ -101,15 +105,14 @@ function Invoke-GitlabApi {
         Write-Debug "Using default site ($($Site.Url))"
     }
     $GitlabUrl = $Site.Url
+    $Headers = @{
+        Accept = 'application/json'
+    }
     if (-not $AccessToken) {
         $AccessToken = $Site.AccessToken 
     }
-
-    $Headers = @{
-        'Accept' = 'application/json'
-    }
     if ($AccessToken) {
-        $Headers['Authorization'] = "Bearer $AccessToken"
+        $Headers.Authorization = "Bearer $AccessToken"
     } else {
         throw "GitlabCli: environment not configured`nSee https://github.com/chris-peterson/pwsh-gitlab#getting-started for details"
     }
@@ -131,9 +134,12 @@ function Invoke-GitlabApi {
             }
         }
     }
-    $Uri = "$GitlabUrl/api/$Api/$Path$SerializedQuery"
-
-    $RestMethodParams = @{}
+    $RestMethodParams = @{
+        Method = $HttpMethod
+        Uri    = "$GitlabUrl/api/$Api/$Path$SerializedQuery"
+        Header = $Headers
+        Proxy  = $ProxyUrl ?? $Site.ProxyUrl
+    }
     if($MaxPages -gt 1) {
         $RestMethodParams.FollowRelLink = $true
         $RestMethodParams.MaximumFollowRelLink = $MaxPages
@@ -143,21 +149,14 @@ function Invoke-GitlabApi {
         $RestMethodParams.Body        = $Body | ConvertTo-Json
     }
 
+    $HostOutput = "$($RestMethodParams | ConvertTo-Json)"
+
     if($WhatIf) {
-        $SerializedParams = ""
-        if($RestMethodParams.Count -gt 0) {
-            $SerializedParams = $RestMethodParams.Keys | 
-                ForEach-Object {
-                    "-$_ `"$($RestMethodParams[$_])`""
-                } |
-                Join-String -Separator " "
-            $SerializedParams += " "
-        }
-        Write-Host "WhatIf: $HttpMethod $Uri $SerializedParams"
+        Write-Host "WhatIf: $HostOutput"
     }
     else {
-        Write-Verbose "$HttpMethod $Uri"
-        $Result = Invoke-RestMethod -Method $HttpMethod -Uri $Uri -Header $Headers @RestMethodParams
+        Write-Verbose "$HostOutput"
+        $Result = Invoke-RestMethod @RestMethodParams
         if($MaxPages -gt 1) {
             # Unwrap pagination container
             $Result | ForEach-Object { 
