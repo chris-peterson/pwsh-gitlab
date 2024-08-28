@@ -138,10 +138,13 @@ function Invoke-GitlabApi {
         Method = $HttpMethod
         Uri    = "$GitlabUrl/api/$Api/$Path$SerializedQuery"
         Header = $Headers
-        Proxy  = $ProxyUrl ?? $Site.ProxyUrl
+    }
+    $Proxy  = $ProxyUrl ?? $Site.ProxyUrl
+    if (-not [string]::IsNullOrWhiteSpace($Proxy)) {
+        Write-Verbose "Using proxy $Proxy"
     }
     if($MaxPages -gt 1) {
-        $RestMethodParams.FollowRelLink = $true
+        $RestMethodParams.FollowRelLink        = $true
         $RestMethodParams.MaximumFollowRelLink = $MaxPages
     }
     if ($Body.Count -gt 0) {
