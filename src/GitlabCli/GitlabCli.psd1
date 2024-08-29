@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.117.2'
+    ModuleVersion = '1.118.0'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,8 +27,8 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* https://github.com/chris-peterson/pwsh-gitlab/issues/94
-* https://github.com/chris-peterson/pwsh-gitlab/issues/97
+* Wrap pipeline schedule ownership transfer
+* Support impersonation session
 '@
         }
     }
@@ -66,6 +66,7 @@
         'Notes.psm1'
         'PersonalAccessTokens.psm1'
         'Pipelines.psm1'
+        'PipelineSchedules.psm1'
         'Projects.psm1'
         'ProjectHooks.psm1'
         'RepositoryFiles.psm1'
@@ -202,18 +203,20 @@
         'Get-GitlabPipelineVariable'
         'New-GitlabPipeline'
         'Remove-GitlabPipeline'
-        'Get-GitlabPipelineSchedule'
-        'New-GitlabPipelineSchedule'
-        'Update-GitlabPipelineSchedule'
-        'Enable-GitlabPipelineSchedule'
-        'Disable-GitlabPipelineSchedule'
-        'Remove-GitlabPipelineSchedule'
         'Get-GitlabPipelineScheduleVariable'
         'New-GitlabPipelineScheduleVariable'
         'Remove-GitlabPipelineScheduleVariable'
         'Update-GitlabPipelineScheduleVariable'
         'New-GitlabScheduledPipeline'
         'Get-GitlabPipelineBridge'
+
+        # Pipeline Schedules
+        'Get-GitlabPipelineSchedule'
+        'New-GitlabPipelineSchedule'
+        'Update-GitlabPipelineSchedule'
+        'Enable-GitlabPipelineSchedule'
+        'Disable-GitlabPipelineSchedule'
+        'Remove-GitlabPipelineSchedule'
 
         # Jobs
         'Get-GitlabJob'
@@ -250,6 +253,8 @@
         'Get-GitlabUser'
         'Get-GitlabCurrentUser'
         'Block-GitlabUser'
+        'Start-GitlabUserImpersonation'
+        'Stop-GitlabUserImpersonation'
         'Unblock-GitlabUser'
 
         # Events

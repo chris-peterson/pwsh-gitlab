@@ -265,3 +265,74 @@ function Get-GitlabCurrentUser {
 
     Get-GitlabUser -Me -SiteUrl $SiteUrl
 }
+
+function Start-GitlabUserImpersonation {
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('Id')]
+        [Alias('Username')]
+        [Alias('EmailAddress')]
+        [string]
+        $UserId,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+    $User = Get-GitlabUser $UserId
+
+    # https://docs.gitlab.com/ee/api/users.html#create-an-impersonation-token
+    $Parameters = @{
+        Method  = 'POST'
+        Path    = "users/$($User.Id)/impersonation_tokens"
+        Body = @{
+            name = "pwsh-gitlab temporary impersonation token $($User.Username)"
+            expires_at = (Get-Date).AddDays(1).ToString('yyyy-MM-dd')
+            scopes = @('api', 'read_user')
+        }
+        SiteUrl = $SiteUrl
+    }
+    if ($PSCmdlet.ShouldProcess("$($User.Username)", "start impersonation")) {
+
+        if ($global:GitlabUserImpersonationSession) {
+            Write-Error "Impersonation session already started by $($global:GitlabUserImpersonationSession.StartedBy).  Call 'Stop-GitlabUserImpersonation' before attempting a new session."
+        }
+
+        $Result = Invoke-GitlabApi @Parameters
+        $global:GitlabUserImpersonationSession = @{
+            Id       = $Result.id
+            UserId   = $Result.user_id
+            Username = $User.Username
+            Token    = $Result.token
+        }
+    }
+}
+
+function Stop-GitlabUserImpersonation {
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    if ($PSCmdlet.ShouldProcess("Impersonation session for $($global:GitlabUserImpersonationSession.Username)", "stop")) {
+        if ($global:GitlabUserImpersonationSession) {
+            # https://docs.gitlab.com/ee/api/users.html#revoke-an-impersonation-token
+            $Parameters = @{
+                Method  = 'DELETE'
+                Path    = "users/$($global:GitlabUserImpersonationSession.UserId)/impersonation_tokens/$($global:GitlabUserImpersonationSession.Id)"
+                SiteUrl = $SiteUrl
+            }
+            # NOTE: important that we clear first as the revoke API requires admin
+            $global:GitlabUserImpersonationSession = $null
+            if (Invoke-GitlabApi @Parameters) {
+                Write-Host "Impersonation session ($($global:GitlabUserImpersonationSession.Username)) stopped"
+            }
+        }
+        else {
+            Write-Warning "No impersonation session started.  Call 'Start-GitlabUserImpersonation' to start one."
+        }
+    }
+}

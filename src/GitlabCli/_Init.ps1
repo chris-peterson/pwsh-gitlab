@@ -59,3 +59,4 @@ $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.Variable'                  = ''
 }
 $global:GitlabJobLogSections            = New-Object 'Collections.Generic.Stack[string]'
+$global:GitlabUserImpersonationSession = $null

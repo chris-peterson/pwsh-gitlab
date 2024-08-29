@@ -108,7 +108,10 @@ function Invoke-GitlabApi {
     $Headers = @{
         Accept = 'application/json'
     }
-    if (-not $AccessToken) {
+    if ($global:GitlabUserImpersonationSession) {
+        Write-Verbose "Impersonating API call as '$($global:GitlabUserImpersonationSession.Username)'..."
+        $AccessToken = $global:GitlabUserImpersonationSession.Token
+    } elseif (-not $AccessToken) {
         $AccessToken = $Site.AccessToken 
     }
     if ($AccessToken) {
@@ -142,7 +145,7 @@ function Invoke-GitlabApi {
     }
     $Proxy  = $ProxyUrl ?? $Site.ProxyUrl
     if (-not [string]::IsNullOrWhiteSpace($Proxy)) {
-        Write-Verbose "Using proxy $Proxy"
+        Write-Verbose "Using proxy $Proxy..."
     }
     if($MaxPages -gt 1) {
         $RestMethodParams.FollowRelLink        = $true
@@ -159,8 +162,9 @@ function Invoke-GitlabApi {
         Write-Host "WhatIf: $HostOutput"
     }
     else {
-        Write-Verbose "$HostOutput"
+        Write-Verbose "Request: $HostOutput"
         $Result = Invoke-RestMethod @RestMethodParams
+        Write-Verbose "Response: $($Result | ConvertTo-Json)"
         if($MaxPages -gt 1) {
             # Unwrap pagination container
             $Result | ForEach-Object { 
