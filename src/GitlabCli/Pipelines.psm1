@@ -161,7 +161,12 @@ function Get-GitlabPipeline {
 
                 foreach ($Downstream in $DownstreamList) {
                     $MatchingBridge = $Bridges | Where-Object { $_.DownstreamPipeline.id -eq $Downstream.Id }
-                    $DownstreamMap[$MatchingBridge.Name] = $Downstream
+                    if ($MatchingBridge) {
+                        $DownstreamMap[$MatchingBridge.Name] = $Downstream
+                    }
+                    else {
+                        Write-Debug -Message "No bridge found for $($Downstream.Id)"
+                    }
                 }
                 $Pipeline | Add-Member -MemberType 'NoteProperty' -Name 'Downstream' -Value $DownstreamMap
             }
