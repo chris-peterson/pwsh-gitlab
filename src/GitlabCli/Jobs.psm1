@@ -1,4 +1,3 @@
-# https://docs.gitlab.com/ee/api/jobs.html
 function Get-GitlabJob {
     [Alias('job')]
     [Alias('jobs')]
@@ -43,35 +42,50 @@ function Get-GitlabJob {
         $IncludeVariables,
 
         [Parameter()]
+        [uint]
+        $MaxPages,
+
+        [switch]
+        [Parameter()]
+        $All,
+
+        [Parameter()]
         [string]
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
+    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+    $Project = Get-GitlabProject -ProjectId $ProjectId
     $ProjectId = $Project.Id
 
-    $GitlabApiArguments = @{
-        HttpMethod="GET"
-        Query=@{}
-        Path = "projects/$ProjectId/jobs"
-        SiteUrl = $SiteUrl
+    $Request = @{
+        HttpMethod = "GET"
+        Query      = @{}
+        SiteUrl    = $SiteUrl
+        MaxPages   = $MaxPages
     }
 
-    if ($PipelineId) {
-        $GitlabApiArguments.Path = "projects/$ProjectId/pipelines/$PipelineId/jobs"
-    }
     if ($JobId) {
-        $GitlabApiArguments.Path = "projects/$ProjectId/jobs/$JobId"
+        # https://docs.gitlab.com/ee/api/jobs.html#get-a-single-job
+        $Request.Path = "projects/$ProjectId/jobs/$JobId"
+    }
+    elseif ($PipelineId) {
+        # https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-jobs
+        $Request.Path = "projects/$ProjectId/pipelines/$PipelineId/jobs"
+    }
+    else {
+        # https://docs.gitlab.com/ee/api/jobs.html#list-project-jobs
+        $Request.Path = "projects/$ProjectId/jobs"
     }
 
     if ($Scope) {
-        $GitlabApiArguments['Query']['scope'] = $Scope
+        $Request.Query.scope = $Scope
     }
     if ($IncludeRetried) {
-        $GitlabApiArguments['Query']['include_retried'] = $true
+        $Request.Query.include_retried = $true
     }
 
-    $Jobs = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Job'
+    $Jobs = Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Job'
 
     if ($Stage) {
         $Jobs = $Jobs |

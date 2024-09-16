@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.118.0'
+    ModuleVersion = '1.118.1'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,8 +27,8 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* Wrap pipeline schedule ownership transfer
-* Support impersonation session
+* bugfix for missing pipeline bridges
+* add pagination for Get-GitlabJob
 '@
         }
     }
