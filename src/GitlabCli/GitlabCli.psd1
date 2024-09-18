@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.118.1'
+    ModuleVersion = '1.118.2'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,8 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* bugfix for missing pipeline bridges
-* add pagination for Get-GitlabJob
+* improve handling of graphql errors
 '@
         }
     }
