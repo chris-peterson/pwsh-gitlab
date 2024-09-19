@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.118.2'
+    ModuleVersion = '1.119.0'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* improve handling of graphql errors
+* copy to clipboard for PAT
 '@
         }
     }

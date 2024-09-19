@@ -79,6 +79,8 @@ The following switches are supported when possible:
 
 `-Recurse`: For tree-based operations, opt-in to recurse children (e.g. `Get-GitlabProject -GroupId 'mygroup' -Recurse`)
 
+`-CopyToClipboard` : For token-based operations, copy the resultant token to the clipboard rather than displaying in the terminal
+
 ## Global Behaviors
 
 If invoking commands from within a git repository, `.` can be used for `ProjectId` / `BranchName` to use the local context.

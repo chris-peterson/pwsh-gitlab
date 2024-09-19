@@ -144,6 +144,10 @@ function New-GitlabPersonalAccessToken {
         [uint]
         $ExpireInMonths,
 
+        [switch]
+        [Parameter()]
+        $CopyToClipboard,
+
         [Parameter()]
         [string]
         $SiteUrl
@@ -174,9 +178,11 @@ function New-GitlabPersonalAccessToken {
 
     if ($PSCmdlet.ShouldProcess("$($Request.Path)", "create personal access token $($Request | ConvertTo-Json)")) {
         $Response = Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.NewPersonalAccessToken'
-        Set-Clipboard -Value $Response.Token
-        Write-Warning "New personal access token copied to clipboard"
-        $Response
+        if ($CopyToClipboard) {
+            $Response.Token | Set-Clipboard
+        } else {
+            $Response
+        }
     }
 }
 
