@@ -164,7 +164,7 @@ function Invoke-GitlabApi {
     else {
         Write-Verbose "Request: $HostOutput"
         $Result = Invoke-RestMethod @RestMethodParams
-        Write-Verbose "Response: $($Result | ConvertTo-Json)"
+        Write-Verbose "Response: $($Result | ConvertTo-Json -Depth 10)"
         if($MaxPages -gt 1) {
             # Unwrap pagination container
             $Result | ForEach-Object { 

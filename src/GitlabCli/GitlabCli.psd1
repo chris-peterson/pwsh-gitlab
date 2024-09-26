@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.119.0'
+    ModuleVersion = '1.119.1'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* copy to clipboard for PAT
+* bugfix: suppress frequent JSON truncation warnings
 '@
         }
     }
