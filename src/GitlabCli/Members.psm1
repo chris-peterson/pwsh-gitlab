@@ -114,7 +114,7 @@ function Add-GitlabGroupMember {
     )
 
     $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
-    $Group = Get-GitlabGroup -GroupId $GroupId -SiteUrl $SiteUrl -WhatIf:$false
+    $Group = Get-GitlabGroup -GroupId $GroupId -SiteUrl $SiteUrl
 
     $Request = @{
         user_id = $User.Id

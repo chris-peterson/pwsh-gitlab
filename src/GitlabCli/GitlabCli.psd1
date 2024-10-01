@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.119.1'
+    ModuleVersion = '1.119.2'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* bugfix: suppress frequent JSON truncation warnings
+* bugfix: Remove WhatIf from cmdlet that no longer supports it
 '@
         }
     }
