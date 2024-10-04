@@ -4,6 +4,7 @@ function Get-GitlabPersonalAccessToken {
     [CmdletBinding(DefaultParameterSetName='Default')]
     param(
         [Parameter(Position=0, ParameterSetName='Default')]
+        [Alias('Id')]
         [string]
         $TokenId,
 
@@ -110,11 +111,14 @@ function Get-GitlabPersonalAccessToken {
         $Request.Query.last_used_before = $LastUsedBefore
     }
     Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.PersonalAccessToken' | ForEach-Object {
-        $ExpiresAt = [datetime]::Parse($_.ExpiresAt)
-        $_.PSObject.Properties.Remove('ExpiresAt')
-        $_ | Add-Member -PassThru -NotePropertyMembers @{
-            ExpiresAt = $ExpiresAt
+        if ($_.ExpiresAt) {
+            $ExpiresAt = [datetime]::Parse($_.ExpiresAt)
+            $_.PSObject.Properties.Remove('ExpiresAt')
+            $_ | Add-Member -NotePropertyMembers @{
+                ExpiresAt = $ExpiresAt
+            }
         }
+        $_
     } | Sort-Object LastUsedAtSortable -Descending
 }
 

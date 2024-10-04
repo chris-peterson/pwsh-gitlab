@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.119.2'
+    ModuleVersion = '1.119.3'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* bugfix: Remove WhatIf from cmdlet that no longer supports it
+* bugfix: support non-expiring PATs
 '@
         }
     }
