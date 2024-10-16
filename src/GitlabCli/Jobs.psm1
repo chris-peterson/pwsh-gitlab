@@ -1,7 +1,7 @@
 function Get-GitlabJob {
     [Alias('job')]
     [Alias('jobs')]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='Query')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -11,12 +11,12 @@ function Get-GitlabJob {
         [string]
         $PipelineId,
 
-        [Parameter(ParameterSetName='ByJobId', Mandatory)]
+        [Parameter(ParameterSetName='ById', Mandatory)]
         [Alias('Id')]
         [string]
         $JobId,
 
-        [Parameter()]
+        [Parameter(ParameterSetName='Query')]
         [string]
         [ValidateSet('created', 'pending', 'running', 'failed', 'success', 'canceled', 'skipped', 'manual')]
         $Scope,
@@ -29,7 +29,7 @@ function Get-GitlabJob {
         [string]
         $Name,
 
-        [Parameter()]
+        [Parameter(ParameterSetName='ByPipeline')]
         [switch]
         $IncludeRetried,
 

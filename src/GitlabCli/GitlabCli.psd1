@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.119.3'
+    ModuleVersion = '1.119.4'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* bugfix: support non-expiring PATs
+* bugfix: get job cmdlet parameter group confusion
 '@
         }
     }
