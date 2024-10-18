@@ -114,12 +114,10 @@ function Get-GitlabProject {
 
         [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter()]
-        $WhatIf
+        $SiteUrl
     )
+
+    $ProjectId = $ProjectId.TrimEnd('/')
 
     $MaxPages = Get-GitlabMaxPages -MaxPages $MaxPages -All:$All
     $Projects = @()
@@ -131,7 +129,7 @@ function Get-GitlabProject {
                     throw "Could not infer project based on current directory ($(Get-Location))"
                 }
             }
-            $Projects = Invoke-GitlabApi GET "projects/$($ProjectId | ConvertTo-UrlEncoded)" -SiteUrl $SiteUrl -WhatIf:$WhatIf
+            $Projects = Invoke-GitlabApi GET "projects/$($ProjectId | ConvertTo-UrlEncoded)" -SiteUrl $SiteUrl
         }
         ByGroup {
             $Group = Get-GitlabGroup $GroupId
@@ -141,7 +139,7 @@ function Get-GitlabProject {
             if (-not $IncludeArchived) {
                 $Query['archived'] = 'false'
             }
-            $Projects = Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+            $Projects = Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPages $MaxPages -SiteUrl $SiteUrl |
                 Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
                 Sort-Object -Property 'Name'
         }
@@ -160,7 +158,7 @@ function Get-GitlabProject {
         ByTopics {
             $Projects = Invoke-GitlabApi GET "projects" -Query @{
                 topic = $Topics -join ','
-            } -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf
+            } -MaxPages $MaxPages -SiteUrl $SiteUrl
         }
         ByUrl {
             $Url -match "$($(Get-DefaultGitlabSite).Url)/(?<ProjectId>.*)" | Out-Null

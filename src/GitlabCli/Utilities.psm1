@@ -219,6 +219,7 @@ function New-WrapperObject {
             
             # aliases for common property names
             Add-AliasedProperty -On $Wrapper -From 'Url' -To 'WebUrl'
+            Add-AliasedProperty -On $Wrapper -From 'Url' -To 'TargetUrl'
             
             if ($DisplayType) {
                 $Wrapper.PSTypeNames.Insert(0, $DisplayType)

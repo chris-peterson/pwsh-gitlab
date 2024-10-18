@@ -226,6 +226,15 @@
     </Members>
   </Type>
   <Type>
+    <Name>Gitlab.Todo</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Type</Name>
+        <GetScriptBlock>$this.TargetType</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Gitlab.Project</Name>
     <Members>
       <ScriptProperty>

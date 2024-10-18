@@ -92,39 +92,47 @@ function Get-GitlabIssue {
         Sort-Object SortKey
 }
 
-# https://docs.gitlab.com/ee/api/issues.html#new-issue
 function New-GitlabIssue {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory)]
         [string]
         $Title,
 
-        [Parameter(Position=1, Mandatory=$false)]
+        [Parameter(Position=1)]
         [string]
         $Description,
 
-        [Parameter(Mandatory=$false)]
-        [string]
-        $SiteUrl,
-
+        [Parameter()]
+        [Alias('NoTodo')]
         [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $MarkTodoAsRead,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
-    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
-
-    Invoke-GitlabApi POST "projects/$ProjectId/issues" -Body @{
+    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $Request = @{
         title = $Title
         description = $Description
         assignee_id = $(Get-GitlabUser -Me).Id
-    } -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-        New-WrapperObject 'Gitlab.Issue'
+    }
+
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "Create new issue ($($Request | ConvertTo-Json))")) {
+        # https://docs.gitlab.com/ee/api/issues.html#new-issue
+        $Issue = Invoke-GitlabApi POST "projects/$($Project.Id)/issues" -Body $Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Issue'
+        if ($MarkTodoAsRead) {
+            $Todo = Get-GitlabTodo -SiteUrl $SiteUrl | Where-Object TargetUrl -eq $Issue.WebUrl
+            Clear-GitlabTodo -TodoId $Todo.Id -SiteUrl $SiteUrl | Out-Null
+        }
+        $Issue
+    }
 }
 
 # https://docs.gitlab.com/ee/api/issues.html#edit-issue
@@ -281,24 +289,22 @@ function Open-GitlabIssue {
 }
 
 function Close-GitlabIssue {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $IssueId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    Update-GitlabIssue -ProjectId $ProjectId $IssueId -StateEvent 'close' -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    if ($PSCmdlet.ShouldProcess("issue #$IssueId", "close")) {
+        Update-GitlabIssue -ProjectId $ProjectId -IssueId $IssueId -StateEvent 'close' -SiteUrl $SiteUrl
+    }
 }

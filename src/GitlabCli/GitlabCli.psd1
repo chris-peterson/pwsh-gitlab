@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.119.4'
+    ModuleVersion = '1.120.0'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,10 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* bugfix: get job cmdlet parameter group confusion
+* feature: wrap TODO apis; allow clearing TODO as part of creation (https://github.com/chris-peterson/pwsh-gitlab/issues/56)
+* enhance: better preview for issue cmdlets
+* enhance: allow a project to have a trailing slash
+* enhance: Get-GitlabProject no longer supports WhatIf
 '@
         }
     }
@@ -72,6 +75,7 @@
         'Releases.psm1'
         'Runners.psm1'
         'Search.psm1'
+        'Todos.psm1'
         'Topics.psm1'
         'Users.psm1'
         'Utilities.psm1'
@@ -241,6 +245,10 @@
         # Search
         'Search-Gitlab'
         'Search-GitlabProject'
+
+        # Todo
+        'Get-GitlabTodo'
+        'Clear-GitlabTodo'
 
         # Topics
         'Get-GitlabTopic'
