@@ -144,15 +144,13 @@ function Get-GitlabProject {
                 Sort-Object -Property 'Name'
         }
         ByUser {
-            # https://docs.gitlab.com/ee/api/projects.html#list-user-projects
-
             if ($Mine) {
                 if ($UserId) {
                     Write-Warning "Ignoring '-UserId $UserId' parameter since -Mine was also provided"
                 }
                 $UserId = Get-GitlabUser -Me | Select-Object -ExpandProperty Username
             }
-
+            # https://docs.gitlab.com/ee/api/projects.html#list-user-projects
             $Projects = Invoke-GitlabApi GET "users/$UserId/projects"
         }
         ByTopics {
@@ -161,9 +159,8 @@ function Get-GitlabProject {
             } -MaxPages $MaxPages -SiteUrl $SiteUrl
         }
         ByUrl {
-            $Url -match "$($(Get-DefaultGitlabSite).Url)/(?<ProjectId>.*)" | Out-Null
+            $Url -match "$($(Get-DefaultGitlabSite).Url)/?(?<ProjectId>.*)" | Out-Null
             if ($Matches) {
-                $ProjectId = $Matches.ProjectId
                 $ProjectId = $Matches.ProjectId
                 Get-GitlabProject -ProjectId $ProjectId
             } else {
@@ -612,7 +609,7 @@ function Set-GitlabProjectVariable {
         $IsExistingVariable = $false
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "set $($IsExistingVariable ? 'existing' : 'new') project variable $(($Request | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "set $($IsExistingVariable ? 'existing' : 'new') project variable ($Key) $(($Request | ConvertTo-Json))")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/project_level_variables.html#update-variable
             Invoke-GitlabApi PUT "projects/$($Project.Id)/variables/$Key" -Body $Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
