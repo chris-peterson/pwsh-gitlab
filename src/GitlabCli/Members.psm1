@@ -201,8 +201,58 @@ function Get-GitlabProjectMember {
         Sort-Object -Property $(Get-GitlabMembershipSortKey)
 }
 
-# https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project
+function Set-GitlabProjectMember {
+    [CmdletBinding(SupportsShouldProcess)]
+    param(
+        [Parameter(Mandatory=$false)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Position=0, Mandatory=$true)]
+        [Alias('Username')]
+        [string]
+        $UserId,
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [ValidateSet('guest', 'reporter', 'developer', 'maintainer', 'owner')]
+        [string]
+        $AccessLevel,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl
+    )
+
+    $Existing = $Null
+    try {
+        $Existing = Get-GitlabProjectMember -ProjectId @ProjectId -UserId $UserId -SiteUrl $SiteUrl
+    }
+    catch {
+        Write-Verbose "User '$UserId' is not a member of '$ProjectId'"
+    }
+
+    if ($Existing) {
+        # https://docs.gitlab.com/ee/api/members.html#edit-a-member-of-a-group-or-project
+        $Request = @{
+            HttpMethod = 'PUT'
+            Path       = "projects/$($Existing.ProjectId)/members/$($Existing.Id)"
+            Body      = @{
+                access_level = Get-GitlabMemberAccessLevel $AccessLevel
+            }
+            SiteUrl = $SiteUrl
+        }
+        if ($PSCmdlet.ShouldProcess("Project '$ProjectId'", "update '$($Existing.Name)' membership to '$AccessLevel'")) {
+            Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Member'
+        }
+    } else {
+        if ($PSCmdlet.ShouldProcess("Project '$ProjectId'", "add '$UserId' as '$AccessLevel'")) {
+            Add-GitlabProjectMember -ProjectId $ProjectId -UserId $UserId -AccessLevel $AccessLevel -SiteUrl $SiteUrl
+        }
+    }
+}
+
 function Add-GitlabProjectMember {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -220,22 +270,26 @@ function Add-GitlabProjectMember {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
-    $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl -WhatIf:$false
+    $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl
 
-    $Query = @{
-        user_id = $User.Id
-        access_level = Get-GitlabMemberAccessLevel $AccessLevel
+    $Request = @{
+        # https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project
+        HttpMethod = 'POST'
+        Path       = "projects/$($Project.Id)/members"
+        Body       = @{
+            user_id      = $User.Id
+            access_level = Get-GitlabMemberAccessLevel $AccessLevel
+        }
+        SiteUrl = $SiteUrl
     }
-    Invoke-GitlabApi POST "projects/$($Project.Id)/members" -Query $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-        New-WrapperObject 'Gitlab.Member'
+
+    if ($PSCmdlet.ShouldProcess($Project.PathWithNamespace, "grant '$($User.Username)' $AccessLevel membership")) {
+        Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Member'
+    }
 }
 
 # https://docs.gitlab.com/ee/api/members.html#remove-a-member-from-a-group-or-project
