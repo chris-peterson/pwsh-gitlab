@@ -756,7 +756,7 @@ function Add-GitlabGroupToProject {
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]

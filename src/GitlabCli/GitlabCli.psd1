@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.120.2'
+    ModuleVersion = '1.120.3'
 
     RequiredModules = @('powershell-yaml')
 
@@ -32,6 +32,7 @@
 * enhance: better preview for issue cmdlets
 * enhance: allow a project to have a trailing slash
 * enhance: Get-GitlabProject no longer supports WhatIf
+* bugfix: Add group to project should default to current project
 '@
         }
     }
