@@ -776,7 +776,7 @@ function Add-GitlabGroupToProject {
     # https://docs.gitlab.com/ee/api/projects.html#share-project-with-group
     $Request = @{
         Method = 'POST'
-        Path = "projects/$($ProjectId)/share"
+        Path = "projects/$($Project.Id)/share"
         Body = @{
             group_id     = $Group.Id
             group_access = $AccessLiteral
