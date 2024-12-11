@@ -318,7 +318,6 @@ function Copy-GitlabProject {
     }
 }
 
-# https://docs.gitlab.com/ee/api/projects.html#create-project
 function New-GitlabProject {
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -327,7 +326,7 @@ function New-GitlabProject {
         [string]
         $ProjectName,
 
-        [Parameter(ValueFromPipelineByPropertyName=$true, ParameterSetName='Group')]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName='Group')]
         [Alias('Group')]
         [string]
         $DestinationGroup,
@@ -340,6 +339,10 @@ function New-GitlabProject {
         [ValidateSet('private', 'internal', 'public')]
         [string]
         $Visibility = 'internal',
+
+        [Parameter()]
+        [uint]
+        $BuildTimeout = 0,
 
         [switch]
         [Parameter()]
@@ -361,12 +364,18 @@ function New-GitlabProject {
         $NamespaceId = $null # defaults to current user
     }
 
-    if ($PSCmdlet.ShouldProcess($NamespaceId, "create new project '$ProjectName'" )) {
-        $Project = Invoke-GitlabApi POST "projects" @{
-            name = $ProjectName
-            namespace_id = $NamespaceId
-            visibility = $Visibility
-        } -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Project'
+    $Request = @{
+        name = $ProjectName
+        namespace_id = $NamespaceId
+        visibility = $Visibility
+    }
+    if ($BuildTimeout -gt 0) {
+        $Request.build_timeout = $BuildTimeout
+    }
+
+    if ($PSCmdlet.ShouldProcess($NamespaceId, "create new project '$ProjectName' $($Request | ConvertTo-Json)" )) {
+        # https://docs.gitlab.com/ee/api/projects.html#create-project
+        $Project = Invoke-GitlabApi POST "projects" -Body $Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Project'
     
         if ($CloneNow) {
             git clone $Project.SshUrlToRepo
@@ -421,6 +430,10 @@ function Update-GitlabProject {
         $CiForwardDeployment,
 
         [Parameter()]
+        [uint]
+        $BuildTimeout = 0,
+
+        [Parameter()]
         [ValidateSet('disabled', 'private', 'enabled')]
         [string]
         $RepositoryAccessLevel,
@@ -442,44 +455,47 @@ function Update-GitlabProject {
 
     $Project = Get-GitlabProject $ProjectId
 
-    $Query = @{}
+    $Request = @{}
 
-    if($CiForwardDeployment){
-        $Query.ci_forward_deployment_enabled = $CiForwardDeployment
+    if ($BuildsAccessLevel) {
+        $Request.builds_access_level = $BuildsAccessLevel
     }
     if ($BuildGitStrategy) {
-        $Query.build_git_strategy = $BuildGitStrategy
+        $Request.build_git_strategy = $BuildGitStrategy
+    }
+    if ($BuildTimeout -gt 0) {
+        $Request.build_timeout = $BuildTimeout
     }
     if ($CiDefaultGitDepth) {
-        $Query.ci_default_git_depth = $CiDefaultGitDepth
+        $Request.ci_default_git_depth = $CiDefaultGitDepth
     }
-    if ($Visibility) {
-        $Query.visibility = $Visibility
-    }
-    if ($Name) {
-        $Query.name = $Name
-    }
-    if ($Path) {
-        $Query.path = $Path
+    if ($CiForwardDeployment){
+        $Request.ci_forward_deployment_enabled = $CiForwardDeployment
     }
     if ($DefaultBranch) {
-        $Query.default_branch = $DefaultBranch
+        $Request.default_branch = $DefaultBranch
     }
-    if ($Topics) {
-        $Query.topics = $Topics -join ','
-    }
-    if ($RepositoryAccessLevel) {
-        $Query.repository_access_level = $RepositoryAccessLevel
-    }
-    if ($BuildsAccessLevel) {
-        $Query.builds_access_level = $BuildsAccessLevel
+    if ($Name) {
+        $Request.name = $Name
     }
     if ($OnlyAllowMergeIfAllDiscussionsAreResolved) {
-        $Query.only_allow_merge_if_all_discussions_are_resolved = $OnlyAllowMergeIfAllDiscussionsAreResolved
+        $Request.only_allow_merge_if_all_discussions_are_resolved = $OnlyAllowMergeIfAllDiscussionsAreResolved
+    }
+    if ($Path) {
+        $Request.path = $Path
+    }
+    if ($RepositoryAccessLevel) {
+        $Request.repository_access_level = $RepositoryAccessLevel
+    }
+    if ($Topics) {
+        $Request.topics = $Topics -join ','
+    }
+    if ($Visibility) {
+        $Request.visibility = $Visibility
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "update project ($($Query | ConvertTo-Json))")) {
-        Invoke-GitlabApi PUT "projects/$($Project.Id)" $Query -SiteUrl $SiteUrl |
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "update project ($($Request | ConvertTo-Json))")) {
+        Invoke-GitlabApi PUT "projects/$($Project.Id)" -Body $Request -SiteUrl $SiteUrl |
             New-WrapperObject 'Gitlab.Project'
     }
 }

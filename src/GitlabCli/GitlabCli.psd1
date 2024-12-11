@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.120.4'
+    ModuleVersion = '1.121.0'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,12 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* feature: wrap TODO apis; allow clearing TODO as part of creation (https://github.com/chris-peterson/pwsh-gitlab/issues/56)
-* feature: Set-GitlabProjectMember
-* enhance: better preview for issue cmdlets
-* enhance: allow a project to have a trailing slash
-* enhance: Get-GitlabProject no longer supports WhatIf
-* bugfix: Add group to project should default to current project
+* feature: Set build timeout for projects
 '@
         }
     }
