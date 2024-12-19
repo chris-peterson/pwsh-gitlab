@@ -82,6 +82,15 @@
     </Members>
   </Type>
   <Type>
+    <Name>Gitlab.Milestone</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>UpdatedAtSortable</Name>
+        <GetScriptBlock>$this.UpdatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Gitlab.MergeRequestApprovalRule</Name>
     <Members>
       <ScriptProperty>

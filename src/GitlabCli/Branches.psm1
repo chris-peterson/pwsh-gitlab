@@ -12,27 +12,23 @@ function Get-GitlabProtectedBranchAccessLevel {
 function Get-GitlabBranch {
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
     param (
-        [Parameter(ParameterSetName="ByProjectId", Mandatory=$false, ValueFromPipelineByPropertyName)]
-        [Parameter(ParameterSetName="ByRef", Mandatory=$false, ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName="ByProjectId", ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName="ByRef", ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(ParameterSetName="ByProjectId",Mandatory=$false)]
+        [Parameter(ParameterSetName="ByProjectId")]
         [string]
         $Search,
 
-        [Parameter(ParameterSetName="ByRef", Mandatory=$true)]
+        [Parameter(ParameterSetName="ByRef", Mandatory, Position=0)]
         [Alias("Branch")]
         [string]
         $Ref,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
@@ -48,7 +44,7 @@ function Get-GitlabBranch {
         SiteUrl    = $SiteUrl
     }
 
-    switch($PSCmdlet.ParameterSetName) {
+    switch ($PSCmdlet.ParameterSetName) {
         ByProjectId {
             if($Search) {
                 $GitlabApiArguments.Query["search"] = $Search
@@ -58,11 +54,11 @@ function Get-GitlabBranch {
             $GitlabApiArguments.Path += "/$($Ref)"
         }
         default {
-            throw "Parameterset $($PSCmdlet.ParameterSetName) is not implemented"
+            throw "$($PSCmdlet.ParameterSetName) is not implemented"
         }
     }
 
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf
+    Invoke-GitlabApi @GitlabApiArguments
         | New-WrapperObject 'Gitlab.Branch'
         | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id -PassThru
         | Sort-Object -Descending LastUpdated

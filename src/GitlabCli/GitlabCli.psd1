@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.121.0'
+    ModuleVersion = '1.122.0'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,8 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* feature: Set build timeout for projects
+* feature: implement milestones
+* enhance: add options for issues/MRs
 '@
         }
     }
@@ -62,6 +63,7 @@
         'Jobs.psm1'
         'Members.psm1'
         'MergeRequests.psm1'
+        'Milestones.psm1'
         'Notes.psm1'
         'PersonalAccessTokens.psm1'
         'Pipelines.psm1'
@@ -191,6 +193,9 @@
         'Get-GitlabMergeRequestApprovalRule'
         'New-GitlabMergeRequestApprovalRule'
         'Remove-GitlabMergeRequestApprovalRule'
+
+        # Milestones
+        'Get-GitlabMilestone'
 
         # PATs
         'Get-GitlabPersonalAccessToken'

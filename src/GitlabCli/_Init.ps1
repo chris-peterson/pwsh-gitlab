@@ -17,8 +17,6 @@ $global:GitlabConsoleColors     = @{
     White       = '1;37'
     Yellow      = '1;33'
 }
-# https://docs.gitlab.com/ee/api/#id-vs-iid
-# TL;DR; it's a mess and we have to special-case specific entity types
 $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.AuditEvent'                = 'Id'
     'Gitlab.AccessToken'               = 'Id'
@@ -33,6 +31,7 @@ $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.Job'                       = 'Id'
     'Gitlab.Member'                    = 'Id'
     'Gitlab.MergeRequestApprovalRule'  = 'Id'
+    'Gitlab.Milestone'                 = 'Iid'
     'Gitlab.NewPersonalAccessToken'    = 'Id'
     'Gitlab.Note'                      = 'Id'
     'Gitlab.PersonalAccessToken'       = 'Id'

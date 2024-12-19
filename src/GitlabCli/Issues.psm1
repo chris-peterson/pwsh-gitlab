@@ -113,6 +113,10 @@ function New-GitlabIssue {
         $MarkTodoAsRead,
 
         [Parameter()]
+        [switch]
+        $Follow,
+
+        [Parameter()]
         [string]
         $SiteUrl
     )
@@ -130,6 +134,9 @@ function New-GitlabIssue {
         if ($MarkTodoAsRead) {
             $Todo = Get-GitlabTodo -SiteUrl $SiteUrl | Where-Object TargetUrl -eq $Issue.WebUrl
             Clear-GitlabTodo -TodoId $Todo.Id -SiteUrl $SiteUrl | Out-Null
+        }
+        if ($Follow) {
+            Start-Process $Issue.WebUrl
         }
         $Issue
     }

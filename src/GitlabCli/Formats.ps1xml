@@ -181,6 +181,44 @@
       </TableControl>
     </View>
     <View>
+      <Name>GitlabMilestone</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.Milestone</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+          </TableColumnHeader>
+          <TableColumnHeader>
+          </TableColumnHeader>
+          <TableColumnHeader>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>UpdatedAt</Label>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+                <Alignment>Right</Alignment>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Title</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>DueDate</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>UpdatedAtSortable</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>GitlabMergeRequestApprovalRule</Name>
       <ViewSelectedBy>
         <TypeName>Gitlab.MergeRequestApprovalRule</TypeName>

@@ -227,9 +227,9 @@ function Add-GitlabMergeRequestChangeSummary {
 function New-GitlabMergeRequest {
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
-        $ProjectId,
+        $ProjectId = '.',
 
         [Parameter(Position=1)]
         [string]
@@ -242,6 +242,15 @@ function New-GitlabMergeRequest {
         [Parameter(Position=3)]
         [string]
         $Title,
+
+        [Parameter()]
+        [string]
+        $MilestoneId,
+
+        [Parameter()]
+        [Alias('NoTodo')]
+        [switch]
+        $MarkTodoAsRead,
 
         [Parameter()]
         [switch]
@@ -270,20 +279,30 @@ function New-GitlabMergeRequest {
 
     $Me = Get-GitlabCurrentUser
 
-    $Request = @{
-        Method = 'POST'
-        Path   = "projects/$($Project.Id)/merge_requests"
-        Body   = @{
-            source_branch        = $SourceBranch
-            target_branch        = $TargetBranch
-            remove_source_branch = 'true'
-            assignee_id          = $Me.Id
-            title                = $Title
-        }
+    $Body = @{
+        source_branch        = $SourceBranch
+        target_branch        = $TargetBranch
+        remove_source_branch = 'true'
+        assignee_id          = $Me.Id
+        title                = $Title
+    }
+    if ($MilestoneId) {
+        $Body.milestone_id = $MilestoneId
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create merge request ($($Request | ConvertTo-Json))")) {
+    $Request = @{
+        Method = 'POST'
+        # https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
+        Path = "projects/$($Project.Id)/merge_requests"
+        Body = $Body
+    }
+
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create merge request ($($Body | ConvertTo-Json))")) {
         $MergeRequest = Invoke-GitlabApi @Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.MergeRequest'
+        if ($MarkTodoAsRead) {
+            $Todo = Get-GitlabTodo -SiteUrl $SiteUrl | Where-Object TargetUrl -eq $MergeRequest.WebUrl
+            Clear-GitlabTodo -TodoId $Todo.Id -SiteUrl $SiteUrl | Out-Null
+        }
         if ($Follow) {
             Start-Process $MergeRequest.WebUrl
         }
@@ -438,6 +457,10 @@ function Update-GitlabMergeRequest {
 
         [Parameter()]
         [string]
+        $MilestoneId,
+
+        [Parameter()]
+        [string]
         $SiteUrl
     )
     $Project = Get-GitlabProject -ProjectId $ProjectId
@@ -475,6 +498,9 @@ function Update-GitlabMergeRequest {
         } | Select-Object -ExpandProperty Id)
     } elseif ($UnsetReviewers) {
         $Request.reviewer_ids = @()
+    }
+    if ($MilestoneId) {
+        $Request.milestone_id = $MilestoneId
     }
 
     if ($PSCmdlet.ShouldProcess("MR $MergeRequestId in $($Project.PathWithNamespace)", "update $($Request | ConvertTo-Json)")) {
