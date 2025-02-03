@@ -121,7 +121,7 @@ function Update-GitlabRunner {
 
         [Parameter()]
         [object]
-        [ValidateSet($null, $true, $false)]
+        [ValidateSet($null, 'true', 'false')]
         $Active,
 
         [Parameter()]
@@ -130,12 +130,12 @@ function Update-GitlabRunner {
 
         [Parameter()]
         [object]
-        [ValidateSet($null, $true, $false)]
+        [ValidateSet($null, 'true', 'false')]
         $RunUntaggedJobs,
 
         [Parameter()]
         [object]
-        [ValidateSet($null, $true, $false)]
+        [ValidateSet($null, 'true', 'false')]
         $Locked,
 
         [Parameter()]
@@ -177,14 +177,14 @@ function Update-GitlabRunner {
         $Params.Query.maximum_timeout = $MaximumTimeoutSeconds
     }
 
-    if ($Active -ne $null) {
-        $Params.Query.active = $Active.ToString().ToLower()
+    if ($Active) {
+        $Params.Query.active = $Active
     }
-    if ($RunUntaggedJobs -ne $null) {
-        $Params.Query.run_untagged = $RunUntaggedJobs.ToString().ToLower()
+    if ($RunUntaggedJobs) {
+        $Params.Query.run_untagged = $RunUntaggedJobs
     }
-    if ($Locked -ne $null) {
-        $Params.Query.locked = $Locked.ToString().ToLower()
+    if ($Locked) {
+        $Params.Query.locked = $Locked
     }
 
     if ($PSCmdlet.ShouldProcess("$($Params.Path)", "update ($($Params.Query | ConvertTo-Json))")) {

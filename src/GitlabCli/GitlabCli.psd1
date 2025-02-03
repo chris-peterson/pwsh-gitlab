@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.122.0'
+    ModuleVersion = '1.122.1'
 
     RequiredModules = @('powershell-yaml')
 

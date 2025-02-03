@@ -34,9 +34,7 @@ function Get-GitlabMergeRequest {
         [string]
         $CreatedBefore,
 
-        [Parameter(ParameterSetName='ByGroupId')]
-        [Parameter(ParameterSetName='ByProjectId')]
-        [ValidateSet($null, $true, $false)]
+        [ValidateSet($null, 'true', 'false')]
         [object]
         $IsDraft,
 
@@ -60,12 +58,20 @@ function Get-GitlabMergeRequest {
         $Mine,
 
         [Parameter()]
+        [uint]
+        $MaxPages,
+    
+        [switch]
+        [Parameter()]
+        $All,
+
+        [Parameter()]
         [string]
         $SiteUrl
     )
 
+    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
     $Path = $null
-    $MaxPages = 1
     $Query = @{}
 
     if ($Mine) {
@@ -113,7 +119,7 @@ function Get-GitlabMergeRequest {
     }
 
     if ($IsDraft) {
-        $Query['wip'] = $IsDraft ? 'yes' : 'no'
+        $Query['wip'] = $IsDraft -eq 'true' ? 'yes' : 'no'
     }
 
     if ($Branch) {
@@ -639,7 +645,7 @@ function Update-GitlabMergeRequestApprovalConfiguration {
         $ResetApprovalsOnPush,
 
         [Parameter()]
-        [ValidateSet($null, $true, $false)]
+        [ValidateSet($null, 'true', 'false')]
         [object]
         $SelectiveCodeOwnerRemovals,
 
