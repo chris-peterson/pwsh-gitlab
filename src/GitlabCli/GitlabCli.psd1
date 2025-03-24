@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.122.1'
+    ModuleVersion = '1.123.0'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,8 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* feature: implement milestones
-* enhance: add options for issues/MRs
+* feature: remove project fork relationship
 '@
         }
     }
@@ -37,7 +36,7 @@
 
     Author = 'Chris Peterson'
     CompanyName = 'Chris Peterson'
-    Copyright = '(c) 2021-2024'
+    Copyright = '(c) 2021-2025'
 
     Description = 'Interact with GitLab via PowerShell'
     PowerShellVersion = '7.1'
@@ -142,6 +141,7 @@
         'New-GitlabProject'
         'New-GitlabProjectHook'
         'Remove-GitlabProject'
+        'Remove-GitlabProjectForkRelationship'
         'Remove-GitlabProjectHook'
         'Remove-GitlabProjectVariable'
         'Rename-GitlabProject'
@@ -318,11 +318,12 @@
         'Fork-GitlabProject'
         'Play-GitlabJob'
         'Pull-GitlabGroup'
-        'Remove-GitlabProtectedBranch'
         'Remove-GitlabPersonalAccessToken'
-        'Rotate-GitlabPersonalAccessToken'
+        'Remove-GitlabProjectFork'
+        'Remove-GitlabProtectedBranch'
         'Review-GitlabMergeRequest'
         'Revoke-GitlabGroupAccessToken'
+        'Rotate-GitlabPersonalAccessToken'
         'Share-GitlabProjectWithGroup'
         'Transfer-GitlabGroup'
         'Transfer-GitlabProject'

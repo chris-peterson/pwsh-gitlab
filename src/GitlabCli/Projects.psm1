@@ -312,9 +312,34 @@ function Copy-GitlabProject {
         } -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference
 
         if (-not $PreserveForkRelationship) {
-            Invoke-GitlabApi DELETE "projects/$($NewProject.id)/fork" -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference | Out-Null
-            Write-Host "Removed fork relationship between $($SourceProject.Name) and $($NewProject.PathWithNamespace)"
+            $NewProject | Remove-GitlabProjectForkRelationship
         }
+    }
+}
+
+function Remove-GitlabProjectForkRelationship {
+    [Alias("Remove-GitlabProjectFork")]
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    $Project = Get-GitlabProject -ProjectId $ProjectId
+    if (-not $Project.ForkedFromProjectId) {
+        throw "Project $($Project.PathWithNamespace) does not have a fork"
+    }
+    $ForkedFromProject = Get-GitlabProject -ProjectId $Project.ForkedFromProjectId
+
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "remove fork relationship to $($ForkedFromProject.PathWithNamespace)")) {
+        # https://docs.gitlab.com/api/project_forks/#delete-a-fork-relationship-between-projects
+        Invoke-GitlabApi DELETE "projects/$($ProjectId)/fork" -SiteUrl $SiteUrl | Out-Null
+        Write-Host "Removed fork relationship from $($Project.PathWithNamespace) (was $($ForkedFromProject.PathWithNamespace))"
     }
 }
 

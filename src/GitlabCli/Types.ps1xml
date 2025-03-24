@@ -254,6 +254,10 @@
         <Name>Tags</Name>
         <GetScriptBlock>$this.TagList</GetScriptBlock>
       </ScriptProperty>
+      <ScriptProperty>
+        <Name>ForkedFromProjectId</Name>
+        <GetScriptBlock>$this.ForkedFromProject.id</GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
   <Type>
