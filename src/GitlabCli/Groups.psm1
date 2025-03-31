@@ -454,48 +454,47 @@ function Move-GitlabGroup {
 }
 
 
-# https://docs.gitlab.com/ee/api/groups.html#create-a-link-to-share-a-group-with-another-group
 function New-GitlabGroupShareLink {
-
-    [CmdletBinding()]
+    [Alias('Share-GitlabGroupWithGroup')]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0)]
         [string]
         $GroupId,
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Alias('ShareWith')]
+        [Parameter(Position=1)]
         [string]
         $GroupShareId,
 
-        [Parameter(Position=2, Mandatory=$true)]
+        [Parameter(Position=2)]
         [ValidateSet('noaccess','minimalaccess','guest','reporter','developer','maintainer','owner')]
         [string]
         $AccessLevel,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateScript({ValidateGitlabDateFormat $_})]
         [string]
         $ExpiresAt,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $GroupId = $GroupId | ConvertTo-UrlEncoded
+    $Group            = Get-GitlabGroup $GroupId
+    $GroupToShareWith = Get-GitlabGroup $GroupShareId
 
     $Body = @{
-
-        group_id = $GroupShareId
+        group_id     = $GroupShareId
         group_access = Get-GitlabMemberAccessLevel $AccessLevel
-        expires_at = $ExpiresAt
+        expires_at   = $ExpiresAt
     }
 
-    Invoke-GitlabApi POST "groups/$GroupId/share" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Group'
+    if ($PSCmdlet.ShouldProcess("$($Group.FullPath)", "share with group '$($GroupToShareWith.FullPath)'")) {
+        # https://docs.gitlab.com/ee/api/groups.html#share-groups-with-groups
+        Invoke-GitlabApi POST "groups/$GroupId/share" -Body $Body -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Group'
+    }
 }
 
 # https://docs.gitlab.com/ee/api/groups.html#delete-link-sharing-group-with-another-group

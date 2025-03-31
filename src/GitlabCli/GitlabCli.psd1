@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.123.0'
+    ModuleVersion = '1.123.1'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* feature: remove project fork relationship
+* enhance: Add an alias and tidy up Share-GitlabGroupWithGroup
 '@
         }
     }
@@ -324,6 +324,7 @@
         'Review-GitlabMergeRequest'
         'Revoke-GitlabGroupAccessToken'
         'Rotate-GitlabPersonalAccessToken'
+        'Share-GitlabGroupWithGroup'
         'Share-GitlabProjectWithGroup'
         'Transfer-GitlabGroup'
         'Transfer-GitlabProject'
