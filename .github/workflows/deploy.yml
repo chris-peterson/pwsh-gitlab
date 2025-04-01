@@ -7,11 +7,11 @@ on:
 jobs:
   build:
     if: github.repository == 'chris-peterson/pwsh-gitlab'
- 
+
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Publish PowerShell Module
         uses: natescherer/publish-powershell-action@v1.1.1
@@ -25,14 +25,14 @@ jobs:
 
   push:
     if: github.repository == 'chris-peterson/pwsh-gitlab'
-    
+
     env:
       IMAGE_NAME: gitlab-cli
       IMAGE_VERSION: ${{ github.ref_name }}
 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Build image
         run: docker build . --tag $IMAGE_NAME

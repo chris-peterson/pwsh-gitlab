@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.123.1'
+    ModuleVersion = '1.124.0'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,9 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* enhance: Add an alias and tidy up Share-GitlabGroupWithGroup
+* behavior: default Get-GitlabMergeRequest to return all merge requests (was only open)
+* fix: max pages bug in Get-GitlabMergeRequest
+* enhance: add date format validation to Get-GitlabMergeRequest
 '@
         }
     }

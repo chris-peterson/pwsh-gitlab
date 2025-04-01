@@ -22,16 +22,18 @@ function Get-GitlabMergeRequest {
         [Parameter()]
         [ValidateSet('', 'closed', 'opened', 'merged')]
         [string]
-        $State = 'opened',
+        $State = '', # any
 
         [Parameter(ParameterSetName='ByGroupId')]
         [Parameter(ParameterSetName='ByProjectId')]
         [string]
+        [ValidateScript({ValidateGitlabDateFormat $_})]
         $CreatedAfter,
 
         [Parameter(ParameterSetName='ByGroupId')]
         [Parameter(ParameterSetName='ByProjectId')]
         [string]
+        [ValidateScript({ValidateGitlabDateFormat $_})]
         $CreatedBefore,
 
         [ValidateSet($null, 'true', 'false')]
@@ -96,11 +98,9 @@ function Get-GitlabMergeRequest {
         } elseif ($ProjectId) {
             # https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
             $Path = "projects/$ProjectId/merge_requests"
-            $MaxPages = 10
         } elseif ($GroupId) {
             # https://docs.gitlab.com/ee/api/merge_requests.html#list-group-merge-requests
             $Path = "groups/$GroupId/merge_requests"
-            $MaxPages = 10
         } else {
             throw "Unsupported parameter combination"
         }
@@ -315,7 +315,6 @@ function New-GitlabMergeRequest {
         $MergeRequest
     }
 }
-
 
 function Merge-GitlabMergeRequest {
     [CmdletBinding(SupportsShouldProcess)]
