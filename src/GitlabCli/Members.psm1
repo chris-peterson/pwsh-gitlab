@@ -41,7 +41,6 @@ function Get-GitlabMembershipSortKey {
     )
 }
 
-# https://docs.gitlab.com/ee/api/members.html#list-all-members-of-a-group-or-project
 function Get-GitlabGroupMember {
     param (
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
@@ -54,7 +53,7 @@ function Get-GitlabGroupMember {
 
         [switch]
         [Parameter()]
-        $All,
+        $IncludeInherited,
 
         [Parameter()]
         [string]
@@ -62,21 +61,30 @@ function Get-GitlabGroupMember {
         $MinAccessLevel,
 
         [Parameter()]
-        [int]
-        $MaxPages = 10,
+        [uint]
+        $MaxPages,
+
+        [switch]
+        [Parameter()]
+        $All,
 
         [Parameter()]
         [string]
         $SiteUrl
     )
 
+    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+
     $Group = Get-GitlabGroup -GroupId $GroupId -SiteUrl $SiteUrl
     if ($UserId) {
         $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
     }
 
-    $Members = $All ? "members/all" : "members"
-    $Resource = $User ? "groups/$($Group.Id)/$Members/$($User.Id)" : "groups/$($Group.Id)/$Members"
+    # https://docs.gitlab.com/api/members/#list-all-members-of-a-group-or-project-including-inherited-and-invited-members
+    # https://docs.gitlab.com/ee/api/members.html#list-all-members-of-a-group-or-project
+    # https://docs.gitlab.com/api/members/#get-a-member-of-a-group-or-project
+    $Members = $IncludeInherited ? "members/all" : "members"
+    $Resource = $User ?"groups/$($Group.Id)/$Members/$($User.Id)" : "groups/$($Group.Id)/$Members"
 
     $Members = Invoke-GitlabApi GET $Resource -MaxPages $MaxPages -SiteUrl $SiteUrl
     if ($MinAccessLevel) {
@@ -169,19 +177,25 @@ function Get-GitlabProjectMember {
         [Alias('Username')]
         [string]
         $UserId,
-        
+
+        [switch]
+        [Parameter()]
+        $IncludeInherited,
+                
+        [Parameter()]
+        [uint]
+        $MaxPages,
+
         [switch]
         [Parameter()]
         $All,
-        
-        [Parameter()]
-        [int]
-        $MaxPages = 10,
-        
+
         [Parameter()]
         [string]
         $SiteUrl
     )
+
+    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
     $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl
 
@@ -189,10 +203,12 @@ function Get-GitlabProjectMember {
         $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
     }
 
-    $Members = $All ? "members/all" : "members"
+    # https://docs.gitlab.com/api/members/#list-all-members-of-a-group-or-project-including-inherited-and-invited-members
+    # https://docs.gitlab.com/ee/api/members.html#list-all-members-of-a-group-or-project
+    # https://docs.gitlab.com/api/members/#get-a-member-of-a-group-or-project
+    $Members = $IncludeInherited ? "members/all" : "members"
     $Resource = $User ? "projects/$($Project.Id)/$Members/$($User.Id)" : "projects/$($Project.Id)/$Members"
 
-    # https://docs.gitlab.com/ee/api/members.html#list-all-members-of-a-group-or-project
     Invoke-GitlabApi GET $Resource -MaxPages $MaxPages -SiteUrl $SiteUrl |
         New-WrapperObject 'Gitlab.Member' |
         Add-Member -PassThru -NotePropertyMembers @{

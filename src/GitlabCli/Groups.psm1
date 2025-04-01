@@ -486,7 +486,7 @@ function New-GitlabGroupShareLink {
     $GroupToShareWith = Get-GitlabGroup $GroupShareId
 
     $Body = @{
-        group_id     = $GroupShareId
+        group_id     = $GroupToShareWith.Id
         group_access = Get-GitlabMemberAccessLevel $AccessLevel
         expires_at   = $ExpiresAt
     }
