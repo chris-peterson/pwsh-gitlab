@@ -31,16 +31,16 @@ function Get-GitlabGroup {
         $Recurse,
 
         [Parameter()]
-        [string]
-        $SiteUrl,
-
-        [Parameter()]
         [uint]
         $MaxPages,
 
         [switch]
         [Parameter()]
-        $All
+        $All,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
     $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
@@ -246,7 +246,7 @@ function Get-GitlabGroupVariable {
 
         [Parameter()]
         [string]
-        $SiteUrl
+        $SiteUrl,
 
         [Parameter()]
         [uint]

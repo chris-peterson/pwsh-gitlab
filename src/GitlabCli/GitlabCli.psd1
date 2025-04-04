@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.124.1'
+    ModuleVersion = '1.125.0'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,8 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* bug: paging issues in Get-Gitlab[Group|Project]Member
-* bug: share use looked up id
+* https://github.com/chris-peterson/pwsh-gitlab/pull/105
 '@
         }
     }

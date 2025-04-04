@@ -581,16 +581,16 @@ function Get-GitlabProjectVariable {
         $Key,
 
         [Parameter()]
-        [string]
-        $SiteUrl
-
-        [Parameter()]
         [uint]
         $MaxPages,
 
         [switch]
         [Parameter()]
-        $All
+        $All,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
     $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
@@ -599,11 +599,11 @@ function Get-GitlabProjectVariable {
 
     if ($Key) {
         # https://docs.gitlab.com/ee/api/project_level_variables.html#get-a-single-variable
-        Invoke-GitlabApi GET "projects/$($Project.Id)/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "projects/$($Project.Id)/variables/$Key" -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
     }
     else {
         # https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
-        Invoke-GitlabApi GET "projects/$($Project.Id)/variables" -SiteUrl $SiteUrl -WhatIf:$WhatIf -MaxPages $MaxPages | New-WrapperObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "projects/$($Project.Id)/variables" -SiteUrl $SiteUrl -MaxPages $MaxPages | New-WrapperObject 'Gitlab.Variable'
     }
 }
 
