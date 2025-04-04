@@ -247,7 +247,17 @@ function Get-GitlabGroupVariable {
         [Parameter()]
         [string]
         $SiteUrl
+
+        [Parameter()]
+        [uint]
+        $MaxPages,
+
+        [switch]
+        [Parameter()]
+        $All
     )
+
+    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
     $GroupId = $GroupId | ConvertTo-UrlEncoded
 
@@ -257,7 +267,7 @@ function Get-GitlabGroupVariable {
     }
     else {
         # https://docs.gitlab.com/ee/api/group_level_variables.html#list-group-variables
-        Invoke-GitlabApi GET "groups/$GroupId/variables" -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "groups/$GroupId/variables" -SiteUrl $SiteUrl -MaxPages $MaxPages | New-WrapperObject 'Gitlab.Variable'
     }
 }
 
