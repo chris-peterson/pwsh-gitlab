@@ -76,60 +76,48 @@ function Get-GitlabMergeRequest {
     $Path = $null
     $Query = @{}
 
-    if ($Mine) {
-        $Path = 'merge_requests'
-    }
-    else {
-        if ($Url) {
+    switch ($PSCmdlet.ParameterSetName) {
+        'Mine' {
+            # https://docs.gitlab.com/api/merge_requests/#list-merge-requests
+            $Path = 'merge_requests'
+        }
+        'ByUrl' {
             $Resource = $Url | Get-GitlabResourceFromUrl
             $ProjectId = $Resource.ProjectId
             $MergeRequestId = $Resource.ResourceId
-        }
-        if ($ProjectId) {
+            }
+        'ByProjectId' {
             $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
-        }
-        if ($GroupId) {
-            $GroupId = $(Get-GitlabGroup -GroupId $GroupId).Id
-        }
-
-        if ($MergeRequestId) {
-            # https://docs.gitlab.com/ee/api/merge_requests.html#get-single-mr
-            $Path = "projects/$ProjectId/merge_requests/$MergeRequestId"
-        } elseif ($ProjectId) {
             # https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
             $Path = "projects/$ProjectId/merge_requests"
-        } elseif ($GroupId) {
+        }
+        'ByGroupId' {
+            $GroupId = $(Get-GitlabGroup -GroupId $GroupId).Id
             # https://docs.gitlab.com/ee/api/merge_requests.html#list-group-merge-requests
             $Path = "groups/$GroupId/merge_requests"
-        } else {
-            throw "Unsupported parameter combination"
         }
     }
 
     if($State) {
-        $Query['state'] = $State
+        $Query.state = $State
     }
-
     if ($CreatedBefore) {
-        $Query['created_before'] = $CreatedBefore
+        $Query.created_before = $CreatedBefore
     }
-
     if ($CreatedAfter) {
-        $Query['created_after'] = $CreatedAfter
+        $Query.created_after = $CreatedAfter
     }
-
     if ($IsDraft) {
-        $Query['wip'] = $IsDraft -eq 'true' ? 'yes' : 'no'
+        $Query.wip = $IsDraft -eq 'true' ? 'yes' : 'no'
     }
-
     if ($Branch) {
         if ($Branch -eq '.') {
             $Branch = Get-LocalGitContext | Select-Object -ExpandProperty Branch
         }
-        $Query['source_branch'] = $Branch
+        $Query.source_branch = $Branch
     }
 
-    $MergeRequests = Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl |
+    $MergeRequests = Invoke-GitlabApi GET $Path -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl |
         Select-Object -Property '*' -ExcludeProperty approvals_before_merge | # https://docs.gitlab.com/ee/api/merge_requests.html#removals-in-api-v5
         New-WrapperObject 'Gitlab.MergeRequest'
 

@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.125.0'
+    ModuleVersion = '1.125.1'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* https://github.com/chris-peterson/pwsh-gitlab/pull/105
+* bug: don't require project context when getting MRs by group
 '@
         }
     }
