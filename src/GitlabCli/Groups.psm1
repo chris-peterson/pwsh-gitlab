@@ -287,13 +287,17 @@ function Set-GitlabGroupVariable {
         [string]
         $Value,
 
-        [bool]
-        [Parameter()]
-        $Protect = $false,
+        [switch]
+        [Parameter(ValueFromPipelineByPropertyName)]
+        $Protect,
 
-        [bool]
-        [Parameter()]
-        $Mask = $false,
+        [switch]
+        [Parameter(ValueFromPipelineByPropertyName)]
+        $Mask,
+
+        [ValidateSet($null, 'true', 'false')]
+        [Parameter(ValueFromPipelineByPropertyName)]
+        $ExpandVariables = 'true',
 
         [Parameter()]
         [string]
@@ -302,21 +306,15 @@ function Set-GitlabGroupVariable {
 
     $Group = Get-GitlabGroup $GroupId
 
-    $Query = @{
+    $Request = @{
         value = $Value
+        raw   = $ExpandVariables -eq 'true' ? 'false' : 'true'
     }
-
     if ($Protect) {
-        $Query.protected = 'true'
-    }
-    else {
-        $Query.protected = 'false'
+        $Request.protected = 'true'
     }
     if ($Mask) {
-        $Query.masked = 'true'
-    }
-    else {
-        $Query.masked = 'false'
+        $Request.masked = 'true'
     }
 
     try {
@@ -330,12 +328,12 @@ function Set-GitlabGroupVariable {
     if ($PSCmdlet.ShouldProcess("$($Group.FullName)", "set $($IsExistingVariable ? 'existing' : 'new') variable $Key to $Value")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/group_level_variables.html#update-variable
-            Invoke-GitlabApi PUT "groups/$($Group.Id)/variables/$Key" -Query $Query -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
+            Invoke-GitlabApi PUT "groups/$($Group.Id)/variables/$Key" -Body $Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
         }
         else {
-            $Query.key = $Key
+            $Request.key = $Key
             # https://docs.gitlab.com/ee/api/group_level_variables.html#create-variable
-            Invoke-GitlabApi POST "groups/$($Group.Id)/variables" -Query $Query -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
+            Invoke-GitlabApi POST "groups/$($Group.Id)/variables" -Body $Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
         }
     }
 }

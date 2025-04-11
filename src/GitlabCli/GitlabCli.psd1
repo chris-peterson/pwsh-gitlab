@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.125.1'
+    ModuleVersion = '1.125.2'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* bug: don't require project context when getting MRs by group
+* bug: add missing expand flag on group variables'
 '@
         }
     }
