@@ -210,7 +210,7 @@ function Invoke-GitlabPersonalAccessTokenRotation {
     )
 
     $Request = @{
-        # https://docs.gitlab.com/ee/api/users.html#rotate-a-personal-access-token
+        # https://docs.gitlab.com/api/personal_access_tokens/#rotate-a-personal-access-token
         Method  = 'POST'
         Path    = "personal_access_tokens/$($TokenId)/rotate"
         Body    = @{}

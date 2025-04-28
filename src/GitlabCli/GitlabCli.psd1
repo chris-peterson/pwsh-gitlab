@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.125.2'
+    ModuleVersion = '1.126.0'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* bug: add missing expand flag on group variables'
+* enhance: better consistency for sharing groups (to groups or projects)
 '@
         }
     }
@@ -114,22 +114,21 @@
         'Remove-GitlabGroupAccessToken'
 
         # Groups
-        'Get-GitlabGroup'
-        'New-GitlabGroup'
-        'Remove-GitlabGroup'
-        'Rename-GitlabGroup'
-        'Move-GitlabGroup'
         'Copy-GitlabGroupToLocalFileSystem'
+        'Get-GitlabGroup'
+        'Get-GitlabGroupVariable'
+        'Move-GitlabGroup'
+        'New-GitlabGroup'
+        'New-GitlabGroupToGroupShare'
+        'Remove-GitlabGroup'
+        'Remove-GitlabGroupToGroupShare'
+        'Remove-GitlabGroupVariable'
+        'Rename-GitlabGroup'
+        'Set-GitlabGroupVariable'
         'Update-GitlabGroup'
         'Update-LocalGitlabGroup'
-        'Get-GitlabGroupVariable'
-        'Set-GitlabGroupVariable'
-        'Remove-GitlabGroupVariable'
-        'New-GitlabGroupShareLink'
-        'Remove-GitlabGroupShareLink'
 
         # Projects
-        'Add-GitlabGroupToProject'
         'ConvertTo-GitlabTriggerYaml'
         'Copy-GitlabProject'
         'Get-GitlabProject'
@@ -138,8 +137,10 @@
         'Invoke-GitlabProjectArchival'
         'Invoke-GitlabProjectUnarchival'
         'Move-GitlabProject'
+        'New-GitlabGroupToProjectShare'
         'New-GitlabProject'
         'New-GitlabProjectHook'
+        'Remove-GitlabGroupToProjectShare'
         'Remove-GitlabProject'
         'Remove-GitlabProjectForkRelationship'
         'Remove-GitlabProjectHook'

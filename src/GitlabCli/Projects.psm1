@@ -801,7 +801,7 @@ function Get-GitlabProjectEvent {
         New-WrapperObject 'Gitlab.Event'
 }
 
-function Add-GitlabGroupToProject {
+function New-GitlabGroupToProjectShare {
     [CmdletBinding(SupportsShouldProcess)]
     [Alias('Share-GitlabProjectWithGroup')]
     param (
@@ -821,10 +821,10 @@ function Add-GitlabGroupToProject {
     )
 
     $AccessLiteral = Get-GitlabMemberAccessLevel $GroupAccess
-    $Project = Get-GitlabProject $ProjectId
-    $Group = Get-GitlabGroup $GroupId
+    $Project       = Get-GitlabProject $ProjectId
+    $Group         = Get-GitlabGroup $GroupId
 
-    # https://docs.gitlab.com/ee/api/projects.html#share-project-with-group
+    # https://docs.gitlab.com/api/projects/#share-a-project-with-a-group
     $Request = @{
         Method = 'POST'
         Path = "projects/$($Project.Id)/share"
@@ -837,6 +837,33 @@ function Add-GitlabGroupToProject {
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "share project with group ($($Request | ConvertTo-Json))")) {
         if (Invoke-GitlabApi @Request | Out-Null) {
             Write-Host "Successfully shared $($Project.PathWithNamespace) with $($Group.FullPath)"
+        }
+    }
+}
+
+function Remove-GitlabGroupToProjectShare {
+
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory, Position=1)]
+        [string]
+        $GroupId,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    $Project    = Get-GitlabGroup $GroupId
+    $GroupShare = Get-GitlabGroup $GroupShareId
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "remove sharing with group '$($GroupShare.Name)'")) {
+        # https://docs.gitlab.com/api/projects/#delete-a-shared-project-link-in-a-grou
+        if (Invoke-GitlabApi DELETE "projects/$($Project.Id)/share/$($GroupShare.Id)" -SiteUrl $SiteUrl | Out-Null) {
+            Write-Host "Removed sharing with $($GroupShare.Name) from $($Project.PathWithNamespace)"
         }
     }
 }

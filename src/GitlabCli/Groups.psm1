@@ -462,20 +462,20 @@ function Move-GitlabGroup {
 }
 
 
-function New-GitlabGroupShareLink {
+function New-GitlabGroupToGroupShare {
     [Alias('Share-GitlabGroupWithGroup')]
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Position=0)]
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
 
         [Alias('ShareWith')]
-        [Parameter(Position=1)]
+        [Parameter(Mandatory, Position=1)]
         [string]
         $GroupShareId,
 
-        [Parameter(Position=2)]
+        [Parameter(Mandatory, Position=2)]
         [ValidateSet('noaccess','minimalaccess','guest','reporter','developer','maintainer','owner')]
         [string]
         $AccessLevel,
@@ -496,38 +496,40 @@ function New-GitlabGroupShareLink {
     $Body = @{
         group_id     = $GroupToShareWith.Id
         group_access = Get-GitlabMemberAccessLevel $AccessLevel
-        expires_at   = $ExpiresAt
+    }
+    if ($ExpiresAt) {
+        $Body.expires_at = $ExpiresAt
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Group.FullPath)", "share with group '$($GroupToShareWith.FullPath)'")) {
+    if ($PSCmdlet.ShouldProcess("$($Group.FullPath)", "share with group '$($GroupToShareWith.FullPath)' ($AccessLevel)")) {
         # https://docs.gitlab.com/ee/api/groups.html#share-groups-with-groups
         Invoke-GitlabApi POST "groups/$GroupId/share" -Body $Body -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Group'
     }
 }
 
-# https://docs.gitlab.com/ee/api/groups.html#delete-link-sharing-group-with-another-group
-function Remove-GitlabGroupShareLink {
+function Remove-GitlabGroupToGroupShare {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
 
-        [Parameter(Mandatory=$true, Position=1)]
+        [Parameter(Mandatory, Position=1)]
         [string]
         $GroupShareId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $GroupId = $GroupId | ConvertTo-UrlEncoded
-
-    Invoke-GitlabApi DELETE "groups/$GroupId/share/$GroupShareId" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+    $Group = Get-GitlabGroup $GroupId
+    $GroupShare = Get-GitlabGroup $GroupShareId
+    if ($PSCmdlet.ShouldProcess("$($Group.FullPath)", "remove sharing with group '$($GroupShare.Name)'")) {
+        # https://docs.gitlab.com/api/groups/#delete-the-link-that-shares-a-group-with-another-group
+        if (Invoke-GitlabApi DELETE "groups/$GroupId/share/$($GroupShare.Id)" -SiteUrl $SiteUrl | Out-Null) {
+            Write-Host "Removed sharing with $($GroupShare.Name) from $($Group.Name)"
+        }
+    }
 }
