@@ -8,7 +8,7 @@ function Get-GitlabProjectIntegration {
         $ProjectId = '.',
 
         [Parameter(Position=0)]
-        [ValidateSet($null, 'assana', 'assembla', 'bamboo', 'bugzilla', 'buildkite', 'campfire', 'datadog', 'unify-circuit', 'pumble', 'webex-teams', 'custom-issue-tracker', 'discord', 'drone-ci', 'emails-on-push', 'ewm', 'confluence', 'external-wiki', 'flowdock', 'github', 'hangouts-chat', 'irker', 'jira', 'slack-slash-commands', 'mattermost-slash-commands', 'packagist', 'pipelines-email', 'pivotaltracker', 'prometheus', 'pushover', 'redmine', 'slack', 'microsoft-teams', 'mattermost', 'teamcity', 'jenkins', 'jenkins-deprecated', 'mock-ci', 'youtrack')]
+        [ValidateSet($null, 'assana', 'assembla', 'bamboo', 'bugzilla', 'buildkite', 'campfire', 'datadog', 'unify-circuit', 'pumble', 'webex-teams', 'custom-issue-tracker', 'discord', 'drone-ci', 'emails-on-push', 'ewm', 'confluence', 'external-wiki', 'flowdock', 'github', 'hangouts-chat', 'irker', 'jira', 'slack-slash-commands', 'mattermost-slash-commands', 'packagist', 'pipelines-email', 'pivotaltracker', 'prometheus', 'pushover', 'redmine', 'slack', 'gitlab-slack-application', 'microsoft-teams', 'mattermost', 'teamcity', 'jenkins', 'jenkins-deprecated', 'mock-ci', 'youtrack')]
         [string]
         $Integration,
 
@@ -38,7 +38,7 @@ function Update-GitlabProjectIntegration {
 
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Slug')]
-        [ValidateSet('slack')]
+        [ValidateSet('slack', 'gitlab-slack-application')]
         [string]
         $Integration,
 
@@ -71,7 +71,7 @@ function Remove-GitlabProjectIntegration {
 
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Slug')]
-        [ValidateSet('slack')]
+        [ValidateSet('slack', 'gitlab-slack-application')]
         [string]
         $Integration,
 
@@ -91,6 +91,7 @@ function Remove-GitlabProjectIntegration {
 }
 
 # wraps Update-GitlabProjectIntegration but with an interface tailored for Slack
+# Allows for deprecated 'slack' integration or newer 'gitlab-slack-application' integration
 # https://docs.gitlab.com/ee/api/integrations.html#createedit-slack-integration
 function Enable-GitlabProjectSlackNotification {
 
@@ -105,7 +106,7 @@ function Enable-GitlabProjectSlackNotification {
         [string]
         $Channel,
 
-        [Parameter(Mandatory)]
+        [Parameter()]
         [string]
         $Webhook,
 
@@ -147,6 +148,15 @@ function Enable-GitlabProjectSlackNotification {
         $NoEvents,
 
         [Parameter()]
+        [ValidateSet('slack', 'gitlab-slack-application')]
+        [string]
+        $Integration,
+
+        [Parameter()]
+        [boolean]
+        $InheritSettings=$false,
+
+        [Parameter()]
         [string]
         $SiteUrl
     )
@@ -160,9 +170,17 @@ function Enable-GitlabProjectSlackNotification {
         $Disable = $KnownEvents
     }
 
-    $Settings = @{
-        webhook = $Webhook
+    if (!$Webhook) {
+        $Settings = @{
+            use_inherited_settings = $InheritSettings
+        }
+    } else {
+        $Settings = @{
+            webhook = $Webhook
+            use_inherited_settings = $InheritSettings
+        }
     }
+
     if ($PSBoundParameters.ContainsKey('Username')) {
         $Settings.username = $Username
     }
@@ -198,6 +216,6 @@ function Enable-GitlabProjectSlackNotification {
     }
 
     if ($PSCmdlet.ShouldProcess("slack notifications for $($Project.PathWithNamespace)", "notify $Channel ($($Settings | ConvertTo-Json)))")) {
-        Update-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack' -Settings $Settings
+        Update-GitlabProjectIntegration -ProjectId $Project.Id -Integration $Integration -Settings $Settings
     }
 }
