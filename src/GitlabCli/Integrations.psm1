@@ -91,6 +91,7 @@ function Remove-GitlabProjectIntegration {
 }
 
 # wraps Update-GitlabProjectIntegration but with an interface tailored for Slack
+# Allows for deprecated 'slack' integration or newer 'gitlab-slack-application' integration
 # https://docs.gitlab.com/ee/api/integrations.html#createedit-slack-integration
 function Enable-GitlabProjectSlackNotification {
 
@@ -105,7 +106,7 @@ function Enable-GitlabProjectSlackNotification {
         [string]
         $Channel,
 
-        [Parameter(Mandatory)]
+        [Parameter()]
         [string]
         $Webhook,
 
@@ -147,6 +148,11 @@ function Enable-GitlabProjectSlackNotification {
         $NoEvents,
 
         [Parameter()]
+        [ValidateSet('slack', 'gitlab-slack-application')]
+        [string]
+        $Integration = 'slack',
+
+        [Parameter()]
         [string]
         $SiteUrl
     )
@@ -160,9 +166,14 @@ function Enable-GitlabProjectSlackNotification {
         $Disable = $KnownEvents
     }
 
-    $Settings = @{
-        webhook = $Webhook
+    if (!$Webhook) {
+        $Settings = @{}
+    } else {
+        $Settings = @{
+            webhook = $Webhook
+        }
     }
+
     if ($PSBoundParameters.ContainsKey('Username')) {
         $Settings.username = $Username
     }
@@ -197,7 +208,7 @@ function Enable-GitlabProjectSlackNotification {
         }
     }
 
-    if ($PSCmdlet.ShouldProcess("slack notifications for $($Project.PathWithNamespace)", "notify $Channel ($($Settings | ConvertTo-Json)))")) {
-        Update-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack' -Settings $Settings
+    if ($PSCmdlet.ShouldProcess("slack notifications for $($Project.PathWithNamespace)", "notify $Channel ($($Settings | ConvertTo-Json))")) {
+        Update-GitlabProjectIntegration -ProjectId $Project.Id -Integration $Integration -Settings $Settings
     }
 }
