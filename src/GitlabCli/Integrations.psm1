@@ -153,6 +153,10 @@ function Enable-GitlabProjectSlackNotification {
         $Integration,
 
         [Parameter()]
+        [boolean]
+        $InheritSettings=$false,
+
+        [Parameter()]
         [string]
         $SiteUrl
     )
@@ -167,10 +171,13 @@ function Enable-GitlabProjectSlackNotification {
     }
 
     if (!$Webhook) {
-        $Settings = @{}
+        $Settings = @{
+            use_inherited_settings = $InheritSettings
+        }
     } else {
         $Settings = @{
             webhook = $Webhook
+            use_inherited_settings = $InheritSettings
         }
     }
 
