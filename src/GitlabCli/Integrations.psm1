@@ -176,7 +176,7 @@ function Enable-GitlabProjectSlackNotification {
     if ($Webhook) {
         $Settings.webhook = $Webhook
     }
-    if ($Username)) {
+    if ($Username) {
         $Settings.username = $Username
     }
     if ($BranchesToBeNotified) {
