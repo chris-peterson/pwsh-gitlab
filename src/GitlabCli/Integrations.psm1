@@ -170,7 +170,7 @@ function Enable-GitlabProjectSlackNotification {
     }
 
     $Settings = @{
-        # this seems to be necessary in all cases
+        # this seems to be necessary in all cases, otherwise the settings don't "stick"
         use_inherited_settings = 'false'
     }
     if ($Webhook) {
@@ -211,10 +211,14 @@ function Enable-GitlabProjectSlackNotification {
     }
 
     $Action = 'enable'
-    $ExistingLegacyIntegration = Get-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack' -SiteUrl $SiteUrl | Select-Object -Expand Active
-    if ($ExistingLegacyIntegration) {
-        $Action = 'disable legacy integration and enable'
-    }
+
+    $ExistingLegacyIntegration = $null
+    try {
+        $ExistingLegacyIntegration = Get-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack' -SiteUrl $SiteUrl | Select-Object -Expand Active
+        if ($ExistingLegacyIntegration) {
+            $Action = 'disable legacy integration, then enable'
+        }
+    } catch {}
 
     if ($PSCmdlet.ShouldProcess("$Action slack notifications for $($Project.PathWithNamespace)", "notify $Channel ($($Settings | ConvertTo-Json)))")) {
         if ($ExistingLegacyIntegration) {
