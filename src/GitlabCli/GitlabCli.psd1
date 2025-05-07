@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.126.0'
+    ModuleVersion = '1.127.0'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* enhance: better consistency for sharing groups (to groups or projects)
+* https://github.com/chris-peterson/pwsh-gitlab/pull/106
 '@
         }
     }
