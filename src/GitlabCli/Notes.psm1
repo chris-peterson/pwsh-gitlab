@@ -1,89 +1,82 @@
 # https://docs.gitlab.com/ee/api/notes.html
 
-# https://docs.gitlab.com/ee/api/notes.html#list-project-issue-notes
 function Get-GitlabIssueNote {
     param (
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $IssueId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
 
-    Invoke-GitlabApi GET "projects/$($Project.Id)/issues/$IssueId/notes" -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Note'
+    # https://docs.gitlab.com/ee/api/notes.html#list-project-issue-notes
+    Invoke-GitlabApi GET "projects/$($Project.Id)/issues/$IssueId/notes" -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Note'
 }
 
-# https://docs.gitlab.com/ee/api/notes.html#create-new-issue-note
 function New-GitlabIssueNote {
+    [Alias('Add-GitlabIssueNote')]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $IssueId,
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory)]
         [string]
         $Note,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
 
-    Invoke-GitlabApi POST "projects/$($Project.Id)/issues/$IssueId/notes" -Body @{body = $Note} -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Note'
+    if ($PSCmdlet.ShouldProcess("issue #$IssueId", "Create new issue note ($Note)")) {
+        # https://docs.gitlab.com/ee/api/notes.html#create-new-issue-note
+        Invoke-GitlabApi POST "projects/$($Project.Id)/issues/$IssueId/notes" -Body @{body = $Note} -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Note'
+    }
 }
 
-# https://docs.gitlab.com/ee/api/notes.html#list-all-merge-request-notes
 function Get-GitlabMergeRequestNote {
     param (
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $MergeRequestId,
 
-        [Parameter(Position=1, Mandatory=$false)]
+        [Parameter(Position=1)]
         [string]
         $NoteId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
 
+    # https://docs.gitlab.com/ee/api/notes.html#list-all-merge-request-notes
     $Url = "projects/$($Project.Id)/merge_requests/$MergeRequestId/notes"
     if ($NoteId) {
+        # https://docs.gitlab.com/api/notes/#get-single-issue-note
         $Url += "/$NoteId"
     }
 
-    Invoke-GitlabApi GET $Url -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.Note'
+    Invoke-GitlabApi GET $Url -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Note'
 }

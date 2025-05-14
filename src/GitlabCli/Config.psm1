@@ -13,7 +13,7 @@ function Test-IsConfigurationEnvironmentVariables {
 function Write-GitlabConfiguration {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        [Parameter(Mandatory, ValueFromPipeline)]
         $Configuration
     )
 
@@ -36,9 +36,14 @@ function Write-GitlabConfiguration {
         New-Item -Type Directory $ConfigContainer | Out-Null
     }
 
+    $SaveParameters = @{
+        Path   = $global:GitlabConfigurationPath
+        Force  = $true
+        WhatIf = $false
+    }
     $ToSave |
         ConvertTo-Json |
-        Set-Content -Path $global:GitlabConfigurationPath -Force |
+        Set-Content @SaveParameters |
         Out-Null
 }
 

@@ -3,53 +3,55 @@ function Get-GitlabIssue {
     [Alias('issue')]
     [Alias('issues')]
     param(
-        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$false, ParameterSetName='ByProjectId')]
+        [Parameter(Position=0, ParameterSetName='ByProjectId')]
         [string]
         $IssueId,
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByGroupId', ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, Mandatory, ParameterSetName='ByGroupId', ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
-        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
-        [Parameter(Mandatory=$false, ParameterSetName='Mine')]
+        [Parameter(ParameterSetName='ByGroupId')]
+        [Parameter(ParameterSetName='ByProjectId')]
+        [Parameter(ParameterSetName='Mine')]
         [ValidateSet($null, 'opened', 'closed')]
         [string]
         $State = 'opened',
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
-        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
-        [Parameter(Mandatory=$false, ParameterSetName='Mine')]
+        [Parameter(ParameterSetName='ByGroupId')]
+        [Parameter(ParameterSetName='ByProjectId')]
+        [Parameter(ParameterSetName='Mine')]
         [string]
         $CreatedAfter,
 
-        [Parameter(Mandatory=$false, ParameterSetName='ByGroupId')]
-        [Parameter(Mandatory=$false, ParameterSetName='ByProjectId')]
-        [Parameter(Mandatory=$false, ParameterSetName='Mine')]
+        [Parameter(ParameterSetName='ByGroupId')]
+        [Parameter(ParameterSetName='ByProjectId')]
+        [Parameter(ParameterSetName='Mine')]
         [string]
         $CreatedBefore,
 
-        [Parameter(Mandatory=$true, ParameterSetName='Mine')]
+        [Parameter(Mandatory, ParameterSetName='Mine')]
         [switch]
         $Mine,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [uint]
-        $MaxPages = 1,
-
-        [Parameter(Mandatory=$false)]
-        [string]
-        $SiteUrl,
+        $MaxPages,
 
         [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        [Parameter()]
+        $All,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
+
+    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
     $Path = $null
     $Query = @{}
@@ -67,10 +69,8 @@ function Get-GitlabIssue {
             $Path = "projects/$ProjectId/issues/$IssueId"
         } elseif ($GroupId) {
             $Path = "groups/$GroupId/issues"
-            $MaxPages = 10
         } else {
             $Path = "projects/$ProjectId/issues"
-            $MaxPages = 10
         }
     }
 
@@ -87,7 +87,7 @@ function Get-GitlabIssue {
         $Query.created_after = $CreatedAfter
     }
 
-    Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+    Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl |
         New-WrapperObject 'Gitlab.Issue' |
         Sort-Object SortKey
 }

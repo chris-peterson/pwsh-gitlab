@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.127.2'
+    ModuleVersion = '1.128.0'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,8 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* https://github.com/chris-peterson/pwsh-gitlab/pull/106
+* feat: standardize paging behavior for issues
+* enhance: aliases, conveniences for issue notes
 '@
         }
     }
@@ -313,7 +314,7 @@
         'Resolve-GitlabVariable'
     )
     AliasesToExport = @(
-        # long form
+        'Add-GitlabIssueNote'
         'Archive-GitlabProject'
         'Clone-GitlabGroup'
         'Fork-GitlabProject'
