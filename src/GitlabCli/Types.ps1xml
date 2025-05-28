@@ -223,6 +223,10 @@
         <Name>ProjectId</Name>
         <GetScriptBlock>$this.Pipeline.project_id</GetScriptBlock>
       </ScriptProperty>
+      <ScriptProperty>
+        <Name>PipelineId</Name>
+        <GetScriptBlock>$this.Pipeline.id</GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
   <Type>

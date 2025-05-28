@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.128.0'
+    ModuleVersion = '1.129.0'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,8 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* feat: standardize paging behavior for issues
-* enhance: aliases, conveniences for issue notes
+* feat: add wait option for jobs
 '@
         }
     }
@@ -323,6 +322,7 @@
         'Remove-GitlabPersonalAccessToken'
         'Remove-GitlabProjectFork'
         'Remove-GitlabProtectedBranch'
+        'Retry-GitlabJob'
         'Review-GitlabMergeRequest'
         'Revoke-GitlabGroupAccessToken'
         'Rotate-GitlabPersonalAccessToken'

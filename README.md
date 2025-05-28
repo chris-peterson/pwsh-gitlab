@@ -81,6 +81,8 @@ The following switches are supported when possible:
 
 `-CopyToClipboard` : For token-based operations, copy the resultant token to the clipboard rather than displaying in the terminal
 
+`-Wait` : For long-running operations (e.g. running a job/pipeline), wait for operation to complete.  In the meantime, the status is polled and reported to the terminal
+
 ## Global Behaviors
 
 If invoking commands from within a git repository, `.` can be used for `ProjectId` / `BranchName` to use the local context.

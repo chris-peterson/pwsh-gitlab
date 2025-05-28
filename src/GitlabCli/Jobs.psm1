@@ -54,12 +54,12 @@ function Get-GitlabJob {
         $SiteUrl
     )
 
-    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $MaxPages  = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+    $Project   = Get-GitlabProject -ProjectId $ProjectId
     $ProjectId = $Project.Id
 
     $Request = @{
-        HttpMethod = "GET"
+        HttpMethod = 'GET'
         Query      = @{}
         SiteUrl    = $SiteUrl
         MaxPages   = $MaxPages
@@ -81,19 +81,20 @@ function Get-GitlabJob {
     if ($Scope) {
         $Request.Query.scope = $Scope
     }
-    if ($IncludeRetried) {
+    if ($Name -or $IncludeRetried) {
         $Request.Query.include_retried = $true
     }
 
     $Jobs = Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Job'
 
     if ($Stage) {
+        Write-Verbose "Filtering jobs by stage: $Stage"
         $Jobs = $Jobs |
             Where-Object Stage -match $Stage
     }
     if ($Name) {
-        $Jobs = $Jobs |
-            Where-Object Name -match $Name
+        Write-Verbose "Filtering jobs by name: $Name"
+        $Jobs = $Jobs | Where-Object Name -match $Name | Select-Object -First 1
     }
     if ($IncludeTrace) {
         $Jobs | ForEach-Object {
@@ -170,6 +171,7 @@ function Get-GitlabJobTrace {
 
 function Start-GitlabJob {
     [Alias('Play-GitlabJob')]
+    [Alias('Retry-GitlabJob')]
     [Alias('play')]
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -187,7 +189,11 @@ function Start-GitlabJob {
 
         [Parameter()]
         [string]
-        $SiteUrl
+        $SiteUrl,
+
+        [Parameter()]
+        [switch]
+        $Wait
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
@@ -206,16 +212,35 @@ function Start-GitlabJob {
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "start job $($GitlabApiArguments | ConvertTo-Json -Depth 3)")) {
         try {
             # https://docs.gitlab.com/ee/api/jobs.html#run-a-job
-            Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.Job"
+            $Job = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.Job"
         }
         catch {
-            Write-Verbose $_
             if ($_.ErrorDetails.Message -match 'Unplayable Job') {
+                Write-Verbose "Job $JobId is not playable, retrying instead"
                 # https://docs.gitlab.com/ee/api/jobs.html#retry-a-job
                 $GitlabApiArguments.Path = $GitlabApiArguments.Path -replace '/play', '/retry'
-                Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.Job"
+                $Job = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.Job"
+            } else {
+                throw $_
             }
         }
+        if ($Wait) {
+            $ProgressArgs = @{
+                Activity = "Running '$($Job.Name)'..."
+                Id       = $Job.Id
+            }
+            Write-Progress @ProgressArgs
+            do {
+                Start-Sleep -Seconds 5
+                # NOTE: we are intentionally getting by _name_ as the ID that we get from 'play' / 'retry' is the original job ID
+                $Job = Get-GitlabJob -ProjectId $Project.Id -Name $Job.Name -SiteUrl $SiteUrl -IncludeTrace
+
+                $JobTail = $Job.Trace -split "`n" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Last 1
+                Write-Progress @ProgressArgs -Status $JobTail
+            } while ($Job.Status -eq 'running')
+            Write-Progress @ProgressArgs -Completed
+        }
+        $Job
     }
 }
 
