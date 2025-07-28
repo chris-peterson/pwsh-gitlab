@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/powershell:lts-debian-10
+FROM mcr.microsoft.com/powershell:lts-debian-12
 
 RUN apt-get update && apt-get install -y git
 
