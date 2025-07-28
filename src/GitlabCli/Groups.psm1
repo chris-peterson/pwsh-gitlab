@@ -299,10 +299,18 @@ function Set-GitlabGroupVariable {
         [Parameter(ValueFromPipelineByPropertyName)]
         $ExpandVariables = 'true',
 
+        [switch]
+        [Parameter()]
+        $NoExpand,
+
         [Parameter()]
         [string]
         $SiteUrl
     )
+
+    if ($NoExpand) {
+        $ExpandVariables = 'false'
+    }
 
     $Group = Get-GitlabGroup $GroupId
 

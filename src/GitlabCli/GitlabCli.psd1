@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.129.0'
+    ModuleVersion = '1.129.1'
 
     RequiredModules = @('powershell-yaml')
 
@@ -27,7 +27,7 @@
             ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* feat: add wait option for jobs
+* enhance: Add NoExpand parameter for setting GitLab variables
 '@
         }
     }

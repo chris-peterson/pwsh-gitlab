@@ -634,10 +634,18 @@ function Set-GitlabProjectVariable {
         [Parameter(ValueFromPipelineByPropertyName)]
         $ExpandVariables = 'true',
 
+        [switch]
+        [Parameter()]
+        $NoExpand,
+
         [Parameter()]
         [string]
         $SiteUrl
     )
+
+    if ($NoExpand) {
+        $ExpandVariables = 'false'
+    }
 
     $Request = @{
         value = $Value
