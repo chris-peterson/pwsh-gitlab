@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    if: github.repository == 'chris-peterson/pwsh-gitlab'
+    if: github.event.repository.fork == false
 
     runs-on: ubuntu-latest
 
@@ -24,7 +24,7 @@ jobs:
       url: https://www.powershellgallery.com/packages/GitlabCli
 
   push:
-    if: github.repository == 'chris-peterson/pwsh-gitlab'
+    if: github.event.repository.fork == false
 
     env:
       IMAGE_NAME: gitlab-cli
