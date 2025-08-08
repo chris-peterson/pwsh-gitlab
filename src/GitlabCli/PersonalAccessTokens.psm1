@@ -57,6 +57,10 @@ function Get-GitlabPersonalAccessToken {
         $Revoked = 'false',
 
         [Parameter()]
+        [switch]
+        $FetchUsers,
+
+        [Parameter()]
         [uint]
         $MaxPages,
     
@@ -110,7 +114,7 @@ function Get-GitlabPersonalAccessToken {
     if ($LastUsedBefore) {
         $Request.Query.last_used_before = $LastUsedBefore
     }
-    Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.PersonalAccessToken' | ForEach-Object {
+    $Results = Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.PersonalAccessToken' | ForEach-Object {
         if ($_.ExpiresAt) {
             $ExpiresAt = [datetime]::Parse($_.ExpiresAt)
             $_.PSObject.Properties.Remove('ExpiresAt')
@@ -120,6 +124,20 @@ function Get-GitlabPersonalAccessToken {
         }
         $_
     } | Sort-Object LastUsedAtSortable -Descending
+
+    if ($FetchUsers) {
+        $Users = @{}
+        foreach ($Id in $Results | Where-Object { $_.UserId } | Select-Object -ExpandProperty UserId -Unique) {
+            $Users[$Id] = Get-GitlabUser -Id $Id -SiteUrl $SiteUrl
+        }
+        $Results | ForEach-Object {
+            if ($_.UserId -and $Users.ContainsKey($_.UserId)) {
+                $_ | Add-Member -NotePropertyName 'User' -NotePropertyValue $Users[$_.UserId]
+            }
+        }
+    }
+
+    $Results
 }
 
 function New-GitlabPersonalAccessToken {

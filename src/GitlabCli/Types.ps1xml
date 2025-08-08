@@ -124,6 +124,10 @@
         <Name>Scope</Name>
         <GetScriptBlock>$this.Scopes</GetScriptBlock>
       </ScriptProperty>
+      <ScriptProperty>
+        <Name>Username</Name>
+        <GetScriptBlock>$this.User.Username</GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
   <Type>
