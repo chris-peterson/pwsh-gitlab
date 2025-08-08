@@ -264,7 +264,9 @@
         <TableHeaders>
           <TableColumnHeader/>
           <TableColumnHeader/>
-          <TableColumnHeader/>
+          <TableColumnHeader>
+            <Label>Scopes</Label>
+          </TableColumnHeader>
           <TableColumnHeader>
             <Label>LastUsedAt</Label>
           </TableColumnHeader>
@@ -283,7 +285,7 @@
                 <PropertyName>Name</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Scope</PropertyName>
+                <PropertyName>ScopesDisplay</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>LastUsedAtSortable</PropertyName>
@@ -320,7 +322,7 @@
                 <PropertyName>Name</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Scope</PropertyName>
+                <PropertyName>ScopesDisplay</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>ExpiresAt</PropertyName>

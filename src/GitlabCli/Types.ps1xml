@@ -121,8 +121,8 @@
         <GetScriptBlock>$this.LastUsedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
-        <Name>Scope</Name>
-        <GetScriptBlock>$this.Scopes</GetScriptBlock>
+        <Name>ScopesDisplay</Name>
+        <GetScriptBlock>$this.Scopes -join ', '</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Username</Name>
@@ -134,8 +134,8 @@
     <Name>Gitlab.NewPersonalAccessToken</Name>
     <Members>
       <ScriptProperty>
-        <Name>Scope</Name>
-        <GetScriptBlock>$this.Scopes</GetScriptBlock>
+        <Name>ScopesDisplay</Name>
+        <GetScriptBlock>$this.Scopes -join ', '</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>

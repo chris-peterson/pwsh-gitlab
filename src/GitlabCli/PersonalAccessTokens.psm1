@@ -61,6 +61,10 @@ function Get-GitlabPersonalAccessToken {
         $FetchUsers,
 
         [Parameter()]
+        [switch]
+        $ForExport,
+
+        [Parameter()]
         [uint]
         $MaxPages,
     
@@ -135,6 +139,24 @@ function Get-GitlabPersonalAccessToken {
                 $_ | Add-Member -NotePropertyName 'User' -NotePropertyValue $Users[$_.UserId]
             }
         }
+    }
+
+    if ($ForExport) {
+        return $Results |
+            ForEach-Object {
+                [pscustomobject]@{
+                    Id          = $_.Id
+                    Name        = $_.Name
+                    Description = $_.Description
+                    User        = $_.Username ?? $_.UserId
+                    Scopes      = $_.ScopesDisplay
+                    Active      = $_.Active
+                    CreatedAt   = $_.CreatedAt.ToString('yyyy-MM-dd')
+                    LastUsedAt  = $_.LastUsedAt ? $_.LastUsedAt.ToString('yyyy-MM-dd') : $null
+                    ExpiresAt   = $_.ExpiresAt ? $_.ExpiresAt.ToString('yyyy-MM-dd') : $null
+                }
+            } |
+            Sort-Object -Descending LastUsedAt
     }
 
     $Results
