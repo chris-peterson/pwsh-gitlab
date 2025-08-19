@@ -2,7 +2,8 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+    - main
 
 jobs:
   build:
@@ -11,20 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - name: Ensure PSGallery is registered
-        shell: pwsh
-        run: |
-          if (-not (Get-PSResourceRepository -Name 'PSGallery' -ErrorAction SilentlyContinue)) {
-            Register-PSResourceRepository -Name 'PSGallery' -Uri 'https://www.powershellgallery.com/api/v2'
-          }
       - name: Publish PowerShell Module
-        uses: natescherer/publish-powershell-action@v1.1.1
+        uses: chris-peterson/publish-powershell-modules@v1
         with:
-          token: ${{ secrets.PS_GALLERY_KEY }}
-          target: gallery
-          path: src/GitlabCli
+          ApiKey: ${{ secrets.PSGALLERY_API_KEY }}
     environment:
       name: PowerShell Gallery
       url: https://www.powershellgallery.com/packages/GitlabCli
@@ -38,7 +31,7 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Build image
         run: docker build . --tag $IMAGE_NAME

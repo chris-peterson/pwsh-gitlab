@@ -1,7 +1,12 @@
 @{
-    ModuleVersion = '1.130.0'
+    ModuleVersion = '1.131.0'
 
-    RequiredModules = @('powershell-yaml')
+    RequiredModules = @(
+        @{
+            ModuleName = 'powershell-yaml'
+            RequiredVersion = '0.4.12'
+        }
+    )
 
     PrivateData = @{
         PSData = @{
@@ -24,10 +29,9 @@
                 'Linux',
                 'MacOS'
             )
-            ExternalModuleDependencies = @('powershell-yaml')
             ReleaseNotes =
 @'
-* enhance: Add NoExpand parameter for setting GitLab variables
+* switch [publishing mechanism](https://github.com/marketplace/actions/publish-powershell-modules)
 '@
         }
     }
