@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.131.0'
+    ModuleVersion = '1.132.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* switch [publishing mechanism](https://github.com/marketplace/actions/publish-powershell-modules)
+* convenience methods for adding/removing project topics
 '@
         }
     }
@@ -133,6 +133,7 @@
         'Update-LocalGitlabGroup'
 
         # Projects
+        'Add-GitlabProjectTopic'
         'ConvertTo-GitlabTriggerYaml'
         'Copy-GitlabProject'
         'Get-GitlabProject'
@@ -148,6 +149,7 @@
         'Remove-GitlabProject'
         'Remove-GitlabProjectForkRelationship'
         'Remove-GitlabProjectHook'
+        'Remove-GitlabProjectTopic'
         'Remove-GitlabProjectVariable'
         'Rename-GitlabProject'
         'Rename-GitlabProjectDefaultBranch'

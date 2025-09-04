@@ -896,3 +896,55 @@ function Remove-GitlabProject {
         Write-Host "Removed $($Project.PathWithNamespace)"
     }
 }
+
+function Add-GitlabProjectTopic {
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory, Position=0)]
+        [string[]]
+        $Topic
+    )
+
+    $Project        = Get-GitlabProject $ProjectId
+    $ExistingTopics = @($Project.Topics)
+    $NewTopics      = $ExistingTopics + $Topic | Select-Object -Unique
+
+    if ($NewTopics.Count -eq $ExistingTopics.Count) {
+        Write-Verbose "No new topics to add to $($Project.PathWithNamespace)"
+        return
+    }
+
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "add topic ($($Topic -join ', '))")) {
+        Update-GitlabProject -ProjectId $Project.Id -Topics $NewTopics
+    }
+}
+
+function Remove-GitlabProjectTopic {
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory, Position=0)]
+        [string[]]
+        $Topic
+    )
+
+    $Project        = Get-GitlabProject $ProjectId
+    $ExistingTopics = @($Project.Topics)
+    $NewTopics      = $ExistingTopics | Where-Object { $Topic -notcontains $_ } | Select-Object -Unique
+
+    if ($NewTopics.Count -eq $ExistingTopics.Count) {
+        Write-Verbose "No topics to remove from $($Project.PathWithNamespace)"
+        return
+    }
+
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "remove topic ($($Topic -join ', '))")) {
+        Update-GitlabProject -ProjectId $Project.Id -Topics $NewTopics
+    }
+}
