@@ -211,15 +211,15 @@ function Protect-GitlabBranch {
         }
 
         if($MergeAccessLevel) {
-            $Request.merge_access_level = $(Get-GitlabProtectedBranchAccessLevel).$MergeAccessLevel
+            $Request.allowed_to_merge  += @({access_level = $(Get-GitlabProtectedBranchAccessLevel).$MergeAccessLevel})
         }
 
         if($PushAccessLevel) {
-            $Request.push_access_level = $(Get-GitlabProtectedBranchAccessLevel).$PushAccessLevel
+            $Request.allowed_to_push += @({access_level = $(Get-GitlabProtectedBranchAccessLevel).$PushAccessLevel})
         }
 
         if($UnprotectAccessLevel) {
-            $Request.unprotect_access_level = $(Get-GitlabProtectedBranchAccessLevel).$UnprotectAccessLevel
+            $Request.allowed_to_unprotect += @({access_level = $(Get-GitlabProtectedBranchAccessLevel).$UnprotectAccessLevel})
         }
 
         if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) ($Branch)", "update protected branch $($Request | ConvertTo-Json)")) {
