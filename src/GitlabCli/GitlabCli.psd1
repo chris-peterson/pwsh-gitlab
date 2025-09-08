@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.132.0'
+    ModuleVersion = '1.133.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* convenience methods for adding/removing project topics
+* add search by filename and/or within a group
 '@
         }
     }

@@ -8,6 +8,14 @@ function Search-Gitlab {
         [string]
         $Scope = 'blobs',
 
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $GroupId,
+
+        [Parameter()]
+        [string]
+        $Filename,
+
         [Parameter(Position=0, Mandatory)]
         [string]
         $Search,
@@ -42,10 +50,16 @@ function Search-Gitlab {
 
     $PageSize = 20
     $MaxPages = [Math]::Max(1, $MaxResults / $PageSize)
-    $Query = @{
-        scope = $Scope
-        per_page = $PageSize
-        search = $Search
+    $Request = @{
+        HttpMethod = 'GET'
+        Path   = 'search'
+        Query      = @{
+            scope    = $Scope
+            per_page = $PageSize
+            search   = $Search
+        }
+        MaxPages = $MaxPages
+        SiteUrl  = $SiteUrl
     }
 
     switch ($Scope) {
@@ -60,8 +74,16 @@ function Search-Gitlab {
         }
     }
 
-    if ($PSCmdlet.ShouldProcess("search", "$($Query | ConvertTo-Json)")) {
-        $Results = Invoke-GitlabApi GET 'search' $Query -MaxPages $MaxPages -SiteUrl $SiteUrl | New-WrapperObject $DisplayType
+    if ($GroupId) {
+        $Request.Path = "groups/$($GroupId)/search"
+    }
+
+    if ($Filename) {
+        $Request.Query.search = "filename:$Filename $($Request.Query.search)"
+    }
+
+    if ($PSCmdlet.ShouldProcess("search", "$($Request | ConvertTo-Json)")) {
+        $Results = Invoke-GitlabApi @Request | New-WrapperObject $DisplayType
 
         if ($Scope -eq 'blobs') {
             # the response object is too anemic to be useful.  enrich with project data
