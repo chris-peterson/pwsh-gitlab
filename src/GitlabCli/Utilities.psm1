@@ -140,7 +140,7 @@ function Invoke-GitlabApi {
     }
     $RestMethodParams = @{
         Method = $HttpMethod
-        Uri    = "$GitlabUrl/api/$Api/$Path$SerializedQuery"
+        Uri    = "$GitlabUrl/api/$([string]::IsNullOrWhiteSpace($Api) ? '' : "$Api/")$Path$SerializedQuery"
         Header = $Headers
     }
     $Proxy  = $ProxyUrl ?? $Site.ProxyUrl

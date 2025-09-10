@@ -85,11 +85,14 @@ function Get-GitlabMergeRequest {
             $Resource = $Url | Get-GitlabResourceFromUrl
             $ProjectId = $Resource.ProjectId
             $MergeRequestId = $Resource.ResourceId
-            }
+        }
         'ByProjectId' {
             $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
             # https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
             $Path = "projects/$ProjectId/merge_requests"
+            if ($MergeRequestId) {
+                $Path += "/$MergeRequestId"
+            }
         }
         'ByGroupId' {
             $GroupId = $(Get-GitlabGroup -GroupId $GroupId).Id
@@ -176,6 +179,7 @@ function Add-GitlabMergeRequestChangeSummary {
                 }
                 notes {
                     nodes {
+                      id
                       author {
                           username
                       }
@@ -188,18 +192,57 @@ function Add-GitlabMergeRequestChangeSummary {
     }
 "@
 
+
     $Mr = $Data.Project.mergeRequest
-    $Notes = $Mr.notes.nodes | Where-Object body -NotMatch "^assigned to @$($MergeRequest.Author.username)" # filter out self-assignment
+    $Notes = $Mr.notes.nodes | Sort-Object -Descending updatedAt
+
+    $SpecialNotes = @{
+        SelfAssigned         = @{ Regex="^assigned to @$($MergeRequest.Author.username)"; Notes=@() }
+        Assigned             = @{ Regex='^assigned to @'; Notes=@() }
+        DescriptionChanges   = @{ Regex='^changed the description'; Notes=@() }
+        TitleChanges         = @{ Regex='^<div>changed title from'; Notes=@() }
+        MarkedDraft          = @{ Regex='^marked this merge request as \*\*draft\*\*'; Notes=@() }
+        MarkedReady          = @{ Regex='^marked this merge request as \*\*ready\*\*'; Notes=@() }
+        ReviewRequested      = @{ Regex='^requested review from @'; Notes=@() }
+        Approved             = @{ Regex='^approved this merge request'; Notes=@() }
+        Commits              = @{ Regex='^added \d+ commit'; Notes=@() }
+        MentionCommits       = @{ Regex="^mentioned in commit"; Notes=@() }
+        MentionMergeRequests = @{ Regex="^mentioned in merge request"; Notes=@() }
+        Edits                = @{ Regex="^changed this line in \[version"; Notes=@() }
+        PostMergeCommits     = @{ Regex="^deleted the `.*` branch."; Notes=@() }
+    }
+    $SpecialNoteIds = @()
+    foreach ($Key in $SpecialNotes.Keys) {
+        $Special = $Notes | Where-Object body -Match $SpecialNotes[$Key].Regex
+        if ($Special) {
+            $SpecialNotes[$Key].Notes = $Special
+            $SpecialNoteIds += $Special.id
+        }
+    }
+    $RegularComments = $Notes | Where-Object {
+        $SpecialNoteIds -notcontains $_.id
+    }
+    $SelfComments     = $RegularComments | Where-Object { $_.author.username -eq $MergeRequest.Author.username }
+    $ReviewerComments = $RegularComments | Where-Object { $_.author.username -ne $MergeRequest.Author.username }
+
     $Summary = [PSCustomObject]@{
-        Changes           = $Mr.diffStatsSummary | New-WrapperObject
-        Authors           = $Mr.commitsWithoutMergeCommits.nodes.author.username        | Select-Object -Unique | Sort-Object
-        FirstCommittedAt  = $Mr.commitsWithoutMergeCommits.nodes.authoredDate           | Sort-Object | Select-Object -First 1
-        ReviewRequestedAt = $Notes | Where-Object body -Match '^requested review from @' | Sort-Object updatedAt | Select-Object -First 1 -ExpandProperty updatedAt
-        AssignedAt        = $Notes | Where-Object body -Match '^assigned to @' | Sort-Object updatedAt | Select-Object -First 1 -ExpandProperty updatedAt
-        MarkedReadyAt     = $Notes | Where-Object body -Match '^marked this merge request as \*\*ready\*\*' | Sort-Object updatedAt | Select-Object -First 1 -ExpandProperty updatedAt
-        ApprovedAt        = $Notes | Where-Object body -Match '^approved this merge request' |
-                                Sort-Object updatedAt | Select-Object -First 1 -ExpandProperty updatedAt
-        TimeToMerge       = '(computed below)'
+        Changes                 = $Mr.diffStatsSummary | New-WrapperObject
+        Authors                 = $Mr.commitsWithoutMergeCommits.nodes.author.username | Select-Object -Unique | Sort-Object
+        FirstCommittedAt        = @($Mr.commitsWithoutMergeCommits.nodes.authoredDate) + @($SpecialNotes.Commits.Notes.updatedAt) | Sort-Object | Select-Object -First 1
+        ReviewRequestedAt       = $SpecialNotes.ReviewRequested.Notes | Select-Object -First 1 | Select-Object -ExpandProperty updatedAt
+        AssignedAt              = $SpecialNotes.SelfAssigned.Notes | Select-Object -First 1 | Select-Object -ExpandProperty updatedAt
+        MarkedReadyAt           = $SpecialNotes.MarkedReady.Notes | Select-Object -First 1 | Select-Object -ExpandProperty updatedAt
+        ApprovedAt              = $SpecialNotes.Approved.Notes | Select-Object -First 1 | Select-Object -ExpandProperty updatedAt
+        FirstNonAuthorCommentAt = $ReviewerComments | Select-Object -First 1 | Select-Object -ExpandProperty updatedAt
+        TimeToMerge             = '(computed below)'
+    }
+    if ($DebugPreference -eq 'Continue') {
+        $Summary | Add-Member -NotePropertyMembers @{
+            Commits         = $Mr.commitsWithoutMergeCommits.nodes
+            SpecialNotes     = $SpecialNotes
+            ReviewerComments = $ReviewerComments
+            SelfComments     = $SelfComments
+        }
     }
 
     $MergedAt = $MergeRequest.MergedAt
@@ -207,8 +250,6 @@ function Add-GitlabMergeRequestChangeSummary {
         $Summary.TimeToMerge = @{ Duration = $MergedAt - $Summary.ReviewRequestedAt; Measure='FromReviewRequested' }
     } elseif ($Summary.AssignedAt) {
         $Summary.TimeToMerge = @{ Duration = $MergedAt - $Summary.AssignedAt; Measure='FromAssigned' }
-    } elseif ($Summary.MarkedReadyAt) {
-        $Summary.TimeToMerge = @{ Duration = $MergedAt - $Summary.MarkedReadyAt; Measure='FromMarkedReady' }
     } else {
         $Summary.TimeToMerge = @{ Duration = $MergedAt - $MergeRequest.CreatedAt; Measure='FromCreated'}
     }

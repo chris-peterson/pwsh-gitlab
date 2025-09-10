@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.133.0'
+    ModuleVersion = '1.134.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* add search by filename and/or within a group
+* enhance: Merge request change summary - add FirstNonAuthorCommentAt, filter out some other 'special notes'
 '@
         }
     }
