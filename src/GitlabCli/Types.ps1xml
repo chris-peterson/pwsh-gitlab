@@ -35,6 +35,10 @@
   <Type>
     <Name>Gitlab.Group</Name>
     <Members>
+      <ScriptProperty>
+        <Name>IsTopLevel</Name>
+        <GetScriptBlock>-not $this.ParentId</GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
   <Type>

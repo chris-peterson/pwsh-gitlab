@@ -336,6 +336,35 @@
       </TableControl>
     </View>
     <View>
+      <Name>GitlabServiceAccount</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.ServiceAccount</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+                <Alignment>Right</Alignment>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Name</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Username</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>GitlabPipeline</Name>
       <ViewSelectedBy>
         <TypeName>Gitlab.Pipeline</TypeName>

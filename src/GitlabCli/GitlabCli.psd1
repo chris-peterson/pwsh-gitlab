@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.134.0'
+    ModuleVersion = '1.135.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* enhance: Merge request change summary - add FirstNonAuthorCommentAt, filter out some other 'special notes'
+* feat: wrap service account APIs and Remove-GitlabUser
 '@
         }
     }
@@ -77,6 +77,7 @@
         'Releases.psm1'
         'Runners.psm1'
         'Search.psm1'
+        'ServiceAccounts.psm1'
         'Todos.psm1'
         'Topics.psm1'
         'Users.psm1'
@@ -210,6 +211,12 @@
         'Invoke-GitlabPersonalAccessTokenRotation'
         'Revoke-GitlabPersonalAccessToken'
 
+        # Service Accounts
+        'Get-GitlabServiceAccount'
+        'New-GitlabServiceAccount'
+        'Remove-GitlabServiceAccount'
+        'Update-GitlabServiceAccount'
+
         # Pipelines
         'Get-GitlabPipeline'
         'Get-GitlabPipelineVariable'
@@ -269,6 +276,7 @@
         'Get-GitlabUser'
         'Get-GitlabCurrentUser'
         'Block-GitlabUser'
+        'Remove-GitlabUser'
         'Start-GitlabUserImpersonation'
         'Stop-GitlabUserImpersonation'
         'Unblock-GitlabUser'

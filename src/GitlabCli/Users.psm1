@@ -145,6 +145,40 @@ function Unblock-GitlabUser {
     }
 }
 
+function Remove-GitlabUser {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    param(
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
+        [int]
+        [Alias('Id')]
+        $UserId,
+
+        [Parameter()]
+        [string]
+        $SiteUrl,
+
+        [Parameter()]
+        [switch]
+        $Force
+    )
+
+    # https://learn.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7.5#implementing--force
+    if ($Force -and -not $PSBoundParameters.ContainsKey('Confirm')) {
+        $ConfirmPreference = 'None'
+    }
+
+    $Request = @{
+        # https://docs.gitlab.com/api/users/#delete-a-user
+        HttpMethod = 'DELETE'
+        Path       = "users/$UserId"
+        SiteUrl    = $SiteUrl
+    }
+    if ($PSCmdlet.ShouldProcess($UserId, 'delete user')) {
+        Invoke-GitlabApi @Request | Out-Null
+        Write-Host "User '$UserId' deleted"
+    }
+}
+
 # https://docs.gitlab.com/ee/api/events.html#get-user-contribution-events
 function Get-GitlabUserEvent {
     [CmdletBinding(DefaultParameterSetName='ByUserId')]
