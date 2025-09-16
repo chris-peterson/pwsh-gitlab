@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.135.0'
+    ModuleVersion = '1.136.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* feat: wrap service account APIs and Remove-GitlabUser
+* feat: runner stats
 '@
         }
     }
@@ -257,6 +257,7 @@
         'Suspend-GitlabRunner'
         'Resume-GitlabRunner'
         'Remove-GitlabRunner'
+        'Get-GitlabRunnerStats'
 
         # Search
         'Search-Gitlab'

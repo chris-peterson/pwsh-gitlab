@@ -203,9 +203,13 @@ function New-WrapperObject {
         [Parameter(ValueFromPipeline)]
         $InputObject,
 
-        [Parameter(Position=0, Mandatory=$false)]
+        [Parameter(Position=0)]
         [string]
-        $DisplayType
+        $DisplayType,
+
+        [Parameter()]
+        [switch]
+        $PreserveCasing
     )
     Begin{}
     Process {
@@ -214,7 +218,8 @@ function New-WrapperObject {
             $item.PSObject.Properties |
                 Sort-Object Name |
                 ForEach-Object {
-                    $Wrapper | Add-Member -MemberType NoteProperty -Name $($_.Name | ConvertTo-PascalCase) -Value $_.Value
+                    $Name = if ($PreserveCasing) { $_.Name } else { $_.Name | ConvertTo-PascalCase }
+                    $Wrapper | Add-Member -MemberType NoteProperty -Name $Name -Value $_.Value
                 }
             
             # aliases for common property names

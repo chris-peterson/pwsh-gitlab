@@ -49,6 +49,7 @@ $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.RepositoryTree'            = ''
     'Gitlab.Runner'                    = 'Id'
     'Gitlab.RunnerJob'                 = 'Id'
+    'Gitlab.RunnerStats'               = ''
     'Gitlab.SearchResult.Blob'         = ''
     'Gitlab.SearchResult.MergeRequest' = ''
     'Gitlab.SearchResult.Project'      = ''

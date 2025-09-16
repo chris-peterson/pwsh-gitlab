@@ -468,6 +468,23 @@
     </Members>
   </Type>
   <Type>
+    <Name>Gitlab.RunnerStats</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>JobCountByStatusFriendly</Name>
+        <GetScriptBlock>$($this.JobCountByStatus.GetEnumerator() | ForEach-Object { "$($_.Key): $($_.Value)" }) -join ', '</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>JobQueuedStatsFriendly</Name>
+        <GetScriptBlock>$this.JobQueuedStats | ForEach-Object { "avg: $($_.Average.ToString('N2')) +/- stdev: $($_.StandardDeviation.ToString('N2'))" }</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>LongestQueuedJob</Name>
+        <GetScriptBlock>$this.LongestQueuedJobs | Select-Object -First 1 | ForEach-Object { "$($_.Uri) ($($_.QueuedDuration.ToString('N2')))" }</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Gitlab.AccessToken</Name>
     <Members>
       <ScriptProperty>

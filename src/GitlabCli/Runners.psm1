@@ -244,3 +244,101 @@ function Remove-GitlabRunner {
         }
     }
 }
+
+function Get-GitlabRunnerStats {
+    [CmdletBinding(DefaultParameterSetName='ByTags')]
+    param (
+        [Parameter(ParameterSetName='ById', Mandatory, Position=0, ValueFromPipelineByPropertyName)]
+        [string]
+        $RunnerId,
+
+        [Parameter(ParameterSetName='ByTags', Mandatory, Position=0, ValueFromPipelineByPropertyName)]
+        [Alias('Tag')]
+        [string[]]
+        $RunnerTag,
+
+        [Parameter()]
+        [datetime]
+        $Before,
+
+        [Parameter()]
+        [datetime]
+        $After,
+
+        [Parameter()]
+        [int]
+        $JobLimit = 100,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    if ($PSCmdlet.ParameterSetName -eq 'ById') {
+        $RunnerIds = @($RunnerId) | ForEach-Object { "gid://gitlab/Ci::Runner/$($_)" }
+    } elseif ($PSCmdlet.ParameterSetName -eq 'ByTags') {
+        $TagList = $RunnerTag -join ','
+        $GetRunners = @{
+            Query = @"
+            {
+                runners(tagList: `"$TagList`") {
+                    nodes {
+                        id
+                    }
+                }
+            }
+"@
+            SiteUrl = $SiteUrl
+        }
+        $Runners = Invoke-GitlabGraphQL @GetRunners
+        $RunnerIds = $Runners.Runners.nodes.id
+    }
+
+    $Data = @()
+    foreach ($RunnerId in $RunnerIds) {
+        $GetJobs = @{
+            Query = @"
+        {
+            runner(id: `"$RunnerId`") {
+                id
+                runnerType
+                jobs(first: $JobLimit) {
+                    nodes {
+                        project {
+                            webUrl
+                        }
+                        id
+                        status
+                        queuedDuration
+                        startedAt
+                    }
+                }
+            }
+        }
+"@
+            SiteUrl = $SiteUrl
+        }
+        $Jobs = Invoke-GitlabGraphQL @GetJobs
+
+        $Data += [pscustomobject]@{
+            Runner = $RunnerId
+            Jobs   = $Jobs.Runner.jobs.nodes
+        }
+    }
+
+    $JobCountByStatus = [ordered]@{}
+    $Data.Jobs | Group-Object -Property status -NoElement | Sort-Object -Descending Count | ForEach-Object {
+        $JobCountByStatus[$_.Name.ToLower()] = $_.Count
+    }
+    $QueuedJobs = $Data.Jobs | Where-Object { $_.queuedDuration -ne $null -and $_.queuedDuration -gt 0 }
+    $LongestQueuedJobs = $QueuedJobs | Sort-Object -Property queuedDuration -Descending | Select-Object -First 5 | ForEach-Object {
+      $_ | Add-Member -MemberType NoteProperty -Name 'Uri' -Value "$($_.project.webUrl)/-/jobs/$(($_.id -split '/')[-1])" -PassThru
+    }
+
+    [PSCustomObject]@{
+        JobCount          = $Data.Jobs.Count
+        JobCountByStatus  = $JobCountByStatus
+        JobQueuedStats    = $QueuedJobs.queuedDuration | Measure-Object -AllStats | Select-Object Count, Average, Sum, StandardDeviation
+        LongestQueuedJobs = $LongestQueuedJobs | Select-Object @{l='QueuedDuration'; e={$_.queuedDuration}}, Uri
+    } | New-WrapperObject 'Gitlab.RunnerStats' -PreserveCasing
+}

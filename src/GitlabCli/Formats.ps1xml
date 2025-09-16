@@ -1254,6 +1254,46 @@
       </TableControl>
     </View>
     <View>
+      <Name>GitlabRunnerStats</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.RunnerStats</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>JobCount</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>JobCountByStatus</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>JobQueuedDuration</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>LongestQueuedJob</Label>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>JobCount</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>JobCountByStatusFriendly</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>JobQueuedStatsFriendly</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>LongestQueuedJob</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>GitlabAccessToken</Name>
       <ViewSelectedBy>
         <TypeName>Gitlab.AccessToken</TypeName>

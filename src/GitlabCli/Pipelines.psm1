@@ -1,4 +1,3 @@
-# https://docs.gitlab.com/ee/api/pipelines.html#list-project-pipelines
 function Get-GitlabPipeline {
 
     [Alias('pipeline')]
@@ -14,7 +13,7 @@ function Get-GitlabPipeline {
         [string]
         $Ref,
 
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
         $PipelineId,
 
@@ -59,8 +58,12 @@ function Get-GitlabPipeline {
         $FetchDownstream,
 
         [Parameter()]
-        [int]
-        $MaxPages = 1,
+        [uint]
+        $MaxPages,
+
+        [switch]
+        [Parameter()]
+        $All,
 
         [Parameter()]
         [string]
@@ -69,6 +72,7 @@ function Get-GitlabPipeline {
 
     $GitlabApiParameters = @{
         HttpMethod = 'GET'
+        MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
         SiteUrl    = $SiteUrl
     }
 
@@ -108,8 +112,10 @@ function Get-GitlabPipeline {
     $Project = Get-GitlabProject -ProjectId $ProjectId
 
     $GitlabApiParameters.Path = if ($PipelineId) {
+        # https://docs.gitlab.com/api/pipelines/#get-a-single-pipeline
         "projects/$($Project.Id)/pipelines/$PipelineId"
     } else {
+        # https://docs.gitlab.com/ee/api/pipelines.html#list-project-pipelines
         "projects/$($Project.Id)/pipelines"
     }
 
