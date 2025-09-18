@@ -475,8 +475,8 @@
         <GetScriptBlock>$($this.JobCountByStatus.GetEnumerator() | ForEach-Object { "$($_.Key): $($_.Value)" }) -join ', '</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
-        <Name>JobQueuedStatsFriendly</Name>
-        <GetScriptBlock>$this.JobQueuedStats | ForEach-Object { "avg: $($_.Average.ToString('N2')) +/- stdev: $($_.StandardDeviation.ToString('N2'))" }</GetScriptBlock>
+        <Name>JobQueuedDurationPercentilesFriendly</Name>
+        <GetScriptBlock>$($this.JobQueuedDurationPercentiles.GetEnumerator() | ForEach-Object { "p$($_.Key): $($_.Value.ToString('N2'))" }) -join ', '</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>LongestQueuedJob</Name>

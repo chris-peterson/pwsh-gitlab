@@ -245,6 +245,18 @@ function Remove-GitlabRunner {
     }
 }
 
+function Get-Percentile {
+    param (
+        [double[]]$Values,
+        [double]$Percentile
+    )
+    if (-not $Values -or $Values.Count -eq 0) { return $null }
+    $Sorted = $Values | Sort-Object
+    $Rank = [math]::Ceiling($Percentile * $Sorted.Count) - 1
+    $Rank = [math]::Max(0, [math]::Min($Rank, $Sorted.Count - 1))
+    $Sorted[$Rank]
+}
+
 function Get-GitlabRunnerStats {
     [CmdletBinding(DefaultParameterSetName='ByTags')]
     param (
@@ -334,11 +346,18 @@ function Get-GitlabRunnerStats {
     $LongestQueuedJobs = $QueuedJobs | Sort-Object -Property queuedDuration -Descending | Select-Object -First 5 | ForEach-Object {
       $_ | Add-Member -MemberType NoteProperty -Name 'Uri' -Value "$($_.project.webUrl)/-/jobs/$(($_.id -split '/')[-1])" -PassThru
     }
+    $Durations = $QueuedJobs.queuedDuration
 
     [PSCustomObject]@{
-        JobCount          = $Data.Jobs.Count
-        JobCountByStatus  = $JobCountByStatus
-        JobQueuedStats    = $QueuedJobs.queuedDuration | Measure-Object -AllStats | Select-Object Count, Average, Sum, StandardDeviation
+        RunnerCount                  = $RunnerIds.Count
+        JobCount                     = $Data.Jobs.Count
+        JobCountByStatus             = $JobCountByStatus
+        JobQueuedDurationPercentiles = [ordered]@{
+            '50' = Get-Percentile -Values $Durations -Percentile 0.50
+            '80' = Get-Percentile -Values $Durations -Percentile 0.80
+            '95' = Get-Percentile -Values $Durations -Percentile 0.95
+            '99' = Get-Percentile -Values $Durations -Percentile 0.99
+        }
         LongestQueuedJobs = $LongestQueuedJobs | Select-Object @{l='QueuedDuration'; e={$_.queuedDuration}}, Uri
     } | New-WrapperObject 'Gitlab.RunnerStats' -PreserveCasing
 }

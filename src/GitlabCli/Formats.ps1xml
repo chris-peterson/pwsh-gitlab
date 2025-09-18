@@ -1261,6 +1261,9 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
+            <Label>RunnerCount</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
             <Label>JobCount</Label>
           </TableColumnHeader>
           <TableColumnHeader>
@@ -1277,13 +1280,16 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
+                <PropertyName>RunnerCount</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
                 <PropertyName>JobCount</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>JobCountByStatusFriendly</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>JobQueuedStatsFriendly</PropertyName>
+                <PropertyName>JobQueuedDurationPercentilesFriendly</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>LongestQueuedJob</PropertyName>
