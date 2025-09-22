@@ -71,6 +71,7 @@
         'PersonalAccessTokens.psm1'
         'Pipelines.psm1'
         'PipelineSchedules.psm1'
+        'ProjectAccessTokens.psm1'
         'Projects.psm1'
         'ProjectHooks.psm1'
         'RepositoryFiles.psm1'
@@ -132,6 +133,12 @@
         'Set-GitlabGroupVariable'
         'Update-GitlabGroup'
         'Update-LocalGitlabGroup'
+
+        # Project Access Tokens
+        'Get-GitlabProjectAccessToken'
+        'New-GitlabProjectAccessToken'
+        'Remove-GitlabProjectAccessToken'
+        'Invoke-GitlabProjectAccessTokenRotation'
 
         # Projects
         'Add-GitlabProjectTopic'
@@ -340,7 +347,9 @@
         'Retry-GitlabJob'
         'Review-GitlabMergeRequest'
         'Revoke-GitlabGroupAccessToken'
+        'Revoke-GitlabProjectAccessToken'
         'Rotate-GitlabPersonalAccessToken'
+        'Rotate-GitlabProjectAccessToken'
         'Share-GitlabGroupWithGroup'
         'Share-GitlabProjectWithGroup'
         'Transfer-GitlabGroup'
