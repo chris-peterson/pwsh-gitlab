@@ -512,8 +512,12 @@ function Update-GitlabProject {
     if ($RepositoryAccessLevel) {
         $Request.repository_access_level = $RepositoryAccessLevel
     }
-    if ($Topics) {
-        $Request.topics = $Topics -join ','
+    if($PSBoundParameters.ContainsKey('Topics')) {
+        if ($Topics) {
+            $Request.topics = $Topics -join ','
+        } else {
+            $Request.topics = ''
+        } 
     }
     if ($Visibility) {
         $Request.visibility = $Visibility
