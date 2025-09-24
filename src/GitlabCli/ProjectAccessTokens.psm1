@@ -45,9 +45,6 @@ When no tokenid is specificed, it will return all of the tokens for the project
 .PARAMETER SiteUrl
   The URL of the Gitlab instance. If not provided, the default will be used.
 
-.PARAMETER WhatIf
-  If this switch is enabled, the function will not make any changes and will only return the url and parameters that would have been used.
-
 .LINK
  https://docs.gitlab.com/ee/api/project_access_tokens.html
  https://docs.gitlab.com/ee/api/project_access_tokens.html#list-project-access-tokens
@@ -167,9 +164,6 @@ The date the token will expire. If not provided, the token will expire at the ma
 .PARAMETER SiteUrl
 The URL of the Gitlab instance. If not provided, the default will be used.
 
-.PARAMETER WhatIf
-If this switch is enabled, the function will not make any changes and will only return the url and parameters that would have been used.
-
 .LINK
  https://docs.gitlab.com/ee/api/project_access_tokens.html
  https://docs.gitlab.com/ee/api/project_access_tokens.html#create-a-project-access-token
@@ -248,9 +242,6 @@ The date the new token will expire. If not provided, the token will expire at th
 .PARAMETER SiteUrl
 The URL of the Gitlab instance. If not provided, the default will be used.
 
-.PARAMETER WhatIf
-If this switch is enabled, the function will not make any changes and will only return the url and parameters that would have been used.
-
 .LINK
  https://docs.gitlab.com/ee/api/project_access_tokens.html
  https://docs.gitlab.com/ee/api/project_access_tokens.html#rotate-a-project-access-token
@@ -317,9 +308,6 @@ The ID of the access token to revoke.
 
 .PARAMETER SiteUrl
 The URL of the Gitlab instance. If not provided, the default will be used.
-
-.PARAMETER WhatIf
-If this switch is enabled, the function will not make any changes and will only return the url and parameters that would have been used.
 
 .LINK
  https://docs.gitlab.com/ee/api/project_access_tokens.html
