@@ -186,9 +186,6 @@ function Protect-GitlabBranch {
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
-    $PushAccessLevelLiteral = $(Get-GitlabProtectedBranchAccessLevel).$PushAccessLevel
-    $MergeAccessLevelLiteral = $(Get-GitlabProtectedBranchAccessLevel).$MergeAccessLevel
-    $UnprotectAccessLevelLiteral = $(Get-GitlabProtectedBranchAccessLevel).$UnprotectAccessLevel
 
     if ($Project | Get-GitlabProtectedBranch | Where-Object Name -eq $Branch) {
         # NOTE: the PATCH endpoint is crap (https://gitlab.com/gitlab-org/gitlab/-/issues/365520)
@@ -208,16 +205,34 @@ function Protect-GitlabBranch {
     }
 
     $Request = @{
-        name                         = $Branch
-        push_access_level            = $PushAccessLevelLiteral
-        merge_access_level           = $MergeAccessLevelLiteral
-        unprotect_access_level       = $UnprotectAccessLevelLiteral
-        allow_force_push             = $AllowForcePush
-        allowed_to_push              = @($AllowedToPush | ConvertTo-SnakeCase)
-        allowed_to_merge             = @($AllowedToMerge | ConvertTo-SnakeCase)
-        allowed_to_unprotect         = @($AllowedToUnprotect | ConvertTo-SnakeCase)
-        code_owner_approval_required = $CodeOwnerApprovalRequired
+        name = $Branch
     }
+
+    if($PSBoundParameters.ContainsKey('PushAccessLevel')) {
+        $Request.push_access_level =  $(Get-GitlabProtectedBranchAccessLevel).$PushAccessLevel
+    }
+    if($PSBoundParameters.ContainsKey('MergeAccessLevel')) {
+        $Request.merge_access_level =  $(Get-GitlabProtectedBranchAccessLevel).$MergeAccessLevel
+    }
+    if($PSBoundParameters.ContainsKey('UnprotectAccessLevel')) {
+        $Request.unprotect_access_level =  $(Get-GitlabProtectedBranchAccessLevel).$UnprotectAccessLevel
+    }
+    if($PSBoundParameters.ContainsKey('AllowForcePush')) {
+        $Request.allow_force_push =  $AllowForcePush
+    }
+    if($PSBoundParameters.ContainsKey('CodeOwnerApprovalRequired')) {
+        $Request.code_owner_approval_required =  $CodeOwnerApprovalRequired
+    }
+    if($PSBoundParameters.ContainsKey('AllowedToPush')) {
+        $Request.allowed_to_push = @($AllowedToPush | ConvertTo-SnakeCase)
+    }
+    if($PSBoundParameters.ContainsKey('AllowedToMerge')) {
+        $Request.allowed_to_merge = @($AllowedToMerge | ConvertTo-SnakeCase)
+    }
+    if($PSBoundParameters.ContainsKey('AllowedToUnprotect')) {
+        $Request.allowed_to_unprotect = @($AllowedToUnprotect | ConvertTo-SnakeCase)
+    }
+
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) ($Branch)", "protect branch $($Request | ConvertTo-Json)")) {
         # https://docs.gitlab.com/ee/api/protected_branches.html#protect-repository-branches
         Invoke-GitlabApi POST "projects/$($Project.Id)/protected_branches" -Body $Request | New-WrapperObject 'Gitlab.ProtectedBranch'

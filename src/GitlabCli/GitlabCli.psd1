@@ -55,6 +55,7 @@
         'Branches.psm1'
         'Commits.psm1'
         'Config.psm1'
+        'DeployKeys.psm1'
         'Deployments.psm1'
         'Environments.psm1'
         'Git.psm1'
@@ -72,6 +73,7 @@
         'Pipelines.psm1'
         'PipelineSchedules.psm1'
         'ProjectAccessTokens.psm1'
+        'ProjectDeployKeys.psm1'
         'Projects.psm1'
         'ProjectHooks.psm1'
         'RepositoryFiles.psm1'
@@ -81,6 +83,7 @@
         'ServiceAccounts.psm1'
         'Todos.psm1'
         'Topics.psm1'
+        'UserDeployKeys.psm1'
         'Users.psm1'
         'Utilities.psm1'
         'Variables.psm1'
@@ -111,6 +114,9 @@
         'Get-DefaultGitlabSite'
         'Set-DefaultGitlabSite'
 
+        # Deploy Keys
+        'Get-GitlabDeployKey'
+
         # GraphQL
         'Invoke-GitlabGraphQL'
 
@@ -139,6 +145,13 @@
         'New-GitlabProjectAccessToken'
         'Remove-GitlabProjectAccessToken'
         'Invoke-GitlabProjectAccessTokenRotation'
+
+        # Project Deploy Keys
+        'Get-GitlabProjectDeployKey'
+        'Add-GitlabProjectDeployKey'
+        'Update-GitlabProjectDeployKey'
+        'Remove-GitlabProjectDeployKey'
+        'Enable-GitlabProjectDeployKey'
 
         # Projects
         'Add-GitlabProjectTopic'
@@ -280,6 +293,9 @@
         'Update-GitlabTopic'
         'Remove-GitlabTopic'
 
+        # User Deploy Keys
+        'Get-GitlabUserDeployKey'
+        
         # User
         'Get-GitlabUser'
         'Get-GitlabCurrentUser'
