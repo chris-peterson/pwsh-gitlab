@@ -24,6 +24,7 @@ $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.Branch'                    = ''
     'Gitlab.Commit'                    = 'Id'
     'Gitlab.Configuration'             = ''
+    'Gitlab.DeployKey'                 = 'Id'
     'Gitlab.Environment'               = 'Id'
     'Gitlab.Event'                     = 'Id'
     'Gitlab.Group'                     = 'Id'
