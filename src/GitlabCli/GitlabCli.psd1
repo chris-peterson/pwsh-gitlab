@@ -67,6 +67,7 @@
         'Integrations.psm1'
         'Issues.psm1'
         'Jobs.psm1'
+        'Keys.psm1'
         'Members.psm1'
         'MergeRequests.psm1'
         'Milestones.psm1'
@@ -141,6 +142,9 @@
         'Set-GitlabGroupVariable'
         'Update-GitlabGroup'
         'Update-LocalGitlabGroup'
+
+        # SSH Keys
+        'Get-GitlabKey'
 
         # Project Access Tokens
         'Get-GitlabProjectAccessToken'
