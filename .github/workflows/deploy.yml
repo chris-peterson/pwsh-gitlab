@@ -2,12 +2,60 @@ name: CI
 
 on:
   push:
-    branches:
-    - main
+  pull_request:
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install PowerShell modules
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          if (-not (Get-Module -ListAvailable -Name Pester)) {
+            Install-Module -Name Pester -Force -Scope CurrentUser
+          }
+
+      - name: Run Pester tests
+        shell: pwsh
+        run: |
+          Import-Module Pester
+          $TestResults = Invoke-Pester -Path "./src/tests" -OutputFormat NUnitXml -OutputFile "TestResults.xml" -PassThru
+          if ($TestResults.FailedCount -gt 0) {
+            Write-Host "Tests failed!" -ForegroundColor Red
+            exit 1
+          }
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: TestResults.xml
+
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Run PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+          $Results = Invoke-ScriptAnalyzer -Path ./src -Recurse -ReportSummary
+          if ($Results) {
+            $Results | Format-Table
+            Write-Host "Script analysis found issues!" -ForegroundColor Yellow
+          }
+
   build:
-    if: github.event.repository.fork == false
+    needs: test
+    if: github.event.repository.fork == false && github.ref_name == 'main'
 
     runs-on: ubuntu-latest
 
@@ -22,29 +70,58 @@ jobs:
       name: PowerShell Gallery
       url: https://www.powershellgallery.com/packages/GitlabCli
 
-  push:
-    if: github.event.repository.fork == false
+  docker:
+    needs: test
+    if: github.event.repository.fork == false && github.ref_name == 'main'
 
     env:
       IMAGE_NAME: gitlab-cli
-      IMAGE_VERSION: ${{ github.ref_name }}
+      REGISTRY: ghcr.io
+      IMAGE_ID: ghcr.io/${{ github.repository }}/gitlab-cli
 
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
     steps:
       - uses: actions/checkout@v5
 
-      - name: Build image
-        run: docker build . --tag $IMAGE_NAME
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push image
-        if: ${{ github.ref_name == 'main' }}
-        env:
-          IMAGE_VERSION: latest
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_ID }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
 
-          docker tag $IMAGE_NAME $IMAGE_ID:$IMAGE_VERSION
-          docker push $IMAGE_ID:$IMAGE_VERSION
+      - name: Build and push Docker image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-name: ${{ env.IMAGE_ID }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
