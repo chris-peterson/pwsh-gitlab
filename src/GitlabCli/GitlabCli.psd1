@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.138.0'
+    ModuleVersion = '1.139.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* https://github.com/chris-peterson/pwsh-gitlab/pull/117
+* https://github.com/chris-peterson/pwsh-gitlab/pull/118
 '@
         }
     }
