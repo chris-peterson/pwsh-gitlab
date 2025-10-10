@@ -264,6 +264,7 @@
         # Jobs
         'Get-GitlabJob'
         'Get-GitlabJobTrace'
+        'Get-GitlabJobArtifact'
         'Start-GitlabJob'
         'Get-GitlabPipelineDefinition'
         'Test-GitlabPipelineDefinition'

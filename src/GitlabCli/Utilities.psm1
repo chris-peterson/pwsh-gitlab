@@ -46,6 +46,7 @@ function ConvertTo-UrlEncoded {
 }
 
 function Invoke-GitlabApi {
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Position=0, Mandatory)]
         [Alias('Method')]
@@ -85,8 +86,8 @@ function Invoke-GitlabApi {
         $ProxyUrl,
 
         [Parameter()]
-        [switch]
-        $WhatIf
+        [string]
+        $OutFile
     )
 
     if ($MaxPages -gt [int]::MaxValue) {
@@ -108,6 +109,7 @@ function Invoke-GitlabApi {
     $Headers = @{
         Accept = 'application/json'
     }
+
     if ($global:GitlabUserImpersonationSession) {
         Write-Verbose "Impersonating API call as '$($global:GitlabUserImpersonationSession.Username)'..."
         $AccessToken = $global:GitlabUserImpersonationSession.Token
@@ -143,6 +145,11 @@ function Invoke-GitlabApi {
         Uri    = "$GitlabUrl/api/$([string]::IsNullOrWhiteSpace($Api) ? '' : "$Api/")$Path$SerializedQuery"
         Header = $Headers
     }
+    if ($OutFile) {
+        $RestMethodParams.OutFile = $OutFile
+        $RestMethodParams.Header.Accept = 'application/octet-stream'
+    }
+
     $Proxy  = $ProxyUrl ?? $Site.ProxyUrl
     if (-not [string]::IsNullOrWhiteSpace($Proxy)) {
         Write-Verbose "Using proxy $Proxy..."
@@ -158,10 +165,7 @@ function Invoke-GitlabApi {
 
     $HostOutput = "$($RestMethodParams | ConvertTo-Json)"
 
-    if($WhatIf) {
-        Write-Host "WhatIf: $HostOutput"
-    }
-    else {
+    if($PSCmdlet.ShouldProcess($RestMethodParams.Uri, $HttpMethod)) {
         Write-Verbose "Request: $HostOutput"
         $Result = Invoke-RestMethod @RestMethodParams
         Write-Verbose "Response: $($Result | ConvertTo-Json -Depth 10)"
@@ -170,10 +174,11 @@ function Invoke-GitlabApi {
             $Result | ForEach-Object { 
                 Write-Output $_
             }
-        }
-        else {
+        } else {
             Write-Output $Result
         }
+    } else {
+        Write-Host "Parameters: $HostOutput"
     }
 }
 

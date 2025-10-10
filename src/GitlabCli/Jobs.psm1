@@ -420,3 +420,64 @@ function Write-GitlabJobTrace {
 
     Write-Host $Text
 }
+
+<#
+.SYNOPSIS
+Retrieves an artifact from a GitLab job
+
+.INPUTS
+Gitlab.Job
+
+.PARAMETER ProjectId
+The ID or URL-encoded path of the project. Defaults to the current project (.)
+
+.PARAMETER JobId
+The ID of the job on the associated project
+
+.PARAMETER ArtifactPath
+The path to a specific artifact file within the archive. If not specified, the entire archive will
+
+.LINK
+https://docs.gitlab.com/api/job_artifacts/
+
+#>
+function Get-GitlabJobArtifact {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]
+        $JobId,
+
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $ArtifactPath,
+
+        [Parameter(Mandatory)]
+        [string]
+        $OutFile,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl
+    )
+
+    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = $Project.Id
+
+    $Resource = "projects/$ProjectId/jobs/$JobId/artifacts"
+    if ($ArtifactPath) {
+        $Resource += "/$ArtifactPath"
+    }
+
+    $GitlabApiArguments = @{
+        HttpMethod       = "GET"
+        Path             = $Resource
+        OutFile          = $OutFile
+    }
+
+    Invoke-GitlabApi @GitlabApiArguments -SiteUrl $SiteUrl
+}
