@@ -1,4 +1,3 @@
-# https://docs.gitlab.com/ee/api/audit_events.html
 function Get-GitlabAuditEvent {
 
     [CmdletBinding()]
@@ -38,13 +37,13 @@ function Get-GitlabAuditEvent {
 
         [Alias('Until')]
         [Parameter()]
-        [ValidateScript({ValidateGitlabDateFormat $_})]
+        [ValidateScript({Test-GitlabDate $_})]
         [string]
         $Before,
 
         [Alias('Since')]
         [Parameter()]
-        [ValidateScript({ValidateGitlabDateFormat $_})]
+        [ValidateScript({Test-GitlabDate $_})]
         [string]
         $After,
 
@@ -84,6 +83,7 @@ function Get-GitlabAuditEvent {
     }
     $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
+    # https://docs.gitlab.com/ee/api/audit_events.html
     $Results = Invoke-GitlabApi GET $Resource -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.AuditEvent'
 
     if ($FetchAuthors) {

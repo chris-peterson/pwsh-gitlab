@@ -27,13 +27,13 @@ function Get-GitlabMergeRequest {
         [Parameter(ParameterSetName='ByGroupId')]
         [Parameter(ParameterSetName='ByProjectId')]
         [string]
-        [ValidateScript({ValidateGitlabDateFormat $_})]
+        [ValidateScript({Test-GitlabDate $_})]
         $CreatedAfter,
 
         [Parameter(ParameterSetName='ByGroupId')]
         [Parameter(ParameterSetName='ByProjectId')]
         [string]
-        [ValidateScript({ValidateGitlabDateFormat $_})]
+        [ValidateScript({Test-GitlabDate $_})]
         $CreatedBefore,
 
         [ValidateSet($null, 'true', 'false')]

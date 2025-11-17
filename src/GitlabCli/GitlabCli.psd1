@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.139.0'
+    ModuleVersion = '1.140.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,9 @@
             )
             ReleaseNotes =
 @'
-* https://github.com/chris-peterson/pwsh-gitlab/pull/118
+* api: New-GitlabGroupAccessToken now requires AccessLevel (oversight in original implementation)
+* feature: Improved validation for "settable access level" parameters
+* bugfix: Remove-GitlabGroupMember was stuck in -WhatIf mode
 '@
         }
     }
@@ -87,6 +89,7 @@
         'UserDeployKeys.psm1'
         'Users.psm1'
         'Utilities.psm1'
+        'Validation.psm1'
         'Variables.psm1'
     )
     FunctionsToExport = @(
@@ -325,6 +328,7 @@
         'Get-GitlabMembershipSortKey'
 
         'Get-GitlabGroupMember'
+        'Set-GitlabGroupMember'
         'Add-GitlabGroupMember'
         'Remove-GitlabGroupMember'
 
@@ -349,8 +353,11 @@
         'Invoke-GitlabApi'
         'New-WrapperObject'
         'Open-InBrowser'
-        'ValidateGitlabDateFormat'
         'Get-GitlabResourceFromUrl'
+
+        # Validation
+        'Test-GitlabDate'
+        'Test-GitlabSettableAccessLevel'
 
         # Variables
         'Resolve-GitlabVariable'

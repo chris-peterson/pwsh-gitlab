@@ -768,12 +768,12 @@ function Get-GitlabProjectEvent {
         $ProjectId = '.',
 
         [Parameter(Mandatory=$False)]
-        [ValidateScript({ValidateGitlabDateFormat $_})]
+        [ValidateScript({Test-GitlabDate $_})]
         [string]
         $Before,
 
         [Parameter(Mandatory=$False)]
-        [ValidateScript({ValidateGitlabDateFormat $_})]
+        [ValidateScript({Test-GitlabDate $_})]
         [string]
         $After,
 
@@ -828,7 +828,7 @@ function New-GitlabGroupToProjectShare {
         [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('Access')]
         [string]
-        [ValidateSet('guest', 'reporter', 'developer', 'maintainer', 'owner')]
+        [ValidateScript({Test-GitlabSettableAccessLevel $_})]
         $GroupAccess
     )
 

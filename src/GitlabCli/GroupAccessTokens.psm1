@@ -85,54 +85,54 @@ https://docs.gitlab.com/ee/api/rest/index.html#namespaced-path-encoding
 
 #>
 function New-GitlabGroupAccessToken {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory)]
         [string]
         $GroupId,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [string]
         $Name,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [ValidateSet('api', 'read_api', 'read_registry', 'write_registry', 'read_repository', 'write_repository')]
         [string []]
         $Scope,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory)]
         [string]
-        [ValidateSet('guest', 'reporter', 'developer', 'maintainer', 'owner')]
-        $AccessLevel = 'maintainer',
+        [ValidateScript({Test-GitlabSettableAccessLevel $_})]
+        $AccessLevel,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [System.DateTime]
         [ValidateScript({ $_ -le (Get-Date).AddYears(1)},ErrorMessage = "ExpiresAt can't be more than 1 year from now")]
         $ExpiresAt = $(Get-Date).AddYears(1),
 
         [switch]
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         $CopyToClipboard,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $Response = Invoke-GitlabApi POST "groups/$GroupId/access_tokens" -Body @{
-        name = $Name
-        scopes = $Scope
-        access_level = Get-GitlabMemberAccessLevel $AccessLevel
-        expires_at = $ExpiresAt.ToString('yyyy-MM-dd')
-    } -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    if ($PSCmdlet.ShouldProcess("Group '$GroupId'", "Create Access Token '$Name' with scopes '$($Scope -join ',')' and access level '$AccessLevel'")) {
+        # https://docs.gitlab.com/ee/api/group_access_tokens.html#create-a-group-access-token
+        $Response = Invoke-GitlabApi POST "groups/$GroupId/access_tokens" -Body @{
+            name         = $Name
+            scopes       = $Scope
+            access_level = Get-GitlabMemberAccessLevel $AccessLevel
+            expires_at   = $ExpiresAt.ToString('yyyy-MM-dd')
+        } -SiteUrl $SiteUrl
 
-    if ($CopyToClipboard) {
-        $Response.token | Set-Clipboard
-    } else {
-        $Response
+        if ($CopyToClipboard) {
+            $Response.token | Set-Clipboard
+        } else {
+            $Response
+        }
     }
 }
 

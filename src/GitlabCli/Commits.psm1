@@ -1,4 +1,3 @@
-# https://docs.gitlab.com/ee/api/commits.html#list-repository-commits
 function Get-GitlabCommit {
     [CmdletBinding()]
     param (
@@ -8,13 +7,13 @@ function Get-GitlabCommit {
 
         [Alias('Until')]
         [Parameter()]
-        [ValidateScript({ValidateGitlabDateFormat $_})]
+        [ValidateScript({Test-GitlabDate $_})]
         [string]
         $Before,
 
         [Alias('Since')]
         [Parameter()]
-        [ValidateScript({ValidateGitlabDateFormat $_})]
+        [ValidateScript({Test-GitlabDate $_})]
         [string]
         $After,
 
@@ -53,5 +52,6 @@ function Get-GitlabCommit {
         $Url += "/$Sha"
     }
 
+    # https://docs.gitlab.com/ee/api/commits.html#list-repository-commits
     Invoke-GitlabApi GET $Url -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Commit'
 }

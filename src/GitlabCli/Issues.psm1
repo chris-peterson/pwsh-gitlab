@@ -172,7 +172,7 @@ function Update-GitlabIssue {
 
         [Parameter(Mandatory=$false)]
         [string]
-        [ValidateScript({ValidateGitlabDateFormat $_})]
+        [ValidateScript({Test-GitlabDate $_})]
         $DueDate,
 
         [Parameter(Mandatory=$false)]
