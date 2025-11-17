@@ -165,7 +165,7 @@ function Invoke-GitlabApi {
 
     $HostOutput = "$($RestMethodParams | ConvertTo-Json)"
 
-    if($PSCmdlet.ShouldProcess($RestMethodParams.Uri, $HttpMethod)) {
+    if ($HttpMethod -eq 'GET' -or $PSCmdlet.ShouldProcess($RestMethodParams.Uri, $HostOutput)) {
         Write-Verbose "Request: $HostOutput"
         $Result = Invoke-RestMethod @RestMethodParams
         Write-Verbose "Response: $($Result | ConvertTo-Json -Depth 10)"

@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.140.0'
+    ModuleVersion = '1.141.0'
 
     RequiredModules = @(
         @{
@@ -34,6 +34,7 @@
 * api: New-GitlabGroupAccessToken now requires AccessLevel (oversight in original implementation)
 * feature: Improved validation for "settable access level" parameters
 * bugfix: Remove-GitlabGroupMember was stuck in -WhatIf mode
+* enhancement: Invoke-GitlabApi for GET requests bypass -WhatIf
 '@
         }
     }
