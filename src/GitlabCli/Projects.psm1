@@ -788,11 +788,7 @@ function Get-GitlabProjectEvent {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitLabProject $ProjectId
@@ -809,7 +805,7 @@ function Get-GitlabProjectEvent {
     }
 
     Invoke-GitlabApi GET "projects/$($Project.Id)/events" `
-        -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf | 
+        -Query $Query -MaxPages $MaxPages -SiteUrl |
         New-WrapperObject 'Gitlab.Event'
 }
 

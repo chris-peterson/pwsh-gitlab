@@ -123,7 +123,7 @@ function New-GitlabPipelineSchedule {
             Body       = $Body
             SiteUrl    = $SiteUrl
         }
-        $Wrapper = Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineSchedule'
+        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId
         $Wrapper
     }
@@ -202,7 +202,7 @@ function Update-GitlabPipelineSchedule {
 
     if ($GitlabApiArguments.Body.Count -gt 0) {
         if ($PSCmdlet.ShouldProcess("$($GitlabApiArguments.Path)", "update schedule $($GitlabApiArguments.Body | ConvertTo-Json)")) {
-            Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.PipelineSchedule'
+            Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
         }
     }
 
@@ -446,16 +446,17 @@ function Update-GitlabPipelineScheduleVariable {
 }
 
 function Remove-GitlabPipelineScheduleVariable {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $ProjectId="." ,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [int]
         $PipelineScheduleId,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [string]
         $Key
     )
@@ -470,9 +471,11 @@ function Remove-GitlabPipelineScheduleVariable {
         SiteUrl    = $SiteUrl
     }
 
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject "Gitlab.PipelineScheduleVariable"
-    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
-    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
+    if ($PSCmdlet.ShouldProcess("Delete pipeline schedule variable $Key")) {
+        Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.PipelineScheduleVariable"
+        $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
+        $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
+    }
 }
 
 # https://docs.gitlab.com/ee/api/pipeline_schedules.html#run-a-scheduled-pipeline-immediately

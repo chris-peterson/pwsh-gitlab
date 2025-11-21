@@ -306,13 +306,9 @@ function Get-GitlabVersion {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
-    Invoke-GitlabApi GET 'version' -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject | Get-FilteredObject $Select
+    Invoke-GitlabApi GET 'version' -SiteUrl $SiteUrl | New-WrapperObject | Get-FilteredObject $Select
 }
 
 function Get-GitlabResourceFromUrl {

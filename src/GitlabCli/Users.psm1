@@ -231,11 +231,7 @@ function Get-GitlabUserEvent {
 
         [Parameter(Mandatory=$False)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $GetUserParams = @{}
@@ -268,14 +264,14 @@ function Get-GitlabUserEvent {
         $Query.sort = $Sort
     }
 
-    $Events = Invoke-GitlabApi GET "users/$($User.Id)/events" -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+    $Events = Invoke-GitlabApi GET "users/$($User.Id)/events" -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl |
         New-WrapperObject 'Gitlab.Event'
 
     if ($FetchProjects) {
         $ProjectIds = $Events.ProjectId | Select-Object -Unique
         $Projects = $ProjectIds | ForEach-Object {
             try {
-                Get-GitlabProject $_ -WhatIf:$WhatIf -SiteUrl $SiteUrl
+                Get-GitlabProject $_ -SiteUrl $SiteUrl
             }
             catch {
                 $null
