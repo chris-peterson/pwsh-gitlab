@@ -49,13 +49,23 @@ function Get-GitlabMergeRequest {
         $IncludeChangeSummary,
 
         [Parameter()]
+        [Alias('Diffs')]
+        [switch]
+        $IncludeDiffs,
+
+        [Parameter()]
         [Alias('Approvals')]
         [switch]
         $IncludeApprovals,
 
-        [Parameter(ParameterSetName='ByAuthor')]
+        [Parameter(ParameterSetName='ByUser')]
         [string]
-        $AuthorUsername,
+        $Username,
+
+        [Parameter(ParameterSetName='ByUser')]
+        [string]
+        [ValidateSet('author', 'reviewer')]
+        $Role = 'author',
 
         [Parameter(ParameterSetName='Mine')]
         [switch]
@@ -64,7 +74,7 @@ function Get-GitlabMergeRequest {
         [Parameter()]
         [ValidateSet('created_by_me', 'assigned_to_me', 'reviews_for_me', 'all')]
         [string]
-        $Scope = 'created_by_me',
+        $Scope = 'all',
 
         [Parameter()]
         [uint]
@@ -90,10 +100,16 @@ function Get-GitlabMergeRequest {
 
     switch ($PSCmdlet.ParameterSetName) {
         'Mine' {
+            # while we could use 'merge_requests?scope=created_by_me', that limits our ability to broaden scope
+            $Query.author_username = Get-GitlabCurrentUser | Select-Object -ExpandProperty Username
         }
-        'ByAuthor' {
-            $Query.author_username = $Author
-            $Query.scope = 'all'
+        'ByUser' {
+            if ($Role -eq 'author') {
+                $Query.author_username = $Username
+            }
+            elseif ($Role -eq 'reviewer') {
+                $Query.reviewer_username = $Username
+            }
         }
         'ByUrl' {
             $Resource = $Url | Get-GitlabResourceFromUrl
@@ -130,17 +146,14 @@ function Get-GitlabMergeRequest {
         }
         $Query.source_branch = $SourceBranch
     }
-    if ($AuthorUsername) {
-        $Query.author_username = $AuthorUsername
-    }
 
     $MergeRequests = Invoke-GitlabApi GET $Path -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl |
         Select-Object -ExcludeProperty approvals_before_merge | # https://docs.gitlab.com/ee/api/merge_requests.html#removals-in-api-v5
         New-WrapperObject 'Gitlab.MergeRequest'
 
-    if ($IncludeChangeSummary) {
+    if ($IncludeChangeSummary -or $IncludeDiffs) {
         $MergeRequests | ForEach-Object {
-            $_ | Add-GitlabMergeRequestChangeSummary
+            $_ | Add-GitlabMergeRequestChangeSummary -IncludeDiffs:$IncludeDiffs
         }
     }
 
@@ -171,8 +184,18 @@ function Add-GitlabMergeRequestApprovals {
 function Add-GitlabMergeRequestChangeSummary {
     param (
         [Parameter(Position=0, Mandatory, ValueFromPipeline)]
-        $MergeRequest
+        $MergeRequest,
+
+        [Parameter()]
+        [switch]
+        $IncludeDiffs
     )
+
+    $DiffsFragment = if ($IncludeDiffs) {
+        'diffs { newFile newPath oldPath diff }'
+    } else {
+        ''
+    }
 
     $Data = Invoke-GitlabGraphQL -Query @"
     {
@@ -189,6 +212,7 @@ function Add-GitlabMergeRequestChangeSummary {
                           username
                       }
                       authoredDate
+                      $DiffsFragment
                     }
                 }
                 notes {
@@ -249,6 +273,12 @@ function Add-GitlabMergeRequestChangeSummary {
         ApprovedAt              = $SpecialNotes.Approved.Notes | Select-Object -First 1 | Select-Object -ExpandProperty updatedAt
         FirstNonAuthorCommentAt = $ReviewerComments | Select-Object -First 1 | Select-Object -ExpandProperty updatedAt
         TimeToMerge             = '(computed below)'
+        Diffs                   = $Mr.commitsWithoutMergeCommits.nodes.diffs | ForEach-Object {
+            [PSCustomObject]@{
+                Path = $_.newFile -ne 'true' ? $_.oldPath : $_.newPath
+                Diff = $_.diff
+            }
+        }
     }
     if ($DebugPreference -eq 'Continue') {
         $Summary | Add-Member -NotePropertyMembers @{
@@ -270,6 +300,7 @@ function Add-GitlabMergeRequestChangeSummary {
 
     $MergeRequest | Add-Member -NotePropertyMembers @{
         ChangeSummary = $Summary
+        Diffs         = $Summary.Diffs
     }
 }
 
