@@ -231,6 +231,8 @@ function Add-GitlabMergeRequestChangeSummary {
 "@
 
 
+
+
     $Mr = $Data.Project.mergeRequest
     $Notes = $Mr.notes.nodes | Sort-Object -Descending updatedAt
 
@@ -273,12 +275,6 @@ function Add-GitlabMergeRequestChangeSummary {
         ApprovedAt              = $SpecialNotes.Approved.Notes | Select-Object -First 1 | Select-Object -ExpandProperty updatedAt
         FirstNonAuthorCommentAt = $ReviewerComments | Select-Object -First 1 | Select-Object -ExpandProperty updatedAt
         TimeToMerge             = '(computed below)'
-        Diffs                   = $Mr.commitsWithoutMergeCommits.nodes.diffs | ForEach-Object {
-            [PSCustomObject]@{
-                Path = $_.newFile -ne 'true' ? $_.oldPath : $_.newPath
-                Diff = $_.diff
-            }
-        }
     }
     if ($DebugPreference -eq 'Continue') {
         $Summary | Add-Member -NotePropertyMembers @{
@@ -300,7 +296,19 @@ function Add-GitlabMergeRequestChangeSummary {
 
     $MergeRequest | Add-Member -NotePropertyMembers @{
         ChangeSummary = $Summary
-        Diffs         = $Summary.Diffs
+    }
+
+    if ($IncludeDiffs) {
+        $Diffs = @($Mr.commitsWithoutMergeCommits.nodes | ForEach-Object {
+            $_.diffs | ForEach-Object {
+                [PSCustomObject]@{
+                    Path = if ($_.newFile -eq 'true') { $_.newPath } else { $_.oldPath }
+                    Diff = $_.diff
+                }
+            }
+        })
+        Write-Verbose "!$($MergeRequest.MergeRequestId) has $($Diffs.Count) diffs"
+        $MergeRequest | Add-Member -NotePropertyName Diffs -NotePropertyValue $Diffs
     }
 }
 
