@@ -230,9 +230,6 @@ function Add-GitlabMergeRequestChangeSummary {
     }
 "@
 
-
-
-
     $Mr = $Data.Project.mergeRequest
     $Notes = $Mr.notes.nodes | Sort-Object -Descending updatedAt
 
