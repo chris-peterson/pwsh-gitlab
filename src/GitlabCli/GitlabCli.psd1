@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.141.1'
+    ModuleVersion = '1.142.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* bugfix(es): Fix some WhatIf inconsistencies (some GETs still had them, and some cmdlets (e.g. Remove-GitlabPipeline, New|Upddate-GitlabPipelineSchedule) were always defaulting to WhatIf)
+* Enhance: Get-GitlabMergeRequest to support author/scope filtering
 '@
         }
     }

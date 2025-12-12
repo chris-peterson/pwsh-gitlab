@@ -20,18 +20,16 @@ function Get-GitlabMergeRequest {
         $Url,
 
         [Parameter()]
-        [ValidateSet('', 'closed', 'opened', 'merged')]
+        [ValidateSet('all', 'opened', 'closed', 'locked', 'merged')]
         [string]
-        $State = '', # any
+        $State = 'all',
 
-        [Parameter(ParameterSetName='ByGroupId')]
-        [Parameter(ParameterSetName='ByProjectId')]
+        [Parameter()]
         [string]
         [ValidateScript({Test-GitlabDate $_})]
         $CreatedAfter,
 
-        [Parameter(ParameterSetName='ByGroupId')]
-        [Parameter(ParameterSetName='ByProjectId')]
+        [Parameter()]
         [string]
         [ValidateScript({Test-GitlabDate $_})]
         $CreatedBefore,
@@ -40,10 +38,10 @@ function Get-GitlabMergeRequest {
         [object]
         $IsDraft,
 
-        [Parameter(ParameterSetName='ByGroupId')]
-        [Parameter(ParameterSetName='ByProjectId')]
+        [Parameter()]
+        [Alias('Branch')]
         [string]
-        $Branch,
+        $SourceBranch,
 
         [Parameter()]
         [Alias('ChangeSummary')]
@@ -55,9 +53,18 @@ function Get-GitlabMergeRequest {
         [switch]
         $IncludeApprovals,
 
-        [Parameter(Mandatory, ParameterSetName='Mine')]
+        [Parameter(ParameterSetName='ByAuthor')]
+        [string]
+        $AuthorUsername,
+
+        [Parameter(ParameterSetName='Mine')]
         [switch]
         $Mine,
+
+        [Parameter()]
+        [ValidateSet('created_by_me', 'assigned_to_me', 'reviews_for_me')]
+        [string]
+        $Scope = 'created_by_me',
 
         [Parameter()]
         [uint]
@@ -73,13 +80,19 @@ function Get-GitlabMergeRequest {
     )
 
     $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
-    $Path = $null
-    $Query = @{}
+
+    # https://docs.gitlab.com/api/merge_requests/#list-merge-requests
+    $Path = 'merge_requests'
+    $Query = @{
+        state = $State
+        scope = $Scope
+    }
 
     switch ($PSCmdlet.ParameterSetName) {
         'Mine' {
-            # https://docs.gitlab.com/api/merge_requests/#list-merge-requests
-            $Path = 'merge_requests'
+        }
+        'ByAuthor' {
+            $Query.author_username = $Author
         }
         'ByUrl' {
             $Resource = $Url | Get-GitlabResourceFromUrl
@@ -101,9 +114,6 @@ function Get-GitlabMergeRequest {
         }
     }
 
-    if($State) {
-        $Query.state = $State
-    }
     if ($CreatedBefore) {
         $Query.created_before = $CreatedBefore
     }
@@ -113,15 +123,18 @@ function Get-GitlabMergeRequest {
     if ($IsDraft) {
         $Query.wip = $IsDraft -eq 'true' ? 'yes' : 'no'
     }
-    if ($Branch) {
-        if ($Branch -eq '.') {
-            $Branch = Get-LocalGitContext | Select-Object -ExpandProperty Branch
+    if ($SourceBranch) {
+        if ($SourceBranch -eq '.') {
+            $SourceBranch = Get-LocalGitContext | Select-Object -ExpandProperty Branch
         }
-        $Query.source_branch = $Branch
+        $Query.source_branch = $SourceBranch
+    }
+    if ($AuthorUsername) {
+        $Query.author_username = $AuthorUsername
     }
 
     $MergeRequests = Invoke-GitlabApi GET $Path -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl |
-        Select-Object -Property '*' -ExcludeProperty approvals_before_merge | # https://docs.gitlab.com/ee/api/merge_requests.html#removals-in-api-v5
+        Select-Object -ExcludeProperty approvals_before_merge | # https://docs.gitlab.com/ee/api/merge_requests.html#removals-in-api-v5
         New-WrapperObject 'Gitlab.MergeRequest'
 
     if ($IncludeChangeSummary) {
