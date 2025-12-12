@@ -62,7 +62,7 @@ function Get-GitlabMergeRequest {
         $Mine,
 
         [Parameter()]
-        [ValidateSet('created_by_me', 'assigned_to_me', 'reviews_for_me')]
+        [ValidateSet('created_by_me', 'assigned_to_me', 'reviews_for_me', 'all')]
         [string]
         $Scope = 'created_by_me',
 
@@ -93,6 +93,7 @@ function Get-GitlabMergeRequest {
         }
         'ByAuthor' {
             $Query.author_username = $Author
+            $Query.scope = 'all'
         }
         'ByUrl' {
             $Resource = $Url | Get-GitlabResourceFromUrl
