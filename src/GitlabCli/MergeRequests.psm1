@@ -191,12 +191,7 @@ function Add-GitlabMergeRequestChangeSummary {
         $IncludeDiffs
     )
 
-    $DiffsFragment = if ($IncludeDiffs) {
-        'diffs { newFile newPath oldPath diff }'
-    } else {
-        ''
-    }
-
+    # First query: get commit info without diffs (diffs have a 10 commit limit per request)
     $Data = Invoke-GitlabGraphQL -Query @"
     {
         project(fullPath: "$($MergeRequest.ProjectPath)") {
@@ -212,7 +207,6 @@ function Add-GitlabMergeRequestChangeSummary {
                           username
                       }
                       authoredDate
-                      $DiffsFragment
                     }
                 }
                 notes {
@@ -296,16 +290,49 @@ function Add-GitlabMergeRequestChangeSummary {
     }
 
     if ($IncludeDiffs) {
-        $Diffs = @($Mr.commitsWithoutMergeCommits.nodes | ForEach-Object {
-            $_.diffs | ForEach-Object {
-                [PSCustomObject]@{
-                    Path = if ($_.newFile -eq 'true') { $_.newPath } else { $_.oldPath }
-                    Diff = $_.diff
+        # GitLab limits diffs to 10 commits per request, so use cursor-based pagination
+        $BatchSize = 10
+        $AllDiffs = @()
+        $HasNextPage = $true
+        $AfterCursor = $null
+
+        while ($HasNextPage) {
+            $AfterArg = if ($AfterCursor) { ", after: `"$AfterCursor`"" } else { '' }
+
+            $DiffData = Invoke-GitlabGraphQL -Query @"
+            {
+                project(fullPath: "$($MergeRequest.ProjectPath)") {
+                    mergeRequest(iid: "$($MergeRequest.MergeRequestId)") {
+                        commitsWithoutMergeCommits(first: $BatchSize$AfterArg) {
+                            pageInfo {
+                                hasNextPage
+                                endCursor
+                            }
+                            nodes {
+                                diffs { newFile newPath oldPath diff }
+                            }
+                        }
+                    }
                 }
             }
-        })
-        Write-Verbose "!$($MergeRequest.MergeRequestId) has $($Diffs.Count) diffs"
-        $MergeRequest | Add-Member -NotePropertyName Diffs -NotePropertyValue $Diffs
+"@
+            $CommitsResult = $DiffData.Project.mergeRequest.commitsWithoutMergeCommits
+            $HasNextPage = $CommitsResult.pageInfo.hasNextPage
+            $AfterCursor = $CommitsResult.pageInfo.endCursor
+
+            $BatchDiffs = @($CommitsResult.nodes | ForEach-Object {
+                $_.diffs | ForEach-Object {
+                    [PSCustomObject]@{
+                        Path = if ($_.newFile -eq 'true') { $_.newPath } else { $_.oldPath }
+                        Diff = $_.diff
+                    }
+                }
+            })
+            $AllDiffs += $BatchDiffs
+        }
+
+        Write-Verbose "!$($MergeRequest.MergeRequestId) has $($AllDiffs.Count) diffs"
+        $MergeRequest | Add-Member -NotePropertyName Diffs -NotePropertyValue $AllDiffs
     }
 }
 

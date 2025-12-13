@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.143.1'
+    ModuleVersion = '1.143.2'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,8 @@
             )
             ReleaseNotes =
 @'
-* Feature: Support for snippets  
+* Feature: Support for snippets
+* Bugfix: Add pagination for IncludeDiffs in Get-GitlabMergeRequest
 '@
         }
     }
