@@ -614,4 +614,21 @@
       </ScriptProperty>
     </Members>
   </Type>
+  <Type>
+    <Name>Gitlab.Snippet</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>AuthorName</Name>
+        <GetScriptBlock>$this.Author.username</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>CreatedAtSortable</Name>
+        <GetScriptBlock>$this.CreatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>UpdatedAtSortable</Name>
+        <GetScriptBlock>$this.UpdatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
 </Types>

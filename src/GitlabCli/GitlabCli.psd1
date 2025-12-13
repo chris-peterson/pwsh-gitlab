@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.142.3'
+    ModuleVersion = '1.143.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* Enhance: Get-GitlabMergeRequest to support author/scope filtering
+* Feature: Support for snippets  
 '@
         }
     }
@@ -82,6 +82,7 @@
         'Runners.psm1'
         'Search.psm1'
         'ServiceAccounts.psm1'
+        'Snippets.psm1'
         'Todos.psm1'
         'Topics.psm1'
         'UserDeployKeys.psm1'
@@ -288,6 +289,13 @@
         # Search
         'Search-Gitlab'
         'Search-GitlabProject'
+
+        # Snippets
+        'Get-GitlabSnippet'
+        'Get-GitlabSnippetContent'
+        'New-GitlabSnippet'
+        'Update-GitlabSnippet'
+        'Remove-GitlabSnippet'
 
         # Todo
         'Get-GitlabTodo'

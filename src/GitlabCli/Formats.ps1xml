@@ -1485,5 +1485,43 @@
         </TableRowEntries>
       </TableControl>
     </View>
+    <View>
+      <Name>GitlabSnippet</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.Snippet</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Title</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Visibility</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>AuthorName</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>WebUrl</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
   </ViewDefinitions>
 </Configuration>

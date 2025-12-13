@@ -55,6 +55,7 @@ $global:GitlabIdentityPropertyNameExemptions=@{
     'Gitlab.SearchResult.MergeRequest' = ''
     'Gitlab.SearchResult.Project'      = ''
     'Gitlab.ServiceAccount'            = 'Id'
+    'Gitlab.Snippet'                   = 'Id'
     'Gitlab.SSHKey'                    = 'Id'
     'Gitlab.Todo'                      = 'Id'
     'Gitlab.Topic'                     = 'Id'
