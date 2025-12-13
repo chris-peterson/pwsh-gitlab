@@ -7,7 +7,7 @@ function Get-GitlabIssue {
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, ParameterSetName='ByProjectId')]
+        [Parameter(Position=0)]
         [string]
         $IssueId,
 
@@ -15,24 +15,21 @@ function Get-GitlabIssue {
         [string]
         $GroupId,
 
-        [Parameter(ParameterSetName='ByGroupId')]
-        [Parameter(ParameterSetName='ByProjectId')]
-        [Parameter(ParameterSetName='Mine')]
+        [Parameter()]
         [ValidateSet($null, 'opened', 'closed')]
         [string]
         $State = 'opened',
 
-        [Parameter(ParameterSetName='ByGroupId')]
-        [Parameter(ParameterSetName='ByProjectId')]
-        [Parameter(ParameterSetName='Mine')]
+        [Parameter()]
         [string]
         $CreatedAfter,
 
-        [Parameter(ParameterSetName='ByGroupId')]
-        [Parameter(ParameterSetName='ByProjectId')]
-        [Parameter(ParameterSetName='Mine')]
+        [Parameter()]
         [string]
         $CreatedBefore,
+
+        [Parameter()]
+        $AuthorUsername,
 
         [Parameter(Mandatory, ParameterSetName='Mine')]
         [switch]
@@ -53,24 +50,27 @@ function Get-GitlabIssue {
 
     $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
-    $Path = $null
+    # https://docs.gitlab.com/api/issues/#list-issues
+    $Path = 'issues'
     $Query = @{}
 
     if ($Mine) {
-        $Path = 'issues'
+        $AuthorUsername = (Get-GitlabUser -Me).Username
+    }
+
+    if ($AuthorUsername) {
+        $Query.author_username = $AuthorUsername
     } else {
-        if ($ProjectId) {
-            $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
-        }
         if ($GroupId) {
             $GroupId = $(Get-GitlabGroup -GroupId $GroupId).Id
+            $Path = "groups/$GroupId/issues"
+        }
+        elseif ($ProjectId) {
+            $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+            $Path = "projects/$ProjectId/issues"
         }
         if ($IssueId) {
-            $Path = "projects/$ProjectId/issues/$IssueId"
-        } elseif ($GroupId) {
-            $Path = "groups/$GroupId/issues"
-        } else {
-            $Path = "projects/$ProjectId/issues"
+            $Path += "/$IssueId"
         }
     }
 
