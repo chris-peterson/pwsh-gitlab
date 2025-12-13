@@ -31,7 +31,7 @@ function Get-GitlabSnippet {
         [uint]
         $MaxPages,
 
-        [Parameter(ParameterSetName='All')]
+        [Parameter()]
         [switch]
         $All,
 
@@ -39,6 +39,8 @@ function Get-GitlabSnippet {
         [string]
         $SiteUrl
     )
+
+    $MaxPages = Get-GitlabMaxPages -All:$All -MaxPages:$MaxPages
 
     $Query = @{}
 
@@ -67,10 +69,6 @@ function Get-GitlabSnippet {
         Mine {
             # https://docs.gitlab.com/api/snippets/#list-all-snippets-for-current-user
             $Snippet = Invoke-GitlabApi GET "snippets" -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl
-        }
-        All {
-            # https://docs.gitlab.com/api/snippets/#list-all-snippets
-            $Snippet = Invoke-GitlabApi GET "snippets/all" -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl
         }
     }
 
