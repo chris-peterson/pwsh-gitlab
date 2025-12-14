@@ -312,6 +312,11 @@ function Start-GitlabUserImpersonation {
     )
     $User = Get-GitlabUser $UserId
 
+    if ((Get-GitlabUser -Me | Select-Object -ExpandProperty Id) -eq $User.Id) {
+        Write-Verbose "Ignoring impersonation request for current user ($($User.Username))"
+        return
+    }
+
     # https://docs.gitlab.com/ee/api/users.html#create-an-impersonation-token
     $Parameters = @{
         Method  = 'POST'
@@ -362,7 +367,7 @@ function Stop-GitlabUserImpersonation {
             }
         }
         else {
-            Write-Warning "No impersonation session started.  Call 'Start-GitlabUserImpersonation' to start one."
+            Write-Verbose "No impersonation session started.  Call 'Start-GitlabUserImpersonation' to start one."
         }
     }
 }

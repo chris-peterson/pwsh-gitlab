@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.144.0'
+    ModuleVersion = '1.144.1'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* Feature: Get issues by author
+* Bugfix: don't try to impersonate self
 '@
         }
     }
