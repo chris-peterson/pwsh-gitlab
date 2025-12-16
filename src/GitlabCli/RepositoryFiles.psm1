@@ -61,8 +61,16 @@ function Get-GitlabRepositoryFile {
     }
     $RefName = $(Get-GitlabBranch -ProjectId $ProjectId -Ref $Ref).Name
 
-    return Invoke-GitlabApi GET "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)?ref=$RefName" -SiteUrl $SiteUrl |
-        New-WrapperObject 'Gitlab.RepositoryFile'
+    try {
+        return Invoke-GitlabApi GET "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)?ref=$RefName" -SiteUrl $SiteUrl |
+            New-WrapperObject 'Gitlab.RepositoryFile'
+    }
+    catch {
+        switch ($ErrorActionPreference){
+            'Stop' { throw $_ }
+            default { Write-Warning "File $FilePath not found in $($Project.Name) ($RefName)"; return $null }
+        }
+    }
 }
 
 function New-GitlabRepositoryFile {

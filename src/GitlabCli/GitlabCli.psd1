@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.144.1'
+    ModuleVersion = '1.145.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* Bugfix: don't try to impersonate self
+* Feature: start to honor ErrorActionPreference (right now it's just in 2 places, but a good pattern to follow)
 '@
         }
     }

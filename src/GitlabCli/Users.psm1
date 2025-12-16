@@ -362,8 +362,16 @@ function Stop-GitlabUserImpersonation {
             }
             # NOTE: important that we clear first as the revoke API requires admin
             $global:GitlabUserImpersonationSession = $null
-            if (Invoke-GitlabApi @Parameters) {
-                Write-Host "Impersonation session ($($global:GitlabUserImpersonationSession.Username)) stopped"
+            try {
+                if (Invoke-GitlabApi @Parameters) {
+                    Write-Host "Impersonation session ($($global:GitlabUserImpersonationSession.Username)) stopped"
+                }
+            }
+            catch {
+                switch ($ErrorActionPreference){
+                    'Stop' { throw $_ }
+                    default { Write-Warning "Error stopping impersonation session: $_"; return $null }
+                }
             }
         }
         else {
