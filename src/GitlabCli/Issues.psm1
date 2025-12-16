@@ -8,6 +8,7 @@ function Get-GitlabIssue {
         $ProjectId = '.',
 
         [Parameter(Position=0)]
+        [Alias('Id')]
         [string]
         $IssueId,
 
@@ -113,6 +114,10 @@ function New-GitlabIssue {
         $MarkTodoAsRead,
 
         [Parameter()]
+        [string]
+        $MilestoneId,
+
+        [Parameter()]
         [switch]
         $Follow,
 
@@ -122,15 +127,25 @@ function New-GitlabIssue {
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
+
     $Request = @{
-        title = $Title
-        description = $Description
-        assignee_id = $(Get-GitlabUser -Me).Id
+        # https://docs.gitlab.com/ee/api/issues.html#new-issue
+        Method = 'POST'
+        Path   = "projects/$($Project.Id)/issues"
+        Body   = @{
+            title       = $Title
+            description = $Description
+            assignee_id = $(Get-GitlabUser -Me).Id
+        }
+        SiteUrl = $SiteUrl
+    }
+    if ($MilestoneId) {
+        $Milestone = Get-GitlabMilestone -GroupId $Project.Group | Where-Object Iid -eq $MilestoneId
+        $Request.Body.milestone_id = $Milestone.Id
     }
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "Create new issue ($($Request | ConvertTo-Json))")) {
-        # https://docs.gitlab.com/ee/api/issues.html#new-issue
-        $Issue = Invoke-GitlabApi POST "projects/$($Project.Id)/issues" -Body $Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Issue'
+        $Issue = Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Issue'
         if ($MarkTodoAsRead) {
             $Todo = Get-GitlabTodo -SiteUrl $SiteUrl | Where-Object TargetUrl -eq $Issue.WebUrl
             Clear-GitlabTodo -TodoId $Todo.Id -SiteUrl $SiteUrl | Out-Null
@@ -142,9 +157,8 @@ function New-GitlabIssue {
     }
 }
 
-# https://docs.gitlab.com/ee/api/issues.html#edit-issue
 function Update-GitlabIssue {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -211,64 +225,71 @@ function Update-GitlabIssue {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    $Body = @{}
+    $Project = Get-GitlabProject -ProjectId $ProjectId
+
+    # https://docs.gitlab.com/ee/api/issues.html#edit-issue
+    $Request = @{
+        Method   = 'PUT'
+        Path     = "projects/$ProjectId/issues/$IssueId"
+        Body     = @{}
+        SiteUrl  = $SiteUrl
+    }
 
     if ($AssigneeId) {
         if ($AssigneeId -is [array]) {
-            $Body.assignee_ids = $AssigneeId -join ','
+            $Request.Body.assignee_ids = $AssigneeId -join ','
         } else {
-            $Body.assignee_id = $AssigneeId
+            $Request.Body.assignee_id = $AssigneeId
         }
     }
     if ($Confidential.IsPresent) {
-        $Body.confidential = $Confidential.ToBool().ToString().ToLower()
+        $Request.Body.confidential = $Confidential.ToBool().ToString().ToLower()
     }
     if ($Description) {
-        $Body.description = $Description
+        $Request.Body.description = $Description
     }
     if ($DiscussionLocked.IsPresent) {
-        $Body.discussion_locked = $DiscussionLocked.ToBool().ToString().ToLower()
+        $Request.Body.discussion_locked = $DiscussionLocked.ToBool().ToString().ToLower()
     }
     if ($DueDate) {
-        $Body.due_date = $DueDate
+        $Request.Body.due_date = $DueDate
     }
     if ($IssueType) {
-        $Body.issue_type = $IssueType
+        $Request.Body.issue_type = $IssueType
     }
     if ($Label) {
         $Labels = $Label -join ','
         if ($LabelBehaviorAdd) {
-            $Body.add_labels = $Labels
+            $Request.Body.add_labels = $Labels
         } elseif ($LabelBehaviorRemove) {
-            $Body.remove_labels = $Labels
+            $Request.Body.remove_labels = $Labels
         } else {
-            $Body.labels = $Labels
+            $Request.Body.labels = $Labels
         }
     }
     if ($MilestoneId) {
-        $Body.milestone_id = $MilestoneId
+        $Milestone = Get-GitlabMilestone -GroupId $Project.Group | Where-Object Iid -eq $MilestoneId
+        $Request.Body.milestone_id = $Milestone.Id
     }
     if ($StateEvent) {
-        $Body.state_event = $StateEvent
+        $Request.Body.state_event = $StateEvent
     }
     if ($Title) {
-        $Body.title = $Title
+        $Request.Body.title = $Title
     }
     if ($Weight.HasValue) {
-        $Body.weight = $Weight.Value
+        $Request.Body.weight = $Weight.Value
     }
 
-    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+    $ProjectId = $Project.Id
 
-    return Invoke-GitlabApi PUT "projects/$ProjectId/issues/$IssueId" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf |
-        New-WrapperObject 'Gitlab.Issue'
+    if ($PSCmdlet.ShouldProcess("issue #$IssueId", "update $($Request | ConvertTo-Json)")) {
+        return Invoke-GitlabApi @Request|
+            New-WrapperObject 'Gitlab.Issue'
+    }
 }
 
 function Open-GitlabIssue {

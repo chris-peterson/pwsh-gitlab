@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.145.0'
+    ModuleVersion = '1.146.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* Feature: start to honor ErrorActionPreference (right now it's just in 2 places, but a good pattern to follow)
+* Feature: set milestone for issues (create / update)
 '@
         }
     }
