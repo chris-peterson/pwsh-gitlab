@@ -10,6 +10,11 @@ function Get-GitlabMilestone {
         [string]
         $ProjectId,
 
+        [Parameter()]
+        [ValidateSet('active', 'closed')]
+        [string]
+        $State,
+
         [Parameter(ParameterSetName = 'ByGroup')]
         [Parameter(ParameterSetName = 'ByProject')]
         [Alias('Id')]
@@ -56,6 +61,9 @@ function Get-GitlabMilestone {
         HttpMethod = 'GET'
         Path       = $Resource
         SiteUrl    = $SiteUrl
+    }
+    if ($State) {
+        $Request.Query = @{ state = $State }
     }
 
     Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Milestone'
