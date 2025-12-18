@@ -571,7 +571,7 @@
                 "$($Details.author_class) $($Details.author_name) changed $($Details.target_type) ($($Details.target_details)): $($Details.custom_message)"
               }
             }
-            Default {
+            default {
               if ($Details.add) {
                 "Added $($Details.add) ($($Details.target_details)) in $($Details.entity_path)"
               } elseif ($Details.remove) {

@@ -57,7 +57,7 @@ function Get-GitlabRunner {
             $Params.Query.status = $Status
             $Params.Query.tag_list = $Tags -join ','
         }
-        Default { throw "Unsupported parameter combination" }
+        default { throw "Unsupported parameter combination" }
     }
 
     $Runners = Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.Runner'

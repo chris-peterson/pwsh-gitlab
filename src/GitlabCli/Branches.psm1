@@ -277,42 +277,51 @@ function UnProtect-GitlabBranch {
 }
 
 function Remove-GitlabBranch {
-    [CmdletBinding(DefaultParameterSetName='ByName')]
+    [CmdletBinding(DefaultParameterSetName='ByName', SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory=$true, ParameterSetName='ByName', ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Position=0, Mandatory, ParameterSetName='ByName', ValueFromPipelineByPropertyName)]
         [string]
         $Name,
 
         [switch]
-        [Parameter(Mandatory=$false, ParameterSetName='MergedBranches')]
+        [Parameter(ParameterSetName='MergedBranches')]
         $MergedBranches,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
 
+    $Request = @{
+        HttpMethod = 'DELETE'
+        SiteUrl    = $SiteUrl
+    }
+    $Label = ''
+
     switch ($PSCmdlet.ParameterSetName) {
         ByName {
             # https://docs.gitlab.com/ee/api/branches.html#delete-repository-branch
-            Invoke-GitlabApi DELETE "projects/$($Project.Id)/repository/branches/$Name" -SiteUrl $SiteUrl -WhatIf:$WhatIf
+            $Request.Path = "projects/$($Project.Id)/repository/branches/$Name"
+            $Label = "branch '$Name"
         }
         MergedBranches {
             # https://docs.gitlab.com/ee/api/branches.html#delete-merged-branches
-            Invoke-GitlabApi DELETE "projects/$($Project.Id)/repository/merged_branches" -SiteUrl $SiteUrl -WhatIf:$WhatIf
+            $Request.Path = "projects/$($Project.Id)/repository/merged_branches"
+            $Label = "'merged branches"
         }
-        Default {
+        default {
             throw "Unsupported parameter set $($PSCmdlet.ParameterSetName)"
         }
+    }
+
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "delete $Label'")) {
+        Invoke-GitlabApi @Request | Out-Null
+        Write-Host "Deleted $Label"
     }
 }

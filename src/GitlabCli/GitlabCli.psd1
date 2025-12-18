@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.146.2'
+    ModuleVersion = '1.147.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* Bug: add missing paging parameters for getting branches
+* Feat: should process support for branch deletion
 '@
         }
     }

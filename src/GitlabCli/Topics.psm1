@@ -39,7 +39,7 @@ function Get-GitlabTopic {
     switch ($PSCmdlet.ParameterSetName) {
         Search  { $Url = 'topics'  }
         Id      { $Url = "topics/$TopicId" }
-        Default { throw "$($PSCmdlet.ParameterSetName) is not supported"}
+        default { throw "$($PSCmdlet.ParameterSetName) is not supported"}
     }
     if ($Search) {
         $Query.search = $Search
