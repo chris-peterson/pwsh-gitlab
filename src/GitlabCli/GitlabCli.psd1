@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.146.1'
+    ModuleVersion = '1.146.2'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* Feature: set milestone for issues (create / update), add state filter for get
+* Bug: add missing paging parameters for getting branches
 '@
         }
     }

@@ -27,9 +27,19 @@ function Get-GitlabBranch {
         $Ref,
 
         [Parameter()]
+        [uint]
+        $MaxPages,
+
+        [switch]
+        [Parameter()]
+        $All,
+
+        [Parameter()]
         [string]
         $SiteUrl
     )
+
+    $MaxPages = Get-GitlabMaxPages -MaxPages $MaxPages -All:$All
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
 
@@ -37,28 +47,30 @@ function Get-GitlabBranch {
         $Ref = $(Get-LocalGitContext).Branch
     }
 
-    $GitlabApiArguments = @{
+    # https://docs.gitlab.com/api/branches/#list-repository-branches
+    $Request = @{
         HttpMethod = 'GET'
         Path       = "projects/$($Project.Id)/repository/branches"
         Query      = @{}
         SiteUrl    = $SiteUrl
+        MaxPages   = $MaxPages
     }
 
     switch ($PSCmdlet.ParameterSetName) {
         ByProjectId {
             if($Search) {
-                $GitlabApiArguments.Query["search"] = $Search
+                $Request.Query.search = $Search
             }
         }
         ByRef {
-            $GitlabApiArguments.Path += "/$($Ref)"
+            $Request.Path += "/$($Ref)"
         }
         default {
             throw "$($PSCmdlet.ParameterSetName) is not implemented"
         }
     }
 
-    Invoke-GitlabApi @GitlabApiArguments
+    Invoke-GitlabApi @Request
         | New-WrapperObject 'Gitlab.Branch'
         | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id -PassThru
         | Sort-Object -Descending LastUpdated
