@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.147.1'
+    ModuleVersion = '1.148.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* Bug: Protect-GitlabBranch should work with no parameters
+* Feat: Improved parameter handling for branch cmdlets (https://github.com/chris-peterson/pwsh-gitlab/pull/119)
 '@
         }
     }
