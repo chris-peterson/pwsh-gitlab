@@ -1,132 +1,20 @@
-name: CI
+name: Deploy
 
 on:
   push:
-    branches: [ '*' ]
-  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  test:
-    name: Run Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Install PowerShell modules
-        shell: pwsh
-        run: |
-          Set-PSRepository PSGallery -InstallationPolicy Trusted
-          if (-not (Get-Module -ListAvailable -Name Pester)) {
-            Install-Module -Name Pester -Force -Scope CurrentUser
-          }
-
-      - name: Run Pester tests
-        id: pester
-        shell: pwsh
-        run: |
-          Import-Module Pester
-          $Config = New-PesterConfiguration
-          $Config.Run.Path = "./src/tests"
-          $Config.Run.Exit = $false
-          $Config.Run.PassThru = $true
-          $Config.TestResult.Enabled = $true
-          $Config.TestResult.OutputPath = "TestResults.xml"
-          $Config.TestResult.OutputFormat = "JUnitXml"
-          $Result = Invoke-Pester -Configuration $Config
-          
-          # Write to Job Summary
-          $Summary = "## 🧪 Pester Test Results`n`n"
-          $Summary += "| ✅ Passed | ❌ Failed | ⏭️ Skipped | Total |`n"
-          $Summary += "|-----------|-----------|------------|-------|`n"
-          $Summary += "| $($Result.PassedCount) | $($Result.FailedCount) | $($Result.SkippedCount) | $($Result.TotalCount) |`n"
-          
-          if ($Result.FailedCount -gt 0) {
-            $Summary += "`n### Failed Tests`n`n"
-            foreach ($test in $Result.Failed) {
-              $Summary += "- **$($test.Name)**`n"
-              $Summary += "  - $($test.ErrorRecord.Exception.Message)`n"
-            }
-          }
-          
-          $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
-          
-          if ($Result.FailedCount -gt 0) {
-            exit 1
-          }
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v6
-        if: always()
-        with:
-          name: test-results
-          path: TestResults.xml
-
-  security:
-    name: Run Security Analysis
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Run PSScriptAnalyzer
-        shell: pwsh
-        run: |
-          Set-PSRepository PSGallery -InstallationPolicy Trusted
-          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
-          $Results = Invoke-ScriptAnalyzer -Path ./src -Recurse -ReportSummary
-          
-          $Errors = $Results | Where-Object Severity -eq 'Error'
-          $Warnings = $Results | Where-Object Severity -eq 'Warning'
-          $Info = $Results | Where-Object Severity -eq 'Information'
-          
-          $Summary = "## 🔍 PSScriptAnalyzer Results`n`n"
-          $Summary += "| ❌ Errors | ⚠️ Warnings | ℹ️ Info |`n"
-          $Summary += "|-----------|-------------|---------|`n"
-          $Summary += "| $($Errors.Count) | $($Warnings.Count) | $($Info.Count) |`n"
-          
-          if ($Errors) {
-            $Summary += "`n### Errors`n`n"
-            $Summary += "| Rule | File | Line |`n"
-            $Summary += "|------|------|------|`n"
-            foreach ($r in $Errors) {
-              $File = $r.ScriptPath -replace '.*[/\\]src[/\\]', 'src/'
-              $Summary += "| $($r.RuleName) | $File | $($r.Line) |`n"
-            }
-          } else {
-            $Summary += "`n✅ **No errors!**`n"
-          }
-          
-          $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
-          
-          if ($Results) {
-            $Results | Format-Table
-            if ($Errors.Count -gt 0) {
-              Write-Host "Script analysis found errors!" -ForegroundColor Red
-              exit 1
-            }
-            Write-Host "Script analysis found warnings (non-blocking)" -ForegroundColor Yellow
-          }
-
-  should-deploy:
-    name: Release Gate
-    needs:
-      - test
-      - security
-    if: github.event.repository.fork == false && github.ref_name == 'main'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Deployment checks passed"
-
   build:
     name: Publish Module to PowerShell Gallery
-    needs: should-deploy
-
     runs-on: ubuntu-latest
+    environment:
+      name: PowerShell Gallery
+      url: https://www.powershellgallery.com/packages/GitlabCli
 
     steps:
       - uses: actions/checkout@v6
@@ -135,26 +23,20 @@ jobs:
         uses: chris-peterson/publish-powershell-modules@v1
         with:
           ApiKey: ${{ secrets.PSGALLERY_API_KEY }}
-    environment:
-      name: PowerShell Gallery
-      url: https://www.powershellgallery.com/packages/GitlabCli
 
   docker:
     name: Publish Docker Image to GitHub Container Registry
-    needs: should-deploy
+    runs-on: ubuntu-latest
 
     env:
       IMAGE_NAME: gitlab-cli
       REGISTRY: ghcr.io
       IMAGE_ID: ghcr.io/${{ github.repository }}/gitlab-cli
 
-    runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
       attestations: write
-      artifact-metadata: write
       id-token: write
 
     steps:
