@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.147.0'
+    ModuleVersion = '1.147.1'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* Feat: should process support for branch deletion
+* Bug: Protect-GitlabBranch should work with no parameters
 '@
         }
     }

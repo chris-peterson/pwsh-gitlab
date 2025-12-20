@@ -150,10 +150,10 @@ function Protect-GitlabBranch {
         [string]
         $ProjectId = '.',
         
-        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [Alias('Name')]
         [string]
-        $Branch,
+        $Branch = '.',
         
         [Parameter()]
         [ValidateSet('noaccess','developer','maintainer','admin')]
@@ -198,6 +198,10 @@ function Protect-GitlabBranch {
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
+
+    if ($Branch -eq '.') {
+        $Branch = $(Get-LocalGitContext).Branch
+    }
 
     if ($Project | Get-GitlabProtectedBranch | Where-Object Name -eq $Branch) {
         # NOTE: the PATCH endpoint is crap (https://gitlab.com/gitlab-org/gitlab/-/issues/365520)
