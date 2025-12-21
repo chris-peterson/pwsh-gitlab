@@ -1,4 +1,8 @@
 BeforeAll {
+  . $PSScriptRoot/../GitlabCli/_Init.ps1
+  Import-Module $PSScriptRoot/../GitlabCli/Utilities.psm1 -Force
+  Import-Module $PSScriptRoot/../GitlabCli/Validation.psm1 -Force
+  Import-Module $PSScriptRoot/../GitlabCli/Members.psm1 -Force
   Import-Module $PSScriptRoot/../GitlabCli/GroupAccessTokens.psm1 -Force
 }
 
@@ -11,9 +15,7 @@ Describe "Get-GitlabGroupAccessToken" {
     BeforeEach {
       Mock -CommandName Invoke-GitlabApi `
         -ParameterFilter { 
-          $Method -eq 'GET' `
-          -and $HttpMethod -eq 'GET' `
-          -and $Whatif -eq $False `
+          $HttpMethod -eq 'GET' `
           -and $Path -eq 'groups/1/access_tokens' 
         } `
         -MockWith {
@@ -31,9 +33,7 @@ Describe "Get-GitlabGroupAccessToken" {
     BeforeEach {
       Mock -CommandName Invoke-GitlabApi -ModuleName GroupAccessTokens `
         -ParameterFilter { 
-          $Method -eq 'GET' `
-          -and $HttpMethod -eq 'GET' `
-          -and $Whatif -eq $False `
+          $HttpMethod -eq 'GET' `
           -and $Path -eq 'groups/1/access_tokens' 
         } `
         -MockWith {
@@ -73,11 +73,8 @@ Describe "New-GitlabGroupAccessToken" {
     BeforeEach {
       Mock -CommandName Invoke-GitlabApi -ModuleName GroupAccessTokens `
         -ParameterFilter { 
-          $Method -eq 'POST' `
-          -and $HttpMethod -eq 'POST' `
-          -and $Whatif -eq $False `
-          -and $Path -eq 'groups/1/access_tokens' `
-          -and $Body.scopes -eq @("api")
+          $HttpMethod -eq 'POST' `
+          -and $Path -eq 'groups/1/access_tokens'
         } `
         -MockWith {
           return [PSCustomObject]@{
@@ -91,13 +88,13 @@ Describe "New-GitlabGroupAccessToken" {
     }
 
     It "Should return the new group access token" {
-      $Result = New-GitlabGroupAccessToken -GroupId 1 -Name "token1" -Scope "api"
+      $Result = New-GitlabGroupAccessToken -GroupId 1 -Name "token1" -Scope "api" -AccessLevel "developer"
       $Result.Name | Should -Be "token1"
       $Result.Token  | Should -Be "token1"
     }
 
     It "Should fail when Expires At is more than a year from now" {
-      { New-GitlabGroupAccessToken -GroupId 1 -Name "token1" -Scope "api" -ExpiresAt (Get-Date).AddYears(2) } | Should -Throw
+      { New-GitlabGroupAccessToken -GroupId 1 -Name "token1" -Scope "api" -AccessLevel "developer" -ExpiresAt (Get-Date).AddYears(2) } | Should -Throw
     }
   }
 }

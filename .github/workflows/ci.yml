@@ -1,0 +1,124 @@
+name: CI
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install PowerShell modules
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          if (-not (Get-Module -ListAvailable -Name Pester)) {
+            Install-Module -Name Pester -Force -Scope CurrentUser
+          }
+
+      - name: Run Pester tests
+        id: pester
+        shell: pwsh
+        run: |
+          Import-Module Pester
+          $Config = New-PesterConfiguration
+          $Config.Run.Path = "./src/tests"
+          $Config.Run.Exit = $false
+          $Config.Run.PassThru = $true
+          $Config.TestResult.Enabled = $true
+          $Config.TestResult.OutputPath = "TestResults.xml"
+          $Config.TestResult.OutputFormat = "JUnitXml"
+          $Result = Invoke-Pester -Configuration $Config
+          
+          # Write to Job Summary
+          $Summary = "## Test Results`n`n"
+          $Summary += "| ✅ Passed | ❌ Failed | ⏭️ Skipped | Total |`n"
+          $Summary += "|-----------|-----------|------------|-------|`n"
+          $Summary += "| $($Result.PassedCount) | $($Result.FailedCount) | $($Result.SkippedCount) | $($Result.TotalCount) |`n"
+          
+          if ($Result.FailedCount -gt 0) {
+            $Summary += "`n### Failed Tests`n`n"
+            foreach ($test in $Result.Failed) {
+              $Summary += "- **$($test.Name)**`n"
+              $Summary += "  - $($test.ErrorRecord.Exception.Message)`n"
+            }
+          }
+          
+          $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+          
+          if ($Result.FailedCount -gt 0) {
+            exit 1
+          }
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: test-results
+          path: TestResults.xml
+
+  security:
+    name: Run Security Analysis
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Run PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+          $Results = Invoke-ScriptAnalyzer -Path ./src -Recurse -ReportSummary
+          
+          $Errors = $Results | Where-Object Severity -eq 'Error'
+          $Warnings = $Results | Where-Object Severity -eq 'Warning'
+          $Info = $Results | Where-Object Severity -eq 'Information'
+          
+          $Summary = "## Security Analysis Results`n`n"
+          $Summary += "| ❌ Errors | ⚠️ Warnings | ℹ️ Info |`n"
+          $Summary += "|-----------|-------------|---------|`n"
+          $Summary += "| $($Errors.Count) | $($Warnings.Count) | $($Info.Count) |`n`n"
+          
+          # Group by severity and rule
+          $Grouped = $Results | Group-Object Severity, RuleName | Sort-Object Count -Descending
+          if ($Grouped) {
+            $Summary += "| Rule | Count |`n"
+            $Summary += "|------|-------|`n"
+            foreach ($g in $Grouped) {
+              $Severity = ($g.Name -split ', ')[0]
+              $Rule = ($g.Name -split ', ')[1]
+              $Icon = switch ($Severity) { 'Error' { '❌' } 'Warning' { '⚠️' } default { 'ℹ️' } }
+              $Summary += "| $Icon ``$Rule`` | $($g.Count) |`n"
+            }
+          }
+          
+          $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+          
+          # Export results to file
+          $Results | ConvertTo-Json -Depth 5 | Out-File -FilePath SecurityResults.json
+          
+          if ($Results) {
+            $Results | Format-Table
+            if ($Errors.Count -gt 0) {
+              Write-Host "Script analysis found errors!" -ForegroundColor Red
+              exit 1
+            }
+            Write-Host "Script analysis found warnings (non-blocking)" -ForegroundColor Yellow
+          }
+
+      - name: Upload security results
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: security-results
+          path: SecurityResults.json
