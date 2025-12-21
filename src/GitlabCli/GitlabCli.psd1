@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.148.0'
+    ModuleVersion = '1.149.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* Feat: Improved parameter handling for branch cmdlets (https://github.com/chris-peterson/pwsh-gitlab/pull/119)
+* https://github.com/chris-peterson/pwsh-gitlab/pull/126
 '@
         }
     }
