@@ -120,8 +120,7 @@ function Update-GitlabRunner {
         $Description,
 
         [Parameter()]
-        [object]
-        [ValidateSet($null, 'true', 'false')]
+        [TrueOrFalse()][bool]
         $Active,
 
         [Parameter()]
@@ -129,13 +128,11 @@ function Update-GitlabRunner {
         $Tags,
 
         [Parameter()]
-        [object]
-        [ValidateSet($null, 'true', 'false')]
+        [TrueOrFalse()][bool]
         $RunUntaggedJobs,
 
         [Parameter()]
-        [object]
-        [ValidateSet($null, 'true', 'false')]
+        [TrueOrFalse()][bool]
         $Locked,
 
         [Parameter()]
@@ -177,13 +174,13 @@ function Update-GitlabRunner {
         $Params.Query.maximum_timeout = $MaximumTimeoutSeconds
     }
 
-    if ($Active) {
+    if ($PSBoundParameters.ContainsKey('Active')) {
         $Params.Query.active = $Active
     }
-    if ($RunUntaggedJobs) {
+    if ($PSBoundParameters.ContainsKey('RunUntaggedJobs')) {
         $Params.Query.run_untagged = $RunUntaggedJobs
     }
-    if ($Locked) {
+    if ($PSBoundParameters.ContainsKey('Locked')) {
         $Params.Query.locked = $Locked
     }
 

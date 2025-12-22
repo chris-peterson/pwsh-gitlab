@@ -86,7 +86,7 @@ function Get-GitlabProjectAccessToken {
     $LastUsedBefore,
 
     [Parameter(Mandatory=$false, ParameterSetName='All')]
-    [bool]
+    [TrueOrFalse()][bool]
     $Revoked,
 
     [Parameter(Mandatory=$false, ParameterSetName='All')]
@@ -126,7 +126,7 @@ function Get-GitlabProjectAccessToken {
     if($ExpiresBefore) { $GitlabAPIParams.Query.expires_before = $ExpiresBefore.ToString('o') }
     if($LastUsedAfter) { $GitlabAPIParams.Query.last_used_after = $LastUsedAfter.ToString('o') }
     if($LastUsedBefore) { $GitlabAPIParams.Query.last_used_before = $LastUsedBefore.ToString('o') }
-    if($Revoked -ne $null) { $GitlabAPIParams.Query.revoked = $Revoked }
+    if($PSBoundParameters.ContainsKey('Revoked')) { $GitlabAPIParams.Query.revoked = $Revoked }
     if($Search) { $GitlabAPIParams.Query.search = $Search }
     if($Sort) { $GitlabAPIParams.Query.sort = $Sort }
     if($State) { $GitlabAPIParams.Query.state = $State }

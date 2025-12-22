@@ -52,9 +52,8 @@ function Get-GitlabPersonalAccessToken {
         $State = 'active',
 
         [Parameter(ParameterSetName='Default')]
-        [ValidateSet($null, 'true', 'false')]
-        [string]
-        $Revoked = 'false',
+        [TrueOrFalse()][bool]
+        $Revoked = $false,
 
         [Parameter()]
         [switch]
