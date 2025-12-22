@@ -18,7 +18,8 @@ function Get-LocalGitContext {
 
     try {
         Set-Location $Path
-        if (Test-Path -Path '.git') {
+        $GitDir = git rev-parse --git-dir 2>$null
+        if ($GitDir -and (Test-Path -Path $GitDir)) {
             $OriginUrl = git config --get remote.origin.url
             # https
             try {
