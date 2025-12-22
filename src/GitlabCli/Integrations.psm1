@@ -123,13 +123,11 @@ function Enable-GitlabProjectSlackNotification {
         $BranchesToBeNotified = 'default_and_protected',
 
         [Parameter()]
-        [string]
-        [ValidateSet($null, 'true', 'false')]
+        [TrueOrFalse()][bool]
         $NotifyOnlyBrokenPipelines,
 
         [Parameter()]
-        [ValidateSet($null, 'true', 'false')]
-        [string]
+        [TrueOrFalse()][bool]
         $JobEvents,
 
         [Parameter(ParameterSetName='SpecificEvents')]
@@ -182,10 +180,10 @@ function Enable-GitlabProjectSlackNotification {
     if ($BranchesToBeNotified) {
         $Settings.branches_to_be_notified = $BranchesToBeNotified
     }
-    if ($NotifyOnlyBrokenPipelines) {
+    if ($PSBoundParameters.ContainsKey('NotifyOnlyBrokenPipelines')) {
         $Settings.notify_only_broken_pipelines = $NotifyOnlyBrokenPipelines
     }
-    if ($JobEvents) {
+    if ($PSBoundParameters.ContainsKey('JobEvents')) {
         $Settings.job_events = $JobEvents
     }
 

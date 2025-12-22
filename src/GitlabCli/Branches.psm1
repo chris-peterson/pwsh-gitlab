@@ -191,9 +191,8 @@ function Protect-GitlabBranch {
         $UnprotectAccessLevel,
         
         [Parameter()]
-        [ValidateSet($null, 'true', 'false')]
-        [object]
-        $AllowForcePush = 'false',
+        [TrueOrFalse()][bool]
+        $AllowForcePush = $false,
         
         [Parameter()]
         [array]
@@ -208,8 +207,7 @@ function Protect-GitlabBranch {
         $AllowedToUnprotect,
         
         [Parameter()]
-        [ValidateSet($null, 'true', 'false')]
-        [object]
+        [TrueOrFalse()][bool]
         $CodeOwnerApprovalRequired = $false,
         
         [Parameter()]

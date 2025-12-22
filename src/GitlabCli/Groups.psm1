@@ -287,17 +287,17 @@ function Set-GitlabGroupVariable {
         [string]
         $Value,
 
-        [switch]
+        [TrueOrFalse()][bool]
         [Parameter(ValueFromPipelineByPropertyName)]
         $Protect,
 
-        [switch]
+        [TrueOrFalse()][bool]
         [Parameter(ValueFromPipelineByPropertyName)]
         $Mask,
 
-        [ValidateSet($null, 'true', 'false')]
+        [TrueOrFalse()][bool]
         [Parameter(ValueFromPipelineByPropertyName)]
-        $ExpandVariables = 'true',
+        $ExpandVariables = $true,
 
         [switch]
         [Parameter()]
@@ -309,20 +309,20 @@ function Set-GitlabGroupVariable {
     )
 
     if ($NoExpand) {
-        $ExpandVariables = 'false'
+        $ExpandVariables = $false
     }
 
     $Group = Get-GitlabGroup $GroupId
 
     $Request = @{
         value = $Value
-        raw   = $ExpandVariables -eq 'true' ? 'false' : 'true'
+        raw   = -not $ExpandVariables
     }
-    if ($Protect) {
-        $Request.protected = 'true'
+    if ($PSBoundParameters.ContainsKey('Protect')) {
+        $Request.protected = $Protect
     }
-    if ($Mask) {
-        $Request.masked = 'true'
+    if ($PSBoundParameters.ContainsKey('Mask')) {
+        $Request.masked = $Mask
     }
 
     try {

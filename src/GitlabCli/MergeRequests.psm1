@@ -34,8 +34,7 @@ function Get-GitlabMergeRequest {
         [ValidateScript({Test-GitlabDate $_})]
         $CreatedBefore,
 
-        [ValidateSet($null, 'true', 'false')]
-        [object]
+        [TrueOrFalse()][bool]
         $IsDraft,
 
         [Parameter()]
@@ -137,8 +136,8 @@ function Get-GitlabMergeRequest {
     if ($CreatedAfter) {
         $Query.created_after = $CreatedAfter
     }
-    if ($IsDraft) {
-        $Query.wip = $IsDraft -eq 'true' ? 'yes' : 'no'
+    if ($PSBoundParameters.ContainsKey('IsDraft')) {
+        $Query.wip = $IsDraft ? 'yes' : 'no'
     }
     if ($SourceBranch) {
         if ($SourceBranch -eq '.') {
@@ -725,33 +724,27 @@ function Update-GitlabMergeRequestApprovalConfiguration {
         $ProjectId = '.',
 
         [Parameter()]
-        [ValidateSet($null, 'true', 'false')]
-        [object]
+        [TrueOrFalse()][bool]
         $DisableOverridingApproversPerMergeRequest,
 
         [Parameter()]
-        [ValidateSet($null, 'true', 'false')]
-        [object]
+        [TrueOrFalse()][bool]
         $MergeRequestsAuthorApproval,
 
         [Parameter()]
-        [ValidateSet($null, 'true', 'false')]
-        [object]
+        [TrueOrFalse()][bool]
         $MergeRequestsDisableCommittersApproval,
 
         [Parameter()]
-        [ValidateSet($null, 'true', 'false')]
-        [object]
+        [TrueOrFalse()][bool]
         $RequirePasswordToApprove,
 
         [Parameter()]
-        [ValidateSet($null, 'true', 'false')]
-        [object]
+        [TrueOrFalse()][bool]
         $ResetApprovalsOnPush,
 
         [Parameter()]
-        [ValidateSet($null, 'true', 'false')]
-        [object]
+        [TrueOrFalse()][bool]
         $SelectiveCodeOwnerRemovals,
 
         [Parameter(Mandatory=$false)]
@@ -762,23 +755,23 @@ function Update-GitlabMergeRequestApprovalConfiguration {
     $Project = Get-GitlabProject $ProjectId
 
     $Request = @{}
-    if ($DisableOverridingApproversPerMergeRequest -ne $null) {
-        $Request.disable_overriding_approvers_per_merge_request = $DisableOverridingApproversPerMergeRequest.ToLower()
+    if ($PSBoundParameters.ContainsKey('DisableOverridingApproversPerMergeRequest')) {
+        $Request.disable_overriding_approvers_per_merge_request = $DisableOverridingApproversPerMergeRequest
     }
-    if ($MergeRequestsAuthorApproval -ne $null) {
-        $Request.merge_requests_author_approval = $MergeRequestsAuthorApproval.ToLower()
+    if ($PSBoundParameters.ContainsKey('MergeRequestsAuthorApproval')) {
+        $Request.merge_requests_author_approval = $MergeRequestsAuthorApproval
     }
-    if ($MergeRequestsDisableCommittersApproval -ne $null) {
-        $Request.merge_requests_disable_committers_approval = $MergeRequestsDisableCommittersApproval.ToLower()
+    if ($PSBoundParameters.ContainsKey('MergeRequestsDisableCommittersApproval')) {
+        $Request.merge_requests_disable_committers_approval = $MergeRequestsDisableCommittersApproval
     }
-    if ($RequirePasswordToApprove -ne $null) {
-        $Request.require_password_to_approve = $RequirePasswordToApprove.ToLower()
+    if ($PSBoundParameters.ContainsKey('RequirePasswordToApprove')) {
+        $Request.require_password_to_approve = $RequirePasswordToApprove
     }
-    if ($ResetApprovalsOnPush -ne $null) {
-        $Request.reset_approvals_on_push = $ResetApprovalsOnPush.ToLower()
+    if ($PSBoundParameters.ContainsKey('ResetApprovalsOnPush')) {
+        $Request.reset_approvals_on_push = $ResetApprovalsOnPush
     }
-    if ($SelectiveCodeOwnerRemovals -ne $null) {
-        $Request.selective_code_owner_removals = $SelectiveCodeOwnerRemovals.ToLower()
+    if ($PSBoundParameters.ContainsKey('SelectiveCodeOwnerRemovals')) {
+        $Request.selective_code_owner_removals = $SelectiveCodeOwnerRemovals
     }
 
     if ($PSCmdlet.ShouldProcess($Project.PathWithNamespace, "update merge request approval settings to $($Request | ConvertTo-Json)")) {

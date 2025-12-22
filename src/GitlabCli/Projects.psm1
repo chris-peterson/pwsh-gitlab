@@ -291,7 +291,7 @@ function Copy-GitlabProject {
 
 
         # https://docs.gitlab.com/ee/api/projects.html#delete-an-existing-forked-from-relationship
-        [bool]
+        [TrueOrFalse()][bool]
         [Parameter(Mandatory=$false)]
         $PreserveForkRelationship = $true,
 
@@ -450,8 +450,7 @@ function Update-GitlabProject {
         $CiDefaultGitDepth,
 
         [Parameter()]
-        [ValidateSet($null, 'true', 'false')]
-        [object]
+        [TrueOrFalse()][bool]
         $CiForwardDeployment,
 
         [Parameter()]
@@ -469,8 +468,7 @@ function Update-GitlabProject {
         $BuildsAccessLevel,
 
         [Parameter()]
-        [ValidateSet($null, 'true', 'false')]
-        [object]
+        [TrueOrFalse()][bool]
         $OnlyAllowMergeIfAllDiscussionsAreResolved,
         
         [Parameter()]
@@ -494,7 +492,7 @@ function Update-GitlabProject {
     if ($CiDefaultGitDepth) {
         $Request.ci_default_git_depth = $CiDefaultGitDepth
     }
-    if ($CiForwardDeployment){
+    if ($PSBoundParameters.ContainsKey('CiForwardDeployment')){
         $Request.ci_forward_deployment_enabled = $CiForwardDeployment
     }
     if ($DefaultBranch) {
@@ -503,7 +501,7 @@ function Update-GitlabProject {
     if ($Name) {
         $Request.name = $Name
     }
-    if ($OnlyAllowMergeIfAllDiscussionsAreResolved) {
+    if ($PSBoundParameters.ContainsKey('OnlyAllowMergeIfAllDiscussionsAreResolved')) {
         $Request.only_allow_merge_if_all_discussions_are_resolved = $OnlyAllowMergeIfAllDiscussionsAreResolved
     }
     if ($Path) {
@@ -626,17 +624,17 @@ function Set-GitlabProjectVariable {
         [string]
         $Value,
 
-        [switch]
+        [TrueOrFalse()][bool]
         [Parameter(ValueFromPipelineByPropertyName)]
         $Protect,
 
-        [switch]
+        [TrueOrFalse()][bool]
         [Parameter(ValueFromPipelineByPropertyName)]
         $Mask,
 
-        [ValidateSet($null, 'true', 'false')]
+        [TrueOrFalse()][bool]
         [Parameter(ValueFromPipelineByPropertyName)]
-        $ExpandVariables = 'true',
+        $ExpandVariables = $true,
 
         [switch]
         [Parameter()]
@@ -648,18 +646,18 @@ function Set-GitlabProjectVariable {
     )
 
     if ($NoExpand) {
-        $ExpandVariables = 'false'
+        $ExpandVariables = $false
     }
 
     $Request = @{
         value = $Value
-        raw   = $ExpandVariables -eq 'true' ? 'false' : 'true'
+        raw   = -not $ExpandVariables
     }
-    if ($Protect) {
-        $Request.protected = 'true'
+    if ($PSBoundParameters.ContainsKey('Protect')) {
+        $Request.protected = $Protect
     }
-    if ($Mask) {
-        $Request.masked = 'true'
+    if ($PSBoundParameters.ContainsKey('Mask')) {
+        $Request.masked = $Mask
     }
 
     $Project = Get-GitlabProject $ProjectId

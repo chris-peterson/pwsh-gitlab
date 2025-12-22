@@ -39,39 +39,39 @@ function New-GitlabProjectHook {
       $Url,
 
       [Parameter(Mandatory=$false)]
-      [bool]
+      [TrueOrFalse()][bool]
       $ConfidentialIssuesEvents,
 
       [Parameter(Mandatory=$false)]
-      [bool]
+      [TrueOrFalse()][bool]
       $ConfidentialNoteEvents,
 
       [Parameter(Mandatory=$false)]
-      [bool]
+      [TrueOrFalse()][bool]
       $DeploymentEvents,
             
       [Parameter(Mandatory=$false)]
-      [bool]
+      [TrueOrFalse()][bool]
       $EnableSSLVerification,
             
       [Parameter(Mandatory=$false)]
-      [bool]
+      [TrueOrFalse()][bool]
       $IssuesEvents,
             
       [Parameter(Mandatory=$false)]
-      [bool]
+      [TrueOrFalse()][bool]
       $JobEvents,
             
       [Parameter(Mandatory=$false)]
-      [bool]
+      [TrueOrFalse()][bool]
       $MergeRequestsEvents,
             
       [Parameter(Mandatory=$false)]
-      [bool]
+      [TrueOrFalse()][bool]
       $NoteEvents,
             
       [Parameter(Mandatory=$false)]
-      [bool]
+      [TrueOrFalse()][bool]
       $PipelineEvents,
 
       [Parameter(Mandatory=$false)]
@@ -79,15 +79,15 @@ function New-GitlabProjectHook {
       $PushEventsBranchFilter,
             
       [Parameter(Mandatory=$false)]
-      [bool]
+      [TrueOrFalse()][bool]
       $PushEvents,
             
       [Parameter(Mandatory=$false)]
-      [bool]
+      [TrueOrFalse()][bool]
       $ReleasesEvents,
             
       [Parameter(Mandatory=$false)]
-      [bool]
+      [TrueOrFalse()][bool]
       $TagPushEvents,
 
       [Parameter(Mandatory=$false)]
@@ -95,7 +95,7 @@ function New-GitlabProjectHook {
       $Token,
             
       [Parameter(Mandatory=$false)]
-      [bool]
+      [TrueOrFalse()][bool]
       $WikiPageEvents,
 
       [Parameter(Mandatory=$false)]
@@ -158,39 +158,39 @@ function Update-GitlabProjectHook {
     $Url,
 
     [Parameter(Mandatory=$false)]
-    [bool]
+    [TrueOrFalse()][bool]
     $ConfidentialIssuesEvents,
 
     [Parameter(Mandatory=$false)]
-    [bool]
+    [TrueOrFalse()][bool]
     $ConfidentialNoteEvents,
 
     [Parameter(Mandatory=$false)]
-    [bool]
+    [TrueOrFalse()][bool]
     $DeploymentEvents,
           
     [Parameter(Mandatory=$false)]
-    [bool]
+    [TrueOrFalse()][bool]
     $EnableSSLVerification,
           
     [Parameter(Mandatory=$false)]
-    [bool]
+    [TrueOrFalse()][bool]
     $IssuesEvents,
           
     [Parameter(Mandatory=$false)]
-    [bool]
+    [TrueOrFalse()][bool]
     $JobEvents,
           
     [Parameter(Mandatory=$false)]
-    [bool]
+    [TrueOrFalse()][bool]
     $MergeRequestsEvents,
           
     [Parameter(Mandatory=$false)]
-    [bool]
+    [TrueOrFalse()][bool]
     $NoteEvents,
           
     [Parameter(Mandatory=$false)]
-    [bool]
+    [TrueOrFalse()][bool]
     $PipelineEvents,
 
     [Parameter(Mandatory=$false)]
@@ -198,15 +198,15 @@ function Update-GitlabProjectHook {
     $PushEventsBranchFilter,
           
     [Parameter(Mandatory=$false)]
-    [bool]
+    [TrueOrFalse()][bool]
     $PushEvents,
           
     [Parameter(Mandatory=$false)]
-    [bool]
+    [TrueOrFalse()][bool]
     $ReleasesEvents,
           
     [Parameter(Mandatory=$false)]
-    [bool]
+    [TrueOrFalse()][bool]
     $TagPushEvents,
 
     [Parameter(Mandatory=$false)]
@@ -214,7 +214,7 @@ function Update-GitlabProjectHook {
     $Token,
           
     [Parameter(Mandatory=$false)]
-    [bool]
+    [TrueOrFalse()][bool]
     $WikiPageEvents,
 
     [Parameter(Mandatory=$false)]

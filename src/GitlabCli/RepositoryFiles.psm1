@@ -96,7 +96,7 @@ function New-GitlabRepositoryFile {
         [string]
         $CommitMessage,
 
-        [bool]
+        [TrueOrFalse()][bool]
         [Parameter(Mandatory=$false)]
         $SkipCi = $true,
 
@@ -150,7 +150,7 @@ function Update-GitlabRepositoryFile {
         [string]
         $CommitMessage,
 
-        [bool]
+        [TrueOrFalse()][bool]
         [Parameter(Mandatory=$false)]
         $SkipCi = $true,
 

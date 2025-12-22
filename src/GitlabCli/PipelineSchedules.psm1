@@ -90,8 +90,7 @@ function New-GitlabPipelineSchedule {
         $CronTimezone = 'UTC',
 
         [Parameter()]
-        [ValidateSet($null, 'true', 'false')]
-        [string]
+        [TrueOrFalse()][bool]
         $Active,
 
         [Parameter()]
@@ -111,7 +110,7 @@ function New-GitlabPipelineSchedule {
         cron          = $Cron
         cron_timezone = $CronTimezone
     }
-    if ($Active) {
+    if ($PSBoundParameters.ContainsKey('Active')) {
         $Body.active = $Active
     }
 
@@ -184,7 +183,7 @@ function Update-GitlabPipelineSchedule {
         SiteUrl    = $SiteUrl
     }
 
-    if ($Active) {
+    if ($PSBoundParameters.ContainsKey('Active')) {
         $GitlabApiArguments.Body.active = $Active
     }
     if ($Description) {
