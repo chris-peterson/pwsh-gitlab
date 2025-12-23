@@ -47,7 +47,7 @@
     PowerShellVersion = '7.1'
     CompatiblePSEditions = @('Core', 'Desktop')
 
-    ScriptsToProcess = @('_Init.ps1')
+    ScriptsToProcess = @('Private/Globals.ps1', 'Private/Transformations.ps1', 'Private/Functions.ps1')
     TypesToProcess = @('Types.ps1xml')
     FormatsToProcess = @('Formats.ps1xml')
 
@@ -360,7 +360,6 @@
         'Invoke-GitlabApi'
         'New-WrapperObject'
         'Open-InBrowser'
-        'Get-GitlabResourceFromUrl'
 
         # Validation
         'Test-GitlabDate'

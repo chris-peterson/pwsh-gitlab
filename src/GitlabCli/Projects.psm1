@@ -159,10 +159,9 @@ function Get-GitlabProject {
             } -MaxPages $MaxPages -SiteUrl $SiteUrl
         }
         ByUrl {
-            $Url -match "$($(Get-DefaultGitlabSite).Url)/?(?<ProjectId>.*)" | Out-Null
-            if ($Matches) {
-                $ProjectId = $Matches.ProjectId
-                Get-GitlabProject -ProjectId $ProjectId
+            $Match = $Url | Get-GitlabResourceFromUrl
+            if ($Match) {
+                Get-GitlabProject -ProjectId $Match.ProjectId
             } else {
                 throw "Url didn't match expected format"
             }

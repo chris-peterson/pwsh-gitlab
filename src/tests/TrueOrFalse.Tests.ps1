@@ -1,5 +1,5 @@
 BeforeAll {
-    . $PSScriptRoot/../GitlabCli/_Init.ps1
+    . $PSScriptRoot/../GitlabCli/Private/Transformations.ps1
 
     function Test-TrueOrFalseRequired {
         param (

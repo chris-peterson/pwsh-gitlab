@@ -1,5 +1,3 @@
-$global:GitlabSearchResultsDefaultLimit = 100
-
 function Search-Gitlab {
     [CmdletBinding(SupportsShouldProcess)]
     param(

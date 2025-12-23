@@ -76,6 +76,7 @@ function Get-DefaultGitlabSite {
     param (
     )
 
+    Write-Warning "Get-DefaultGitlabSite is deprecated; it will be removed in a future release"
     $Configuration = Get-GitlabConfiguration
     $LocalContext = Get-LocalGitContext
 
