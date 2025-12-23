@@ -360,9 +360,10 @@ function Resolve-GitlabSite {
     $SiteUrls = @()
     for ($i = 1; $i -lt $CallStack.Count; $i++) {
         $CallerInfo = $CallStack[$i].InvocationInfo
-        if ($CallerInfo.BoundParameters -and $CallerInfo.BoundParameters.TryGetValue('SiteUrl', [ref]$SiteUrl) -and -not [string]::IsNullOrWhiteSpace($SiteUrl)) {
-            Write-Verbose "found $SiteUrl (passed to [$($CallerInfo.MyCommand.Name)])"
-            $SiteUrls += $SiteUrl
+        $CallerSiteUrl = $null
+        if ($CallerInfo.BoundParameters -and $CallerInfo.BoundParameters.TryGetValue('SiteUrl', [ref]$CallerSiteUrl) -and -not [string]::IsNullOrWhiteSpace($CallerSiteUrl)) {
+            Write-Verbose "found $CallerSiteUrl (passed to [$($CallerInfo.MyCommand.Name)])"
+            $SiteUrls += $CallerSiteUrl
         }
     }
     $ResolvedSiteUrls = @($SiteUrls | Select-Object -Unique)
@@ -377,11 +378,13 @@ function Resolve-GitlabSite {
         Write-Verbose "Inconsistent SiteUrls found in call stack ($($SiteUrls -join ', ')), ignoring..."
     }
 
-    Write-Verbose "SiteUrl: Attempting to resolve site using local git context"
-    $Site = $Sites | Where-Object Url -eq $(Get-LocalGitContext).Site
-    if ($Site) {
-        Write-Verbose "SiteUrl: Using $($Site.Url) (source: local git context)"
-        return $Site
+    $LocalGitContext = Get-LocalGitContext
+    if ($LocalGitContext -and $LocalGitContext.Site) {
+        $Site = $Sites | Where-Object Url -eq $LocalGitContext.Site
+        if ($Site) {
+            Write-Verbose "SiteUrl: Using $($Site.Url) (source: local git context)"
+            return $Site
+        }
     }
     $Default = $Sites | Where-Object IsDefault | Select-Object -First 1
     if ($Default) {
