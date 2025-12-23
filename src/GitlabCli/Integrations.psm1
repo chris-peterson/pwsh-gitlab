@@ -16,14 +16,14 @@ function Get-GitlabProjectIntegration {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject $ProjectId
 
     $Resource = "projects/$($Project.Id)/integrations"
     if ($Integration) {
         $Resource += "/$Integration"
     }
     # https://docs.gitlab.com/ee/api/integrations.html#list-all-active-integrations
-    Invoke-GitlabApi GET $Resource -SiteUrl $SiteUrl |
+    Invoke-GitlabApi GET $Resource |
         New-WrapperObject 'Gitlab.ProjectIntegration' |
         Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id -PassThru
 }
@@ -52,13 +52,13 @@ function Update-GitlabProjectIntegration {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject $ProjectId
 
     # https://docs.gitlab.com/api/project_integrations
     $Resource = "projects/$($Project.Id)/integrations/$Integration"
 
     if ($PSCmdlet.ShouldProcess("$Resource", "update $($Settings | ConvertTo-Json)")) {
-        Invoke-GitlabApi PUT $Resource -Body $Settings -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.ProjectIntegration'
+        Invoke-GitlabApi PUT $Resource -Body $Settings | New-WrapperObject 'Gitlab.ProjectIntegration'
     }
 }
 
@@ -81,13 +81,13 @@ function Remove-GitlabProjectIntegration {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject $ProjectId
 
     # https://docs.gitlab.com/api/project_integrations
     $Resource = "projects/$($Project.Id)/integrations/$Integration"
 
     if ($PSCmdlet.ShouldProcess("$Resource", "delete integration")) {
-        Invoke-GitlabApi DELETE $Resource -Body $Settings -SiteUrl $SiteUrl | Out-Null
+        Invoke-GitlabApi DELETE $Resource -Body $Settings | Out-Null
         Write-Host "Deleted $Integration integration from $($Project.PathWithNamespace)"
     }
 }
@@ -157,7 +157,7 @@ function Enable-GitlabProjectSlackNotification {
         [string]
         $SiteUrl
     )
-    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject $ProjectId
 
     $KnownEvents = @('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')
     if ($AllEvents) {
@@ -212,7 +212,7 @@ function Enable-GitlabProjectSlackNotification {
 
     $ExistingLegacyIntegration = $null
     try {
-        $ExistingLegacyIntegration = Get-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack' -SiteUrl $SiteUrl | Select-Object -Expand Active
+        $ExistingLegacyIntegration = Get-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack' | Select-Object -Expand Active
         if ($ExistingLegacyIntegration) {
             $Action = 'disable legacy integration, then enable'
         }
@@ -220,7 +220,7 @@ function Enable-GitlabProjectSlackNotification {
 
     if ($PSCmdlet.ShouldProcess("$Action slack notifications for $($Project.PathWithNamespace)", "notify $Channel ($($Settings | ConvertTo-Json)))")) {
         if ($ExistingLegacyIntegration) {
-            Remove-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack' -SiteUrl $SiteUrl
+            Remove-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack'
         }
         Update-GitlabProjectIntegration -ProjectId $Project.Id -Integration $Integration -Settings $Settings
     }

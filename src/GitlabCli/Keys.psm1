@@ -21,5 +21,5 @@ function Get-GitlabKey {
         Query   = if ($Fingerprint) { @{ fingerprint = $Fingerprint } } else { $null }
     }
 
-    Invoke-GitlabApi @apiParams -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.SSHKey'
+    Invoke-GitlabApi @apiParams | New-WrapperObject 'Gitlab.SSHKey'
 }

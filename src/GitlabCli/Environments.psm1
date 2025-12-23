@@ -41,7 +41,6 @@ function Get-GitlabEnvironment {
         HttpMethod = 'GET'
         Path       = "projects/$($Project.Id)/environments"
         Query      = @{}
-        SiteUrl    = $SiteUrl
         MaxPages   = $MaxPages
     }
 
@@ -103,7 +102,6 @@ function Stop-GitlabEnvironment {
         $GitlabApiArguments = @{
             HttpMethod='POST'
             Path="projects/$($Project.Id)/environments/$($Environment.Id)/stop"
-            SiteUrl = $SiteUrl
         }
     
         Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | Out-Null
@@ -139,7 +137,6 @@ function Remove-GitlabEnvironment {
         $GitlabApiArguments = @{
             HttpMethod='DELETE'
             Path="projects/$($Project.Id)/environments/$($Environment.Id)"
-            SiteUrl = $SiteUrl
         }
     
         Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | Out-Null

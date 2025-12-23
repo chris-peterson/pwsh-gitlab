@@ -57,7 +57,6 @@ function Search-Gitlab {
             search   = $Search
         }
         MaxPages = $MaxPages
-        SiteUrl  = $SiteUrl
     }
 
     switch ($Scope) {
@@ -138,7 +137,7 @@ function Search-GitlabProject {
     }
     
     $Resource = "projects/$($ProjectId | ConvertTo-UrlEncoded)/search"
-    Invoke-GitlabApi GET $Resource $Query -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+    Invoke-GitlabApi GET $Resource $Query -WhatIf:$WhatIf |
         New-WrapperObject 'Gitlab.SearchResult.Blob' |
         Add-Member -MemberType 'NoteProperty' -Name 'Project' -Value $Project -PassThru
 }

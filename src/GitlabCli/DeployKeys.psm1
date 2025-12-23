@@ -18,5 +18,5 @@ function Get-GitlabDeployKey {
       $GitlabAPIParams.Path += "/$DeployKeyId"
   }
 
-  Invoke-GitlabApi @GitlabAPIParams -SiteUrl $SiteUrl -Verbose:$VerbosePreference | New-WrapperObject 'Gitlab.DeployKey'
+  Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference | New-WrapperObject 'Gitlab.DeployKey'
 }

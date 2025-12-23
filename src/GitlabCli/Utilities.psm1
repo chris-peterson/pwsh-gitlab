@@ -294,7 +294,7 @@ function Get-GitlabVersion {
         [string]
         $SiteUrl
     )
-    Invoke-GitlabApi GET 'version' -SiteUrl $SiteUrl | New-WrapperObject | Get-FilteredObject $Select
+    Invoke-GitlabApi GET 'version' | New-WrapperObject | Get-FilteredObject $Select
 }
 
 # Helper function for consistency of paging parameters

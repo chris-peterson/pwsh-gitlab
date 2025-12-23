@@ -61,7 +61,6 @@ function Get-GitlabJob {
     $Request = @{
         HttpMethod = 'GET'
         Query      = @{}
-        SiteUrl    = $SiteUrl
         MaxPages   = $MaxPages
     }
 
@@ -163,7 +162,6 @@ function Get-GitlabJobTrace {
         HttpMethod = "GET"
         Query      = @{}
         Path       = "projects/$ProjectId/jobs/$JobId/trace"
-        SiteUrl    = $SiteUrl
     }
 
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf
@@ -201,7 +199,6 @@ function Start-GitlabJob {
     $GitlabApiArguments = @{
         HttpMethod = "POST"
         Path       = "projects/$($Project.Id)/jobs/$JobId/play"
-        SiteUrl    = $SiteUrl
         Body       = @{}
     }
 
@@ -233,7 +230,7 @@ function Start-GitlabJob {
             do {
                 Start-Sleep -Seconds 5
                 # NOTE: we are intentionally getting by _name_ as the ID that we get from 'play' / 'retry' is the original job ID
-                $Job = Get-GitlabJob -ProjectId $Project.Id -Name $Job.Name -SiteUrl $SiteUrl -IncludeTrace
+                $Job = Get-GitlabJob -ProjectId $Project.Id -Name $Job.Name -IncludeTrace
 
                 $JobTail = $Job.Trace -split "`n" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Last 1
                 Write-Progress @ProgressArgs -Status $JobTail
@@ -272,7 +269,6 @@ function Test-GitlabPipelineDefinition {
         Path    = "projects/$ProjectId/ci/lint"
         Body    = @{}
         Query   = @{}
-        SiteUrl = $SiteUrl
     }
 
     if ($Content) {
@@ -313,7 +309,7 @@ function Get-GitlabPipelineDefinition {
         $SiteUrl
     )
 
-    Get-GitlabRepositoryFileContent -ProjectId $ProjectId -Ref $Ref -FilePath '.gitlab-ci.yml' -SiteUrl $SiteUrl |
+    Get-GitlabRepositoryFileContent -ProjectId $ProjectId -Ref $Ref -FilePath '.gitlab-ci.yml' |
         ConvertFrom-Yaml
 }
 
@@ -479,5 +475,5 @@ function Get-GitlabJobArtifact {
         OutFile          = $OutFile
     }
 
-    Invoke-GitlabApi @GitlabApiArguments -SiteUrl $SiteUrl
+    Invoke-GitlabApi @GitlabApiArguments
 }

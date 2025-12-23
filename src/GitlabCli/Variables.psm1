@@ -22,14 +22,14 @@ function Resolve-GitlabVariable {
     )
 
     switch ($PSCmdlet.ParameterSetName) {
-        ByProject { Get-GitlabProject $ProjectId | Resolve-GitlabVariable $Key -SiteUrl $SiteUrl }
-        ByGroup   { Get-GitlabGroup $GroupId | Resolve-GitlabVariable $Key -SiteUrl $SiteUrl }
+        ByProject { Get-GitlabProject $ProjectId | Resolve-GitlabVariable $Key }
+        ByGroup   { Get-GitlabGroup $GroupId | Resolve-GitlabVariable $Key }
         Default   {
             Write-Verbose "checking for $Key on $($Context.psobject.TypeNames | Select-Object -First 1)..."
             if ($Context.ProjectId) {
                 Write-Verbose "...project id: $($Context.ProjectId)"
                 try {
-                    $ProjectVar = Get-GitlabProjectVariable -ProjectId $Context.ProjectId $Key -SiteUrl $SiteUrl
+                    $ProjectVar = Get-GitlabProjectVariable -ProjectId $Context.ProjectId $Key
                 }
                 catch {
                     if ($_.Exception.Response.StatusCode -eq 'NotFound') {
@@ -41,12 +41,12 @@ function Resolve-GitlabVariable {
                 if ($ProjectVar) {
                     return $ProjectVar.Value
                 } else {
-                    Get-GitlabGroup $Context.Group | Resolve-GitlabVariable -Key $Key -SiteUrl $SiteUrl
+                    Get-GitlabGroup $Context.Group | Resolve-GitlabVariable -Key $Key
                 }
             } elseif ($Context.GroupId) {
                 Write-Verbose "...group id: $($Context.GroupId)"
                 try {
-                    $GroupVar = Get-GitlabGroupVariable $Context.GroupId $Key -SiteUrl $SiteUrl
+                    $GroupVar = Get-GitlabGroupVariable $Context.GroupId $Key
                 }
                 catch {
                     if ($_.Exception.Response.StatusCode.ToString() -eq 'NotFound') {
@@ -62,7 +62,7 @@ function Resolve-GitlabVariable {
                     $GroupId = $Context.FullPath
                     if ($GroupId.Contains('/')) {
                         $Parent = $GroupId.Substring(0, $GroupId.LastIndexOf('/'))
-                        Get-GitLabGroup -GroupId $Parent | Resolve-GitlabVariable $Key -SiteUrl $SiteUrl
+                        Get-GitLabGroup -GroupId $Parent | Resolve-GitlabVariable $Key
                     }
                 }
             }

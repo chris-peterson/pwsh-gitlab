@@ -18,7 +18,7 @@ function Get-GitlabIssueNote {
     $Project = Get-GitlabProject $ProjectId
 
     # https://docs.gitlab.com/ee/api/notes.html#list-project-issue-notes
-    Invoke-GitlabApi GET "projects/$($Project.Id)/issues/$IssueId/notes" -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Note'
+    Invoke-GitlabApi GET "projects/$($Project.Id)/issues/$IssueId/notes" | New-WrapperObject 'Gitlab.Note'
 }
 
 function New-GitlabIssueNote {
@@ -46,7 +46,7 @@ function New-GitlabIssueNote {
 
     if ($PSCmdlet.ShouldProcess("issue #$IssueId", "Create new issue note ($Note)")) {
         # https://docs.gitlab.com/ee/api/notes.html#create-new-issue-note
-        Invoke-GitlabApi POST "projects/$($Project.Id)/issues/$IssueId/notes" -Body @{body = $Note} -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Note'
+        Invoke-GitlabApi POST "projects/$($Project.Id)/issues/$IssueId/notes" -Body @{body = $Note} | New-WrapperObject 'Gitlab.Note'
     }
 }
 
@@ -78,5 +78,5 @@ function Get-GitlabMergeRequestNote {
         $Url += "/$NoteId"
     }
 
-    Invoke-GitlabApi GET $Url -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Note'
+    Invoke-GitlabApi GET $Url | New-WrapperObject 'Gitlab.Note'
 }

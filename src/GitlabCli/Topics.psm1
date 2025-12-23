@@ -48,7 +48,7 @@ function Get-GitlabTopic {
         $Query.without_projects = 'true'
     }
 
-    Invoke-GitlabApi GET $Url $Query -MaxPages $MaxPages -SiteUrl $SiteUrl |
+    Invoke-GitlabApi GET $Url $Query -MaxPages $MaxPages |
         New-WrapperObject 'Gitlab.Topic' |
         Sort-Object Name
 }
@@ -83,7 +83,7 @@ function New-GitlabTopic {
     }
 
     if ($PSCmdlet.ShouldProcess("topics", "create ($($Request | ConvertTo-Json))")) {
-        Invoke-GitlabApi POST "topics" -SiteUrl $SiteUrl -Body $Request | New-WrapperObject 'Gitlab.Topic'
+        Invoke-GitlabApi POST "topics" -Body $Request | New-WrapperObject 'Gitlab.Topic'
     }
 }
 
@@ -121,7 +121,7 @@ function Update-GitlabTopic {
     }
 
     if ($PSCmdlet.ShouldProcess("topic $TopicId", "update ($($Request | ConvertTo-Json))")) {
-        Invoke-GitlabApi PUT "topics/$TopicId" -SiteUrl $SiteUrl -Body $Request | New-WrapperObject 'Gitlab.Topic'
+        Invoke-GitlabApi PUT "topics/$TopicId" -Body $Request | New-WrapperObject 'Gitlab.Topic'
     }
 }
 
@@ -136,7 +136,7 @@ function Remove-GitlabTopic {
     )
     
     if ($PSCmdlet.ShouldProcess("topic $TopicId", "delete")) {
-        if (Invoke-GitlabApi DELETE "topics/$TopicId" -SiteUrl $SiteUrl) {
+        if (Invoke-GitlabApi DELETE "topics/$TopicId") {
             Write-Host "Topic $TopicId deleted"
         }
     }

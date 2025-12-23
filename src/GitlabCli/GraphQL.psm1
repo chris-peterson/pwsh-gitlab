@@ -15,7 +15,7 @@ function Invoke-GitlabGraphQL {
         query = $Query
     }
     if ($PSCmdlet.ShouldProcess("graphql query", "$($Body | ConvertTo-Json -Depth 100)")) {
-        $Result = Invoke-GitlabApi POST 'graphql' -Api '' -Body $Body -SiteUrl $SiteUrl
+        $Result = Invoke-GitlabApi POST 'graphql' -Api '' -Body $Body
         if ($Result.data) {
             $Result.data | New-WrapperObject
         } else {

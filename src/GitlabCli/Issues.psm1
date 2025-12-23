@@ -88,7 +88,7 @@ function Get-GitlabIssue {
         $Query.created_after = $CreatedAfter
     }
 
-    Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages -SiteUrl $SiteUrl |
+    Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages |
         New-WrapperObject 'Gitlab.Issue' |
         Sort-Object SortKey
 }
@@ -137,7 +137,6 @@ function New-GitlabIssue {
             description = $Description
             assignee_id = $(Get-GitlabUser -Me).Id
         }
-        SiteUrl = $SiteUrl
     }
     if ($MilestoneId) {
         $Milestone = Get-GitlabMilestone -GroupId $Project.Group | Where-Object Iid -eq $MilestoneId
@@ -147,8 +146,8 @@ function New-GitlabIssue {
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "Create new issue ($($Request | ConvertTo-Json))")) {
         $Issue = Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Issue'
         if ($MarkTodoAsRead) {
-            $Todo = Get-GitlabTodo -SiteUrl $SiteUrl | Where-Object TargetUrl -eq $Issue.WebUrl
-            Clear-GitlabTodo -TodoId $Todo.Id -SiteUrl $SiteUrl | Out-Null
+            $Todo = Get-GitlabTodo | Where-Object TargetUrl -eq $Issue.WebUrl
+            Clear-GitlabTodo -TodoId $Todo.Id | Out-Null
         }
         if ($Follow) {
             Start-Process $Issue.WebUrl
@@ -235,7 +234,6 @@ function Update-GitlabIssue {
         Method   = 'PUT'
         Path     = "projects/$ProjectId/issues/$IssueId"
         Body     = @{}
-        SiteUrl  = $SiteUrl
     }
 
     if ($AssigneeId) {
@@ -313,7 +311,7 @@ function Open-GitlabIssue {
         $WhatIf
     )
 
-    Update-GitlabIssue -ProjectId $ProjectId $IssueId -StateEvent 'reopen' -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    Update-GitlabIssue -ProjectId $ProjectId $IssueId -StateEvent 'reopen' -WhatIf:$WhatIf
 }
 
 function Close-GitlabIssue {
@@ -333,6 +331,6 @@ function Close-GitlabIssue {
     )
 
     if ($PSCmdlet.ShouldProcess("issue #$IssueId", "close")) {
-        Update-GitlabIssue -ProjectId $ProjectId -IssueId $IssueId -StateEvent 'close' -SiteUrl $SiteUrl
+        Update-GitlabIssue -ProjectId $ProjectId -IssueId $IssueId -StateEvent 'close'
     }
 }

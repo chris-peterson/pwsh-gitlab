@@ -129,7 +129,7 @@ function Get-GitlabProject {
                     throw "Could not infer project based on current directory ($(Get-Location))"
                 }
             }
-            $Projects = Invoke-GitlabApi GET "projects/$($ProjectId | ConvertTo-UrlEncoded)" -SiteUrl $SiteUrl
+            $Projects = Invoke-GitlabApi GET "projects/$($ProjectId | ConvertTo-UrlEncoded)"
         }
         ByGroup {
             $Group = Get-GitlabGroup $GroupId
@@ -139,7 +139,7 @@ function Get-GitlabProject {
             if (-not $IncludeArchived) {
                 $Query['archived'] = 'false'
             }
-            $Projects = Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPages $MaxPages -SiteUrl $SiteUrl |
+            $Projects = Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPages $MaxPages |
                 Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
                 Sort-Object -Property 'Name'
         }
@@ -156,7 +156,7 @@ function Get-GitlabProject {
         ByTopics {
             $Projects = Invoke-GitlabApi GET "projects" -Query @{
                 topic = $Topics -join ','
-            } -MaxPages $MaxPages -SiteUrl $SiteUrl
+            } -MaxPages $MaxPages
         }
         ByUrl {
             $Match = $Url | Get-GitlabResourceFromUrl
@@ -244,7 +244,7 @@ function Move-GitlabProject {
     if ($PSCmdlet.ShouldProcess("group $($Group.FullName)", "transfer '$($SourceProject.PathWithNamespace)'")) {
         Invoke-GitlabApi PUT "projects/$($SourceProject.Id)/transfer" @{
             namespace = $Group.Id
-        } -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.Project'
+        } -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.Project'
     }
 }
 
@@ -268,7 +268,7 @@ function Rename-GitlabProject {
         $WhatIf
     )
 
-    Update-GitlabProject -ProjectId $ProjectId -Name $NewName -Path $NewName -SiteUrl $SiteUrl -WhatIf:$WhatIf
+    Update-GitlabProject -ProjectId $ProjectId -Name $NewName -Path $NewName -WhatIf:$WhatIf
 }
 
 # https://docs.gitlab.com/ee/api/projects.html#fork-project
@@ -308,7 +308,7 @@ function Copy-GitlabProject {
             name                   = $DestinationProjectName ?? $SourceProject.Name
             path                   = $DestinationProjectName ?? $SourceProject.Name
             mr_default_target_self = 'true'
-        } -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference
+        } -WhatIf:$WhatIfPreference
 
         if (-not $PreserveForkRelationship) {
             $NewProject | Remove-GitlabProjectForkRelationship
@@ -337,7 +337,7 @@ function Remove-GitlabProjectForkRelationship {
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "remove fork relationship to $($ForkedFromProject.PathWithNamespace)")) {
         # https://docs.gitlab.com/api/project_forks/#delete-a-fork-relationship-between-projects
-        Invoke-GitlabApi DELETE "projects/$($ProjectId)/fork" -SiteUrl $SiteUrl | Out-Null
+        Invoke-GitlabApi DELETE "projects/$($ProjectId)/fork" | Out-Null
         Write-Host "Removed fork relationship from $($Project.PathWithNamespace) (was $($ForkedFromProject.PathWithNamespace))"
     }
 }
@@ -399,7 +399,7 @@ function New-GitlabProject {
 
     if ($PSCmdlet.ShouldProcess($NamespaceId, "create new project '$ProjectName' $($Request | ConvertTo-Json)" )) {
         # https://docs.gitlab.com/ee/api/projects.html#create-project
-        $Project = Invoke-GitlabApi POST "projects" -Body $Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Project'
+        $Project = Invoke-GitlabApi POST "projects" -Body $Request | New-WrapperObject 'Gitlab.Project'
     
         if ($CloneNow) {
             git clone $Project.SshUrlToRepo
@@ -521,7 +521,7 @@ function Update-GitlabProject {
     }
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "update project ($($Request | ConvertTo-Json))")) {
-        Invoke-GitlabApi PUT "projects/$($Project.Id)" -Body $Request -SiteUrl $SiteUrl |
+        Invoke-GitlabApi PUT "projects/$($Project.Id)" -Body $Request |
             New-WrapperObject 'Gitlab.Project'
     }
 }
@@ -543,7 +543,7 @@ function Invoke-GitlabProjectArchival {
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "archive")) {
         # https://docs.gitlab.com/ee/api/projects.html#archive-a-project
-        Invoke-GitlabApi POST "projects/$($Project.Id)/archive" -SiteUrl $SiteUrl |
+        Invoke-GitlabApi POST "projects/$($Project.Id)/archive" |
             New-WrapperObject 'Gitlab.Project'
     }
 }
@@ -565,7 +565,7 @@ function Invoke-GitlabProjectUnarchival {
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "unarchive")) {
         # https://docs.gitlab.com/ee/api/projects.html#unarchive-a-project
-        Invoke-GitlabApi POST "projects/$($Project.Id)/unarchive" -SiteUrl $SiteUrl |
+        Invoke-GitlabApi POST "projects/$($Project.Id)/unarchive" |
             New-WrapperObject 'Gitlab.Project'
     }
 }
@@ -600,11 +600,11 @@ function Get-GitlabProjectVariable {
 
     if ($Key) {
         # https://docs.gitlab.com/ee/api/project_level_variables.html#get-a-single-variable
-        Invoke-GitlabApi GET "projects/$($Project.Id)/variables/$Key" -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "projects/$($Project.Id)/variables/$Key" | New-WrapperObject 'Gitlab.Variable'
     }
     else {
         # https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
-        Invoke-GitlabApi GET "projects/$($Project.Id)/variables" -SiteUrl $SiteUrl -MaxPages $MaxPages | New-WrapperObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "projects/$($Project.Id)/variables" -MaxPages $MaxPages | New-WrapperObject 'Gitlab.Variable'
     }
 }
 
@@ -672,12 +672,12 @@ function Set-GitlabProjectVariable {
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "set $($IsExistingVariable ? 'existing' : 'new') project variable ($Key) $(($Request | ConvertTo-Json))")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/project_level_variables.html#update-variable
-            Invoke-GitlabApi PUT "projects/$($Project.Id)/variables/$Key" -Body $Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
+            Invoke-GitlabApi PUT "projects/$($Project.Id)/variables/$Key" -Body $Request | New-WrapperObject 'Gitlab.Variable'
         }
         else {
             $Request.key = $Key
             # https://docs.gitlab.com/ee/api/project_level_variables.html#create-a-variable
-            Invoke-GitlabApi POST "projects/$($Project.Id)/variables" -Body $Request -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.Variable'
+            Invoke-GitlabApi POST "projects/$($Project.Id)/variables" -Body $Request | New-WrapperObject 'Gitlab.Variable'
         }
     }
 }
@@ -706,7 +706,7 @@ function Remove-GitlabProjectVariable {
 
     $Project = Get-GitlabProject $ProjectId
 
-    Invoke-GitlabApi DELETE "projects/$($Project.Id)/variables/$Key" -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+    Invoke-GitlabApi DELETE "projects/$($Project.Id)/variables/$Key" -WhatIf:$WhatIf | Out-Null
 }
 
 
@@ -744,12 +744,12 @@ function Rename-GitlabProjectDefaultBranch {
     git pull -p | Out-Null
     git branch -m $OldDefaultBranch $NewDefaultBranch | Out-Null
     git push -u origin $NewDefaultBranch -o ci.skip | Out-Null
-    Update-GitlabProject -DefaultBranch $NewDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+    Update-GitlabProject -DefaultBranch $NewDefaultBranch -WhatIf:$WhatIf | Out-Null
     try {
-        UnProtect-GitlabBranch -Name $OldDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+        UnProtect-GitlabBranch -Name $OldDefaultBranch -WhatIf:$WhatIf | Out-Null
     }
     catch {}
-    Protect-GitlabBranch -Name $NewDefaultBranch -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+    Protect-GitlabBranch -Name $NewDefaultBranch -WhatIf:$WhatIf | Out-Null
     git push --delete origin $OldDefaultBranch | Out-Null
     git remote set-head origin -a | Out-Null
 
@@ -867,7 +867,7 @@ function Remove-GitlabGroupToProjectShare {
     $GroupShare = Get-GitlabGroup $GroupShareId
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "remove sharing with group '$($GroupShare.Name)'")) {
         # https://docs.gitlab.com/api/projects/#delete-a-shared-project-link-in-a-grou
-        if (Invoke-GitlabApi DELETE "projects/$($Project.Id)/share/$($GroupShare.Id)" -SiteUrl $SiteUrl | Out-Null) {
+        if (Invoke-GitlabApi DELETE "projects/$($Project.Id)/share/$($GroupShare.Id)" | Out-Null) {
             Write-Host "Removed sharing with $($GroupShare.Name) from $($Project.PathWithNamespace)"
         }
     }
@@ -889,7 +889,7 @@ function Remove-GitlabProject {
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "remove project")) {
         # https://docs.gitlab.com/ee/api/projects.html#delete-project
-        Invoke-GitlabApi DELETE "projects/$($ProjectId)" -SiteUrl $SiteUrl | Out-Null
+        Invoke-GitlabApi DELETE "projects/$($ProjectId)" | Out-Null
         Write-Host "Removed $($Project.PathWithNamespace)"
     }
 }

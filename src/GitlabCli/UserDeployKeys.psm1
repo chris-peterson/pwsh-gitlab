@@ -9,12 +9,12 @@ function Get-GitlabUserDeployKey {
         $SiteUrl
     ) 
 
-    $User = Get-GitlabUser -UserId $UserId -SiteUrl $SiteUrl
+    $User = Get-GitlabUser -UserId $UserId
 
     $GitlabAPIParams = @{
         Method = 'Get'
         Path   = "users/$($User.Id)/project_deploy_keys"
     }
 
-    Invoke-GitlabApi @GitlabAPIParams -SiteUrl $SiteUrl -Verbose:$VerbosePreference | New-WrapperObject 'Gitlab.DeployKey'
+    Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference | New-WrapperObject 'Gitlab.DeployKey'
 }

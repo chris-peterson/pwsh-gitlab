@@ -60,7 +60,6 @@ function Get-GitlabMilestone {
     $Request = @{
         HttpMethod = 'GET'
         Path       = $Resource
-        SiteUrl    = $SiteUrl
     }
     if ($State) {
         $Request.Query = @{ state = $State }
