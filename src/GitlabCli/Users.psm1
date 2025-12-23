@@ -50,7 +50,6 @@ function Get-GitlabUser {
         Method   = 'GET'
         Path     = 'users' # https://docs.gitlab.com/ee/api/users.html#for-non-administrator-users
         Query    = @{}
-        SiteUrl  = $SiteUrl
     }
 
     if ($Active) {
@@ -108,7 +107,6 @@ function Block-GitlabUser {
             # https://docs.gitlab.com/ee/api/users.html#block-user
             Method  = 'POST'
             Path    = "users/$($User.Id)/block"
-            SiteUrl = $SiteUrl
         }
         if (Invoke-GitlabApi @Parameters) {
             Write-Host "$($User.Username) blocked"
@@ -137,7 +135,6 @@ function Unblock-GitlabUser {
             # https://docs.gitlab.com/ee/api/users.html#unblock-user
             Method  = 'POST'
             Path    = "users/$($User.Id)/unblock"
-            SiteUrl = $SiteUrl
         }
         if (Invoke-GitlabApi @Parameters) {
             Write-Host "$($User.Username) unblocked"
@@ -171,7 +168,6 @@ function Remove-GitlabUser {
         # https://docs.gitlab.com/api/users/#delete-a-user
         HttpMethod = 'DELETE'
         Path       = "users/$UserId"
-        SiteUrl    = $SiteUrl
     }
     if ($PSCmdlet.ShouldProcess($UserId, 'delete user')) {
         Invoke-GitlabApi @Request | Out-Null
@@ -248,7 +244,7 @@ function Get-GitlabUserEvent {
         $GetUserParams.Me = $true
     }
 
-    $User = Get-GitlabUser @GetUserParams -SiteUrl $SiteUrl
+    $User = Get-GitlabUser @GetUserParams
 
     $Query = @{}
     if($Before) {
@@ -264,14 +260,14 @@ function Get-GitlabUserEvent {
         $Query.sort = $Sort
     }
 
-    $Events = Invoke-GitlabApi GET "users/$($User.Id)/events" -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl |
+    $Events = Invoke-GitlabApi GET "users/$($User.Id)/events" -Query $Query -MaxPages $MaxPages |
         New-WrapperObject 'Gitlab.Event'
 
     if ($FetchProjects) {
         $ProjectIds = $Events.ProjectId | Select-Object -Unique
         $Projects = $ProjectIds | ForEach-Object {
             try {
-                Get-GitlabProject $_ -SiteUrl $SiteUrl
+                Get-GitlabProject $_
             }
             catch {
                 $null
@@ -293,7 +289,7 @@ function Get-GitlabCurrentUser {
         $SiteUrl
     )
 
-    Get-GitlabUser -Me -SiteUrl $SiteUrl
+    Get-GitlabUser -Me
 }
 
 function Start-GitlabUserImpersonation {
@@ -326,7 +322,6 @@ function Start-GitlabUserImpersonation {
             expires_at = (Get-Date).AddDays(1).ToString('yyyy-MM-dd')
             scopes = @('api', 'read_user')
         }
-        SiteUrl = $SiteUrl
     }
     if ($PSCmdlet.ShouldProcess("$($User.Username)", "start impersonation")) {
 
@@ -358,7 +353,6 @@ function Stop-GitlabUserImpersonation {
             $Parameters = @{
                 Method  = 'DELETE'
                 Path    = "users/$($global:GitlabUserImpersonationSession.UserId)/impersonation_tokens/$($global:GitlabUserImpersonationSession.Id)"
-                SiteUrl = $SiteUrl
             }
             # NOTE: important that we clear first as the revoke API requires admin
             $global:GitlabUserImpersonationSession = $null

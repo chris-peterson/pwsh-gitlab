@@ -50,7 +50,6 @@ function Get-GitlabDeployment {
 
     $GitlabApiArguments = @{
         HttpMethod = 'GET'
-        SiteUrl    = $SiteUrl
     }
     switch ($PSCmdlet.ParameterSetName) {
         Query {

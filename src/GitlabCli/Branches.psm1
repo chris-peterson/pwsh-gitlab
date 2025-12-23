@@ -55,7 +55,6 @@ function Get-GitlabBranch {
         HttpMethod = 'GET'
         Path       = "projects/$($Project.Id)/repository/branches"
         Query      = @{}
-        SiteUrl    = $SiteUrl
         MaxPages   = $MaxPages
     }
 
@@ -103,7 +102,6 @@ function Get-GitlabProtectedBranch {
     $Request = @{
         HttpMethod = 'GET'
         Path       = "projects/$($Project.Id)/protected_branches"
-        SiteUrl    = $SiteUrl
     }
 
     if ($Name) {
@@ -153,7 +151,6 @@ function New-GitlabBranch {
             branch = $Branch
             ref    = $Ref
         }
-        SiteUrl    = $SiteUrl
     }
 
     if( $PSCmdlet.ShouldProcess("Project $($Project.PathWithNamespace)", "create branch $($Branch) from $($Ref) `nArguments:`n$($Request | ConvertTo-Json)") ) {
@@ -236,7 +233,7 @@ function Protect-GitlabBranch {
         #     Invoke-GitlabApi PATCH "projects/$($Project.Id)/protected_branches/$Branch" -Body $Request | New-WrapperObject 'Gitlab.ProtectedBranch'
         # }
         # as a workaround, remove protection
-        Remove-GitlabProtectedBranch -ProjectId $ProjectId -Branch $Branch -SiteUrl $SiteUrl | Out-Null
+        Remove-GitlabProtectedBranch -ProjectId $ProjectId -Branch $Branch | Out-Null
     }
 
     $Request = @{
@@ -245,7 +242,6 @@ function Protect-GitlabBranch {
         Body       = @{
                         name = $Branch
                       }
-        SiteUrl    = $SiteUrl
     }
 
     if($PSBoundParameters.ContainsKey('PushAccessLevel')) {
@@ -309,7 +305,6 @@ function UnProtect-GitlabBranch {
     $Request = @{
         HttpMethod = 'DELETE'
         Path       = "projects/$($Project.Id)/protected_branches/$($Name | ConvertTo-UrlEncoded)"
-        SiteUrl    = $SiteUrl
     }
 
     if ($PSCmdlet.ShouldProcess("Project $($Project.PathWithNamespace)", "unprotect branch $($Name) with `nArguments:`n$($Request | ConvertTo-Json)")) {
@@ -349,7 +344,6 @@ function Remove-GitlabBranch {
     $Request = @{
         HttpMethod = 'DELETE'
         Path       =  "projects/$($Project.Id)/repository"
-        SiteUrl    = $SiteUrl
     }
     $Label = ''
 

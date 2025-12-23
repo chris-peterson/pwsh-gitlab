@@ -28,7 +28,6 @@ function Get-GitlabServiceAccount {
         HttpMethod = 'GET'
         Path       = ''
         MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
-        SiteUrl    = $SiteUrl
     }
     if ($PSCmdlet.ParameterSetName -eq 'Group') {
         # https://docs.gitlab.com/api/service_accounts/#list-all-group-service-accounts
@@ -86,7 +85,6 @@ function Update-GitlabServiceAccount {
         # https://docs.gitlab.com/api/service_accounts/#update-an-instance-service-account
         Path    = 'service_accounts'
         Body    = @{}
-        SiteUrl = $SiteUrl
     }
     if ($PSCmdlet.ParameterSetName -eq 'Group') {
         # https://docs.gitlab.com/api/service_accounts/#update-a-group-service-account
@@ -139,7 +137,6 @@ function Remove-GitlabServiceAccount {
     $Request = @{
         HttpMethod = 'DELETE'
         Path       = 'service_accounts'
-        SiteUrl    = $SiteUrl
     }
     if ($PSCmdlet.ParameterSetName -eq 'Group') {
         # https://docs.gitlab.com/api/service_accounts/#delete-a-group-service-account
@@ -189,7 +186,6 @@ function New-GitlabServiceAccount {
         HttpMethod = 'POST'
         Path       = 'service_accounts'
         Body       = @{}
-        SiteUrl    = $SiteUrl
     }
     if ($Name) {
         $Request.Body.name = $Name
@@ -202,7 +198,7 @@ function New-GitlabServiceAccount {
     }
 
     if ($PSCmdlet.ParameterSetName -eq 'Group') {
-        $Group = Get-GitlabGroup -GroupId $GroupId -SiteUrl $SiteUrl
+        $Group = Get-GitlabGroup -GroupId $GroupId
         if (-not $Group.IsTopLevel) {
             throw "Service accounts can only be created in top-level groups; '$($Group.FullPath)' is a subgroup of '$($Group.ParentId)')."
         }

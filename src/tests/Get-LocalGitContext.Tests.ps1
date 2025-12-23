@@ -1,5 +1,7 @@
 BeforeAll {
-  Import-Module $PSScriptRoot/../GitlabCli/Git.psm1 -Force
+  $TestModuleName = "Get-LocalGitContext"
+  Get-Module -Name $TestModuleName -All | Remove-Module -Force -ErrorAction SilentlyContinue
+  Import-Module (New-Module -Name $TestModuleName -ScriptBlock ([scriptblock]::Create((Get-Content "$PSScriptRoot/../GitlabCli/Git.psm1" -Raw)))) -Force
 }
 
 Describe "Get-LocalGitContext" {

@@ -46,7 +46,7 @@ function Get-GitlabGroupAccessToken {
         $Resource += "/$TokenId"
     }
 
-    Invoke-GitlabApi GET $Resource -SiteUrl $SiteUrl -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.AccessToken'
+    Invoke-GitlabApi GET $Resource -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.AccessToken'
 }
 
 
@@ -126,7 +126,7 @@ function New-GitlabGroupAccessToken {
             scopes       = $Scope
             access_level = Get-GitlabMemberAccessLevel $AccessLevel
             expires_at   = $ExpiresAt.ToString('yyyy-MM-dd')
-        } -SiteUrl $SiteUrl
+        }
 
         if ($CopyToClipboard) {
             $Response.token | Set-Clipboard
@@ -161,7 +161,7 @@ function Remove-GitlabGroupAccessToken {
 
     try
     {
-        Invoke-GitlabApi DELETE $Resource -SiteUrl $SiteUrl -WhatIf:$WhatIf | Out-Null
+        Invoke-GitlabApi DELETE $Resource -WhatIf:$WhatIf | Out-Null
         Write-Host "$TokenId revoked from $GroupId"
     }
     catch {

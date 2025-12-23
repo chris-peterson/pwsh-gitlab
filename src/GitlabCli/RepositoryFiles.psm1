@@ -23,7 +23,7 @@ function Get-GitlabRepositoryFileContent {
         $SiteUrl
     )
 
-    $File = Get-GitlabRepositoryFile -ProjectId $ProjectId -FilePath $FilePath -Ref $Ref -SiteUrl $SiteUrl
+    $File = Get-GitlabRepositoryFile -ProjectId $ProjectId -FilePath $FilePath -Ref $Ref
 
     if ($File -and $File.Encoding -eq 'base64') {
         return [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($File.Content))
@@ -62,7 +62,7 @@ function Get-GitlabRepositoryFile {
     $RefName = $(Get-GitlabBranch -ProjectId $ProjectId -Ref $Ref).Name
 
     try {
-        return Invoke-GitlabApi GET "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)?ref=$RefName" -SiteUrl $SiteUrl |
+        return Invoke-GitlabApi GET "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)?ref=$RefName" |
             New-WrapperObject 'Gitlab.RepositoryFile'
     }
     catch {
@@ -121,7 +121,7 @@ function New-GitlabRepositoryFile {
     if ($SkipCi) {
         $Body.commit_message += "`n[skip ci]"
     }
-    if (Invoke-GitlabApi POST "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf) {
+    if (Invoke-GitlabApi POST "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)" -Body $Body -WhatIf:$WhatIf) {
         Write-Host "Created $FilePath in $($Project.Name) ($Branch)"
     }
 }
@@ -180,13 +180,13 @@ function Update-GitlabRepositoryFile {
         $Body.commit_message += "`n[skip ci]"
     }
     if (-not $SkipEqualityCheck) {
-        $CurrentContent = Get-GitlabRepositoryFileContent -ProjectId $Project.Id -Ref $Branch -FilePath $FilePath -SiteUrl $SiteUrl
+        $CurrentContent = Get-GitlabRepositoryFileContent -ProjectId $Project.Id -Ref $Branch -FilePath $FilePath
         if ($CurrentContent -eq $Content) {
             Write-Host "$FilePath contents is identical, skipping update"
             return
         }
     }
-    if (Invoke-GitlabApi PUT "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)" -Body $Body -SiteUrl $SiteUrl -WhatIf:$WhatIf) {
+    if (Invoke-GitlabApi PUT "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)" -Body $Body -WhatIf:$WhatIf) {
         Write-Host "Updated $FilePath in $($Project.Name) ($Branch)"
     }
 }
@@ -226,7 +226,7 @@ function Get-GitlabRepositoryTree {
     }
     $RefName = $(Get-GitlabBranch -ProjectId $ProjectId -Ref $Ref).Name
 
-    Invoke-GitlabApi GET "projects/$($Project.Id)/repository/tree?ref=$RefName&path=$Path&recursive=$($Recurse.ToString().ToLower())" -MaxPages 10 -SiteUrl $SiteUrl -WhatIf:$WhatIf |
+    Invoke-GitlabApi GET "projects/$($Project.Id)/repository/tree?ref=$RefName&path=$Path&recursive=$($Recurse.ToString().ToLower())" -MaxPages 10 -WhatIf:$WhatIf |
         New-WrapperObject 'Gitlab.RepositoryTree'
 }
 
@@ -252,6 +252,6 @@ function Get-GitlabRepositoryYmlFileContent {
         $SiteUrl
     )
     
-    Get-GitlabRepositoryFileContent -ProjectId $ProjectId -Ref $Ref -FilePath $FilePath -SiteUrl $SiteUrl |
+    Get-GitlabRepositoryFileContent -ProjectId $ProjectId -Ref $Ref -FilePath $FilePath |
         ConvertFrom-Yaml
 }

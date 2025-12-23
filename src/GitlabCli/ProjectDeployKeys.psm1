@@ -13,7 +13,7 @@ function Get-GitlabProjectDeployKey {
         $SiteUrl
     ) 
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject -ProjectId $ProjectId
 
     $GitlabAPIParams = @{
         Method = 'Get'
@@ -24,7 +24,7 @@ function Get-GitlabProjectDeployKey {
         $GitlabAPIParams.Path += "/$DeployKeyId"
     }
 
-    Invoke-GitlabApi @GitlabAPIParams -SiteUrl $SiteUrl -Verbose:$VerbosePreference | New-WrapperObject 'Gitlab.DeployKey'
+    Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference | New-WrapperObject 'Gitlab.DeployKey'
 }
 
 function Add-GitlabProjectDeployKey {
@@ -50,7 +50,7 @@ function Add-GitlabProjectDeployKey {
         $SiteUrl
     ) 
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject -ProjectId $ProjectId
 
     $Body = @{
         title    = $Title
@@ -64,7 +64,7 @@ function Add-GitlabProjectDeployKey {
         Body   = $Body
     }
 
-    Invoke-GitlabApi @GitlabAPIParams -SiteUrl $SiteUrl -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.DeployKey'
+    Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.DeployKey'
 
 }
 
@@ -96,7 +96,7 @@ function Update-GitlabProjectDeployKey {
         $Force
     ) 
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject -ProjectId $ProjectId
 
     $Body = @{
     }
@@ -118,7 +118,7 @@ function Update-GitlabProjectDeployKey {
     
 
     if($PSCmdlet.ShouldProcess("Update deploy key for project '$($Project.PathWithNamespace)'","Update-GitlabProjectDeployKey")) {
-        Invoke-GitlabApi @GitlabAPIParams -SiteUrl $SiteUrl -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.DeployKey'
+        Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.DeployKey'
     }
 }
 
@@ -142,7 +142,7 @@ function Remove-GitlabProjectDeployKey {
         $Force
     ) 
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject -ProjectId $ProjectId
 
     $GitlabAPIParams = @{
         Method = 'DELETE'
@@ -155,7 +155,7 @@ function Remove-GitlabProjectDeployKey {
     }
 
     if($PSCmdlet.ShouldProcess("Remove deploy key for project '$($Project.PathWithNamespace)'","Remove-GitlabProjectDeployKey")) {
-        Invoke-GitlabApi @GitlabAPIParams -SiteUrl $SiteUrl -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | Out-Null
+        Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | Out-Null
     }
 }
 
@@ -179,7 +179,7 @@ function Enable-GitlabProjectDeployKey {
         $Force
     ) 
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject -ProjectId $ProjectId
 
     $GitlabAPIParams = @{
         Method = 'POST'
@@ -192,6 +192,6 @@ function Enable-GitlabProjectDeployKey {
     }
 
     if($PSCmdlet.ShouldProcess("Enable deploy key for project '$($Project.PathWithNamespace)'","Enable-GitlabProjectDeployKey")) {
-        Invoke-GitlabApi @GitlabAPIParams -SiteUrl $SiteUrl -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.DeployKey'
+        Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.DeployKey'
     }
 }

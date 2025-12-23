@@ -84,7 +84,7 @@ function Get-GitlabAuditEvent {
     $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
     # https://docs.gitlab.com/ee/api/audit_events.html
-    $Results = Invoke-GitlabApi GET $Resource -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.AuditEvent'
+    $Results = Invoke-GitlabApi GET $Resource -Query $Query -MaxPages $MaxPages | New-WrapperObject 'Gitlab.AuditEvent'
 
     if ($FetchAuthors) {
         $Authors = $Results.AuthorId | Select-Object -Unique | Where-Object { $_ -ne '-1' } | ForEach-Object {

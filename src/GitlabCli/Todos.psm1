@@ -19,7 +19,6 @@ function Get-GitlabTodo {
         HttpMethod = 'GET'
         Path       = 'todos'
         MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
-        SiteUrl    = $SiteUrl
     }
 
     Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Todo'
@@ -41,7 +40,6 @@ function Clear-GitlabTodo {
     )
     $Request = @{
         HttpMethod = 'POST'
-        SiteUrl    = $SiteUrl
     }
     
     switch ($PSCmdlet.ParameterSetName) {

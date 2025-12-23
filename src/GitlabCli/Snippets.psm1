@@ -55,26 +55,26 @@ function Get-GitlabSnippet {
     switch ($PSCmdlet.ParameterSetName) {
         ById {
             # https://docs.gitlab.com/api/snippets/#get-a-single-snippet
-            $Snippet = Invoke-GitlabApi GET "snippets/$SnippetId" -SiteUrl $SiteUrl
+            $Snippet = Invoke-GitlabApi GET "snippets/$SnippetId"
         }
         ByAuthor {
             try {
-                Start-GitlabUserImpersonation -UserId $AuthorUsername -SiteUrl $SiteUrl
+                Start-GitlabUserImpersonation -UserId $AuthorUsername
                 return Get-GitlabSnippet -Mine -CreatedAfter:$CreatedAfter -CreatedBefore:$CreatedBefore -IncludeContent:$IncludeContent -MaxPages:$MaxPages -SiteUrl:$SiteUrl
             }
             finally {
-                Stop-GitlabUserImpersonation -SiteUrl $SiteUrl
+                Stop-GitlabUserImpersonation
             }
         }
         Mine {
             # https://docs.gitlab.com/api/snippets/#list-all-snippets-for-current-user
-            $Snippet = Invoke-GitlabApi GET "snippets" -Query $Query -MaxPages $MaxPages -SiteUrl $SiteUrl
+            $Snippet = Invoke-GitlabApi GET "snippets" -Query $Query -MaxPages $MaxPages
         }
     }
 
     if ($IncludeContent) {
         $Snippet | ForEach-Object {
-            $_ | Add-Member -MemberType 'NoteProperty' -Name 'content' -Value $(Get-GitlabSnippetContent -SnippetId $_.id -SiteUrl $SiteUrl)
+            $_ | Add-Member -MemberType 'NoteProperty' -Name 'content' -Value $(Get-GitlabSnippetContent -SnippetId $_.id)
         }
     }
 
@@ -95,7 +95,7 @@ function Get-GitlabSnippetContent {
     )
 
     # https://docs.gitlab.com/api/snippets/#single-snippet-contents
-    Invoke-GitlabApi GET "snippets/$SnippetId/raw" -SiteUrl $SiteUrl
+    Invoke-GitlabApi GET "snippets/$SnippetId/raw"
 }
 
 function New-GitlabSnippet {
@@ -159,7 +159,7 @@ function New-GitlabSnippet {
 
     if ($PSCmdlet.ShouldProcess($Title, "create snippet")) {
         # https://docs.gitlab.com/api/snippets/#create-new-snippet
-        Invoke-GitlabApi POST "snippets" -Body $Body -SiteUrl $SiteUrl |
+        Invoke-GitlabApi POST "snippets" -Body $Body |
             New-WrapperObject 'Gitlab.Snippet'
     }
 }
@@ -225,7 +225,7 @@ function Update-GitlabSnippet {
 
     if ($PSCmdlet.ShouldProcess("snippet $SnippetId", "update")) {
         # https://docs.gitlab.com/api/snippets/#update-snippet
-        Invoke-GitlabApi PUT "snippets/$SnippetId" -Body $Body -SiteUrl $SiteUrl |
+        Invoke-GitlabApi PUT "snippets/$SnippetId" -Body $Body |
             New-WrapperObject 'Gitlab.Snippet'
     }
 }
@@ -245,7 +245,7 @@ function Remove-GitlabSnippet {
 
     if ($PSCmdlet.ShouldProcess("snippet $SnippetId", "delete")) {
         # https://docs.gitlab.com/api/snippets/#delete-snippet
-        Invoke-GitlabApi DELETE "snippets/$SnippetId" -SiteUrl $SiteUrl | Out-Null
+        Invoke-GitlabApi DELETE "snippets/$SnippetId" | Out-Null
         Write-Host "Snippet $SnippetId deleted"
     }
 }

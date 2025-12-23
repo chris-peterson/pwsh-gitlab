@@ -35,7 +35,6 @@ function Get-GitlabPipelineSchedule {
         # https://docs.gitlab.com/ee/api/pipeline_schedules.html#get-all-pipeline-schedules
         Path       = "projects/$($Project.Id)/pipeline_schedules"
         Query      = @{}
-        SiteUrl    = $SiteUrl
     }
 
     switch ($PSCmdlet.ParameterSetName) {
@@ -98,7 +97,7 @@ function New-GitlabPipelineSchedule {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject $ProjectId
     
     if ([string]::IsNullOrWhiteSpace($Ref)) {
         $Ref = $ProjectId -eq '.' -or $Ref -eq '.' ? $(Get-LocalGitContext).Branch : $Project.DefaultBranch
@@ -120,7 +119,6 @@ function New-GitlabPipelineSchedule {
             HttpMethod = 'POST'
             Path       = "projects/$($Project.Id)/pipeline_schedules"
             Body       = $Body
-            SiteUrl    = $SiteUrl
         }
         $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId
@@ -173,14 +171,13 @@ function Update-GitlabPipelineSchedule {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject $ProjectId
 
     # https://docs.gitlab.com/ee/api/pipeline_schedules.html#edit-a-pipeline-schedule
     $GitlabApiArguments = @{
         HttpMethod = 'PUT'
         Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId"
         Body       = @{}
-        SiteUrl    = $SiteUrl
     }
 
     if ($PSBoundParameters.ContainsKey('Active')) {
@@ -208,11 +205,11 @@ function Update-GitlabPipelineSchedule {
     if ($NewOwner) {
         if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "transfer ownership of pipeline schedule $PipelineScheduleId to $NewOwner")) {
             $Owner = Get-GitlabUser $NewOwner
-            Start-GitlabUserImpersonation -UserId $Owner.Id -SiteUrl $SiteUrl
+            Start-GitlabUserImpersonation -UserId $Owner.Id
             # https://docs.gitlab.com/ee/api/pipeline_schedules.html#take-ownership-of-a-pipeline-schedule
-            Invoke-GitlabApi POST "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId/take_ownership" -SiteUrl $SiteUrl | Out-Null
+            Invoke-GitlabApi POST "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId/take_ownership" | Out-Null
             Write-Host "Ownership of pipeline schedule $PipelineScheduleId transferred to $($Owner.Username)"
-            Stop-GitlabUserImpersonation -SiteUrl $SiteUrl
+            Stop-GitlabUserImpersonation
         }
     }
 }
@@ -234,10 +231,10 @@ function Enable-GitlabPipelineSchedule {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject $ProjectId
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "enable pipeline schedule $PipelineScheduleId")) {
-        Update-GitlabPipelineSchedule -ProjectId $ProjectId -PipelineScheduleId $PipelineScheduleId -Active true -SiteUrl $SiteUrl
+        Update-GitlabPipelineSchedule -ProjectId $ProjectId -PipelineScheduleId $PipelineScheduleId -Active true
     }
 }
 
@@ -258,10 +255,10 @@ function Disable-GitlabPipelineSchedule {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject $ProjectId
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "disable pipeline schedule $PipelineScheduleId")) {
-        Update-GitlabPipelineSchedule -ProjectId $ProjectId -PipelineScheduleId $PipelineScheduleId -Active false -SiteUrl $SiteUrl
+        Update-GitlabPipelineSchedule -ProjectId $ProjectId -PipelineScheduleId $PipelineScheduleId -Active false
     }
 }
 
@@ -286,12 +283,11 @@ function Remove-GitlabPipelineSchedule {
         $WhatIf
     )
 
-    $Project = Get-GitlabProject -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject
 
     $GitlabApiArguments = @{
         HttpMethod = 'DELETE'
         Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId"
-        SiteUrl    = $SiteUrl
     }
 
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf
@@ -321,7 +317,7 @@ function Get-GitlabPipelineScheduleVariable {
         $WhatIf
     )
 
-    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject $ProjectId
     $PipelineSchedule = Get-GitlabPipelineSchedule -ProjectId $Project.Id -PipelineScheduleId $PipelineScheduleId
 
     $Wrapper = $PipelineSchedule.Variables | New-WrapperObject "Gitlab.PipelineScheduleVariable"
@@ -368,7 +364,7 @@ function New-GitlabPipelineScheduleVariable {
         $WhatIf
     )
 
-    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject $ProjectId
     $PipelineSchedule = Get-GitlabPipelineSchedule -ProjectId $Project.Id -PipelineScheduleId $PipelineScheduleId
 
     $Body = @{
@@ -380,7 +376,6 @@ function New-GitlabPipelineScheduleVariable {
     $GitlabApiArguments = @{
         HttpMethod = "POST"
         Path       = "projects/$($Project.Id)/pipeline_schedules/$($PipelineSchedule.Id)/variables"
-        SiteUrl    = $SiteUrl
         Body       = $Body
     }
 
@@ -423,7 +418,7 @@ function Update-GitlabPipelineScheduleVariable {
         $WhatIf
     )
 
-    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject $ProjectId
     $PipelineSchedule = Get-GitlabPipelineSchedule -ProjectId $ProjectId -PipelineScheduleId $PipelineScheduleId
 
     $Body = @{
@@ -435,7 +430,6 @@ function Update-GitlabPipelineScheduleVariable {
     $GitlabApiArguments = @{
         HttpMethod = "PUT"
         Path       = "projects/$($Project.Id)/pipeline_schedules/$($PipelineSchedule.Id)/variables/$($Key)"
-        SiteUrl    = $SiteUrl
         Body       = $Body
     }
 
@@ -460,14 +454,13 @@ function Remove-GitlabPipelineScheduleVariable {
         $Key
     )
 
-    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject $ProjectId
     $PipelineSchedule = Get-GitlabPipelineSchedule -ProjectId $ProjectId -PipelineScheduleId $PipelineScheduleId
 
 
     $GitlabApiArguments = @{
         HttpMethod = "DELETE"
         Path       = "projects/$($Project.Id)/pipeline_schedules/$($PipelineSchedule.Id)/$($Key)"
-        SiteUrl    = $SiteUrl
     }
 
     if ($PSCmdlet.ShouldProcess("Delete pipeline schedule variable $Key")) {
@@ -497,12 +490,11 @@ function New-GitlabScheduledPipeline {
         $WhatIf
     )
 
-    $Project = Get-GitlabProject -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject
 
     $GitlabApiArguments = @{
         HttpMethod = 'POST'
         Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId/play"
-        SiteUrl    = $SiteUrl
     }
 
     Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | Select-Object -ExpandProperty 'message'

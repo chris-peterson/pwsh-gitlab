@@ -42,7 +42,6 @@ function Get-GitlabRunner {
         HttpMethod = 'GET'
         Query      = @{}
         MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
-        SiteUrl    = $SiteUrl
     }
 
     switch ($PSCmdlet.ParameterSetName) {
@@ -67,7 +66,7 @@ function Get-GitlabRunner {
         $Runners | ForEach-Object {
             $PercentComplete = $($i++ / $RunnerCount * 100)
             Write-Progress "Fetching runner details ($i of $RunnerCount)" -PercentComplete $PercentComplete
-            Get-GitlabRunner -RunnerId $_.Id -SiteUrl $SiteUrl
+            Get-GitlabRunner -RunnerId $_.Id
         }
     }
     $Runners
@@ -98,7 +97,6 @@ function Get-GitlabRunnerJob {
         HttpMethod = 'GET'
         Path       = "runners/$RunnerId/jobs"
         MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
-        SiteUrl    = $SiteUrl
     }
 
     Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.RunnerJob'
@@ -153,7 +151,6 @@ function Update-GitlabRunner {
         HttpMethod = 'PUT'
         Path       = "runners/$RunnerId"
         Query      = @{}
-        SiteUrl    = $SiteUrl
     }
     if ($Description) {
         $Params.Query.description = $Description
@@ -201,7 +198,7 @@ function Suspend-GitlabRunner {
         $SiteUrl
     )
 
-    Update-GitlabRunner $RunnerId -Active $false -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference
+    Update-GitlabRunner $RunnerId -Active $false -WhatIf:$WhatIfPreference
 }
 
 function Resume-GitlabRunner {
@@ -216,7 +213,7 @@ function Resume-GitlabRunner {
         $SiteUrl
     )
 
-    Update-GitlabRunner $RunnerId -Active $true -SiteUrl $SiteUrl -WhatIf:$WhatIfPreference
+    Update-GitlabRunner $RunnerId -Active $true -WhatIf:$WhatIfPreference
 }
 
 function Remove-GitlabRunner {
@@ -297,7 +294,6 @@ function Get-GitlabRunnerStats {
                 }
             }
 "@
-            SiteUrl = $SiteUrl
         }
         $Runners = Invoke-GitlabGraphQL @GetRunners
         $RunnerIds = $Runners.Runners.nodes.id
@@ -325,7 +321,6 @@ function Get-GitlabRunnerStats {
             }
         }
 "@
-            SiteUrl = $SiteUrl
         }
         $Jobs = Invoke-GitlabGraphQL @GetJobs
 

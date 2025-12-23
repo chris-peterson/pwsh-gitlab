@@ -73,7 +73,6 @@ function Get-GitlabPipeline {
     $GitlabApiParameters = @{
         HttpMethod = 'GET'
         MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
-        SiteUrl    = $SiteUrl
     }
 
     if ($Url) {
@@ -124,7 +123,7 @@ function Get-GitlabPipeline {
     if ($IncludeTestReport) {
         $Pipelines | ForEach-Object {
             try {
-                $TestReport = Invoke-GitlabApi GET "projects/$($_.ProjectId)/pipelines/$($_.Id)/test_report" -SiteUrl $SiteUrl | New-WrapperObject 'Gitlab.TestReport'
+                $TestReport = Invoke-GitlabApi GET "projects/$($_.ProjectId)/pipelines/$($_.Id)/test_report" | New-WrapperObject 'Gitlab.TestReport'
             }
             catch {
                 $TestReport = $Null
@@ -144,19 +143,19 @@ function Get-GitlabPipeline {
         foreach ($Pipeline in $Pipelines) {
 
             # NOTE: have to stitch this together because of https://gitlab.com/gitlab-org/gitlab/-/issues/350686
-            $Bridges = Get-GitlabPipelineBridge -ProjectId $Project.Id  -PipelineId $Pipeline.Id -SiteUrl $SiteUrl
+            $Bridges = Get-GitlabPipelineBridge -ProjectId $Project.Id  -PipelineId $Pipeline.Id
 
             # NOTE: once 14.6 is more available, iid is included in pipeline APIs which would make this simpler (not have to search by sha)
             $Query = @"
             { project(fullPath: "$($Project.PathWithNamespace)") { id pipelines (sha: "$($Pipeline.Sha)") { nodes { id downstream { nodes { id project { fullPath } } } upstream { id project { fullPath } } } } } }
 "@
-            $Nodes = $(Invoke-GitlabGraphQL -Query $Query -SiteUrl $SiteUrl).Project.pipelines.nodes
+            $Nodes = $(Invoke-GitlabGraphQL -Query $Query).Project.pipelines.nodes
             $MatchingResult = $Nodes | Where-Object id -Match "gid://gitlab/Ci::Pipeline/$($Pipeline.Id)"
             if ($MatchingResult.downstream) {
                 $DownstreamList = $MatchingResult.downstream.nodes | ForEach-Object {
                     if ($_.id -match "/(?<PipelineId>\d+)") {
                         try {
-                            Get-GitlabPipeline -ProjectId $_.project.fullPath -PipelineId $Matches.PipelineId -SiteUrl $SiteUrl
+                            Get-GitlabPipeline -ProjectId $_.project.fullPath -PipelineId $Matches.PipelineId
                         }
                         catch {
                             $Null
@@ -178,7 +177,7 @@ function Get-GitlabPipeline {
             }
             if ($MatchingResult.upstream.id -match '\/(?<PipelineId>\d+)') {
                 try {
-                    $Upstream = Get-GitlabPipeline -ProjectId $MatchingResult.upstream.project.fullPath -PipelineId $Matches.PipelineId -SiteUrl $SiteUrl
+                    $Upstream = Get-GitlabPipeline -ProjectId $MatchingResult.upstream.project.fullPath -PipelineId $Matches.PipelineId
                     $Pipeline | Add-Member -MemberType 'NoteProperty' -Name 'Upstream' -Value $Upstream
                 }
                 catch {
@@ -217,7 +216,7 @@ function Get-GitlabPipelineVariable {
     $Project = Get-GitlabProject $ProjectId
 
     # https://docs.gitlab.com/ee/api/pipelines.html#get-variables-of-a-pipeline
-    $KeyValues = Invoke-GitlabApi GET "projects/$($Project.Id)/pipelines/$PipelineId/variables" -SiteUrl $SiteUrl
+    $KeyValues = Invoke-GitlabApi GET "projects/$($Project.Id)/pipelines/$PipelineId/variables"
 
     if ($Variable) {
         $KeyValues | Where-Object Key -eq $Variable | Select-Object -ExpandProperty Value
@@ -265,7 +264,6 @@ function Get-GitlabPipelineBridge {
         HttpMethod = "GET"
         Path       = "projects/$ProjectId/pipelines/$PipelineId/bridges"
         Query      = @{}
-        SiteUrl    = $SiteUrl
     }
 
     if($Scope) {
@@ -329,7 +327,6 @@ function New-GitlabPipeline {
         HttpMethod = "POST"
         Path       = "projects/$ProjectId/pipeline"
         Body       = $Request
-        SiteUrl    = $SiteUrl
     }
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create new pipeline $($Request | ConvertTo-Json)")) {
@@ -404,11 +401,11 @@ function Remove-GitlabPipeline {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId -SiteUrl $SiteUrl
-    $Pipeline = Get-GitlabPipeline -ProjectId $ProjectId -PipelineId $PipelineId -SiteUrl $SiteUrl
+    $Project = Get-GitlabProject $ProjectId
+    $Pipeline = Get-GitlabPipeline -ProjectId $ProjectId -PipelineId $PipelineId
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "delete pipeline $PipelineId")) {
-        Invoke-GitlabApi DELETE "projects/$($Project.Id)/pipelines/$($Pipeline.Id)" -SiteUrl $SiteUrl | Out-Null
+        Invoke-GitlabApi DELETE "projects/$($Project.Id)/pipelines/$($Pipeline.Id)" | Out-Null
         Write-Host "$PipelineId deleted from $($Project.Name)"
     }
 }

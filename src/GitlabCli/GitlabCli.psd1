@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.150.1'
+    ModuleVersion = '1.151.0'
 
     RequiredModules = @(
         @{
@@ -31,8 +31,7 @@
             )
             ReleaseNotes =
 @'
-* https://github.com/chris-peterson/pwsh-gitlab/pull/128
-* https://github.com/chris-peterson/pwsh-gitlab/issues/108
+* https://github.com/chris-peterson/pwsh-gitlab/pull/129
 '@
         }
     }
@@ -47,7 +46,7 @@
     PowerShellVersion = '7.1'
     CompatiblePSEditions = @('Core', 'Desktop')
 
-    ScriptsToProcess = @('_Init.ps1')
+    ScriptsToProcess = @('Private/Globals.ps1', 'Private/Transformations.ps1', 'Private/Functions.ps1')
     TypesToProcess = @('Types.ps1xml')
     FormatsToProcess = @('Formats.ps1xml')
 
@@ -360,7 +359,6 @@
         'Invoke-GitlabApi'
         'New-WrapperObject'
         'Open-InBrowser'
-        'Get-GitlabResourceFromUrl'
 
         # Validation
         'Test-GitlabDate'

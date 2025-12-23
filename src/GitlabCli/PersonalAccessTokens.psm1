@@ -85,7 +85,6 @@ function Get-GitlabPersonalAccessToken {
             revoked = $Revoked
         }
         MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
-        SiteUrl  = $SiteUrl
     }
 
     if ($TokenId) {
@@ -131,7 +130,7 @@ function Get-GitlabPersonalAccessToken {
     if ($FetchUsers) {
         $Users = @{}
         foreach ($Id in $Results | Where-Object { $_.UserId } | Select-Object -ExpandProperty UserId -Unique) {
-            $Users[$Id] = Get-GitlabUser -Id $Id -SiteUrl $SiteUrl
+            $Users[$Id] = Get-GitlabUser -Id $Id
         }
         $Results | ForEach-Object {
             if ($_.UserId -and $Users.ContainsKey($_.UserId)) {
@@ -210,7 +209,6 @@ function New-GitlabPersonalAccessToken {
             name   = $Name
             scopes = $Scope
         }
-        SiteUrl  = $SiteUrl
     }
     if ($ExpireInMonths) {
         $Request.Body.expires_at = (Get-Date).AddMonths($ExpireInMonths).ToString('yyyy-MM-dd')
@@ -253,7 +251,6 @@ function Invoke-GitlabPersonalAccessTokenRotation {
         Method  = 'POST'
         Path    = "personal_access_tokens/$($TokenId)/rotate"
         Body    = @{}
-        SiteUrl = $SiteUrl
     }
     if ($ExpiresAt) {
         $Request.Body.expires_at = $ExpiresAt
@@ -285,7 +282,6 @@ function Revoke-GitlabPersonalAccessToken {
         # https://docs.gitlab.com/ee/api/personal_access_tokens.html#revoke-a-personal-access-token
         Method  = 'DELETE'
         Path    = "personal_access_tokens/$($TokenId)"
-        SiteUrl = $SiteUrl
     }
 
     if ($PSCmdlet.ShouldProcess("$($Request.Path)", "revoke personal access token")) {
