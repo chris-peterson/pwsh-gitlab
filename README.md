@@ -63,25 +63,42 @@ The following commands can be used to configure your system for use with **multi
 * `Remove-GitlabSite`
 * `Set-DefaultGitlabSite`
 
-## Global Switches
+## Common Parameters: Paging
 
-The following switches are supported when possible:
+The following parameters control pagination for query operations:
 
-`-WhatIf` : For mutable operations (or for some complex query operations), gives a preview of what actions would be taken
+| Parameter | Description |
+| --- | --- |
+| `-MaxPages` | Maximum number of pages to return _(default: `$global:GitlabDefaultMaxPages`)_ |
+| `-All` | Return all pages. _NOTE:_ Overrides `-MaxPages` |
+| `-Recurse` | Recurse child objects (e.g. `Get-GitlabProject -GroupId 'mygroup' -Recurse`). _NOTE:_ Implies `-All` pages |
 
-`-Select` : Select into a property of the response.  A shortcut for `| Select-Object -ExpandProperty` or select multiple properties separated by commas
+## Common Parameters: Safety
 
-`-SiteUrl` : Optional.  By default, site url is inferred from the local git context.  Providing a value overrides this value.  The provided value must match a configured site's url (e.g. `gitlab.com`)
+Mutable operations in this module support ["should process"](https://learn.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7.5).
 
-`-Follow` : For operations that create a resource, follow the the URL after creation
+| Parameter | Description |
+| --- | --- |
+| `-WhatIf` | Preview what actions would be taken without executing them |
+| `-Confirm` | Prompt for confirmation before executing mutable operations |
 
-`-MaxPages`: For query operations, maximum number of pages to return.  Typically defaults to 1
+## Common Parameters: Navigation
 
-`-Recurse`: For tree-based operations, opt-in to recurse children (e.g. `Get-GitlabProject -GroupId 'mygroup' -Recurse`)
+The following parameters control post-operation behavior:
 
-`-CopyToClipboard` : For token-based operations, copy the resultant token to the clipboard rather than displaying in the terminal
+| Parameter | Description |
+| --- | --- |
+| `-Follow` | For operations that create a resource, follow the URL after creation |
+| `-Wait` | For long-running operations (e.g. running a job/pipeline), wait for operation to complete. In the meantime, the status is polled and reported to the terminal |
 
-`-Wait` : For long-running operations (e.g. running a job/pipeline), wait for operation to complete.  In the meantime, the status is polled and reported to the terminal
+## Common Parameters: Other
+
+The following parameters are supported when possible:
+
+| Parameter | Description |
+| --- | --- |
+| `-Select` | Select subset of response. A shortcut for `\| Select-Object -ExpandProperty`.  _NOTE:_ can select multiple properties (comma-separated) |
+| `-SiteUrl` | Override site url _(default: inferred from local git context)_ |
 
 ## Global Behaviors
 
