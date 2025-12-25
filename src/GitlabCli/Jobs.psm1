@@ -54,7 +54,7 @@ function Get-GitlabJob {
         $SiteUrl
     )
 
-    $MaxPages  = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+    $MaxPages  = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
     $Project   = Get-GitlabProject -ProjectId $ProjectId
     $ProjectId = $Project.Id
 

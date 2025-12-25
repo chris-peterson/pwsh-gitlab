@@ -40,7 +40,7 @@ function Get-GitlabSnippet {
         $SiteUrl
     )
 
-    $MaxPages = Get-GitlabMaxPages -All:$All -MaxPages:$MaxPages
+    $MaxPages = Resolve-GitlabMaxPages -All:$All -MaxPages:$MaxPages
 
     $Query = @{}
 

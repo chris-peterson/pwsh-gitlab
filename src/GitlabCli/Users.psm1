@@ -46,7 +46,7 @@ function Get-GitlabUser {
     )
 
     $Parameters = @{
-        MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+        MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
         Method   = 'GET'
         Path     = 'users' # https://docs.gitlab.com/ee/api/users.html#for-non-administrator-users
         Query    = @{}

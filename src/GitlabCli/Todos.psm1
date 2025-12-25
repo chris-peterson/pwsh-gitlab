@@ -18,7 +18,7 @@ function Get-GitlabTodo {
     $Request = @{
         HttpMethod = 'GET'
         Path       = 'todos'
-        MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+        MaxPages   = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
     }
 
     Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Todo'

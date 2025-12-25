@@ -4,7 +4,7 @@ BeforeAll {
 
   Import-Module (New-Module -Name $TestModuleName -ScriptBlock ([scriptblock]::Create(
     @(
-      Get-Content "$PSScriptRoot/../src/GitlabCli/Private/Functions/Configuration.ps1" -Raw
+      Get-Content "$PSScriptRoot/../src/GitlabCli/Private/Functions/ConfigurationHelpers.ps1" -Raw
     ) -join "`n"))) -Force
 
   function global:Get-GitlabConfiguration {}

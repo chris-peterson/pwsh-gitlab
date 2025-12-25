@@ -49,7 +49,7 @@ function Get-GitlabIssue {
         $SiteUrl
     )
 
-    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+    $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
     # https://docs.gitlab.com/api/issues/#list-issues
     $Path = 'issues'

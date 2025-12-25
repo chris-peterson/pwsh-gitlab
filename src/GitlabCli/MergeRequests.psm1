@@ -88,7 +88,7 @@ function Get-GitlabMergeRequest {
         $SiteUrl
     )
 
-    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+    $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
     # https://docs.gitlab.com/api/merge_requests/#list-merge-requests
     $Path = 'merge_requests'

@@ -81,7 +81,7 @@ function Get-GitlabAuditEvent {
     if ($After) {
         $Query.created_after = $After
     }
-    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+    $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
     # https://docs.gitlab.com/ee/api/audit_events.html
     $Results = Invoke-GitlabApi GET $Resource -Query $Query -MaxPages $MaxPages | New-WrapperObject 'Gitlab.AuditEvent'

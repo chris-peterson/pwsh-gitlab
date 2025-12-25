@@ -72,7 +72,7 @@ function Get-GitlabPipeline {
 
     $GitlabApiParameters = @{
         HttpMethod = 'GET'
-        MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+        MaxPages   = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
     }
 
     if ($Url) {

@@ -27,7 +27,7 @@ function Get-GitlabServiceAccount {
     $Request = @{
         HttpMethod = 'GET'
         Path       = ''
-        MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+        MaxPages   = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
     }
     if ($PSCmdlet.ParameterSetName -eq 'Group') {
         # https://docs.gitlab.com/api/service_accounts/#list-all-group-service-accounts

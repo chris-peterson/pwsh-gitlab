@@ -28,7 +28,7 @@ function Get-GitlabGroup {
         $SiteUrl
     )
 
-    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+    $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
     if($GroupId) {
         if ($GroupId -eq '.') {
             $LocalPath = Get-Location | Select-Object -ExpandProperty Path
@@ -237,7 +237,7 @@ function Get-GitlabGroupVariable {
         $All
     )
 
-    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+    $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
     $GroupId = $GroupId | ConvertTo-UrlEncoded
 

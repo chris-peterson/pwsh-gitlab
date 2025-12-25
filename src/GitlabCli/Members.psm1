@@ -78,7 +78,7 @@ function Get-GitlabGroupMember {
         $SiteUrl
     )
 
-    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+    $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
     $Group = Get-GitlabGroup -GroupId $GroupId
     if ($UserId) {
@@ -252,7 +252,7 @@ function Get-GitlabProjectMember {
         $SiteUrl
     )
 
-    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+    $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
 
@@ -423,7 +423,7 @@ function Get-GitlabUserMembership {
         $All
     )
 
-    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+    $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
     if ($Me) {
         $Username = $(Get-GitlabUser -Me).Username

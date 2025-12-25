@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.152.1'
+    ModuleVersion = '1.153.0'
 
     RequiredModules = @(
         @{
@@ -32,6 +32,7 @@
             ReleaseNotes =
 @'
 * https://github.com/chris-peterson/pwsh-gitlab/pull/132
+* https://github.com/chris-peterson/pwsh-gitlab/issues/122
 '@
         }
     }
@@ -47,14 +48,15 @@
     CompatiblePSEditions = @('Core', 'Desktop')
 
     ScriptsToProcess = @(
-        'Private/Globals.ps1',
-        'Private/Transformations.ps1',
-        'Private/Functions/Configuration.ps1',
-        'Private/Functions/ObjectHelpers.ps1',
-        'Private/Functions/MergeRequestHelpers.ps1',
-        'Private/Functions/JobHelpers.ps1',
-        'Private/Functions/RunnerHelpers.ps1',
+        'Private/Functions/ConfigurationHelpers.ps1'
         'Private/Functions/GroupHelpers.ps1'
+        'Private/Functions/JobHelpers.ps1'
+        'Private/Functions/MergeRequestHelpers.ps1'
+        'Private/Functions/ObjectHelpers.ps1'
+        'Private/Functions/PaginationHelpers.ps1'
+        'Private/Functions/RunnerHelpers.ps1'
+        'Private/Globals.ps1'
+        'Private/Transformations.ps1'
     )
     TypesToProcess = @('Types.ps1xml')
     FormatsToProcess = @('Formats.ps1xml')
@@ -363,7 +365,6 @@
         'ConvertTo-UrlEncoded'
         'ConvertTo-GitlabVariables'
         'Get-FilteredObject'
-        'Get-GitlabMaxPages'
         'Get-GitlabVersion'
         'Invoke-GitlabApi'
         'New-WrapperObject'

@@ -41,7 +41,7 @@ function Get-GitlabRunner {
     $Params = @{
         HttpMethod = 'GET'
         Query      = @{}
-        MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+        MaxPages   = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
     }
 
     switch ($PSCmdlet.ParameterSetName) {
@@ -96,7 +96,7 @@ function Get-GitlabRunnerJob {
     $Params = @{
         HttpMethod = 'GET'
         Path       = "runners/$RunnerId/jobs"
-        MaxPages   = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+        MaxPages   = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
     }
 
     Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.RunnerJob'

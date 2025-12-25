@@ -290,28 +290,6 @@ function Get-GitlabVersion {
 #>
 # then call
 <#
-    $MaxPages = Get-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+    $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 #>
-
-function Get-GitlabMaxPages {
-    param (
-        [Parameter()]
-        [uint]
-        $MaxPages,
-
-        [switch]
-        [Parameter()]
-        $All
-    )
-    if ($MaxPages -eq 0) {
-        $MaxPages = $global:GitlabDefaultMaxPages
-    }
-    if ($All) {
-        if ($MaxPages -ne $global:GitlabDefaultMaxPages) {
-            Write-Warning -Message "Ignoring -MaxPages in favor of -All"
-        }
-        $MaxPages = [uint]::MaxValue
-    }
-    Write-Debug "MaxPages: $MaxPages"
-    $MaxPages
-}
+# Note: Resolve-GitlabMaxPages is defined in Private/Functions/PaginationHelpers.ps1
