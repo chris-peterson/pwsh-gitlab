@@ -239,18 +239,6 @@ function Remove-GitlabRunner {
     }
 }
 
-function Get-Percentile {
-    param (
-        [double[]]$Values,
-        [double]$Percentile
-    )
-    if (-not $Values -or $Values.Count -eq 0) { return $null }
-    $Sorted = $Values | Sort-Object
-    $Rank = [math]::Ceiling($Percentile * $Sorted.Count) - 1
-    $Rank = [math]::Max(0, [math]::Min($Rank, $Sorted.Count - 1))
-    $Sorted[$Rank]
-}
-
 function Get-GitlabRunnerStats {
     [CmdletBinding(DefaultParameterSetName='ByTags')]
     param (

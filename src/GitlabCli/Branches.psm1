@@ -140,7 +140,11 @@ function New-GitlabBranch {
         [Parameter(Position=2, Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [string]
-        $Ref
+        $Ref,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId

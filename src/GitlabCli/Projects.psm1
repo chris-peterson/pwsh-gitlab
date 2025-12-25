@@ -822,7 +822,11 @@ function New-GitlabGroupToProjectShare {
         [Alias('Access')]
         [string]
         [ValidateScript({Test-GitlabSettableAccessLevel $_})]
-        $GroupAccess
+        $GroupAccess,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
     $AccessLiteral = Get-GitlabMemberAccessLevel $GroupAccess

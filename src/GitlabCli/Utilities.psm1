@@ -168,26 +168,6 @@ function Invoke-GitlabApi {
     }
 }
 
-function Add-AliasedProperty {
-    param (
-        [PSCustomObject]
-        [Parameter(Mandatory=$true, Position = 0)]
-        $On,
-
-        [string]
-        [Parameter(Mandatory=$true)]
-        $From,
-
-        [string]
-        [Parameter(Mandatory=$true)]
-        $To
-    )
-    
-    if ($null -ne $On.$To -and -NOT (Get-Member -Name $On.$To -InputObject $On)) {
-        $On | Add-Member -MemberType NoteProperty -Name $From -Value $On.$To
-    }
-}
-
 function New-WrapperObject {
     [CmdletBinding()]
     param(
@@ -334,63 +314,4 @@ function Get-GitlabMaxPages {
     }
     Write-Debug "MaxPages: $MaxPages"
     $MaxPages
-}
-
-function Resolve-GitlabSite {
-    [CmdletBinding()]
-    param(
-        [Parameter(Position=0, ValueFromPipeline)]
-        [string]
-        $SiteUrl
-    )
-
-    $Sites = Get-GitlabConfiguration | Select-Object -ExpandProperty Sites
-
-    if (-not [string]::IsNullOrWhiteSpace($SiteUrl)) {
-        Write-Verbose "SiteUrl: $SiteUrl (source: -SiteUrl parameter)"
-
-        $Site = $Sites | Where-Object Url -match $SiteUrl
-        if ($Site) {
-            Write-Verbose "SiteUrl: Using $($Site.Url)"
-            return $Site
-        }
-    }
-
-    $CallStack = Get-PSCallStack
-    $SiteUrls = @()
-    for ($i = 1; $i -lt $CallStack.Count; $i++) {
-        $CallerInfo = $CallStack[$i].InvocationInfo
-        $CallerSiteUrl = $null
-        if ($CallerInfo.BoundParameters -and $CallerInfo.BoundParameters.TryGetValue('SiteUrl', [ref]$CallerSiteUrl) -and -not [string]::IsNullOrWhiteSpace($CallerSiteUrl)) {
-            Write-Verbose "found $CallerSiteUrl (passed to [$($CallerInfo.MyCommand.Name)])"
-            $SiteUrls += $CallerSiteUrl
-        }
-    }
-    $ResolvedSiteUrls = @($SiteUrls | Select-Object -Unique)
-    if ($ResolvedSiteUrls.Count -eq 1) {
-        Write-Verbose "SiteUrl: $($ResolvedSiteUrls[0]) (source: call stack)"
-        $Site = $Sites | Where-Object Url -match $ResolvedSiteUrls[0]
-        if ($Site) {
-            return $Site
-        }
-    }
-    elseif ($ResolvedSiteUrls.Count -gt 1) {
-        Write-Verbose "Inconsistent SiteUrls found in call stack ($($SiteUrls -join ', ')), ignoring..."
-    }
-
-    $LocalGitContext = Get-LocalGitContext
-    if ($LocalGitContext -and $LocalGitContext.Site) {
-        $Site = $Sites | Where-Object Url -eq $LocalGitContext.Site
-        if ($Site) {
-            Write-Verbose "SiteUrl: Using $($Site.Url) (source: local git context)"
-            return $Site
-        }
-    }
-    $Default = $Sites | Where-Object IsDefault | Select-Object -First 1
-    if ($Default) {
-        Write-Verbose "SiteUrl: Using $($Default.Url) (source: default site)"
-        return $Default
-    }
-
-    throw "SiteUrl: Could not resolve GitLab site.  See https://github.com/chris-peterson/pwsh-gitlab#configuration"
 }

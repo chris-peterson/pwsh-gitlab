@@ -24,7 +24,11 @@ function Get-GitlabRelease {
 
         [switch]
         [Parameter()]
-        $All
+        $All,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId

@@ -451,7 +451,11 @@ function Remove-GitlabPipelineScheduleVariable {
 
         [Parameter(Mandatory)]
         [string]
-        $Key
+        $Key,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId

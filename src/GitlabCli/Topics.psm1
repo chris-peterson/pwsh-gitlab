@@ -67,7 +67,11 @@ function New-GitlabTopic {
 
         [Parameter()]
         [string]
-        $Description
+        $Description,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
     if (-not $Title) {
@@ -106,7 +110,11 @@ function Update-GitlabTopic {
 
         [Parameter()]
         [string]
-        $Description
+        $Description,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
     $Request = @{}
@@ -132,7 +140,11 @@ function Remove-GitlabTopic {
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]
         [string]
-        $TopicId
+        $TopicId,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
     
     if ($PSCmdlet.ShouldProcess("topic $TopicId", "delete")) {

@@ -393,10 +393,6 @@ function Stop-GitlabJobLogSection {
     Write-Host "section_end:$($Timestamp):$PreviousId`r`e[0K"
 }
 
-function Get-EpochTimestamp {
-    [int] $(New-TimeSpan -Start $(Get-Date "01/01/1970") -End $(Get-Date)).TotalSeconds
-}
-
 function Write-GitlabJobTrace {
     [CmdletBinding()]
     param (

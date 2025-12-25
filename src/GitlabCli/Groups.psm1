@@ -1,18 +1,3 @@
-function Get-PossibleGroupName {
-    param (
-        [Parameter(Position=0, Mandatory=$true)]
-        [string]
-        $Path,
-
-        [Parameter(Position=1, Mandatory=$false)]
-        [uint]
-        $Depth = 1
-    )
-
-    $Split = $(Get-Location).Path -split '/'
-    $($Split | Select-Object -Last $Depth) -join '/'
-}
-
 # https://docs.gitlab.com/ee/api/groups.html#details-of-a-group
 function Get-GitlabGroup {
     [CmdletBinding(DefaultParameterSetName='ByGroupId')]

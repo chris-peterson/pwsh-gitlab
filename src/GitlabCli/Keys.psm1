@@ -12,7 +12,10 @@ function Get-GitlabKey {
         [string]$Id,
 
         [Parameter(Mandatory,ParameterSetName = 'ByFingerprint')]
-        [string]$Fingerprint
+        [string]$Fingerprint,
+
+        [Parameter()]
+        [string]$SiteUrl
     )
 
     $apiParams = @{
