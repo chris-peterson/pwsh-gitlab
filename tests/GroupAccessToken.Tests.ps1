@@ -4,8 +4,7 @@ BeforeAll {
 
   Import-Module (New-Module -Name $TestModuleName -ScriptBlock ([scriptblock]::Create(
     @(
-      Get-Content "$PSScriptRoot/../GitlabCli/Private/Globals.ps1" -Raw
-      Get-Content "$PSScriptRoot/../GitlabCli/GroupAccessTokens.psm1" -Raw
+      Get-Content "$PSScriptRoot/../src/GitlabCli/GroupAccessTokens.psm1" -Raw
     ) -join "`n"))) -Force
 
   function global:Invoke-GitlabApi {}

@@ -1,7 +1,7 @@
 BeforeAll {
   $TestModuleName = "Get-GitlabResourceFromUrl"
   Get-Module -Name $TestModuleName -All | Remove-Module -Force -ErrorAction SilentlyContinue
-  Import-Module (New-Module -Name $TestModuleName -ScriptBlock ([scriptblock]::Create((Get-Content "$PSScriptRoot/../GitlabCli/Private/Functions.ps1" -Raw)))) -Force
+  Import-Module (New-Module -Name $TestModuleName -ScriptBlock ([scriptblock]::Create((Get-Content "$PSScriptRoot/../src/GitlabCli/Private/Functions/Configuration.ps1" -Raw)))) -Force
   function global:Get-GitlabConfiguration {}
 }
 
