@@ -40,7 +40,7 @@ function Get-GitlabGroupAccessToken {
         $Resource += "/$TokenId"
     }
 
-    Invoke-GitlabApi GET $Resource | New-WrapperObject 'Gitlab.AccessToken'
+    Invoke-GitlabApi GET $Resource | New-GitlabObject 'Gitlab.AccessToken'
 }
 
 

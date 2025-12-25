@@ -10,7 +10,7 @@ function Get-GitlabConfiguration {
                 AccessToken = $env:GITLAB_ACCESS_TOKEN
                 IsDefault = $true
             })
-        } | New-WrapperObject 'Gitlab.Configuration'
+        } | New-GitlabObject 'Gitlab.Configuration'
     }
 
     if (-not (Test-Path $global:GitlabConfigurationPath)) {
@@ -20,7 +20,7 @@ function Get-GitlabConfiguration {
         } | Write-GitlabConfiguration
     }
 
-    Get-Content $global:GitlabConfigurationPath | ConvertFrom-Json | New-WrapperObject 'Gitlab.Configuration'
+    Get-Content $global:GitlabConfigurationPath | ConvertFrom-Json | New-GitlabObject 'Gitlab.Configuration'
 }
 
 function Get-DefaultGitlabSite {

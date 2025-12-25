@@ -89,7 +89,7 @@ function Get-GitlabIssue {
     }
 
     Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages |
-        New-WrapperObject 'Gitlab.Issue' |
+        New-GitlabObject 'Gitlab.Issue' |
         Sort-Object SortKey
 }
 
@@ -144,7 +144,7 @@ function New-GitlabIssue {
     }
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "Create new issue ($($Request | ConvertTo-Json))")) {
-        $Issue = Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Issue'
+        $Issue = Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Issue'
         if ($MarkTodoAsRead) {
             $Todo = Get-GitlabTodo | Where-Object TargetUrl -eq $Issue.WebUrl
             Clear-GitlabTodo -TodoId $Todo.Id | Out-Null
@@ -286,7 +286,7 @@ function Update-GitlabIssue {
 
     if ($PSCmdlet.ShouldProcess("issue #$IssueId", "update $($Request | ConvertTo-Json)")) {
         return Invoke-GitlabApi @Request|
-            New-WrapperObject 'Gitlab.Issue'
+            New-GitlabObject 'Gitlab.Issue'
     }
 }
 

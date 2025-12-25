@@ -23,7 +23,7 @@ function Get-GitlabProjectHook {
     $Resource = "$($Resource)/$($Id)"
   }
 
-  Invoke-GitlabApi GET $Resource | New-WrapperObject 'Gitlab.ProjectHook'
+  Invoke-GitlabApi GET $Resource | New-GitlabObject 'Gitlab.ProjectHook'
 }
 
 function New-GitlabProjectHook {
@@ -137,7 +137,7 @@ function New-GitlabProjectHook {
   }
 
   if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create webhook to $Url")) {
-    Invoke-GitlabApi POST $Resource @Request | New-WrapperObject 'Gitlab.ProjectHook'
+    Invoke-GitlabApi POST $Resource @Request | New-GitlabObject 'Gitlab.ProjectHook'
   }
 }
 
@@ -255,7 +255,7 @@ function Update-GitlabProjectHook {
   }
   
   if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) hook #$Id", "update webhook")) {
-    Invoke-GitlabApi PUT $Resource $Request | New-WrapperObject 'Gitlab.ProjectHook'
+    Invoke-GitlabApi PUT $Resource $Request | New-GitlabObject 'Gitlab.ProjectHook'
   }
 }
 

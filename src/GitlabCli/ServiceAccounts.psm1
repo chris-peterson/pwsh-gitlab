@@ -37,7 +37,7 @@ function Get-GitlabServiceAccount {
         $Request.Path = "service_accounts"
     }
 
-    $ServiceAccounts = Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.ServiceAccount'
+    $ServiceAccounts = Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.ServiceAccount'
 
     if ($ServiceAccountId) {
         # workaround for https://gitlab.com/gitlab-org/gitlab/-/issues/570317
@@ -103,7 +103,7 @@ function Update-GitlabServiceAccount {
     }
 
     if ($PSCmdlet.ShouldProcess($ServiceAccountId, "update service account ($($Request | ConvertTo-Json))")) {
-        Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.ServiceAccount'
+        Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.ServiceAccount'
     }
 }
 
@@ -207,6 +207,6 @@ function New-GitlabServiceAccount {
     }
 
     if ($PSCmdlet.ShouldProcess($Target, "Create ($($Request | ConvertTo-Json))")) {
-        Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.ServiceAccount'
+        Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.ServiceAccount'
     }
 }

@@ -49,7 +49,7 @@ function Get-GitlabTopic {
     }
 
     Invoke-GitlabApi GET $Url $Query -MaxPages $MaxPages |
-        New-WrapperObject 'Gitlab.Topic' |
+        New-GitlabObject 'Gitlab.Topic' |
         Sort-Object Name
 }
 
@@ -87,7 +87,7 @@ function New-GitlabTopic {
     }
 
     if ($PSCmdlet.ShouldProcess("topics", "create ($($Request | ConvertTo-Json))")) {
-        Invoke-GitlabApi POST "topics" -Body $Request | New-WrapperObject 'Gitlab.Topic'
+        Invoke-GitlabApi POST "topics" -Body $Request | New-GitlabObject 'Gitlab.Topic'
     }
 }
 
@@ -129,7 +129,7 @@ function Update-GitlabTopic {
     }
 
     if ($PSCmdlet.ShouldProcess("topic $TopicId", "update ($($Request | ConvertTo-Json))")) {
-        Invoke-GitlabApi PUT "topics/$TopicId" -Body $Request | New-WrapperObject 'Gitlab.Topic'
+        Invoke-GitlabApi PUT "topics/$TopicId" -Body $Request | New-GitlabObject 'Gitlab.Topic'
     }
 }
 

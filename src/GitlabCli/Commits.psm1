@@ -53,5 +53,5 @@ function Get-GitlabCommit {
     }
 
     # https://docs.gitlab.com/ee/api/commits.html#list-repository-commits
-    Invoke-GitlabApi GET $Url -Query $Query -MaxPages $MaxPages | New-WrapperObject 'Gitlab.Commit'
+    Invoke-GitlabApi GET $Url -Query $Query -MaxPages $MaxPages | New-GitlabObject 'Gitlab.Commit'
 }

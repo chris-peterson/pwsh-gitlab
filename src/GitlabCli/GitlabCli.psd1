@@ -47,6 +47,7 @@
     CompatiblePSEditions = @('Core', 'Desktop')
 
     ScriptsToProcess = @(
+        'Private/Functions/CasingHelpers.ps1'
         'Private/Functions/ConfigurationHelpers.ps1'
         'Private/Functions/GroupHelpers.ps1'
         'Private/Functions/JobHelpers.ps1'
@@ -359,14 +360,10 @@
         'Remove-GitlabUserMembership'
 
         # Utilities
-        'ConvertTo-PascalCase'
-        'ConvertTo-SnakeCase'
-        'ConvertTo-UrlEncoded'
         'ConvertTo-GitlabVariables'
         'Get-FilteredObject'
         'Get-GitlabVersion'
         'Invoke-GitlabApi'
-        'New-WrapperObject'
         'Open-InBrowser'
 
         # Validation

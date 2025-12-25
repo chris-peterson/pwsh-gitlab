@@ -84,7 +84,7 @@ function Get-GitlabJob {
         $Request.Query.include_retried = $true
     }
 
-    $Jobs = Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Job'
+    $Jobs = Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Job'
 
     if ($Stage) {
         Write-Verbose "Filtering jobs by stage: $Stage"
@@ -205,14 +205,14 @@ function Start-GitlabJob {
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "start job $($GitlabApiArguments | ConvertTo-Json -Depth 3)")) {
         try {
             # https://docs.gitlab.com/ee/api/jobs.html#run-a-job
-            $Job = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.Job"
+            $Job = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.Job"
         }
         catch {
             if ($_.ErrorDetails.Message -match 'Unplayable Job') {
                 Write-Verbose "Job $JobId is not playable, retrying instead"
                 # https://docs.gitlab.com/ee/api/jobs.html#retry-a-job
                 $GitlabApiArguments.Path = $GitlabApiArguments.Path -replace '/play', '/retry'
-                $Job = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.Job"
+                $Job = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.Job"
             } else {
                 throw $_
             }
@@ -283,7 +283,7 @@ function Test-GitlabPipelineDefinition {
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "Validate CI definition ($($Params | ConvertTo-Json))")) {
         Invoke-GitlabApi @Params |
-            New-WrapperObject 'Gitlab.PipelineDefinition' |
+            New-GitlabObject 'Gitlab.PipelineDefinition' |
             Get-FilteredObject $Select
     }
 }

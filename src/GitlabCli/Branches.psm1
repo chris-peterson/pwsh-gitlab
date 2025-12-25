@@ -73,7 +73,7 @@ function Get-GitlabBranch {
     }
 
     Invoke-GitlabApi @Request
-        | New-WrapperObject 'Gitlab.Branch'
+        | New-GitlabObject 'Gitlab.Branch'
         | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id -PassThru
         | Sort-Object -Descending LastUpdated
 }
@@ -111,7 +111,7 @@ function Get-GitlabProtectedBranch {
     try {
         # https://docs.gitlab.com/ee/api/protected_branches.html#list-protected-branches
         Invoke-GitlabApi @Request
-            | New-WrapperObject 'Gitlab.ProtectedBranch'
+            | New-GitlabObject 'Gitlab.ProtectedBranch'
             | Add-Member -PassThru -NotePropertyMembers @{
                 ProjectId = $Project.Id
             }
@@ -158,7 +158,7 @@ function New-GitlabBranch {
     }
 
     if( $PSCmdlet.ShouldProcess("Project $($Project.PathWithNamespace)", "create branch $($Branch) from $($Ref) `nArguments:`n$($Request | ConvertTo-Json)") ) {
-        Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Branch'
+        Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Branch'
     }
 }
 
@@ -234,7 +234,7 @@ function Protect-GitlabBranch {
         # }
         # if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) ($Branch)", "update protected branch $($Request | ConvertTo-Json)")) {
         #     # https://docs.gitlab.com/ee/api/protected_branches.html#update-a-protected-branch
-        #     Invoke-GitlabApi PATCH "projects/$($Project.Id)/protected_branches/$Branch" -Body $Request | New-WrapperObject 'Gitlab.ProtectedBranch'
+        #     Invoke-GitlabApi PATCH "projects/$($Project.Id)/protected_branches/$Branch" -Body $Request | New-GitlabObject 'Gitlab.ProtectedBranch'
         # }
         # as a workaround, remove protection
         Remove-GitlabProtectedBranch -ProjectId $ProjectId -Branch $Branch | Out-Null
@@ -275,7 +275,7 @@ function Protect-GitlabBranch {
 
     if ($PSCmdlet.ShouldProcess("Project $($Project.PathWithNamespace)", "protect branch name $Branch with `nArguments:`n$($Request | ConvertTo-Json)")) {
         # https://docs.gitlab.com/ee/api/protected_branches.html#protect-repository-branches
-        Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.ProtectedBranch'
+        Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.ProtectedBranch'
     }
 }
 

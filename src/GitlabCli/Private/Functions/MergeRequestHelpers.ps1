@@ -91,7 +91,7 @@ function Add-GitlabMergeRequestChangeSummary {
     $ReviewerComments = $RegularComments | Where-Object { $_.author.username -ne $MergeRequest.Author.username }
 
     $Summary = [PSCustomObject]@{
-        Changes                 = $Mr.diffStatsSummary | New-WrapperObject
+        Changes                 = $Mr.diffStatsSummary | New-GitlabObject
         Authors                 = $Mr.commitsWithoutMergeCommits.nodes.author.username | Select-Object -Unique | Sort-Object
         FirstCommittedAt        = @($Mr.commitsWithoutMergeCommits.nodes.authoredDate) + @($SpecialNotes.Commits.Notes.updatedAt) | Sort-Object | Select-Object -First 1
         ReviewRequestedAt       = $SpecialNotes.ReviewRequested.Notes | Select-Object -First 1 | Select-Object -ExpandProperty updatedAt

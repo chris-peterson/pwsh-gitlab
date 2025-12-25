@@ -118,12 +118,12 @@ function Get-GitlabPipeline {
         "projects/$($Project.Id)/pipelines"
     }
 
-    $Pipelines = Invoke-GitlabApi @GitlabApiParameters | New-WrapperObject 'Gitlab.Pipeline'
+    $Pipelines = Invoke-GitlabApi @GitlabApiParameters | New-GitlabObject 'Gitlab.Pipeline'
 
     if ($IncludeTestReport) {
         $Pipelines | ForEach-Object {
             try {
-                $TestReport = Invoke-GitlabApi GET "projects/$($_.ProjectId)/pipelines/$($_.Id)/test_report" | New-WrapperObject 'Gitlab.TestReport'
+                $TestReport = Invoke-GitlabApi GET "projects/$($_.ProjectId)/pipelines/$($_.Id)/test_report" | New-GitlabObject 'Gitlab.TestReport'
             }
             catch {
                 $TestReport = $Null
@@ -222,7 +222,7 @@ function Get-GitlabPipelineVariable {
         $KeyValues | Where-Object Key -eq $Variable | Select-Object -ExpandProperty Value
     } else {
         if ($As -eq 'KeyValuePairs') {
-            $KeyValues | New-WrapperObject 'Gitlab.PipelineVariable'
+            $KeyValues | New-GitlabObject 'Gitlab.PipelineVariable'
         } elseif ($As -eq 'Object') {
             $Obj = New-Object PSObject
             $KeyValues.Key | ForEach-Object {
@@ -266,7 +266,7 @@ function Get-GitlabPipelineBridge {
         $GitlabApiArguments['Query']['scope'] = $Scope
     }
 
-    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.PipelineBridge"
+    Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.PipelineBridge"
 }
 
 function New-GitlabPipeline {
@@ -326,7 +326,7 @@ function New-GitlabPipeline {
     }
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create new pipeline $($Request | ConvertTo-Json)")) {
-        $Pipeline = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Pipeline'
+        $Pipeline = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject 'Gitlab.Pipeline'
 
         if ($Wait) {
             Write-Host "$($Pipeline.Id) created..."

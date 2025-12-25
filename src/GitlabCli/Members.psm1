@@ -97,7 +97,7 @@ function Get-GitlabGroupMember {
         $Members = $Members | Where-Object access_level -ge $MinAccessLevelLiteral
     }
 
-    $Members | New-WrapperObject 'Gitlab.Member' |
+    $Members | New-GitlabObject 'Gitlab.Member' |
         Add-Member -PassThru -NotePropertyMembers @{
             GroupId = $Group.Id
         } |
@@ -144,7 +144,7 @@ function Set-GitlabGroupMember {
             }
         }
         if ($PSCmdlet.ShouldProcess("Group '$GroupId'", "update '$($Existing.Name)' membership to '$AccessLevel'")) {
-            Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Member'
+            Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Member'
         }
     } else {
         if ($PSCmdlet.ShouldProcess("Group '$GroupId'", "add '$UserId' as '$AccessLevel'")) {
@@ -188,7 +188,7 @@ function Add-GitlabGroupMember {
             }
         }
         Invoke-GitlabApi @Request |
-            New-WrapperObject 'Gitlab.Member'
+            New-GitlabObject 'Gitlab.Member'
     }
 }
 
@@ -267,7 +267,7 @@ function Get-GitlabProjectMember {
     $Resource = $User ? "projects/$($Project.Id)/$Members/$($User.Id)" : "projects/$($Project.Id)/$Members"
 
     Invoke-GitlabApi GET $Resource -MaxPages $MaxPages |
-        New-WrapperObject 'Gitlab.Member' |
+        New-GitlabObject 'Gitlab.Member' |
         Add-Member -PassThru -NotePropertyMembers @{
             ProjectId = $Project.Id
         } |
@@ -314,7 +314,7 @@ function Set-GitlabProjectMember {
             }
         }
         if ($PSCmdlet.ShouldProcess("Project '$ProjectId'", "update '$($Existing.Name)' membership to '$AccessLevel'")) {
-            Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Member'
+            Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Member'
         }
     } else {
         if ($PSCmdlet.ShouldProcess("Project '$ProjectId'", "add '$UserId' as '$AccessLevel'")) {
@@ -359,7 +359,7 @@ function Add-GitlabProjectMember {
     }
 
     if ($PSCmdlet.ShouldProcess($Project.PathWithNamespace, "grant '$($User.Username)' $AccessLevel membership")) {
-        Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Member'
+        Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Member'
     }
 }
 
@@ -433,7 +433,7 @@ function Get-GitlabUserMembership {
 
     # https://docs.gitlab.com/ee/api/users.html#user-memberships-admin-only
     Invoke-GitlabApi GET "users/$($User.Id)/memberships" -MaxPages $MaxPages |
-        New-WrapperObject 'Gitlab.UserMembership'
+        New-GitlabObject 'Gitlab.UserMembership'
 }
 
 function Remove-GitlabUserMembership {
@@ -568,5 +568,5 @@ function Update-GitlabUserMembership {
         }
     }
 
-    $Rows | New-WrapperObject 'Gitlab.Member'
+    $Rows | New-GitlabObject 'Gitlab.Member'
 }

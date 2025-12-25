@@ -1,50 +1,3 @@
-# Inspired by https://gist.github.com/awakecoding/acc626741704e8885da8892b0ac6ce64
-function ConvertTo-PascalCase
-{
-    param(
-        [Parameter(Position=0, ValueFromPipeline=$true)]
-        [string] $Value
-    )
-
-    # https://devblogs.microsoft.com/oldnewthing/20190909-00/?p=102844
-    return [regex]::replace($Value.ToLower(), '(^|_)(.)', { $args[0].Groups[2].Value.ToUpper()})
-}
-
-function ConvertTo-SnakeCase
-{
-    param(
-        [Parameter(Position=0, ValueFromPipeline=$true)]
-        $InputObject
-    )
-
-    Process {
-        foreach ($Value in $InputObject) {
-            if ($Value -is [string]) {
-                return [regex]::replace($Value, '(?<=.)(?=[A-Z])', '_').ToLower()
-            }
-        
-            if ($Value -is [hashtable]) {
-                $Value.Keys.Clone() | ForEach-Object {
-                    $OriginalValue = $Value[$_]
-                    $Value.Remove($_)
-                    $Value[$($_ | ConvertTo-SnakeCase)] = $OriginalValue
-                }
-                $Value
-            }
-        }
-    }
-}
-
-
-function ConvertTo-UrlEncoded {
-    param (
-        [Parameter(Position=0, ValueFromPipeline=$true)]
-        [string]
-        $Value
-    )
-    [System.Net.WebUtility]::UrlEncode($Value)
-}
-
 function Invoke-GitlabApi {
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -168,57 +121,6 @@ function Invoke-GitlabApi {
     }
 }
 
-function New-WrapperObject {
-    [CmdletBinding()]
-    param(
-        [Parameter(ValueFromPipeline)]
-        $InputObject,
-
-        [Parameter(Position=0)]
-        [string]
-        $DisplayType,
-
-        [Parameter()]
-        [switch]
-        $PreserveCasing
-    )
-    Begin{}
-    Process {
-        foreach ($item in $InputObject) {
-            $Wrapper = New-Object PSObject
-            $item.PSObject.Properties |
-                Sort-Object Name |
-                ForEach-Object {
-                    $Name = if ($PreserveCasing) { $_.Name } else { $_.Name | ConvertTo-PascalCase }
-                    $Wrapper | Add-Member -MemberType NoteProperty -Name $Name -Value $_.Value
-                }
-            
-            # aliases for common property names
-            Add-AliasedProperty -On $Wrapper -From 'Url' -To 'WebUrl'
-            Add-AliasedProperty -On $Wrapper -From 'Url' -To 'TargetUrl'
-            
-            if ($DisplayType) {
-                $Wrapper.PSTypeNames.Insert(0, $DisplayType)
-
-                $IdentityPropertyName = $global:GitlabIdentityPropertyNameExemptions[$DisplayType]
-                if ($IdentityPropertyName -eq $null) {
-                    $IdentityPropertyName = 'Iid' # default for anything that isn't explicitly mapped
-                }
-                if ($IdentityPropertyName -ne '') {
-                    if ($Wrapper.$IdentityPropertyName) {
-                        $TypeShortName = $DisplayType.Split('.') | Select-Object -Last 1
-                        Add-AliasedProperty -On $Wrapper -From "$($TypeShortName)Id" -To $IdentityPropertyName
-                    } else {
-                        Write-Warning "$DisplayType does not have an identity field"
-                    }
-                }
-            }
-            Write-Output $Wrapper
-        }
-    }
-    End{}
-}
-
 function Open-InBrowser {
     [CmdletBinding()]
     [Alias('go')]
@@ -274,7 +176,7 @@ function Get-GitlabVersion {
         [string]
         $SiteUrl
     )
-    Invoke-GitlabApi GET 'version' | New-WrapperObject | Get-FilteredObject $Select
+    Invoke-GitlabApi GET 'version' | New-GitlabObject | Get-FilteredObject $Select
 }
 
 # Helper function for consistency of paging parameters

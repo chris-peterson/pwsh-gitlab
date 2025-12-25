@@ -71,7 +71,7 @@ function Get-GitlabEnvironment {
             Get-GitlabEnvironment -ProjectId $ProjectId -EnvironmentId $_.id
         }
     } else {
-        $Result | New-WrapperObject 'Gitlab.Environment'
+        $Result | New-GitlabObject 'Gitlab.Environment'
     }
 }
 

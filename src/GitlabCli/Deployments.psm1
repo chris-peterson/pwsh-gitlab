@@ -76,7 +76,7 @@ function Get-GitlabDeployment {
         }
     }
 
-    $Result = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.Deployment'
+    $Result = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject 'Gitlab.Deployment'
 
     if ($Latest) {
         $Result = $Result | Select-Object -First 1

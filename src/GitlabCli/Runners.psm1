@@ -59,7 +59,7 @@ function Get-GitlabRunner {
         default { throw "Unsupported parameter combination" }
     }
 
-    $Runners = Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.Runner'
+    $Runners = Invoke-GitlabApi @Params | New-GitlabObject 'Gitlab.Runner'
     if ($FetchDetails) {
         $RunnerCount = $Runners.Count
         $i = 0
@@ -99,7 +99,7 @@ function Get-GitlabRunnerJob {
         MaxPages   = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
     }
 
-    Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.RunnerJob'
+    Invoke-GitlabApi @Params | New-GitlabObject 'Gitlab.RunnerJob'
 }
 
 function Update-GitlabRunner {
@@ -183,7 +183,7 @@ function Update-GitlabRunner {
 
     if ($PSCmdlet.ShouldProcess("$($Params.Path)", "update ($($Params.Query | ConvertTo-Json))")) {
         # https://docs.gitlab.com/ee/api/runners.html#update-runners-details
-        Invoke-GitlabApi @Params | New-WrapperObject 'Gitlab.Runner'
+        Invoke-GitlabApi @Params | New-GitlabObject 'Gitlab.Runner'
     }
 }
 function Suspend-GitlabRunner {
@@ -339,5 +339,5 @@ function Get-GitlabRunnerStats {
             '99' = Get-Percentile -Values $Durations -Percentile 0.99
         }
         LongestQueuedJobs = $LongestQueuedJobs | Select-Object @{l='QueuedDuration'; e={$_.queuedDuration}}, Uri
-    } | New-WrapperObject 'Gitlab.RunnerStats' -PreserveCasing
+    } | New-GitlabObject 'Gitlab.RunnerStats' -PreserveCasing
 }

@@ -116,7 +116,7 @@ function Get-GitlabPersonalAccessToken {
     if ($LastUsedBefore) {
         $Request.Query.last_used_before = $LastUsedBefore
     }
-    $Results = Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.PersonalAccessToken' | ForEach-Object {
+    $Results = Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.PersonalAccessToken' | ForEach-Object {
         if ($_.ExpiresAt) {
             $ExpiresAt = [datetime]::Parse($_.ExpiresAt)
             $_.PSObject.Properties.Remove('ExpiresAt')
@@ -218,7 +218,7 @@ function New-GitlabPersonalAccessToken {
     }
 
     if ($PSCmdlet.ShouldProcess("$($Request.Path)", "create personal access token $($Request | ConvertTo-Json)")) {
-        $Response = Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.NewPersonalAccessToken'
+        $Response = Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.NewPersonalAccessToken'
         if ($CopyToClipboard) {
             $Response.Token | Set-Clipboard
         } else {
@@ -257,7 +257,7 @@ function Invoke-GitlabPersonalAccessTokenRotation {
     }
 
     if ($PSCmdlet.ShouldProcess("$($Request.Path)", "rotate personal access token")) {
-        $Response = Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.NewPersonalAccessToken'
+        $Response = Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.NewPersonalAccessToken'
         Set-Clipboard -Value $Response.Token
         Write-Warning "Updated personal access token copied to clipboard"
         $Response

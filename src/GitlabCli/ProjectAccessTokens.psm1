@@ -132,7 +132,7 @@ function Get-GitlabProjectAccessToken {
     if($State) { $GitlabAPIParams.Query.state = $State }
 
     If($PSCmdlet.ShouldProcess($GitlabAPIParams.Path,"Get Project Access Tokens")) {
-      Invoke-GitlabApi @GitlabAPIParams | New-WrapperObject 'Gitlab.AccessToken'
+      Invoke-GitlabApi @GitlabAPIParams | New-GitlabObject 'Gitlab.AccessToken'
     }
 }
 
@@ -219,7 +219,7 @@ function New-GitlabProjectAccessToken {
     if($ExpiresAt) { $GitlabAPIParams.Body.expires_at = $ExpiresAt.ToString('o') }
 
     If($PSCmdlet.ShouldProcess($GitlabAPIParams.Path,"Create Project Access Token")) {
-      Invoke-GitlabApi @GitlabAPIParams | New-WrapperObject 'Gitlab.AccessToken'
+      Invoke-GitlabApi @GitlabAPIParams | New-GitlabObject 'Gitlab.AccessToken'
     }
 }
 
@@ -289,7 +289,7 @@ function Invoke-GitlabProjectAccessTokenRotation {
     }
     
     if($PSCmdlet.ShouldProcess($GitlabAPIParams.Path,"Rotate Project Access Token")) {
-      Invoke-GitlabApi @GitlabAPIParams | New-WrapperObject 'Gitlab.AccessToken'
+      Invoke-GitlabApi @GitlabAPIParams | New-GitlabObject 'Gitlab.AccessToken'
     }
 }
 

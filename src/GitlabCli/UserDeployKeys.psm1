@@ -16,5 +16,5 @@ function Get-GitlabUserDeployKey {
         Path   = "users/$($User.Id)/project_deploy_keys"
     }
 
-    Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference | New-WrapperObject 'Gitlab.DeployKey'
+    Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference | New-GitlabObject 'Gitlab.DeployKey'
 }

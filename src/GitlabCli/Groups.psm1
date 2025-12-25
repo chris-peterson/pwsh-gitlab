@@ -69,7 +69,7 @@ function Get-GitlabGroup {
 
     return $Group |
         Where-Object -Not marked_for_deletion_on |
-        New-WrapperObject 'Gitlab.Group'
+        New-GitlabObject 'Gitlab.Group'
 }
 
 # https://docs.gitlab.com/ee/api/groups.html#new-group
@@ -108,7 +108,7 @@ function New-GitlabGroup {
 
     if ($PSCmdlet.ShouldProcess($GroupName, "create new $Visibility group '$GroupName'" )) {
         Invoke-GitlabApi POST "groups" $Query -WhatIf:$WhatIfPreference |
-            New-WrapperObject 'Gitlab.Group'
+            New-GitlabObject 'Gitlab.Group'
     }
 }
 
@@ -243,11 +243,11 @@ function Get-GitlabGroupVariable {
 
     if ($Key) {
         # https://docs.gitlab.com/ee/api/group_level_variables.html#show-variable-details
-        Invoke-GitlabApi GET "groups/$GroupId/variables/$Key" | New-WrapperObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "groups/$GroupId/variables/$Key" | New-GitlabObject 'Gitlab.Variable'
     }
     else {
         # https://docs.gitlab.com/ee/api/group_level_variables.html#list-group-variables
-        Invoke-GitlabApi GET "groups/$GroupId/variables" -MaxPages $MaxPages | New-WrapperObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "groups/$GroupId/variables" -MaxPages $MaxPages | New-GitlabObject 'Gitlab.Variable'
     }
 }
 
@@ -316,12 +316,12 @@ function Set-GitlabGroupVariable {
     if ($PSCmdlet.ShouldProcess("$($Group.FullName)", "set $($IsExistingVariable ? 'existing' : 'new') variable $Key to $Value")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/group_level_variables.html#update-variable
-            Invoke-GitlabApi PUT "groups/$($Group.Id)/variables/$Key" -Body $Request | New-WrapperObject 'Gitlab.Variable'
+            Invoke-GitlabApi PUT "groups/$($Group.Id)/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable'
         }
         else {
             $Request.key = $Key
             # https://docs.gitlab.com/ee/api/group_level_variables.html#create-variable
-            Invoke-GitlabApi POST "groups/$($Group.Id)/variables" -Body $Request | New-WrapperObject 'Gitlab.Variable'
+            Invoke-GitlabApi POST "groups/$($Group.Id)/variables" -Body $Request | New-GitlabObject 'Gitlab.Variable'
         }
     }
 }
@@ -394,7 +394,7 @@ function Update-GitlabGroup {
     }
 
     if ($PSCmdlet.ShouldProcess("group $GroupId", "update ($($Body | ConvertTo-Json))")) {
-        Invoke-GitlabApi PUT "groups/$GroupId" -Body $Body | New-WrapperObject 'Gitlab.Group'
+        Invoke-GitlabApi PUT "groups/$GroupId" -Body $Body | New-GitlabObject 'Gitlab.Group'
     }
 }
 
@@ -445,7 +445,7 @@ function Move-GitlabGroup {
     }
 
     if ($PSCmdlet.ShouldProcess("group $GroupId", "transfer to $DestinationLabel")) {
-        Invoke-GitlabApi POST "groups/$($GroupId)/transfer" $Request | New-WrapperObject 'Gitlab.Group'
+        Invoke-GitlabApi POST "groups/$($GroupId)/transfer" $Request | New-GitlabObject 'Gitlab.Group'
     }
 }
 
@@ -491,7 +491,7 @@ function New-GitlabGroupToGroupShare {
 
     if ($PSCmdlet.ShouldProcess("$($Group.FullPath)", "share with group '$($GroupToShareWith.FullPath)' ($AccessLevel)")) {
         # https://docs.gitlab.com/ee/api/groups.html#share-groups-with-groups
-        Invoke-GitlabApi POST "groups/$GroupId/share" -Body $Body | New-WrapperObject 'Gitlab.Group'
+        Invoke-GitlabApi POST "groups/$GroupId/share" -Body $Body | New-GitlabObject 'Gitlab.Group'
     }
 }
 

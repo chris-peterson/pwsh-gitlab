@@ -24,7 +24,7 @@ function Get-GitlabProjectDeployKey {
         $GitlabAPIParams.Path += "/$DeployKeyId"
     }
 
-    Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference | New-WrapperObject 'Gitlab.DeployKey'
+    Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference | New-GitlabObject 'Gitlab.DeployKey'
 }
 
 function Add-GitlabProjectDeployKey {
@@ -66,7 +66,7 @@ function Add-GitlabProjectDeployKey {
     }
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "add deploy key '$Title'")) {
-        Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference | New-WrapperObject 'Gitlab.DeployKey'
+        Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference | New-GitlabObject 'Gitlab.DeployKey'
     }
 }
 
@@ -120,7 +120,7 @@ function Update-GitlabProjectDeployKey {
     
 
     if($PSCmdlet.ShouldProcess("Update deploy key for project '$($Project.PathWithNamespace)'","Update-GitlabProjectDeployKey")) {
-        Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.DeployKey'
+        Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-GitlabObject 'Gitlab.DeployKey'
     }
 }
 
@@ -194,6 +194,6 @@ function Enable-GitlabProjectDeployKey {
     }
 
     if($PSCmdlet.ShouldProcess("Enable deploy key for project '$($Project.PathWithNamespace)'","Enable-GitlabProjectDeployKey")) {
-        Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.DeployKey'
+        Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-GitlabObject 'Gitlab.DeployKey'
     }
 }

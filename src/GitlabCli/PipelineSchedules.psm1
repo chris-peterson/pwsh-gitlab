@@ -49,7 +49,7 @@ function Get-GitlabPipelineSchedule {
         default { throw "Parameterset $($PSCmdlet.ParameterSetName) is not implemented"}
     }
 
-    $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
+    $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject 'Gitlab.PipelineSchedule'
     $Wrapper | Add-Member -NotePropertyMembers @{ Project = $Project }
 
     if ($IncludeVariables) {
@@ -120,7 +120,7 @@ function New-GitlabPipelineSchedule {
             Path       = "projects/$($Project.Id)/pipeline_schedules"
             Body       = $Body
         }
-        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
+        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject 'Gitlab.PipelineSchedule'
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId
         $Wrapper
     }
@@ -198,7 +198,7 @@ function Update-GitlabPipelineSchedule {
 
     if ($GitlabApiArguments.Body.Count -gt 0) {
         if ($PSCmdlet.ShouldProcess("$($GitlabApiArguments.Path)", "update schedule $($GitlabApiArguments.Body | ConvertTo-Json)")) {
-            Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject 'Gitlab.PipelineSchedule'
+            Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject 'Gitlab.PipelineSchedule'
         }
     }
 
@@ -316,7 +316,7 @@ function Get-GitlabPipelineScheduleVariable {
     $Project = Get-GitlabProject $ProjectId
     $PipelineSchedule = Get-GitlabPipelineSchedule -ProjectId $Project.Id -PipelineScheduleId $PipelineScheduleId
 
-    $Wrapper = $PipelineSchedule.Variables | New-WrapperObject "Gitlab.PipelineScheduleVariable"
+    $Wrapper = $PipelineSchedule.Variables | New-GitlabObject "Gitlab.PipelineScheduleVariable"
     $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
     $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
 
@@ -373,7 +373,7 @@ function New-GitlabPipelineScheduleVariable {
     }
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) schedule #$PipelineScheduleId", "create variable '$Key'")) {
-        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.PipelineScheduleVariable"
+        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.PipelineScheduleVariable"
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
     }
@@ -426,7 +426,7 @@ function Update-GitlabPipelineScheduleVariable {
     }
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) schedule #$PipelineScheduleId", "update variable '$Key'")) {
-        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.PipelineScheduleVariable"
+        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.PipelineScheduleVariable"
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
     }
@@ -462,7 +462,7 @@ function Remove-GitlabPipelineScheduleVariable {
     }
 
     if ($PSCmdlet.ShouldProcess("Delete pipeline schedule variable $Key")) {
-        Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.PipelineScheduleVariable"
+        Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.PipelineScheduleVariable"
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
     }

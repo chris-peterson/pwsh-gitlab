@@ -65,5 +65,5 @@ function Get-GitlabMilestone {
         $Request.Query = @{ state = $State }
     }
 
-    Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Milestone'
+    Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Milestone'
 }

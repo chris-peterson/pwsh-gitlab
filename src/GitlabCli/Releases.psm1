@@ -45,7 +45,7 @@ function Get-GitlabRelease {
         $Query.include_html_description = 'true';
     }
     $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
-    Invoke-GitlabApi GET $Path -Query $Query -MaxPages $MaxPages | New-WrapperObject 'Gitlab.Release' | ForEach-Object {
+    Invoke-GitlabApi GET $Path -Query $Query -MaxPages $MaxPages | New-GitlabObject 'Gitlab.Release' | ForEach-Object {
         $_ | Add-Member -PassThru -NotePropertyMembers @{ ProjectId = $Project.Id }
     }
 }

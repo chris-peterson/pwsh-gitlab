@@ -80,7 +80,7 @@ function Search-Gitlab {
     }
 
     if ($PSCmdlet.ShouldProcess("search", "$($Request | ConvertTo-Json)")) {
-        $Results = Invoke-GitlabApi @Request | New-WrapperObject $DisplayType
+        $Results = Invoke-GitlabApi @Request | New-GitlabObject $DisplayType
 
         if ($Scope -eq 'blobs') {
             # the response object is too anemic to be useful.  enrich with project data
@@ -135,6 +135,6 @@ function Search-GitlabProject {
     
     $Resource = "projects/$($ProjectId | ConvertTo-UrlEncoded)/search"
     Invoke-GitlabApi GET $Resource $Query |
-        New-WrapperObject 'Gitlab.SearchResult.Blob' |
+        New-GitlabObject 'Gitlab.SearchResult.Blob' |
         Add-Member -MemberType 'NoteProperty' -Name 'Project' -Value $Project -PassThru
 }

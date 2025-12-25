@@ -21,7 +21,7 @@ function Get-GitlabTodo {
         MaxPages   = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
     }
 
-    Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Todo'
+    Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Todo'
 }
 
 function Clear-GitlabTodo {
@@ -55,7 +55,7 @@ function Clear-GitlabTodo {
             # https://docs.gitlab.com/ee/api/todos.html#mark-a-to-do-item-as-done
             $Request.Path = "todos/$TodoId/mark_as_done"
             if ($PSCmdlet.ShouldProcess("todo #$TodoId", "$($Request | ConvertTo-Json)")) {
-                Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.Todo'
+                Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Todo'
             }    
         }
     }

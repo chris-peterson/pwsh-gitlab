@@ -220,7 +220,7 @@
       </ScriptProperty>
       <ScriptProperty>
         <Name>Pipeline</Name>
-        <GetScriptBlock>$this.Deployable.Pipeline | New-WrapperObject 'Gitlab.Pipeline'</GetScriptBlock>
+        <GetScriptBlock>$this.Deployable.Pipeline | New-GitlabObject 'Gitlab.Pipeline'</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>

@@ -24,7 +24,7 @@ function Get-GitlabProjectIntegration {
     }
     # https://docs.gitlab.com/ee/api/integrations.html#list-all-active-integrations
     Invoke-GitlabApi GET $Resource |
-        New-WrapperObject 'Gitlab.ProjectIntegration' |
+        New-GitlabObject 'Gitlab.ProjectIntegration' |
         Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id -PassThru
 }
 
@@ -58,7 +58,7 @@ function Update-GitlabProjectIntegration {
     $Resource = "projects/$($Project.Id)/integrations/$Integration"
 
     if ($PSCmdlet.ShouldProcess("$Resource", "update $($Settings | ConvertTo-Json)")) {
-        Invoke-GitlabApi PUT $Resource -Body $Settings | New-WrapperObject 'Gitlab.ProjectIntegration'
+        Invoke-GitlabApi PUT $Resource -Body $Settings | New-GitlabObject 'Gitlab.ProjectIntegration'
     }
 }
 

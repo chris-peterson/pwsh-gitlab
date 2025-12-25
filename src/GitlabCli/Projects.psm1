@@ -169,7 +169,7 @@ function Get-GitlabProject {
     }
 
     $Projects |
-        New-WrapperObject 'Gitlab.Project' |
+        New-GitlabObject 'Gitlab.Project' |
         Get-FilteredObject $Select
 }
 
@@ -244,7 +244,7 @@ function Move-GitlabProject {
     if ($PSCmdlet.ShouldProcess("group $($Group.FullName)", "transfer '$($SourceProject.PathWithNamespace)'")) {
         Invoke-GitlabApi PUT "projects/$($SourceProject.Id)/transfer" @{
             namespace = $Group.Id
-        } -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.Project'
+        } -WhatIf:$WhatIfPreference | New-GitlabObject 'Gitlab.Project'
     }
 }
 
@@ -397,7 +397,7 @@ function New-GitlabProject {
 
     if ($PSCmdlet.ShouldProcess($NamespaceId, "create new project '$ProjectName' $($Request | ConvertTo-Json)" )) {
         # https://docs.gitlab.com/ee/api/projects.html#create-project
-        $Project = Invoke-GitlabApi POST "projects" -Body $Request | New-WrapperObject 'Gitlab.Project'
+        $Project = Invoke-GitlabApi POST "projects" -Body $Request | New-GitlabObject 'Gitlab.Project'
     
         if ($CloneNow) {
             git clone $Project.SshUrlToRepo
@@ -520,7 +520,7 @@ function Update-GitlabProject {
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "update project ($($Request | ConvertTo-Json))")) {
         Invoke-GitlabApi PUT "projects/$($Project.Id)" -Body $Request |
-            New-WrapperObject 'Gitlab.Project'
+            New-GitlabObject 'Gitlab.Project'
     }
 }
 
@@ -542,7 +542,7 @@ function Invoke-GitlabProjectArchival {
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "archive")) {
         # https://docs.gitlab.com/ee/api/projects.html#archive-a-project
         Invoke-GitlabApi POST "projects/$($Project.Id)/archive" |
-            New-WrapperObject 'Gitlab.Project'
+            New-GitlabObject 'Gitlab.Project'
     }
 }
 
@@ -564,7 +564,7 @@ function Invoke-GitlabProjectUnarchival {
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "unarchive")) {
         # https://docs.gitlab.com/ee/api/projects.html#unarchive-a-project
         Invoke-GitlabApi POST "projects/$($Project.Id)/unarchive" |
-            New-WrapperObject 'Gitlab.Project'
+            New-GitlabObject 'Gitlab.Project'
     }
 }
 
@@ -598,11 +598,11 @@ function Get-GitlabProjectVariable {
 
     if ($Key) {
         # https://docs.gitlab.com/ee/api/project_level_variables.html#get-a-single-variable
-        Invoke-GitlabApi GET "projects/$($Project.Id)/variables/$Key" | New-WrapperObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "projects/$($Project.Id)/variables/$Key" | New-GitlabObject 'Gitlab.Variable'
     }
     else {
         # https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
-        Invoke-GitlabApi GET "projects/$($Project.Id)/variables" -MaxPages $MaxPages | New-WrapperObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "projects/$($Project.Id)/variables" -MaxPages $MaxPages | New-GitlabObject 'Gitlab.Variable'
     }
 }
 
@@ -670,12 +670,12 @@ function Set-GitlabProjectVariable {
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "set $($IsExistingVariable ? 'existing' : 'new') project variable ($Key) $(($Request | ConvertTo-Json))")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/project_level_variables.html#update-variable
-            Invoke-GitlabApi PUT "projects/$($Project.Id)/variables/$Key" -Body $Request | New-WrapperObject 'Gitlab.Variable'
+            Invoke-GitlabApi PUT "projects/$($Project.Id)/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable'
         }
         else {
             $Request.key = $Key
             # https://docs.gitlab.com/ee/api/project_level_variables.html#create-a-variable
-            Invoke-GitlabApi POST "projects/$($Project.Id)/variables" -Body $Request | New-WrapperObject 'Gitlab.Variable'
+            Invoke-GitlabApi POST "projects/$($Project.Id)/variables" -Body $Request | New-GitlabObject 'Gitlab.Variable'
         }
     }
 }
@@ -793,7 +793,7 @@ function Get-GitlabProjectEvent {
 
     Invoke-GitlabApi GET "projects/$($Project.Id)/events" `
         -Query $Query -MaxPages $MaxPages -SiteUrl |
-        New-WrapperObject 'Gitlab.Event'
+        New-GitlabObject 'Gitlab.Event'
 }
 
 function New-GitlabGroupToProjectShare {

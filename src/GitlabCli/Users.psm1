@@ -83,7 +83,7 @@ function Get-GitlabUser {
         $Parameters.Path = 'user' # https://docs.gitlab.com/ee/api/users.html#for-non-administrator-users
     }
 
-    Invoke-GitlabApi @Parameters | New-WrapperObject 'Gitlab.User'
+    Invoke-GitlabApi @Parameters | New-GitlabObject 'Gitlab.User'
 }
 
 function Block-GitlabUser {
@@ -261,7 +261,7 @@ function Get-GitlabUserEvent {
     }
 
     $Events = Invoke-GitlabApi GET "users/$($User.Id)/events" -Query $Query -MaxPages $MaxPages |
-        New-WrapperObject 'Gitlab.Event'
+        New-GitlabObject 'Gitlab.Event'
 
     if ($FetchProjects) {
         $ProjectIds = $Events.ProjectId | Select-Object -Unique

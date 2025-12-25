@@ -148,7 +148,7 @@ function Get-GitlabMergeRequest {
 
     $MergeRequests = Invoke-GitlabApi GET $Path -Query $Query -MaxPages $MaxPages |
         Select-Object -ExcludeProperty approvals_before_merge | # https://docs.gitlab.com/ee/api/merge_requests.html#removals-in-api-v5
-        New-WrapperObject 'Gitlab.MergeRequest'
+        New-GitlabObject 'Gitlab.MergeRequest'
 
     if ($IncludeChangeSummary -or $IncludeDiffs) {
         $MergeRequests | ForEach-Object {
@@ -239,7 +239,7 @@ function New-GitlabMergeRequest {
     }
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create merge request ($($Body | ConvertTo-Json))")) {
-        $MergeRequest = Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.MergeRequest'
+        $MergeRequest = Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.MergeRequest'
         if ($MarkTodoAsRead) {
             $Todo = Get-GitlabTodo | Where-Object TargetUrl -eq $MergeRequest.WebUrl
             Clear-GitlabTodo -TodoId $Todo.Id | Out-Null
@@ -319,7 +319,7 @@ function Merge-GitlabMergeRequest {
         $Request.Body.merge_when_pipeline_succeeds = $MergeWhenPipelineSucceeds
     }
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "merge ($($Request.Body | ConvertTo-Json))")) {
-        Invoke-GitlabApi @Request | New-WrapperObject 'Gitlab.MergeRequest'
+        Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.MergeRequest'
     }
 }
 
@@ -450,7 +450,7 @@ function Update-GitlabMergeRequest {
 
     if ($PSCmdlet.ShouldProcess("MR $MergeRequestId in $($Project.PathWithNamespace)", "update $($Request | ConvertTo-Json)")) {
         # https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
-        Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" -Body $Request | New-WrapperObject 'Gitlab.MergeRequest'
+        Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" -Body $Request | New-GitlabObject 'Gitlab.MergeRequest'
     }
 }
 
@@ -543,7 +543,7 @@ function Get-GitlabMergeRequestApprovalConfiguration {
 
     $Project = Get-GitlabProject $ProjectId
 
-    Invoke-GitlabApi GET "projects/$($Project.Id)/approvals" | New-WrapperObject
+    Invoke-GitlabApi GET "projects/$($Project.Id)/approvals" | New-GitlabObject
 }
 
 # https://docs.gitlab.com/ee/api/merge_request_approvals.html#change-configuration
@@ -606,7 +606,7 @@ function Update-GitlabMergeRequestApprovalConfiguration {
     }
 
     if ($PSCmdlet.ShouldProcess($Project.PathWithNamespace, "update merge request approval settings to $($Request | ConvertTo-Json)")) {
-        Invoke-GitlabApi POST "projects/$($Project.Id)/approvals" -Body $Request | New-WrapperObject
+        Invoke-GitlabApi POST "projects/$($Project.Id)/approvals" -Body $Request | New-GitlabObject
     }
 }
 
@@ -636,7 +636,7 @@ function Get-GitlabMergeRequestApprovalRule {
     # https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-project-level-rules
     # https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-a-single-project-level-rule
     Invoke-GitlabApi GET $Resource
-        | New-WrapperObject 'Gitlab.MergeRequestApprovalRule'
+        | New-GitlabObject 'Gitlab.MergeRequestApprovalRule'
         | Add-Member -PassThru -NotePropertyMembers @{
             ProjectId = $Project.Id
         }
@@ -673,7 +673,7 @@ function New-GitlabMergeRequestApprovalRule {
 
     if ($PSCmdlet.ShouldProcess($Project.PathWithNamespace, "create new merge request approval rule $($Rule | ConvertTo-Json)")) {
         # https://docs.gitlab.com/ee/api/merge_request_approvals.html#create-project-level-rule
-        Invoke-GitlabApi POST $Resource -Body $Rule | New-WrapperObject 'Gitlab.MergeRequestApprovalRule'
+        Invoke-GitlabApi POST $Resource -Body $Rule | New-GitlabObject 'Gitlab.MergeRequestApprovalRule'
     }
 }
 

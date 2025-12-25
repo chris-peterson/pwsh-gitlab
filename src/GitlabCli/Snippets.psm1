@@ -78,7 +78,7 @@ function Get-GitlabSnippet {
         }
     }
 
-    $Snippet | New-WrapperObject 'Gitlab.Snippet'
+    $Snippet | New-GitlabObject 'Gitlab.Snippet'
 }
 
 function Get-GitlabSnippetContent {
@@ -160,7 +160,7 @@ function New-GitlabSnippet {
     if ($PSCmdlet.ShouldProcess($Title, "create snippet")) {
         # https://docs.gitlab.com/api/snippets/#create-new-snippet
         Invoke-GitlabApi POST "snippets" -Body $Body |
-            New-WrapperObject 'Gitlab.Snippet'
+            New-GitlabObject 'Gitlab.Snippet'
     }
 }
 
@@ -226,7 +226,7 @@ function Update-GitlabSnippet {
     if ($PSCmdlet.ShouldProcess("snippet $SnippetId", "update")) {
         # https://docs.gitlab.com/api/snippets/#update-snippet
         Invoke-GitlabApi PUT "snippets/$SnippetId" -Body $Body |
-            New-WrapperObject 'Gitlab.Snippet'
+            New-GitlabObject 'Gitlab.Snippet'
     }
 }
 

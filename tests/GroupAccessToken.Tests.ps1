@@ -8,7 +8,7 @@ BeforeAll {
     ) -join "`n"))) -Force
 
   function global:Invoke-GitlabApi {}
-  function global:New-WrapperObject {
+  function global:New-GitlabObject {
     param(
       [Parameter(ValueFromPipeline)]$InputObject,
       [Parameter(Position=0)][string]$DisplayType
