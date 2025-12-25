@@ -264,6 +264,7 @@ function Disable-GitlabPipelineSchedule {
 
 # https://docs.gitlab.com/ee/api/pipeline_schedules.html#delete-a-pipeline-schedule
 function Remove-GitlabPipelineSchedule {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -276,11 +277,7 @@ function Remove-GitlabPipelineSchedule {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject
@@ -290,12 +287,15 @@ function Remove-GitlabPipelineSchedule {
         Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId"
     }
 
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) schedule #$PipelineScheduleId", "delete pipeline schedule")) {
+        Invoke-GitlabApi @GitlabApiArguments
+    }
 }
 
 #https://docs.gitlab.com/ee/api/pipeline_schedules.html#pipeline-schedule-variables
 # This behavior isn't part of the api, but a nested structure on getting a PipelineSchedule itself JUST by Id
 function Get-GitlabPipelineScheduleVariable {
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -310,11 +310,7 @@ function Get-GitlabPipelineScheduleVariable {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
@@ -332,6 +328,7 @@ function Get-GitlabPipelineScheduleVariable {
 }
 
 function New-GitlabPipelineScheduleVariable {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -357,11 +354,7 @@ function New-GitlabPipelineScheduleVariable {
      
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
@@ -379,12 +372,15 @@ function New-GitlabPipelineScheduleVariable {
         Body       = $Body
     }
 
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject "Gitlab.PipelineScheduleVariable"
-    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
-    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) schedule #$PipelineScheduleId", "create variable '$Key'")) {
+        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.PipelineScheduleVariable"
+        $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
+        $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
+    }
 }
 
 function Update-GitlabPipelineScheduleVariable {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -411,11 +407,7 @@ function Update-GitlabPipelineScheduleVariable {
      
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
@@ -433,13 +425,15 @@ function Update-GitlabPipelineScheduleVariable {
         Body       = $Body
     }
 
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject "Gitlab.PipelineScheduleVariable"
-    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
-    $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) schedule #$PipelineScheduleId", "update variable '$Key'")) {
+        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.PipelineScheduleVariable"
+        $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id
+        $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
+    }
 }
 
 function Remove-GitlabPipelineScheduleVariable {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter()]
         [string]
@@ -476,6 +470,7 @@ function Remove-GitlabPipelineScheduleVariable {
 
 # https://docs.gitlab.com/ee/api/pipeline_schedules.html#run-a-scheduled-pipeline-immediately
 function New-GitlabScheduledPipeline {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -487,11 +482,7 @@ function New-GitlabScheduledPipeline {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject
@@ -501,5 +492,7 @@ function New-GitlabScheduledPipeline {
         Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId/play"
     }
 
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | Select-Object -ExpandProperty 'message'
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) schedule #$PipelineScheduleId", "run scheduled pipeline")) {
+        Invoke-GitlabApi @GitlabApiArguments | Select-Object -ExpandProperty 'message'
+    }
 }

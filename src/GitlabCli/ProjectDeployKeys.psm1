@@ -28,6 +28,7 @@ function Get-GitlabProjectDeployKey {
 }
 
 function Add-GitlabProjectDeployKey {
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory, ValueFromPipelineByPropertyName,Position=0)]
         [string]
@@ -64,12 +65,13 @@ function Add-GitlabProjectDeployKey {
         Body   = $Body
     }
 
-    Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-WrapperObject 'Gitlab.DeployKey'
-
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "add deploy key '$Title'")) {
+        Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference | New-WrapperObject 'Gitlab.DeployKey'
+    }
 }
 
 function Update-GitlabProjectDeployKey {
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='High')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Medium')]
     param(
         [Parameter(Mandatory, ValueFromPipelineByPropertyName,Position=0)]
         [string]
@@ -160,7 +162,7 @@ function Remove-GitlabProjectDeployKey {
 }
 
 function Enable-GitlabProjectDeployKey {
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='High')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Low')]
     param(
         [Parameter(Mandatory, ValueFromPipelineByPropertyName,Position=0)]
         [string]

@@ -249,7 +249,7 @@ The URL of the Gitlab instance. If not provided, the default will be used.
 #>
 function Invoke-GitlabProjectAccessTokenRotation {
     [Alias('Rotate-GitlabProjectAccessToken')]
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='High')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Low')]
     param(
         [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]

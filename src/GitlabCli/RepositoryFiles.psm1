@@ -74,7 +74,7 @@ function Get-GitlabRepositoryFile {
 }
 
 function New-GitlabRepositoryFile {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -102,11 +102,7 @@ function New-GitlabRepositoryFile {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
@@ -121,14 +117,16 @@ function New-GitlabRepositoryFile {
     if ($SkipCi) {
         $Body.commit_message += "`n[skip ci]"
     }
-    if (Invoke-GitlabApi POST "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)" -Body $Body -WhatIf:$WhatIf) {
-        Write-Host "Created $FilePath in $($Project.Name) ($Branch)"
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)/$FilePath ($Branch)", "create file")) {
+        if (Invoke-GitlabApi POST "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)" -Body $Body) {
+            Write-Host "Created $FilePath in $($Project.Name) ($Branch)"
+        }
     }
 }
 
 # https://docs.gitlab.com/ee/api/repository_files.html#update-existing-file-in-repository
 function Update-GitlabRepositoryFile {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -160,11 +158,7 @@ function Update-GitlabRepositoryFile {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
@@ -186,12 +180,15 @@ function Update-GitlabRepositoryFile {
             return
         }
     }
-    if (Invoke-GitlabApi PUT "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)" -Body $Body -WhatIf:$WhatIf) {
-        Write-Host "Updated $FilePath in $($Project.Name) ($Branch)"
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)/$FilePath ($Branch)", "update file")) {
+        if (Invoke-GitlabApi PUT "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)" -Body $Body) {
+            Write-Host "Updated $FilePath in $($Project.Name) ($Branch)"
+        }
     }
 }
 
 function Get-GitlabRepositoryTree {
+    [CmdletBinding()]
     param(
         [Parameter(Mandatory=$false)]
         [string]
@@ -213,11 +210,7 @@ function Get-GitlabRepositoryTree {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
@@ -226,7 +219,7 @@ function Get-GitlabRepositoryTree {
     }
     $RefName = $(Get-GitlabBranch -ProjectId $ProjectId -Ref $Ref).Name
 
-    Invoke-GitlabApi GET "projects/$($Project.Id)/repository/tree?ref=$RefName&path=$Path&recursive=$($Recurse.ToString().ToLower())" -MaxPages 10 -WhatIf:$WhatIf |
+    Invoke-GitlabApi GET "projects/$($Project.Id)/repository/tree?ref=$RefName&path=$Path&recursive=$($Recurse.ToString().ToLower())" -MaxPages 10 |
         New-WrapperObject 'Gitlab.RepositoryTree'
 }
 

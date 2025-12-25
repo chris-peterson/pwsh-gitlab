@@ -135,7 +135,7 @@ function Update-GitlabTopic {
 
 # https://docs.gitlab.com/ee/api/topics.html#delete-a-project-topic
 function Remove-GitlabTopic {
-    [CmdletBinding(SupportsShouldProcess=$true)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]

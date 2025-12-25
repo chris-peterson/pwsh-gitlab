@@ -114,7 +114,7 @@ function New-GitlabGroup {
 
 # https://docs.gitlab.com/ee/api/groups.html#remove-group
 function Remove-GitlabGroup {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(Position=0, Mandatory=$false)]
         [string]
@@ -195,11 +195,8 @@ function Copy-GitlabGroupToLocalFileSystem {
 
 function Update-LocalGitlabGroup {
     [Alias("Pull-GitlabGroup")]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf = $false
     )
 
     Get-ChildItem -Recurse -Hidden -Directory |
@@ -207,9 +204,7 @@ function Update-LocalGitlabGroup {
         ForEach-Object {
             Push-Location
 
-            if ($WhatIf) {
-                Write-Host "WhatIf: git pull -p '$_'"
-            } else {
+            if ($PSCmdlet.ShouldProcess("$_", "git pull -p")) {
                 Set-Location -Path "$_/.."
                 git pull -p
             }
@@ -258,7 +253,7 @@ function Get-GitlabGroupVariable {
 
 function Set-GitlabGroupVariable {
 
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Medium')]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]
@@ -333,7 +328,7 @@ function Set-GitlabGroupVariable {
 
 function Remove-GitlabGroupVariable {
 
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]
@@ -502,7 +497,7 @@ function New-GitlabGroupToGroupShare {
 
 function Remove-GitlabGroupToGroupShare {
 
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
