@@ -30,7 +30,7 @@ jobs:
         run: |
           Import-Module Pester
           $Config = New-PesterConfiguration
-          $Config.Run.Path = "./src/tests"
+          $Config.Run.Path = "./tests"
           $Config.Run.Exit = $false
           $Config.Run.PassThru = $true
           $Config.TestResult.Enabled = $true
