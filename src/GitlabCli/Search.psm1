@@ -102,6 +102,7 @@ function Search-Gitlab {
 
 # https://docs.gitlab.com/ee/api/search.html#project-search-api
 function Search-GitlabProject {
+    [CmdletBinding()]
     param(
         [Parameter(Mandatory=$false)]
         [string]
@@ -117,11 +118,7 @@ function Search-GitlabProject {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Query = @{
@@ -137,7 +134,7 @@ function Search-GitlabProject {
     }
     
     $Resource = "projects/$($ProjectId | ConvertTo-UrlEncoded)/search"
-    Invoke-GitlabApi GET $Resource $Query -WhatIf:$WhatIf |
+    Invoke-GitlabApi GET $Resource $Query |
         New-WrapperObject 'Gitlab.SearchResult.Blob' |
         Add-Member -MemberType 'NoteProperty' -Name 'Project' -Value $Project -PassThru
 }

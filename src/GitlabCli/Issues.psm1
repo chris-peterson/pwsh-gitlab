@@ -292,7 +292,7 @@ function Update-GitlabIssue {
 
 function Open-GitlabIssue {
     [Alias('Reopen-GitlabIssue')]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -304,14 +304,12 @@ function Open-GitlabIssue {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    Update-GitlabIssue -ProjectId $ProjectId $IssueId -StateEvent 'reopen' -WhatIf:$WhatIf
+    if ($PSCmdlet.ShouldProcess("issue #$IssueId", "reopen")) {
+        Update-GitlabIssue -ProjectId $ProjectId -IssueId $IssueId -StateEvent 'reopen'
+    }
 }
 
 function Close-GitlabIssue {

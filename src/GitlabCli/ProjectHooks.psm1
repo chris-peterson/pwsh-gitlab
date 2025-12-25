@@ -27,7 +27,7 @@ function Get-GitlabProjectHook {
 }
 
 function New-GitlabProjectHook {
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess)]
   [Alias('Add-GitlabProjectHook')]
   param (
       [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -100,14 +100,10 @@ function New-GitlabProjectHook {
 
       [Parameter(Mandatory=$false)]
       [string]
-      $SiteUrl,
-
-      [switch]
-      [Parameter(Mandatory=$false)]
-      $WhatIf
+      $SiteUrl
   )
 
-  $Project = Get-GitlabProject $ProjectId -WhatIf:$WhatIf
+  $Project = Get-GitlabProject $ProjectId
 
   $Resource = "projects/$($Project.Id)/hooks"
 
@@ -140,10 +136,13 @@ function New-GitlabProjectHook {
     }
   }
 
-  Invoke-GitlabApi POST $Resource @Request -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.ProjectHook'
+  if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create webhook to $Url")) {
+    Invoke-GitlabApi POST $Resource @Request | New-WrapperObject 'Gitlab.ProjectHook'
+  }
 }
 
 function Update-GitlabProjectHook {
+  [CmdletBinding(SupportsShouldProcess)]
   param (
     [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
     [string]
@@ -219,14 +218,10 @@ function Update-GitlabProjectHook {
 
     [Parameter(Mandatory=$false)]
     [string]
-    $SiteUrl,
-
-    [switch]
-    [Parameter(Mandatory=$false)]
-    $WhatIf
+    $SiteUrl
   )
 
-  $Project = Get-GitlabProject $ProjectId -WhatIf:$WhatIf
+  $Project = Get-GitlabProject $ProjectId
 
   $Resource = "projects/$($Project.Id)/hooks/$($Id)"
 
@@ -259,7 +254,9 @@ function Update-GitlabProjectHook {
     }
   }
   
-  Invoke-GitlabApi PUT $Resource $Request -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.ProjectHook'
+  if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) hook #$Id", "update webhook")) {
+    Invoke-GitlabApi PUT $Resource $Request | New-WrapperObject 'Gitlab.ProjectHook'
+  }
 }
 
 # https://docs.gitlab.com/ee/api/projects.html#delete-project-hook

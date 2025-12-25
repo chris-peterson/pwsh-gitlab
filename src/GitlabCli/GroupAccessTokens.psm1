@@ -15,14 +15,12 @@ When no tokenid is specificed, it will return all of the tokens for the group
 .PARAMETER SiteUrl
   The URL of the Gitlab instance. If not provided, the default will be used.
 
-.PARAMETER WhatIf
-  If this switch is enabled, the function will not make any changes and will only return the url that would have been called.
-
 .LINK
  https://docs.gitlab.com/ee/api/group_access_tokens.html
  https://docs.gitlab.com/ee/api/group_access_tokens.html#list-group-access-tokens
 #>
 function Get-GitlabGroupAccessToken {
+    [CmdletBinding()]
     param (
         [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -34,11 +32,7 @@ function Get-GitlabGroupAccessToken {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Resource = "groups/$GroupId/access_tokens"
@@ -46,7 +40,7 @@ function Get-GitlabGroupAccessToken {
         $Resource += "/$TokenId"
     }
 
-    Invoke-GitlabApi GET $Resource -WhatIf:$WhatIf | New-WrapperObject 'Gitlab.AccessToken'
+    Invoke-GitlabApi GET $Resource | New-WrapperObject 'Gitlab.AccessToken'
 }
 
 
@@ -138,6 +132,7 @@ function New-GitlabGroupAccessToken {
 
 # https://docs.gitlab.com/ee/api/group_access_tokens.html#revoke-a-group-access-token
 function Remove-GitlabGroupAccessToken {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     [Alias('Revoke-GitlabGroupAccessToken')]
     param (
         [Parameter(Position=0, Mandatory=$true)]
@@ -150,21 +145,19 @@ function Remove-GitlabGroupAccessToken {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Resource = "groups/$GroupId/access_tokens/$TokenId"
 
-    try
-    {
-        Invoke-GitlabApi DELETE $Resource -WhatIf:$WhatIf | Out-Null
-        Write-Host "$TokenId revoked from $GroupId"
-    }
-    catch {
-        Write-Error "Error revoking gitlab token from ${GroupId}: $_"
+    if ($PSCmdlet.ShouldProcess("Group '$GroupId' token #$TokenId", "revoke access token")) {
+        try
+        {
+            Invoke-GitlabApi DELETE $Resource | Out-Null
+            Write-Host "$TokenId revoked from $GroupId"
+        }
+        catch {
+            Write-Error "Error revoking gitlab token from ${GroupId}: $_"
+        }
     }
 }

@@ -148,11 +148,7 @@ function Get-GitlabJobTrace {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
@@ -164,7 +160,7 @@ function Get-GitlabJobTrace {
         Path       = "projects/$ProjectId/jobs/$JobId/trace"
     }
 
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf
+    Invoke-GitlabApi @GitlabApiArguments
 }
 
 function Start-GitlabJob {

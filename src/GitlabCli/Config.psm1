@@ -71,7 +71,7 @@ function Set-DefaultGitlabSite {
 }
 
 function Add-GitlabSite {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter()]
         [string]
@@ -107,24 +107,26 @@ function Add-GitlabSite {
         }
     }
 
-    $Config.Sites += @{
-        Url         = $Url
-        AccessToken = $AccessToken
-        ProxyUrl    = $ProxyUrl
-        IsDefault   = 'false'
+    if ($PSCmdlet.ShouldProcess("$Url", "add site")) {
+        $Config.Sites += @{
+            Url         = $Url
+            AccessToken = $AccessToken
+            ProxyUrl    = $ProxyUrl
+            IsDefault   = 'false'
+        }
+
+        $Config | Write-GitlabConfiguration
+
+        if ($IsDefault) {
+            Set-DefaultGitlabSite -Url $Url
+        }
+
+        Get-GitlabConfiguration
     }
-
-    $Config | Write-GitlabConfiguration
-
-    if ($IsDefault) {
-        Set-DefaultGitlabSite -Url $Url
-    }
-
-    Get-GitlabConfiguration
 }
 
 function Remove-GitlabSite {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(Mandatory=$true)]
         [string]
@@ -137,10 +139,12 @@ function Remove-GitlabSite {
         return
     }
 
-    $Config = Get-GitlabConfiguration
-    $Config.Sites = $Config.Sites | Where-Object Url -ne $Url
+    if ($PSCmdlet.ShouldProcess("$Url", "remove site")) {
+        $Config = Get-GitlabConfiguration
+        $Config.Sites = $Config.Sites | Where-Object Url -ne $Url
 
-    $Config | Write-GitlabConfiguration
+        $Config | Write-GitlabConfiguration
 
-    Get-GitlabConfiguration
+        Get-GitlabConfiguration
+    }
 }

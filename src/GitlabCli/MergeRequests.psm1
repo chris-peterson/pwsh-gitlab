@@ -324,10 +324,14 @@ function Merge-GitlabMergeRequest {
 }
 
 function Set-GitlabMergeRequest {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Low')]
     [Alias("mr")]
 
     param (
+        # intentionally omit SiteUrl as this is meant to be used in a localized git context
+        # [Parameter()]
+        # [string]
+        # $SiteUrl
     )
 
     $ProjectId = '.'
@@ -337,8 +341,9 @@ function Set-GitlabMergeRequest {
     if ($Existing) {
         return $Existing
     }
-
-    New-GitlabMergeRequest -ProjectId $ProjectId -SourceBranch $Branch
+    if ($PSCmdlet.ShouldProcess("MR in $ProjectId for branch $Branch", "create")) {
+        New-GitlabMergeRequest -ProjectId $ProjectId -SourceBranch $Branch
+    }
 }
 
 function Update-GitlabMergeRequest {
@@ -450,7 +455,7 @@ function Update-GitlabMergeRequest {
 }
 
 function Close-GitlabMergeRequest {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -462,13 +467,15 @@ function Close-GitlabMergeRequest {
         $MergeRequestId,
 
         [Parameter(Mandatory=$false)]
-        [switch]
-        $WhatIf
+        [string]
+        $SiteUrl
     )
 
     $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
 
-    Update-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -Close -WhatIf:$WhatIf
+    if ($PSCmdlet.ShouldProcess("MR #$MergeRequestId", "close")) {
+        Update-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -Close
+    }
 }
 
 function Invoke-GitlabMergeRequestReview {
@@ -481,11 +488,7 @@ function Invoke-GitlabMergeRequestReview {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $ProjectId = $(Get-GitlabProject -ProjectId '.').Id
@@ -499,7 +502,7 @@ function Invoke-GitlabMergeRequestReview {
 }
 
 function Approve-GitlabMergeRequest {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Position=0, Mandatory=$false)]
         [string]
@@ -507,11 +510,7 @@ function Approve-GitlabMergeRequest {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $ProjectId = $(Get-GitlabProject -ProjectId '.').Id
@@ -523,8 +522,10 @@ function Approve-GitlabMergeRequest {
         }
     }
 
-    Invoke-GitlabApi POST "projects/$ProjectId/merge_requests/$MergeRequestId/approve" -WhatIf:$WhatIf | Out-Null
-    Get-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -IncludeApprovals
+    if ($PSCmdlet.ShouldProcess("MR #$MergeRequestId", "approve")) {
+        Invoke-GitlabApi POST "projects/$ProjectId/merge_requests/$MergeRequestId/approve" | Out-Null
+        Get-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -IncludeApprovals
+    }
 }
 
 # https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-configuration
@@ -677,7 +678,7 @@ function New-GitlabMergeRequestApprovalRule {
 }
 
 function Remove-GitlabMergeRequestApprovalRule {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]

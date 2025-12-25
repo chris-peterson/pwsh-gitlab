@@ -64,7 +64,7 @@ function Update-GitlabProjectIntegration {
 
 function Remove-GitlabProjectIntegration {
 
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]

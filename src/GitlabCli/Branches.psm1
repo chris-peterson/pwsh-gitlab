@@ -319,7 +319,7 @@ function UnProtect-GitlabBranch {
 }
 
 function Remove-GitlabBranch {
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Medium')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]

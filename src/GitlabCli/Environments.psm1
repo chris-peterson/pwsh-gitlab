@@ -76,7 +76,7 @@ function Get-GitlabEnvironment {
 }
 
 function Stop-GitlabEnvironment {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -88,11 +88,7 @@ function Stop-GitlabEnvironment {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     process {
@@ -104,14 +100,15 @@ function Stop-GitlabEnvironment {
             Path="projects/$($Project.Id)/environments/$($Environment.Id)/stop"
         }
     
-        Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | Out-Null
-
-        Write-Host "Environment '$($Environment.Name)' (id: $($Environment.Id)) has been stopped"
+        if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)/$($Environment.Name)", "stop environment")) {
+            Invoke-GitlabApi @GitlabApiArguments | Out-Null
+            Write-Host "Environment '$($Environment.Name)' (id: $($Environment.Id)) has been stopped"
+        }
     }
 }
 
 function Remove-GitlabEnvironment {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param(
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -123,11 +120,7 @@ function Remove-GitlabEnvironment {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     process {
@@ -139,8 +132,9 @@ function Remove-GitlabEnvironment {
             Path="projects/$($Project.Id)/environments/$($Environment.Id)"
         }
     
-        Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | Out-Null
-    
-        Write-Host "Environment '$($Environment.Name)' (id: $($Environment.Id)) has been deleted"
+        if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)/$($Environment.Name)", "delete environment")) {
+            Invoke-GitlabApi @GitlabApiArguments | Out-Null
+            Write-Host "Environment '$($Environment.Name)' (id: $($Environment.Id)) has been deleted"
+        }
     }
 }

@@ -249,7 +249,7 @@ function Move-GitlabProject {
 }
 
 function Rename-GitlabProject {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -261,14 +261,12 @@ function Rename-GitlabProject {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
-    Update-GitlabProject -ProjectId $ProjectId -Name $NewName -Path $NewName -WhatIf:$WhatIf
+    if ($PSCmdlet.ShouldProcess("$ProjectId", "rename to '$NewName'")) {
+        Update-GitlabProject -ProjectId $ProjectId -Name $NewName -Path $NewName
+    }
 }
 
 # https://docs.gitlab.com/ee/api/projects.html#fork-project
@@ -318,7 +316,7 @@ function Copy-GitlabProject {
 
 function Remove-GitlabProjectForkRelationship {
     [Alias("Remove-GitlabProjectFork")]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -609,7 +607,7 @@ function Get-GitlabProjectVariable {
 }
 
 function Set-GitlabProjectVariable {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Medium')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -685,7 +683,7 @@ function Set-GitlabProjectVariable {
 # https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
 function Remove-GitlabProjectVariable {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -697,20 +695,19 @@ function Remove-GitlabProjectVariable {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject $ProjectId
 
-    Invoke-GitlabApi DELETE "projects/$($Project.Id)/variables/$Key" -WhatIf:$WhatIf | Out-Null
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "delete variable '$Key'")) {
+        Invoke-GitlabApi DELETE "projects/$($Project.Id)/variables/$Key" | Out-Null
+    }
 }
 
 
 function Rename-GitlabProjectDefaultBranch {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(Position=0, Mandatory=$true)]
         [string]
@@ -718,11 +715,7 @@ function Rename-GitlabProjectDefaultBranch {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
 
     $Project = Get-GitlabProject -ProjectId '.'
@@ -735,25 +728,22 @@ function Rename-GitlabProjectDefaultBranch {
     }
     $OldDefaultBranch = $Project.DefaultBranch
 
-    if ($WhatIf) {
-        Write-Host "WhatIf: would change default branch for $($Project.PathWithNamespace) from $OldDefaultBranch to $NewDefaultBranch"
-        return
-    }
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "change default branch from $OldDefaultBranch to $NewDefaultBranch")) {
+        git checkout $OldDefaultBranch | Out-Null
+        git pull -p | Out-Null
+        git branch -m $OldDefaultBranch $NewDefaultBranch | Out-Null
+        git push -u origin $NewDefaultBranch -o ci.skip | Out-Null
+        Update-GitlabProject -DefaultBranch $NewDefaultBranch | Out-Null
+        try {
+            UnProtect-GitlabBranch -Name $OldDefaultBranch | Out-Null
+        }
+        catch {}
+        Protect-GitlabBranch -Name $NewDefaultBranch | Out-Null
+        git push --delete origin $OldDefaultBranch | Out-Null
+        git remote set-head origin -a | Out-Null
 
-    git checkout $OldDefaultBranch | Out-Null
-    git pull -p | Out-Null
-    git branch -m $OldDefaultBranch $NewDefaultBranch | Out-Null
-    git push -u origin $NewDefaultBranch -o ci.skip | Out-Null
-    Update-GitlabProject -DefaultBranch $NewDefaultBranch -WhatIf:$WhatIf | Out-Null
-    try {
-        UnProtect-GitlabBranch -Name $OldDefaultBranch -WhatIf:$WhatIf | Out-Null
+        Get-GitlabProject -ProjectId $Project.Id
     }
-    catch {}
-    Protect-GitlabBranch -Name $NewDefaultBranch -WhatIf:$WhatIf | Out-Null
-    git push --delete origin $OldDefaultBranch | Out-Null
-    git remote set-head origin -a | Out-Null
-
-    Get-GitlabProject -ProjectId $Project.Id
 }
 
 function Get-GitlabProjectEvent {
@@ -852,7 +842,7 @@ function New-GitlabGroupToProjectShare {
 
 function Remove-GitlabGroupToProjectShare {
 
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -925,7 +915,7 @@ function Add-GitlabProjectTopic {
 }
 
 function Remove-GitlabProjectTopic {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]

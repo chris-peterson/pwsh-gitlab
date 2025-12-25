@@ -252,11 +252,7 @@ function Get-GitlabPipelineBridge {
 
         [Parameter(Mandatory=$false)]
         [string]
-        $SiteUrl,
-
-        [switch]
-        [Parameter(Mandatory=$false)]
-        $WhatIf
+        $SiteUrl
     )
     $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
 
@@ -270,7 +266,7 @@ function Get-GitlabPipelineBridge {
         $GitlabApiArguments['Query']['scope'] = $Scope
     }
 
-    Invoke-GitlabApi @GitlabApiArguments -WhatIf:$WhatIf | New-WrapperObject "Gitlab.PipelineBridge"
+    Invoke-GitlabApi @GitlabApiArguments | New-WrapperObject "Gitlab.PipelineBridge"
 }
 
 function New-GitlabPipeline {
@@ -384,7 +380,7 @@ function New-GitlabPipeline {
 }
 
 function Remove-GitlabPipeline {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
 
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
