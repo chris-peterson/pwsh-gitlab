@@ -119,7 +119,7 @@ function Get-GitlabProject {
 
     $ProjectId = $ProjectId.TrimEnd('/')
 
-    $MaxPages = Resolve-GitlabMaxPages -MaxPages $MaxPages -All:$All
+    $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All -Recurse:$Recurse
     $Projects = @()
     switch ($PSCmdlet.ParameterSetName) {
         ById {

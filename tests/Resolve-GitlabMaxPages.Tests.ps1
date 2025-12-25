@@ -53,6 +53,28 @@ Describe "Resolve-GitlabMaxPages" {
         }
     }
 
+    Context "When -Recurse is specified" {
+        It "Should return uint max value (implies -All)" {
+            $Result = Resolve-GitlabMaxPages -Recurse
+            $Result | Should -Be ([uint]::MaxValue)
+        }
+
+        It "Should ignore MaxPages when -Recurse is specified" {
+            $Result = Resolve-GitlabMaxPages -MaxPages 5 -Recurse
+            $Result | Should -Be ([uint]::MaxValue)
+        }
+
+        It "Should warn when MaxPages differs from default and -Recurse is specified" {
+            $Result = Resolve-GitlabMaxPages -MaxPages 5 -Recurse -WarningVariable warnings -WarningAction SilentlyContinue
+            $warnings | Should -Match "Ignoring -MaxPages in favor of -All"
+        }
+
+        It "Should work the same with both -Recurse and -All" {
+            $Result = Resolve-GitlabMaxPages -Recurse -All
+            $Result | Should -Be ([uint]::MaxValue)
+        }
+    }
+
     Context "Return type" {
         It "Should return uint type" {
             $Result = Resolve-GitlabMaxPages -MaxPages 10
