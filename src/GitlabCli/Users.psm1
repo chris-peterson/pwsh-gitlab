@@ -1,5 +1,6 @@
 function Get-GitlabUser {
     [CmdletBinding(DefaultParameterSetName='Filter')]
+    [OutputType('Gitlab.User')]
     param (
         [Parameter(ParameterSetName='Id', Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]
@@ -88,6 +89,7 @@ function Get-GitlabUser {
 
 function Block-GitlabUser {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
+    [OutputType([void])]
     param (
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]
@@ -116,6 +118,7 @@ function Block-GitlabUser {
 
 function Unblock-GitlabUser {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
+    [OutputType([void])]
     param (
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]
@@ -144,6 +147,7 @@ function Unblock-GitlabUser {
 
 function Remove-GitlabUser {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param(
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [int]
@@ -178,6 +182,7 @@ function Remove-GitlabUser {
 # https://docs.gitlab.com/ee/api/events.html#get-user-contribution-events
 function Get-GitlabUserEvent {
     [CmdletBinding(DefaultParameterSetName='ByUserId')]
+    [OutputType('Gitlab.Event')]
     param (
         [Parameter(ParameterSetName='ByUserId', Mandatory=$false)]
         [Alias('Username')]
@@ -283,6 +288,7 @@ function Get-GitlabUserEvent {
 
 function Get-GitlabCurrentUser {
     [CmdletBinding()]
+    [OutputType('Gitlab.User')]
     param (
         [Parameter()]
         [string]
@@ -294,6 +300,7 @@ function Get-GitlabCurrentUser {
 
 function Start-GitlabUserImpersonation {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([void])]
     param (
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]
@@ -341,6 +348,7 @@ function Start-GitlabUserImpersonation {
 
 function Stop-GitlabUserImpersonation {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([void])]
     param (
         [Parameter()]
         [string]

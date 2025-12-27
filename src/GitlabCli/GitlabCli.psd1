@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.153.1'
+    ModuleVersion = '1.154.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* https://github.com/chris-peterson/pwsh-gitlab/issues/131
+* https://github.com/chris-peterson/pwsh-gitlab/pull/133
 '@
         }
     }
@@ -47,6 +47,7 @@
     CompatiblePSEditions = @('Core', 'Desktop')
 
     ScriptsToProcess = @(
+        'Private/Functions/BranchHelpers.ps1'
         'Private/Functions/CasingHelpers.ps1'
         'Private/Functions/ConfigurationHelpers.ps1'
         'Private/Functions/GroupHelpers.ps1'
@@ -116,7 +117,6 @@
         'Protect-GitlabBranch'
         'UnProtect-GitlabBranch'
         'Remove-GitlabBranch'
-        'Get-GitlabProtectedBranchAccessLevel'
 
         # Commits
         'Get-GitlabCommit'

@@ -2,6 +2,7 @@
 
 function Get-GitlabRunner {
     [CmdletBinding(DefaultParameterSetName='ListAll')]
+    [OutputType('Gitlab.Runner')]
     param (
         [Parameter(Mandatory, Position=0, ParameterSetName='RunnerId')]
         [string]
@@ -74,6 +75,7 @@ function Get-GitlabRunner {
 
 function Get-GitlabRunnerJob {
     [CmdletBinding()]
+    [OutputType('Gitlab.RunnerJob')]
     param (
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -104,6 +106,7 @@ function Get-GitlabRunnerJob {
 
 function Update-GitlabRunner {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Runner')]
     param (
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -188,6 +191,7 @@ function Update-GitlabRunner {
 }
 function Suspend-GitlabRunner {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Runner')]
     param (
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -203,6 +207,7 @@ function Suspend-GitlabRunner {
 
 function Resume-GitlabRunner {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Runner')]
     param (
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -218,6 +223,7 @@ function Resume-GitlabRunner {
 
 function Remove-GitlabRunner {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([void])]
     param (
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [Alias('Id')]
@@ -241,12 +247,13 @@ function Remove-GitlabRunner {
 
 function Get-GitlabRunnerStats {
     [CmdletBinding(DefaultParameterSetName='ByTags')]
+    [OutputType('Gitlab.RunnerStats')]
     param (
         [Parameter(ParameterSetName='ById', Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
         $RunnerId,
 
-        [Parameter(ParameterSetName='ByTags', Mandatory, Position=0, ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName='ByTags', Mandatory, Position=0)]
         [Alias('Tag')]
         [string[]]
         $RunnerTag,

@@ -1,6 +1,7 @@
 function Get-GitlabPipelineSchedule {
 
     [CmdletBinding(DefaultParameterSetName='ByProjectId')]
+    [OutputType('Gitlab.PipelineSchedule')]
     [Alias('schedule')]
     [Alias('schedules')]
     param (
@@ -64,6 +65,7 @@ function Get-GitlabPipelineSchedule {
 # https://docs.gitlab.com/ee/api/pipeline_schedules.html#create-a-new-pipeline-schedule
 function New-GitlabPipelineSchedule {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.PipelineSchedule')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -128,6 +130,7 @@ function New-GitlabPipelineSchedule {
 
 function Update-GitlabPipelineSchedule {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.PipelineSchedule')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -216,6 +219,7 @@ function Update-GitlabPipelineSchedule {
 
 function Enable-GitlabPipelineSchedule {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.PipelineSchedule')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -240,6 +244,7 @@ function Enable-GitlabPipelineSchedule {
 
 function Disable-GitlabPipelineSchedule {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.PipelineSchedule')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -265,6 +270,7 @@ function Disable-GitlabPipelineSchedule {
 # https://docs.gitlab.com/ee/api/pipeline_schedules.html#delete-a-pipeline-schedule
 function Remove-GitlabPipelineSchedule {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([PSCustomObject])]
     param (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -296,6 +302,7 @@ function Remove-GitlabPipelineSchedule {
 # This behavior isn't part of the api, but a nested structure on getting a PipelineSchedule itself JUST by Id
 function Get-GitlabPipelineScheduleVariable {
     [CmdletBinding()]
+    [OutputType('Gitlab.PipelineScheduleVariable')]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -329,6 +336,7 @@ function Get-GitlabPipelineScheduleVariable {
 
 function New-GitlabPipelineScheduleVariable {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.PipelineScheduleVariable')]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -381,36 +389,37 @@ function New-GitlabPipelineScheduleVariable {
 
 function Update-GitlabPipelineScheduleVariable {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.PipelineScheduleVariable')]
     param (
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
-        $ProjectId="." ,
+        $ProjectId = '.',
 
-        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [int]
         $PipelineScheduleId,
 
-        [Parameter(Mandatory=$true)]
-        [ValidateLength(255)]
-        [ValidatePattern("[A-Za-z0-9_]")]
+        [Parameter(Mandatory)]
+        [ValidateLength(1, 255)]
+        [ValidatePattern('[A-Za-z0-9_]')]
         [string]
         $Key,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [string]
         $Value,
 
-        [Parameter(Mandatory=$false)]
-        [ValidateSet("env_var","file")]
+        [Parameter()]
+        [ValidateSet('env_var', 'file')]
         [string]
-        $VariableType="env_var",
+        $VariableType = 'env_var',
      
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
+    $Project          = Get-GitlabProject $ProjectId
     $PipelineSchedule = Get-GitlabPipelineSchedule -ProjectId $ProjectId -PipelineScheduleId $PipelineScheduleId
 
     $Body = @{
@@ -434,6 +443,7 @@ function Update-GitlabPipelineScheduleVariable {
 
 function Remove-GitlabPipelineScheduleVariable {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType('Gitlab.PipelineScheduleVariable')]
     param (
         [Parameter()]
         [string]
@@ -471,6 +481,7 @@ function Remove-GitlabPipelineScheduleVariable {
 # https://docs.gitlab.com/ee/api/pipeline_schedules.html#run-a-scheduled-pipeline-immediately
 function New-GitlabScheduledPipeline {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([string])]
     param (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]

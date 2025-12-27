@@ -1,12 +1,6 @@
-<#
-.SYNOPSIS
-    Retrieves SSH key by ID or Fingerprint from GitLab.
-
-.LINK
-    https://docs.gitlab.com/api/keys/
-#>
 function Get-GitlabKey {
     [CmdletBinding(DefaultParameterSetName = 'ById')]
+    [OutputType('Gitlab.SSHKey')]
     param (
         [Parameter(Mandatory,ParameterSetName = 'ById')]
         [string]$Id,

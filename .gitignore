@@ -3,3 +3,4 @@ test.ps1
 .DS_Store
 *.csv
 PLANNING.md
+src/GitlabCli/en-US

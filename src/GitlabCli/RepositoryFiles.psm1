@@ -4,6 +4,7 @@
 # https://docs.gitlab.com/ee/api/repository_files.html#get-file-from-repository
 function Get-GitlabRepositoryFileContent {
     [CmdletBinding()]
+    [OutputType([string])]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -32,6 +33,7 @@ function Get-GitlabRepositoryFileContent {
 
 function Get-GitlabRepositoryFile {
     [CmdletBinding()]
+    [OutputType('Gitlab.RepositoryFile')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -75,6 +77,7 @@ function Get-GitlabRepositoryFile {
 
 function New-GitlabRepositoryFile {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([void])]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -127,6 +130,7 @@ function New-GitlabRepositoryFile {
 # https://docs.gitlab.com/ee/api/repository_files.html#update-existing-file-in-repository
 function Update-GitlabRepositoryFile {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([void])]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -189,6 +193,7 @@ function Update-GitlabRepositoryFile {
 
 function Get-GitlabRepositoryTree {
     [CmdletBinding()]
+    [OutputType('Gitlab.RepositoryTree')]
     param(
         [Parameter(Mandatory=$false)]
         [string]
@@ -226,6 +231,7 @@ function Get-GitlabRepositoryTree {
 function Get-GitlabRepositoryYmlFileContent {
     [Obsolete("Use 'Get-GitlabRepositoryFileContent | ConvertFrom-Yaml' instead")]
     [CmdletBinding()]
+    [OutputType([hashtable])]
     param (
         [Parameter()]
         [string]

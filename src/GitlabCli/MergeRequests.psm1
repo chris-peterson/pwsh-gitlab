@@ -1,5 +1,6 @@
 function Get-GitlabMergeRequest {
     [CmdletBinding(DefaultParameterSetName='ByProjectId')]
+    [OutputType('Gitlab.MergeRequest')]
     [Alias('mrs')]
     param(
         [Parameter(ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName)]
@@ -167,6 +168,7 @@ function Get-GitlabMergeRequest {
 
 function New-GitlabMergeRequest {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.MergeRequest')]
     param(
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -253,6 +255,7 @@ function New-GitlabMergeRequest {
 
 function Merge-GitlabMergeRequest {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.MergeRequest')]
     param(
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -325,6 +328,7 @@ function Merge-GitlabMergeRequest {
 
 function Set-GitlabMergeRequest {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Low')]
+    [OutputType('Gitlab.MergeRequest')]
     [Alias("mr")]
 
     param (
@@ -348,6 +352,7 @@ function Set-GitlabMergeRequest {
 
 function Update-GitlabMergeRequest {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.MergeRequest')]
     param(
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [string]
@@ -456,6 +461,7 @@ function Update-GitlabMergeRequest {
 
 function Close-GitlabMergeRequest {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.MergeRequest')]
     param(
         [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -480,6 +486,7 @@ function Close-GitlabMergeRequest {
 
 function Invoke-GitlabMergeRequestReview {
     [CmdletBinding()]
+    [OutputType([void])]
     [Alias('Review-GitlabMergeRequest')]
     param(
         [Parameter(Position=0, Mandatory=$true)]
@@ -503,6 +510,7 @@ function Invoke-GitlabMergeRequestReview {
 
 function Approve-GitlabMergeRequest {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.MergeRequest')]
     param(
         [Parameter(Position=0, Mandatory=$false)]
         [string]
@@ -531,6 +539,7 @@ function Approve-GitlabMergeRequest {
 # https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-configuration
 function Get-GitlabMergeRequestApprovalConfiguration {
     [CmdletBinding()]
+    [OutputType([PSCustomObject])]
     param (
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -549,6 +558,7 @@ function Get-GitlabMergeRequestApprovalConfiguration {
 # https://docs.gitlab.com/ee/api/merge_request_approvals.html#change-configuration
 function Update-GitlabMergeRequestApprovalConfiguration {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([PSCustomObject])]
     param (
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -612,6 +622,7 @@ function Update-GitlabMergeRequestApprovalConfiguration {
 
 function Get-GitlabMergeRequestApprovalRule {
     [CmdletBinding()]
+    [OutputType('Gitlab.MergeRequestApprovalRule')]
     param (
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -644,6 +655,7 @@ function Get-GitlabMergeRequestApprovalRule {
 
 function New-GitlabMergeRequestApprovalRule {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.MergeRequestApprovalRule')]
     param (
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -679,6 +691,7 @@ function New-GitlabMergeRequestApprovalRule {
 
 function Remove-GitlabMergeRequestApprovalRule {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]

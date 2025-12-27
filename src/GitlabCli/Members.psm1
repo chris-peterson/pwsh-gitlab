@@ -1,6 +1,7 @@
 # https://docs.gitlab.com/ee/api/members.html#valid-access-levels
 function Get-GitlabMemberAccessLevel {
-
+    [CmdletBinding()]
+    [OutputType([PSCustomObject])]
     param(
         [Parameter(Position=0)]
         $AccessLevel
@@ -31,6 +32,8 @@ function Get-GitlabMemberAccessLevel {
 }
 
 function Get-GitlabMembershipSortKey {
+    [CmdletBinding()]
+    [OutputType([array])]
     param(
     )
 
@@ -47,6 +50,8 @@ function Get-GitlabMembershipSortKey {
 }
 
 function Get-GitlabGroupMember {
+    [CmdletBinding()]
+    [OutputType('Gitlab.Member')]
     param (
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -106,6 +111,7 @@ function Get-GitlabGroupMember {
 
 function Set-GitlabGroupMember {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Medium')]
+    [OutputType('Gitlab.Member')]
     param(
         [Parameter()]
         [string]
@@ -155,6 +161,7 @@ function Set-GitlabGroupMember {
 
 function Add-GitlabGroupMember {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Member')]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]
@@ -194,6 +201,7 @@ function Add-GitlabGroupMember {
 
 function Remove-GitlabGroupMember {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]
@@ -225,6 +233,8 @@ function Remove-GitlabGroupMember {
 }
 
 function Get-GitlabProjectMember {
+    [CmdletBinding()]
+    [OutputType('Gitlab.Member')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -276,6 +286,7 @@ function Get-GitlabProjectMember {
 
 function Set-GitlabProjectMember {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Medium')]
+    [OutputType('Gitlab.Member')]
     param(
         [Parameter()]
         [string]
@@ -325,6 +336,7 @@ function Set-GitlabProjectMember {
 
 function Add-GitlabProjectMember {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Member')]
     param (
         [Parameter()]
         [string]
@@ -366,6 +378,7 @@ function Add-GitlabProjectMember {
 # https://docs.gitlab.com/ee/api/members.html#remove-a-member-from-a-group-or-project
 function Remove-GitlabProjectMember {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -401,6 +414,7 @@ function Remove-GitlabProjectMember {
 
 function Get-GitlabUserMembership {
     [CmdletBinding(DefaultParameterSetName='ByUsername')]
+    [OutputType('Gitlab.UserMembership')]
     param (
         [Parameter(ParameterSetName='ByUsername', Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -438,6 +452,7 @@ function Get-GitlabUserMembership {
 
 function Remove-GitlabUserMembership {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param(
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -486,6 +501,7 @@ function Remove-GitlabUserMembership {
 
 function Add-GitlabUserMembership {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([void])]
     param (
         [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -520,6 +536,7 @@ function Add-GitlabUserMembership {
 # https://docs.gitlab.com/ee/api/members.html#edit-a-member-of-a-group-or-project
 function Update-GitlabUserMembership {
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName='Group')]
+    [OutputType('Gitlab.Member')]
     param (
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [string]

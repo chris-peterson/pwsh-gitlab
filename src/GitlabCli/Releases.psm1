@@ -1,5 +1,6 @@
 function Get-GitlabRelease {
     [CmdletBinding()]
+    [OutputType('Gitlab.Release')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]

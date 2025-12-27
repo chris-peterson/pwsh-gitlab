@@ -1,4 +1,6 @@
 function Get-GitlabUserDeployKey {
+    [CmdletBinding()]
+    [OutputType('Gitlab.DeployKey')]
     param(
         [Parameter(Mandatory, ValueFromPipelineByPropertyName,Position=0)]
         [string]

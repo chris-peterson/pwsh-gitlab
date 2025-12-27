@@ -1,5 +1,6 @@
 function Search-Gitlab {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([PSCustomObject])]
     param(
         [Parameter()]
         [ValidateSet('blobs', 'merge_requests', 'projects')]
@@ -103,6 +104,7 @@ function Search-Gitlab {
 # https://docs.gitlab.com/ee/api/search.html#project-search-api
 function Search-GitlabProject {
     [CmdletBinding()]
+    [OutputType('Gitlab.SearchResult.Blob')]
     param(
         [Parameter(Mandatory=$false)]
         [string]

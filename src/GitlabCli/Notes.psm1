@@ -1,6 +1,8 @@
 # https://docs.gitlab.com/ee/api/notes.html
 
 function Get-GitlabIssueNote {
+    [CmdletBinding()]
+    [OutputType('Gitlab.Note')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -24,6 +26,7 @@ function Get-GitlabIssueNote {
 function New-GitlabIssueNote {
     [Alias('Add-GitlabIssueNote')]
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Note')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -51,6 +54,8 @@ function New-GitlabIssueNote {
 }
 
 function Get-GitlabMergeRequestNote {
+    [CmdletBinding()]
+    [OutputType('Gitlab.Note')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]

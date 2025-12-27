@@ -1,4 +1,6 @@
 function Get-GitlabProjectDeployKey {
+    [CmdletBinding()]
+    [OutputType('Gitlab.DeployKey')]
     param(
         [Parameter(Mandatory, ValueFromPipelineByPropertyName,Position=0)]
         [string]
@@ -29,6 +31,7 @@ function Get-GitlabProjectDeployKey {
 
 function Add-GitlabProjectDeployKey {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.DeployKey')]
     param(
         [Parameter(Mandatory, ValueFromPipelineByPropertyName,Position=0)]
         [string]
@@ -72,6 +75,7 @@ function Add-GitlabProjectDeployKey {
 
 function Update-GitlabProjectDeployKey {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Medium')]
+    [OutputType('Gitlab.DeployKey')]
     param(
         [Parameter(Mandatory, ValueFromPipelineByPropertyName,Position=0)]
         [string]
@@ -126,6 +130,7 @@ function Update-GitlabProjectDeployKey {
 
 function Remove-GitlabProjectDeployKey {
     [CmdletBinding(SupportsShouldProcess,ConfirmImpact='High')]
+    [OutputType([void])]
     param(
         [Parameter(Mandatory, ValueFromPipelineByPropertyName,Position=0)]
         [string]
@@ -163,6 +168,7 @@ function Remove-GitlabProjectDeployKey {
 
 function Enable-GitlabProjectDeployKey {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Low')]
+    [OutputType('Gitlab.DeployKey')]
     param(
         [Parameter(Mandatory, ValueFromPipelineByPropertyName,Position=0)]
         [string]

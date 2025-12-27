@@ -1,5 +1,6 @@
 function Get-GitlabIssue {
     [CmdletBinding(DefaultParameterSetName='ByProjectId')]
+    [OutputType('Gitlab.Issue')]
     [Alias('issue')]
     [Alias('issues')]
     param(
@@ -95,6 +96,7 @@ function Get-GitlabIssue {
 
 function New-GitlabIssue {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Issue')]
     param(
         [Parameter()]
         [string]
@@ -158,6 +160,7 @@ function New-GitlabIssue {
 
 function Update-GitlabIssue {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Issue')]
     param(
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -293,6 +296,7 @@ function Update-GitlabIssue {
 function Open-GitlabIssue {
     [Alias('Reopen-GitlabIssue')]
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Issue')]
     param(
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -314,6 +318,7 @@ function Open-GitlabIssue {
 
 function Close-GitlabIssue {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Issue')]
     param(
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]

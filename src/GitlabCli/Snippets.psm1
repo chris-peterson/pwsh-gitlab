@@ -1,5 +1,6 @@
 function Get-GitlabSnippet {
     [CmdletBinding(DefaultParameterSetName='Mine')]
+    [OutputType('Gitlab.Snippet')]
     param (
         [Parameter(Position=0, ParameterSetName='ById', Mandatory)]
         [int]
@@ -83,6 +84,7 @@ function Get-GitlabSnippet {
 
 function Get-GitlabSnippetContent {
     [CmdletBinding()]
+    [OutputType([string])]
     param (
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]
@@ -100,6 +102,7 @@ function Get-GitlabSnippetContent {
 
 function New-GitlabSnippet {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Snippet')]
     param (
         [Parameter(Position=0, Mandatory)]
         [string]
@@ -166,6 +169,7 @@ function New-GitlabSnippet {
 
 function Update-GitlabSnippet {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Snippet')]
     param (
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]
@@ -232,6 +236,7 @@ function Update-GitlabSnippet {
 
 function Remove-GitlabSnippet {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]

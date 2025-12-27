@@ -1,6 +1,7 @@
 # https://docs.gitlab.com/ee/api/groups.html#details-of-a-group
 function Get-GitlabGroup {
     [CmdletBinding(DefaultParameterSetName='ByGroupId')]
+    [OutputType('Gitlab.Group')]
     param (
         [Parameter(Position=0, ParameterSetName='ByGroupId')]
         [string]
@@ -76,6 +77,7 @@ function Get-GitlabGroup {
 function New-GitlabGroup {
 
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Group')]
     param (
         [Parameter(Position=0, Mandatory=$true)]
         [Alias('Name')]
@@ -115,6 +117,7 @@ function New-GitlabGroup {
 # https://docs.gitlab.com/ee/api/groups.html#remove-group
 function Remove-GitlabGroup {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(Position=0, Mandatory=$false)]
         [string]
@@ -136,6 +139,7 @@ function Remove-GitlabGroup {
 function Copy-GitlabGroupToLocalFileSystem {
     [Alias("Clone-GitlabGroup")]
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([void])]
     param (
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [string]
@@ -196,6 +200,7 @@ function Copy-GitlabGroupToLocalFileSystem {
 function Update-LocalGitlabGroup {
     [Alias("Pull-GitlabGroup")]
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([void])]
     param (
     )
 
@@ -215,6 +220,7 @@ function Update-LocalGitlabGroup {
 function Get-GitlabGroupVariable {
 
     [CmdletBinding()]
+    [OutputType('Gitlab.Variable')]
     param (
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [string]
@@ -254,6 +260,7 @@ function Get-GitlabGroupVariable {
 function Set-GitlabGroupVariable {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Medium')]
+    [OutputType('Gitlab.Variable')]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]
@@ -329,6 +336,7 @@ function Set-GitlabGroupVariable {
 function Remove-GitlabGroupVariable {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]
@@ -356,6 +364,7 @@ function Remove-GitlabGroupVariable {
 function Update-GitlabGroup {
 
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Group')]
     param (
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -400,6 +409,7 @@ function Update-GitlabGroup {
 
 function Rename-GitlabGroup {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Group')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -422,6 +432,7 @@ function Rename-GitlabGroup {
 function Move-GitlabGroup {
     [Alias("Transfer-GitlabGroup")]
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Group')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -453,6 +464,7 @@ function Move-GitlabGroup {
 function New-GitlabGroupToGroupShare {
     [Alias('Share-GitlabGroupWithGroup')]
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Group')]
     param (
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -498,6 +510,7 @@ function New-GitlabGroupToGroupShare {
 function Remove-GitlabGroupToGroupShare {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]

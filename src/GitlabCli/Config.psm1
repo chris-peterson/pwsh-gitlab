@@ -1,6 +1,14 @@
 function Get-GitlabConfiguration {
     [CmdletBinding()]
+    [OutputType('Gitlab.Configuration')]
     param (
+        [Parameter(ParameterSetName='DefaultSite')]
+        [switch]
+        $DefaultSite,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
     )
 
     if (Test-IsConfigurationEnvironmentVariables) {
@@ -20,14 +28,23 @@ function Get-GitlabConfiguration {
         } | Write-GitlabConfiguration
     }
 
-    Get-Content $global:GitlabConfigurationPath | ConvertFrom-Json | New-GitlabObject 'Gitlab.Configuration'
+    $Config = Get-Content $global:GitlabConfigurationPath | ConvertFrom-Json | New-GitlabObject 'Gitlab.Configuration'
+
+    if ($DefaultSite) {
+        return @($Config.Sites | Where-Object IsDefault -eq 'True')
+    } elseif ($SiteUrl) {
+        return @($Config.Sites | Where-Object Url -match $SiteUrl)
+    }
+
+    return $Config
 }
 
 function Get-DefaultGitlabSite {
+
+    [Obsolete("Use 'Get-GitlabConfiguration -DefaultSite' instead")]
     param (
     )
 
-    Write-Warning "Get-DefaultGitlabSite is deprecated; it will be removed in a future release"
     $Configuration = Get-GitlabConfiguration
     $LocalContext = Get-LocalGitContext
 
@@ -43,6 +60,7 @@ function Get-DefaultGitlabSite {
 
 function Set-DefaultGitlabSite {
     [CmdletBinding()]
+    [OutputType([void])]
     param (
         [Parameter(Mandatory=$true)]
         [string]
@@ -72,6 +90,7 @@ function Set-DefaultGitlabSite {
 
 function Add-GitlabSite {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Configuration')]
     param (
         [Parameter()]
         [string]
@@ -127,6 +146,7 @@ function Add-GitlabSite {
 
 function Remove-GitlabSite {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType('Gitlab.Configuration')]
     param (
         [Parameter(Mandatory=$true)]
         [string]

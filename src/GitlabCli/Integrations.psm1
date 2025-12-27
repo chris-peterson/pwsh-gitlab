@@ -1,6 +1,7 @@
 function Get-GitlabProjectIntegration {
 
     [CmdletBinding()]
+    [OutputType('Gitlab.ProjectIntegration')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -31,6 +32,7 @@ function Get-GitlabProjectIntegration {
 function Update-GitlabProjectIntegration {
 
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.ProjectIntegration')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -65,6 +67,7 @@ function Update-GitlabProjectIntegration {
 function Remove-GitlabProjectIntegration {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -99,6 +102,7 @@ function Remove-GitlabProjectIntegration {
 function Enable-GitlabProjectSlackNotification {
 
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName='SpecificEvents')]
+    [OutputType('Gitlab.ProjectIntegration')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]

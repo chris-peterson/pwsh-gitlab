@@ -2,6 +2,7 @@
 
 function Get-GitlabPersonalAccessToken {
     [CmdletBinding(DefaultParameterSetName='Default')]
+    [OutputType('Gitlab.PersonalAccessToken')]
     param(
         [Parameter(Position=0, ParameterSetName='Default')]
         [Alias('Id')]
@@ -162,6 +163,7 @@ function Get-GitlabPersonalAccessToken {
 
 function New-GitlabPersonalAccessToken {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.NewPersonalAccessToken')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('Username')]
@@ -172,7 +174,7 @@ function New-GitlabPersonalAccessToken {
         [string]
         $Name,
 
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory)]
         [ValidateSet('api', 'read_user', 'read_api', 'read_repository', 'write_repository', 'read_registry', 'write_registry', 'sudo', 'admin_mode', 'create_runner', 'manage_runner', 'ai_features', 'k8s_proxy', 'read_service_ping')]
         [string []]
         $Scope,
@@ -229,6 +231,7 @@ function New-GitlabPersonalAccessToken {
 
 function Invoke-GitlabPersonalAccessTokenRotation {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.NewPersonalAccessToken')]
     [Alias('Rotate-GitlabPersonalAccessToken')]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, Position=0)]
@@ -266,6 +269,7 @@ function Invoke-GitlabPersonalAccessTokenRotation {
 
 function Revoke-GitlabPersonalAccessToken {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([void])]
     [Alias('Remove-GitlabPersonalAccessToken')]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, Position=0)]

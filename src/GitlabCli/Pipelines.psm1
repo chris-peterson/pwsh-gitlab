@@ -3,6 +3,7 @@ function Get-GitlabPipeline {
     [Alias('pipeline')]
     [Alias('pipelines')]
     [CmdletBinding()]
+    [OutputType('Gitlab.Pipeline')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -190,6 +191,8 @@ function Get-GitlabPipeline {
 }
 
 function Get-GitlabPipelineVariable {
+    [CmdletBinding()]
+    [OutputType('Gitlab.PipelineVariable')]
     param(
         [Parameter()]
         [string]
@@ -236,6 +239,7 @@ function Get-GitlabPipelineVariable {
 # https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-bridges
 function Get-GitlabPipelineBridge {
     [CmdletBinding()]
+    [OutputType('Gitlab.PipelineBridge')]
     param (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -271,6 +275,7 @@ function Get-GitlabPipelineBridge {
 
 function New-GitlabPipeline {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Pipeline')]
     [Alias('build')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
@@ -381,7 +386,7 @@ function New-GitlabPipeline {
 
 function Remove-GitlabPipeline {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
-
+    [OutputType([void])]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]

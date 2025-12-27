@@ -1,5 +1,6 @@
 function Get-GitlabServiceAccount {
     [CmdletBinding(DefaultParameterSetName='Instance')]
+    [OutputType('Gitlab.ServiceAccount')]
     param(
         [Parameter(Position=0, ParameterSetName='Instance')]
         [Parameter(Position=0, ParameterSetName='Group')]
@@ -53,6 +54,7 @@ function Get-GitlabServiceAccount {
 
 function Update-GitlabServiceAccount {
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName='Instance')]
+    [OutputType('Gitlab.ServiceAccount')]
     param(
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [int]
@@ -109,6 +111,7 @@ function Update-GitlabServiceAccount {
 
 function Remove-GitlabServiceAccount {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High', DefaultParameterSetName='Instance')]
+    [OutputType([void])]
     param(
         [Parameter(Position=0, Mandatory, ParameterSetName='Instance', ValueFromPipelineByPropertyName)]
         [Parameter(Position=0, Mandatory, ParameterSetName='Group', ValueFromPipelineByPropertyName)]
@@ -155,6 +158,7 @@ function Remove-GitlabServiceAccount {
 
 function New-GitlabServiceAccount {
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName='Instance')]
+    [OutputType('Gitlab.ServiceAccount')]
     param(
         [Parameter(ParameterSetName='Instance')]
         [Parameter(ParameterSetName='Group')]

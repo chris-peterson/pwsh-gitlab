@@ -2,6 +2,7 @@ function Get-GitlabJob {
     [Alias('job')]
     [Alias('jobs')]
     [CmdletBinding(DefaultParameterSetName='Query')]
+    [OutputType('Gitlab.Job')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -136,6 +137,7 @@ function Get-GitlabJob {
 function Get-GitlabJobTrace {
     [Alias('trace')]
     [CmdletBinding()]
+    [OutputType([string])]
     param (
 
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -168,6 +170,7 @@ function Start-GitlabJob {
     [Alias('Retry-GitlabJob')]
     [Alias('play')]
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Job')]
     param (
         [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -240,6 +243,7 @@ function Start-GitlabJob {
 function Test-GitlabPipelineDefinition {
 
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.PipelineDefinition')]
     param (
         [Parameter()]
         [string]
@@ -290,6 +294,7 @@ function Test-GitlabPipelineDefinition {
 
 function Get-GitlabPipelineDefinition {
     [CmdletBinding()]
+    [OutputType([hashtable])]
     param (
         [Parameter()]
         [string]
@@ -309,30 +314,9 @@ function Get-GitlabPipelineDefinition {
         ConvertFrom-Yaml
 }
 
-<#
-.SYNOPSIS
-Produces a section that can be collapsed in the Gitlab CI output
-
-.PARAMETER HeaderText
-Name of the section
-
-.PARAMETER Collapsed
-Whether or not the section is pre-collapsed. Not currently supported. Has no affect
-
-.EXAMPLE
-Start-GitlabJobLogSection "Doing the thing"
-try {
-    #the things
-}
-finally {
-    Stop-GitlabJobLogSection
-}
-
-.NOTES
-for reference: https://docs.gitlab.com/ce/ci/jobs/index.html#custom-collapsible-sections
-#>
 function Start-GitlabJobLogSection {
     [CmdletBinding()]
+    [OutputType([void])]
     param(
         [Parameter(Mandatory, Position = 0)]
         [string]
@@ -355,27 +339,9 @@ function Start-GitlabJobLogSection {
     $global:GitlabJobLogSections.Push($SectionId)
 }
 
-<#
-.SYNOPSIS
-Closes out a previously declared collapsible section in Gitlab CI output
-
-.DESCRIPTION
-Long description
-
-.EXAMPLE
-Start-GitlabJobLogSection "Doing the thing"
-try {
-    #the things
-}
-finally {
-    Stop-GitlabJobLogSection
-}
-
-.NOTES
-for reference: https://docs.gitlab.com/ce/ci/jobs/index.html#custom-collapsible-sections
-#>
 function Stop-GitlabJobLogSection {
     [CmdletBinding()]
+    [OutputType([void])]
     param(
     )
 
@@ -391,6 +357,7 @@ function Stop-GitlabJobLogSection {
 
 function Write-GitlabJobTrace {
     [CmdletBinding()]
+    [OutputType([void])]
     param (
         [Parameter()]
         [string]
@@ -409,28 +376,9 @@ function Write-GitlabJobTrace {
     Write-Host $Text
 }
 
-<#
-.SYNOPSIS
-Retrieves an artifact from a GitLab job
-
-.INPUTS
-Gitlab.Job
-
-.PARAMETER ProjectId
-The ID or URL-encoded path of the project. Defaults to the current project (.)
-
-.PARAMETER JobId
-The ID of the job on the associated project
-
-.PARAMETER ArtifactPath
-The path to a specific artifact file within the archive. If not specified, the entire archive will
-
-.LINK
-https://docs.gitlab.com/api/job_artifacts/
-
-#>
 function Get-GitlabJobArtifact {
     [CmdletBinding()]
+    [OutputType([void])]
     param (
         [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]

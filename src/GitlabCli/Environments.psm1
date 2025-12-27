@@ -1,6 +1,7 @@
 function Get-GitlabEnvironment {
     [Alias('envs')]
     [CmdletBinding(DefaultParameterSetName='List')]
+    [OutputType('Gitlab.Environment')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -77,6 +78,7 @@ function Get-GitlabEnvironment {
 
 function Stop-GitlabEnvironment {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([void])]
     param(
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -109,6 +111,7 @@ function Stop-GitlabEnvironment {
 
 function Remove-GitlabEnvironment {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param(
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
