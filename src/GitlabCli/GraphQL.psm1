@@ -1,6 +1,7 @@
 # https://docs.gitlab.com/ee/api/graphql/
 function Invoke-GitlabGraphQL {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([PSCustomObject])]
     param(
         [Parameter(Position=0, Mandatory)]
         [string]

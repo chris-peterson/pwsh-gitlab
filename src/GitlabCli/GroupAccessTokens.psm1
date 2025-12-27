@@ -1,26 +1,6 @@
-
-<#
-.SYNOPSIS
-Get the groups access tokens
-
-.DESCRIPTION
-When no tokenid is specificed, it will return all of the tokens for the group
-
-.PARAMETER GroupId
- The ID or URL-encoded path of the group. 
-
-.PARAMETER TokenId
-  The ID of the access token to get details of.
-
-.PARAMETER SiteUrl
-  The URL of the Gitlab instance. If not provided, the default will be used.
-
-.LINK
- https://docs.gitlab.com/ee/api/group_access_tokens.html
- https://docs.gitlab.com/ee/api/group_access_tokens.html#list-group-access-tokens
-#>
 function Get-GitlabGroupAccessToken {
     [CmdletBinding()]
+    [OutputType('Gitlab.AccessToken')]
     param (
         [Parameter(Position=0, Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -44,42 +24,9 @@ function Get-GitlabGroupAccessToken {
 }
 
 
-<#
-.SYNOPSIS
-Creates a group access token
-
-.DESCRIPTION
-Create a group access token. You must have the Owner role for the group to create group access tokens.
-
-.PARAMETER GroupId
-The ID or URL-encoded path of the group. 
-
-.PARAMETER Name
-The name of the access token.
-
-.PARAMETER Scope
-The scopes of the access token. Values can be 'api', 'read_api', 'read_registry', 'write_registry', 'read_repository', 'write_repository'
-
-.PARAMETER AccessLevel
-The level of access the token will have. Values can be 'guest' , 'reporter', 'developer', 'maintainer', 'owner'
-Default will be 'maintainer'
-
-.PARAMETER ExpiresAt
-The expiration date for the access token. Default will be 1 year from now. This can't be any longer than 1 year from now. The time component is ignored and only the year month and date are reflected
-
-.PARAMETER CopyToClipboard
-If this switch is enabled, the token will be copied to the clipboard.
-
-.NOTES
-This function is a wrapper around the Gitlab API endpoint POST /groups/:id/access_tokens
-
-.LINK
-https://docs.gitlab.com/ee/api/group_access_tokens.html#create-a-group-access-token
-https://docs.gitlab.com/ee/api/rest/index.html#namespaced-path-encoding
-
-#>
 function New-GitlabGroupAccessToken {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([PSCustomObject])]
     param (
         [Parameter(Position=0, Mandatory)]
         [string]
@@ -133,6 +80,7 @@ function New-GitlabGroupAccessToken {
 # https://docs.gitlab.com/ee/api/group_access_tokens.html#revoke-a-group-access-token
 function Remove-GitlabGroupAccessToken {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     [Alias('Revoke-GitlabGroupAccessToken')]
     param (
         [Parameter(Position=0, Mandatory=$true)]

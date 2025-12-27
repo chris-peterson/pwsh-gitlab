@@ -1,6 +1,9 @@
 function Get-GitlabDeployKey {
+  [OutputType('Gitlab.DeployKey')]
+  [CmdletBinding()]
   param(
     [Parameter()]
+    [ValidateNotNullOrWhiteSpace()]
     [string]
     $DeployKeyId,
 
@@ -9,14 +12,14 @@ function Get-GitlabDeployKey {
     $SiteUrl
   )
 
-  $GitlabAPIParams = @{
+  $Request = @{
       Method = 'GET'
       Path   = "deploy_keys"
   }
 
-  if($PSBoundParameters.ContainsKey('DeployKeyId')) {
-      $GitlabAPIParams.Path += "/$DeployKeyId"
+  if ($DeployKeyId) {
+      $Request.Path += "/$DeployKeyId"
   }
 
-  Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference | New-GitlabObject 'Gitlab.DeployKey'
+  Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.DeployKey'
 }

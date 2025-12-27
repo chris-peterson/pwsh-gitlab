@@ -1,5 +1,6 @@
 function Get-GitlabTodo {
     [CmdletBinding()]
+    [OutputType('Gitlab.Todo')]
     param (
         [Parameter()]
         [uint]
@@ -26,6 +27,7 @@ function Get-GitlabTodo {
 
 function Clear-GitlabTodo {
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName='ById')]
+    [OutputType('Gitlab.Todo')]
     param (
         [Parameter(ParameterSetName='ById', Mandatory, Position=0)]
         $TodoId,

@@ -1,6 +1,7 @@
 function Get-GitlabAuditEvent {
 
     [CmdletBinding()]
+    [OutputType('Gitlab.AuditEvent')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]

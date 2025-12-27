@@ -1,16 +1,6 @@
-# https://docs.gitlab.com/ee/api/protected_branches.html
-function Get-GitlabProtectedBranchAccessLevel {
-
-    [PSCustomObject]@{
-        NoAccess = 0
-        Developer = 30
-        Maintainer = 40
-        Admin = 60
-    }
-}
-
 function Get-GitlabBranch {
     [CmdletBinding(DefaultParameterSetName="ByProjectId")]
+    [OutputType('Gitlab.Branch')]
     param (
         [Parameter(ParameterSetName="ByProjectId", ValueFromPipelineByPropertyName)]
         [Parameter(ParameterSetName="ByRef", ValueFromPipelineByPropertyName)]
@@ -80,6 +70,7 @@ function Get-GitlabBranch {
 
 function Get-GitlabProtectedBranch {
     [CmdletBinding()]
+    [OutputType('Gitlab.ProtectedBranch')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
@@ -126,6 +117,7 @@ function Get-GitlabProtectedBranch {
 
 function New-GitlabBranch {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Branch')]
     param (
         [Parameter(Position=0, Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
@@ -164,6 +156,7 @@ function New-GitlabBranch {
 
 function Protect-GitlabBranch {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.ProtectedBranch')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
@@ -282,6 +275,7 @@ function Protect-GitlabBranch {
 function UnProtect-GitlabBranch {
     [Alias('Remove-GitlabProtectedBranch')]
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([void])]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
@@ -320,6 +314,7 @@ function UnProtect-GitlabBranch {
 
 function Remove-GitlabBranch {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]

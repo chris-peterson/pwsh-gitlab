@@ -2,6 +2,7 @@
 function Get-GitlabDeployment {
     [Alias('deploys')]
     [CmdletBinding(DefaultParameterSetName='Query')]
+    [OutputType('Gitlab.Deployment')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]

@@ -2,6 +2,7 @@ function Resolve-GitlabVariable {
 
     [Alias('var')]
     [CmdletBinding(DefaultParameterSetName='FromPipeline')]
+    [OutputType([string])]
     param (
         [Parameter(ParameterSetName='FromPipeline', Mandatory, ValueFromPipeline)]
         $Context,
@@ -71,6 +72,7 @@ function Resolve-GitlabVariable {
 }
 function ConvertTo-GitlabVariables {
     [CmdletBinding()]
+    [OutputType([hashtable[]])]
     param (
         [Parameter(ValueFromPipeline)]
         $Object,

@@ -1,6 +1,7 @@
 # https://docs.gitlab.com/ee/api/projects.html#get-project-hook
 function Get-GitlabProjectHook {
   [CmdletBinding()]
+  [OutputType('Gitlab.ProjectHook')]
   param (
       [Parameter(ValueFromPipelineByPropertyName)]
       [string]
@@ -29,6 +30,7 @@ function Get-GitlabProjectHook {
 function New-GitlabProjectHook {
   [CmdletBinding(SupportsShouldProcess)]
   [Alias('Add-GitlabProjectHook')]
+  [OutputType('Gitlab.ProjectHook')]
   param (
       [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
       [string]
@@ -143,6 +145,7 @@ function New-GitlabProjectHook {
 
 function Update-GitlabProjectHook {
   [CmdletBinding(SupportsShouldProcess)]
+  [OutputType('Gitlab.ProjectHook')]
   param (
     [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
     [string]
@@ -262,6 +265,7 @@ function Update-GitlabProjectHook {
 # https://docs.gitlab.com/ee/api/projects.html#delete-project-hook
 function Remove-GitlabProjectHook {
   [CmdletBinding(SupportsShouldProcess)]
+  [OutputType([void])]
   param (
       [Parameter(ValueFromPipelineByPropertyName)]
       [string]

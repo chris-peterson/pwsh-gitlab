@@ -1,71 +1,7 @@
-<#
-.SYNOPSIS
-Get one or more Gitlab projects
-
-.DESCRIPTION
-Lookup metadata about Gitlab projects by one or more identifiers
-
-.PARAMETER ProjectId
-Project id - can be an integer, or a full path
-
-.PARAMETER GroupId
-Group id - can be an integer, or a full path
-
-.PARAMETER Recurse
-Whether or not to recurse specified group (default: false)
-Alias: -r
-
-.PARAMETER Url
-Get a project by URL
-
-.PARAMETER IncludeArchived
-Whether or not to return archived projects (default: false)
-
-.PARAMETER MaxPages
-Maximum pages to return (default: 10)
-
-.PARAMETER SiteUrl
-Which Gitlab instance to query.  This is optional, if not provided, will
-first attempt to use the remote associated with the local git context.
-If there is no established context (or no matching configuration), the default
-site is used.
-
-.PARAMETER WhatIf
-Preview Gitlab API requests
-
-.EXAMPLE
-Get-GitlabProject
-
-Get a project from local git context
-
-.EXAMPLE
-Get-GitlabProject -ProjectId 'mygroup/myproject'
-OR
-PS > Get-GitlabProject 'mygroup/myproject'
-OR 
-PS > Get-GitlabProject 42
-
-Get a single project by id
-
-.EXAMPLE
-Get-GitlabProject -GroupId 'mygroup' [-Recurse]
-
-Get multiple projects by containing group
-
-.EXAMPLE
-Get-GitlabGroup 'mygroup' | Get-GitlabProject
-
-Enumerate projects within a group
-
-.LINK
-https://github.com/chris-peterson/pwsh-gitlab#projects
-
-.LINK
-https://docs.gitlab.com/ee/api/projects.html
-#>
 function Get-GitlabProject {
 
     [CmdletBinding(DefaultParameterSetName='ById')]
+    [OutputType('Gitlab.Project')]
     param (
         [Parameter(Position=0, ParameterSetName='ById', ValueFromPipelineByPropertyName)]
         [string]
@@ -174,6 +110,8 @@ function Get-GitlabProject {
 }
 
 function ConvertTo-GitlabTriggerYaml {
+    [CmdletBinding()]
+    [OutputType([string])]
     param (
         [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
         $InputObject,
@@ -224,6 +162,7 @@ $($Object.Name):
 function Move-GitlabProject {
     [Alias("Transfer-GitlabProject")]
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Project')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -250,6 +189,7 @@ function Move-GitlabProject {
 
 function Rename-GitlabProject {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Project')]
     param (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -273,6 +213,7 @@ function Rename-GitlabProject {
 function Copy-GitlabProject {
     [Alias("Fork-GitlabProject")]
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([PSCustomObject])]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -317,6 +258,7 @@ function Copy-GitlabProject {
 function Remove-GitlabProjectForkRelationship {
     [Alias("Remove-GitlabProjectFork")]
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -342,6 +284,7 @@ function Remove-GitlabProjectForkRelationship {
 
 function New-GitlabProject {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Project')]
     param (
         [Parameter(Position=0, Mandatory)]
         [Alias('Name')]
@@ -411,6 +354,7 @@ function New-GitlabProject {
 # https://docs.gitlab.com/ee/api/projects.html#edit-project
 function Update-GitlabProject {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Project')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -527,6 +471,7 @@ function Update-GitlabProject {
 function Invoke-GitlabProjectArchival {
     [Alias('Archive-GitlabProject')]
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Project')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -549,6 +494,7 @@ function Invoke-GitlabProjectArchival {
 function Invoke-GitlabProjectUnarchival {
     [Alias('Unarchive-GitlabProject')]
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Project')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -570,6 +516,7 @@ function Invoke-GitlabProjectUnarchival {
 
 function Get-GitlabProjectVariable {
     [CmdletBinding()]
+    [OutputType('Gitlab.Variable')]
     param (
         [Parameter(ValueFromPipelineByPropertyName=$true)]
         [string]
@@ -608,6 +555,7 @@ function Get-GitlabProjectVariable {
 
 function Set-GitlabProjectVariable {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Medium')]
+    [OutputType('Gitlab.Variable')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -684,6 +632,7 @@ function Set-GitlabProjectVariable {
 function Remove-GitlabProjectVariable {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(Mandatory=$false)]
         [string]
@@ -708,6 +657,7 @@ function Remove-GitlabProjectVariable {
 
 function Rename-GitlabProjectDefaultBranch {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType('Gitlab.Project')]
     param (
         [Parameter(Position=0, Mandatory=$true)]
         [string]
@@ -749,6 +699,7 @@ function Rename-GitlabProjectDefaultBranch {
 function Get-GitlabProjectEvent {
 
     [CmdletBinding()]
+    [OutputType('Gitlab.Event')]
     param (
         [Parameter(Position=0, Mandatory=$false)]
         [string]
@@ -799,6 +750,7 @@ function Get-GitlabProjectEvent {
 function New-GitlabGroupToProjectShare {
     [CmdletBinding(SupportsShouldProcess)]
     [Alias('Share-GitlabProjectWithGroup')]
+    [OutputType([void])]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -843,6 +795,7 @@ function New-GitlabGroupToProjectShare {
 function Remove-GitlabGroupToProjectShare {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -869,6 +822,7 @@ function Remove-GitlabGroupToProjectShare {
 
 function Remove-GitlabProject {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [string]
@@ -890,6 +844,7 @@ function Remove-GitlabProject {
 
 function Add-GitlabProjectTopic {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Project')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
@@ -916,6 +871,7 @@ function Add-GitlabProjectTopic {
 
 function Remove-GitlabProjectTopic {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType('Gitlab.Project')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]

@@ -1,5 +1,6 @@
 function Get-GitlabCommit {
     [CmdletBinding()]
+    [OutputType('Gitlab.Commit')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]

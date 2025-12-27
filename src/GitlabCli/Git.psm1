@@ -1,4 +1,6 @@
 function Get-LocalGitContext {
+    [CmdletBinding()]
+    [OutputType([PSCustomObject])]
     param (
         [string]
         [Parameter(Mandatory=$false)]

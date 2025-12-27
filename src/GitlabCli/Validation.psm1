@@ -1,6 +1,8 @@
 # contains functions for use with ValidateScript attributes
 
 function Test-GitlabDate {
+    [CmdletBinding()]
+    [OutputType([bool])]
     param(
         [Parameter(Mandatory, Position=0)]
         [string]
@@ -14,6 +16,8 @@ function Test-GitlabDate {
 }
 
 function Test-GitlabSettableAccessLevel {
+    [CmdletBinding()]
+    [OutputType([bool])]
     param(
         [Parameter(Mandatory)]
         $Permission

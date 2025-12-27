@@ -1,5 +1,6 @@
 function Invoke-GitlabApi {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([PSCustomObject])]
     param(
         [Parameter(Position=0, Mandatory)]
         [Alias('Method')]
@@ -123,6 +124,7 @@ function Invoke-GitlabApi {
 
 function Open-InBrowser {
     [CmdletBinding()]
+    [OutputType([void])]
     [Alias('go')]
     param(
         [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
@@ -143,6 +145,8 @@ function Open-InBrowser {
 }
 
 function Get-FilteredObject {
+    [CmdletBinding()]
+    [OutputType([PSCustomObject])]
     param (
         [Parameter(ValueFromPipeline=$true, Mandatory=$true)]
         $InputObject,
@@ -167,6 +171,8 @@ function Get-FilteredObject {
 }
 
 function Get-GitlabVersion {
+    [CmdletBinding()]
+    [OutputType([PSCustomObject])]
     param(
         [Parameter(Mandatory=$false)]
         [string]

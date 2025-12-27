@@ -1,6 +1,7 @@
 # https://docs.gitlab.com/ee/api/topics.html#list-topics
 function Get-GitlabTopic {
     [CmdletBinding(DefaultParameterSetName='Search')]
+    [OutputType('Gitlab.Topic')]
     param (
         [Parameter(Mandatory, ParameterSetName='Id')]
         [Alias('Id')]
@@ -56,6 +57,7 @@ function Get-GitlabTopic {
 # https://docs.gitlab.com/ee/api/topics.html#create-a-project-topic
 function New-GitlabTopic {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Topic')]
     param (
         [Parameter(Mandatory, Position=0)]
         [string]
@@ -94,6 +96,7 @@ function New-GitlabTopic {
 # https://docs.gitlab.com/ee/api/topics.html#update-a-project-topic
 function Update-GitlabTopic {
     [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Topic')]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]
@@ -136,6 +139,7 @@ function Update-GitlabTopic {
 # https://docs.gitlab.com/ee/api/topics.html#delete-a-project-topic
 function Remove-GitlabTopic {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType([void])]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]
