@@ -541,15 +541,15 @@ function Get-GitlabProjectVariable {
 
     $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
-    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     if ($Key) {
         # https://docs.gitlab.com/ee/api/project_level_variables.html#get-a-single-variable
-        Invoke-GitlabApi GET "projects/$($Project.Id)/variables/$Key" | New-GitlabObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "projects/$ProjectId/variables/$Key" | New-GitlabObject 'Gitlab.Variable'
     }
     else {
         # https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
-        Invoke-GitlabApi GET "projects/$($Project.Id)/variables" -MaxPages $MaxPages | New-GitlabObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "projects/$ProjectId/variables" -MaxPages $MaxPages | New-GitlabObject 'Gitlab.Variable'
     }
 }
 
@@ -729,7 +729,7 @@ function Get-GitlabProjectEvent {
         $SiteUrl
     )
 
-    $Project = Get-GitLabProject $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $Query = @{}
     if($Before) {
@@ -742,7 +742,7 @@ function Get-GitlabProjectEvent {
         $Query.sort = $Sort
     }
 
-    Invoke-GitlabApi GET "projects/$($Project.Id)/events" `
+    Invoke-GitlabApi GET "projects/$ProjectId/events" `
         -Query $Query -MaxPages $MaxPages -SiteUrl |
         New-GitlabObject 'Gitlab.Event'
 }

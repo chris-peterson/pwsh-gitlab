@@ -117,7 +117,7 @@ function Get-GitlabMergeRequest {
             $MergeRequestId = $Resource.ResourceId
         }
         'ByProjectId' {
-            $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+            $ProjectId = Resolve-GitlabProjectId $ProjectId
             # https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
             $Path = "projects/$ProjectId/merge_requests"
             if ($MergeRequestId) {
@@ -477,7 +477,7 @@ function Close-GitlabMergeRequest {
         $SiteUrl
     )
 
-    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     if ($PSCmdlet.ShouldProcess("MR #$MergeRequestId", "close")) {
         Update-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -Close
@@ -498,7 +498,7 @@ function Invoke-GitlabMergeRequestReview {
         $SiteUrl
     )
 
-    $ProjectId = $(Get-GitlabProject -ProjectId '.').Id
+    $ProjectId = Resolve-GitlabProjectId '.'
 
     $MergeRequest = Get-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId
 
@@ -521,7 +521,7 @@ function Approve-GitlabMergeRequest {
         $SiteUrl
     )
 
-    $ProjectId = $(Get-GitlabProject -ProjectId '.').Id
+    $ProjectId = Resolve-GitlabProjectId '.'
 
     if (-not $MergeRequestId) {
         $MergeRequest = Get-GitlabMergeRequest -ProjectId $ProjectId -Branch '.' -State 'opened'
@@ -550,9 +550,9 @@ function Get-GitlabMergeRequestApprovalConfiguration {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
-    Invoke-GitlabApi GET "projects/$($Project.Id)/approvals" | New-GitlabObject
+    Invoke-GitlabApi GET "projects/$ProjectId/approvals" | New-GitlabObject
 }
 
 # https://docs.gitlab.com/ee/api/merge_request_approvals.html#change-configuration
@@ -637,9 +637,9 @@ function Get-GitlabMergeRequestApprovalRule {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
-    $Resource = "projects/$($Project.Id)/approval_rules"
+    $Resource = "projects/$ProjectId/approval_rules"
     if ($ApprovalRuleId) {
         $Resource += "/$ApprovalRuleId"
     }
@@ -649,7 +649,7 @@ function Get-GitlabMergeRequestApprovalRule {
     Invoke-GitlabApi GET $Resource
         | New-GitlabObject 'Gitlab.MergeRequestApprovalRule'
         | Add-Member -PassThru -NotePropertyMembers @{
-            ProjectId = $Project.Id
+            ProjectId = $ProjectId
         }
 }
 

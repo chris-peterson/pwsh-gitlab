@@ -36,9 +36,9 @@ function Get-GitlabCommit {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
-    $Url = "projects/$($Project.Id)/repository/commits"
+    $Url = "projects/$ProjectId/repository/commits"
     $Query = @{}
     if ($Before) {
         $Query.until = $Before

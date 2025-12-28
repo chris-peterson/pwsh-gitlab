@@ -58,11 +58,11 @@ function Get-GitlabProjectAccessToken {
     $SiteUrl
   )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabAPIParams = @{
       Method  = 'GET'
-      Path     = "projects/$($Project.Id)/access_tokens"
+      Path     = "projects/$ProjectId/access_tokens"
       Query   = @{}
     }
 
@@ -121,11 +121,11 @@ function New-GitlabProjectAccessToken {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabAPIParams = @{
       Method  = 'POST'
-      Path     = "projects/$($Project.Id)/access_tokens"
+      Path     = "projects/$ProjectId/access_tokens"
       Body   = @{
         name        = $Name
         scopes     = $Scopes
@@ -167,7 +167,7 @@ function Invoke-GitlabProjectAccessTokenRotation {
         $Force
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     # https://learn.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7.5#implementing--force
     if ($Force -and -not $PSBoundParameters.ContainsKey('Confirm')) {
@@ -176,7 +176,7 @@ function Invoke-GitlabProjectAccessTokenRotation {
 
     $GitlabAPIParams = @{
       Method  = 'POST'
-      Path     = "projects/$($Project.Id)/access_tokens/$TokenId/rotate"
+      Path     = "projects/$ProjectId/access_tokens/$TokenId/rotate"
     }
 
     if($ExpiresAt) { 
@@ -210,11 +210,11 @@ function Remove-GitlabProjectAccessToken {
         $Force
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabAPIParams = @{
       Method  = 'DELETE'
-      Path     = "projects/$($Project.Id)/access_tokens/$TokenId"
+      Path     = "projects/$ProjectId/access_tokens/$TokenId"
     }
 
     # https://learn.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7.5#implementing--force

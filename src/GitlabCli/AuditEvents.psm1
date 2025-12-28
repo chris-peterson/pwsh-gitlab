@@ -57,8 +57,8 @@ function Get-GitlabAuditEvent {
         $Group = Get-GitlabGroup $GroupId
         $Resource = "groups/$($Group.Id)/audit_events"
     } elseif ($ProjectId) {
-        $Project = Get-GitlabProject $ProjectId
-        $Resource = "projects/$($Project.Id)/audit_events"
+        $ResolvedProjectId = Resolve-GitlabProjectId $ProjectId
+        $Resource = "projects/$ResolvedProjectId/audit_events"
     } else {
         $Resource = 'audit_events'
     }

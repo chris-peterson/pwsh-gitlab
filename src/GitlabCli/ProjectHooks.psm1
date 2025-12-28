@@ -16,9 +16,9 @@ function Get-GitlabProjectHook {
       $SiteUrl
   )
 
-  $Project = Get-GitlabProject $ProjectId
+  $ProjectId = Resolve-GitlabProjectId $ProjectId
 
-  $Resource = "projects/$($Project.Id)/hooks"
+  $Resource = "projects/$ProjectId/hooks"
 
   if($Id) {
     $Resource = "$($Resource)/$($Id)"

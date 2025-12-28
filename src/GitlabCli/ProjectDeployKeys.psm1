@@ -15,11 +15,11 @@ function Get-GitlabProjectDeployKey {
         $SiteUrl
     ) 
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabAPIParams = @{
         Method = 'Get'
-        Path   = "projects/$($Project.Id)/deploy_keys"
+        Path   = "projects/$ProjectId/deploy_keys"
     }
 
     if($PSBoundParameters.ContainsKey('DeployKeyId')) {

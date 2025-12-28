@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.154.0'
+    ModuleVersion = '1.155.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* https://github.com/chris-peterson/pwsh-gitlab/pull/133
+* https://github.com/chris-peterson/pwsh-gitlab/pull/134
 '@
         }
     }
@@ -55,6 +55,7 @@
         'Private/Functions/MergeRequestHelpers.ps1'
         'Private/Functions/ObjectHelpers.ps1'
         'Private/Functions/PaginationHelpers.ps1'
+        'Private/Functions/ProjectCacheHelpers.ps1'
         'Private/Functions/RunnerHelpers.ps1'
         'Private/Globals.ps1'
         'Private/Transformations.ps1'

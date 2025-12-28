@@ -21,6 +21,8 @@ function Get-GitlabConfiguration {
         } | New-GitlabObject 'Gitlab.Configuration'
     }
 
+    Invoke-GitlabConfigMigration
+
     if (-not (Test-Path $global:GitlabConfigurationPath)) {
         Write-Warning "GitlabCli: Creating blank configuration file '$global:GitlabConfigurationPath'"
         @{
@@ -28,7 +30,7 @@ function Get-GitlabConfiguration {
         } | Write-GitlabConfiguration
     }
 
-    $Config = Get-Content $global:GitlabConfigurationPath | ConvertFrom-Json | New-GitlabObject 'Gitlab.Configuration'
+    $Config = Get-Content $global:GitlabConfigurationPath -Raw | ConvertFrom-Yaml | New-GitlabObject 'Gitlab.Configuration'
 
     if ($DefaultSite) {
         return @($Config.Sites | Where-Object IsDefault -eq 'True')

@@ -23,6 +23,9 @@ jobs:
           if (-not (Get-Module -ListAvailable -Name Pester)) {
             Install-Module -Name Pester -Force -Scope CurrentUser
           }
+          if (-not (Get-Module -ListAvailable -Name powershell-yaml)) {
+            Install-Module -Name powershell-yaml -Force -Scope CurrentUser
+          }
 
       - name: Run Pester tests
         id: pester

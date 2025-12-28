@@ -264,7 +264,7 @@ function Get-GitlabProjectMember {
 
     $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     if ($UserId) {
         $User = Get-GitlabUser -UserId $UserId
@@ -274,12 +274,12 @@ function Get-GitlabProjectMember {
     # https://docs.gitlab.com/ee/api/members.html#list-all-members-of-a-group-or-project
     # https://docs.gitlab.com/api/members/#get-a-member-of-a-group-or-project
     $Members = $IncludeInherited ? "members/all" : "members"
-    $Resource = $User ? "projects/$($Project.Id)/$Members/$($User.Id)" : "projects/$($Project.Id)/$Members"
+    $Resource = $User ? "projects/$ProjectId/$Members/$($User.Id)" : "projects/$ProjectId/$Members"
 
     Invoke-GitlabApi GET $Resource -MaxPages $MaxPages |
         New-GitlabObject 'Gitlab.Member' |
         Add-Member -PassThru -NotePropertyMembers @{
-            ProjectId = $Project.Id
+            ProjectId = $ProjectId
         } |
         Sort-Object -Property $(Get-GitlabMembershipSortKey)
 }
