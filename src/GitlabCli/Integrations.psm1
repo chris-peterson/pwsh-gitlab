@@ -161,9 +161,12 @@ function Enable-GitlabProjectSlackNotification {
         [string]
         $SiteUrl
     )
-    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
+    if ($Integration -eq 'slack') {
+        Write-Warning "The 'slack' integration is deprecated.  Should use 'gitlab-slack-application' instead."
+    }
 
-    $KnownEvents = @('commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')
+    $KnownEvents = @('alert', 'commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')
     if ($AllEvents) {
         $Enable = $KnownEvents
     }
@@ -216,16 +219,16 @@ function Enable-GitlabProjectSlackNotification {
 
     $ExistingLegacyIntegration = $null
     try {
-        $ExistingLegacyIntegration = Get-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack' | Select-Object -Expand Active
+        $ExistingLegacyIntegration = Get-GitlabProjectIntegration -ProjectId $ProjectId -Integration 'slack' | Select-Object -Expand Active
         if ($ExistingLegacyIntegration) {
             $Action = 'disable legacy integration, then enable'
         }
     } catch {}
 
-    if ($PSCmdlet.ShouldProcess("$Action slack notifications for $($Project.PathWithNamespace)", "notify $Channel ($($Settings | ConvertTo-Json)))")) {
+    if ($PSCmdlet.ShouldProcess("$Action slack notifications for $ProjectId", "notify $Channel ($($Settings | ConvertTo-Json)))")) {
         if ($ExistingLegacyIntegration) {
-            Remove-GitlabProjectIntegration -ProjectId $Project.Id -Integration 'slack'
+            Remove-GitlabProjectIntegration -ProjectId $ProjectId -Integration 'slack'
         }
-        Update-GitlabProjectIntegration -ProjectId $Project.Id -Integration $Integration -Settings $Settings
+        Update-GitlabProjectIntegration -ProjectId $ProjectId -Integration $Integration -Settings $Settings
     }
 }
