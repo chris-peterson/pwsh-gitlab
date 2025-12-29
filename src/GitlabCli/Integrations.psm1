@@ -17,16 +17,16 @@ function Get-GitlabProjectIntegration {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
-    $Resource = "projects/$($Project.Id)/integrations"
+    $Resource = "projects/$ProjectId/integrations"
     if ($Integration) {
         $Resource += "/$Integration"
     }
     # https://docs.gitlab.com/ee/api/integrations.html#list-all-active-integrations
     Invoke-GitlabApi GET $Resource |
         New-GitlabObject 'Gitlab.ProjectIntegration' |
-        Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id -PassThru
+        Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId -PassThru
 }
 
 function Update-GitlabProjectIntegration {

@@ -68,7 +68,7 @@ function Get-GitlabIssue {
             $Path = "groups/$GroupId/issues"
         }
         elseif ($ProjectId) {
-            $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+            $ProjectId = Resolve-GitlabProjectId $ProjectId
             $Path = "projects/$ProjectId/issues"
         }
         if ($IssueId) {

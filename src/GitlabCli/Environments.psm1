@@ -35,12 +35,12 @@ function Get-GitlabEnvironment {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     # https://docs.gitlab.com/ee/api/environments.html#list-environments
     $GitlabApiArguments = @{
         HttpMethod = 'GET'
-        Path       = "projects/$($Project.Id)/environments"
+        Path       = "projects/$ProjectId/environments"
         Query      = @{}
         MaxPages   = $MaxPages
     }

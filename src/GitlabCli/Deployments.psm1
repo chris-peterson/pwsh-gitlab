@@ -47,14 +47,14 @@ function Get-GitlabDeployment {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabApiArguments = @{
         HttpMethod = 'GET'
     }
     switch ($PSCmdlet.ParameterSetName) {
         Query {
-            $GitlabApiArguments.Path = "projects/$($Project.Id)/deployments"
+            $GitlabApiArguments.Path = "projects/$ProjectId/deployments"
             $GitlabApiArguments.Query = @{
                 sort='desc'
             }

@@ -32,9 +32,9 @@ function Get-GitlabRelease {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
-    $Path = "projects/$($Project.Id)/releases"
+    $Path = "projects/$ProjectId/releases"
     $Query = @{}
     if ($Tag) {
         $Path += "/$Tag"

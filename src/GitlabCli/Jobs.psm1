@@ -153,8 +153,7 @@ function Get-GitlabJobTrace {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
-    $ProjectId = $Project.Id
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabApiArguments = @{
         HttpMethod = "GET"
@@ -401,8 +400,7 @@ function Get-GitlabJobArtifact {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
-    $ProjectId = $Project.Id
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $Resource = "projects/$ProjectId/jobs/$JobId/artifacts"
     if ($ArtifactPath) {

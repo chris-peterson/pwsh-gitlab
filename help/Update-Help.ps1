@@ -35,7 +35,25 @@ foreach ($File in $NewFiles) {
     $Help | Export-MarkdownCommandHelp -OutputFolder $DocsFolder -Force
 }
 
-# Check for PlatyPS placeholder text that needs to be filled in
+Write-Host "Filtering out unimportant changes..." -ForegroundColor Cyan
+Push-Location $RepoRoot
+$ModifiedFiles = git diff --name-only -- docs/
+foreach ($File in $ModifiedFiles) {
+    if ($File) {
+        $DiffContent = git diff --unified=0 -- $File
+        $SignificantChanges = $DiffContent | Where-Object {
+            $_ -match '^[+-]' -and
+            $_ -notmatch '^[+-]{3}' -and      # Ignore diff headers
+            $_ -notmatch '^[+-]ms\.date:'     # Ignore ms.date changes
+        }
+        if (-not $SignificantChanges) {
+            git checkout -- $File 2>$null
+            Write-Debug "  Reverted unimportant changes in: $File"
+        }
+    }
+}
+Pop-Location
+
 Write-Host "Checking for placeholder text..." -ForegroundColor Cyan
 $PlaceholderPattern = '\{\{\s*Fill in'
 $PlaceholderMatches = Get-ChildItem -Path $DocsFolder -Filter '*.md' -Recurse |

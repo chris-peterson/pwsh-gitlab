@@ -7,6 +7,36 @@ function Test-IsConfigurationEnvironmentVariables {
     $env:GITLAB_ACCESS_TOKEN
 }
 
+function Invoke-GitlabConfigMigration {
+    [CmdletBinding()]
+    param ()
+
+    if (Test-Path $global:GitlabConfigurationPath) {
+        return
+    }
+
+    $OldConfigPath = Join-Path $env:HOME '/.config/powershell/gitlab.config'
+
+    if (-not (Test-Path $OldConfigPath)) {
+        return
+    }
+
+    Write-Host "GitlabCli: Migrating configuration from '$OldConfigPath' to '$global:GitlabConfigurationPath'"
+
+    try {
+        $OldConfig = Get-Content $OldConfigPath -Raw | ConvertFrom-Json
+
+        $OldConfig | Write-GitlabConfiguration
+
+        Remove-Item $OldConfigPath -Force
+        Write-Host "GitlabCli: Migration complete. Old config file removed."
+    }
+    catch {
+        Write-Warning "GitlabCli: Failed to migrate configuration: $_"
+        Write-Warning "GitlabCli: Old config preserved at '$OldConfigPath'"
+    }
+}
+
 function Write-GitlabConfiguration {
     [CmdletBinding()]
     param (
@@ -39,7 +69,7 @@ function Write-GitlabConfiguration {
         WhatIf = $false
     }
     $ToSave |
-        ConvertTo-Json |
+        ConvertTo-Yaml |
         Set-Content @SaveParameters |
         Out-Null
 }

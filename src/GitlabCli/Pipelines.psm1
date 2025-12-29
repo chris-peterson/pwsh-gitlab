@@ -216,10 +216,10 @@ function Get-GitlabPipelineVariable {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     # https://docs.gitlab.com/ee/api/pipelines.html#get-variables-of-a-pipeline
-    $KeyValues = Invoke-GitlabApi GET "projects/$($Project.Id)/pipelines/$PipelineId/variables"
+    $KeyValues = Invoke-GitlabApi GET "projects/$ProjectId/pipelines/$PipelineId/variables"
 
     if ($Variable) {
         $KeyValues | Where-Object Key -eq $Variable | Select-Object -ExpandProperty Value
@@ -258,7 +258,7 @@ function Get-GitlabPipelineBridge {
         [string]
         $SiteUrl
     )
-    $ProjectId = $(Get-GitlabProject -ProjectId $ProjectId).Id
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabApiArguments = @{
         HttpMethod = "GET"

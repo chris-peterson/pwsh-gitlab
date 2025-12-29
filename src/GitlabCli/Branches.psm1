@@ -34,7 +34,7 @@ function Get-GitlabBranch {
 
     $MaxPages = Resolve-GitlabMaxPages -MaxPages $MaxPages -All:$All
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     if ($Ref -eq '.') {
         $Ref = $(Get-LocalGitContext).Branch
@@ -43,7 +43,7 @@ function Get-GitlabBranch {
     # https://docs.gitlab.com/api/branches/#list-repository-branches
     $Request = @{
         HttpMethod = 'GET'
-        Path       = "projects/$($Project.Id)/repository/branches"
+        Path       = "projects/$ProjectId/repository/branches"
         Query      = @{}
         MaxPages   = $MaxPages
     }
@@ -88,11 +88,11 @@ function Get-GitlabProtectedBranch {
         $SiteUrl
     )
 
-    $Project  = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $Request = @{
         HttpMethod = 'GET'
-        Path       = "projects/$($Project.Id)/protected_branches"
+        Path       = "projects/$ProjectId/protected_branches"
     }
 
     if ($Name) {
@@ -104,7 +104,7 @@ function Get-GitlabProtectedBranch {
         Invoke-GitlabApi @Request
             | New-GitlabObject 'Gitlab.ProtectedBranch'
             | Add-Member -PassThru -NotePropertyMembers @{
-                ProjectId = $Project.Id
+                ProjectId = $ProjectId
             }
     } catch {
         if ($_.Exception.Response.StatusCode.ToString() -eq 'NotFound') {

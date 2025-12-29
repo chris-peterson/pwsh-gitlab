@@ -45,6 +45,10 @@ function New-GitlabObject {
     Begin{}
     Process {
         foreach ($item in $InputObject) {
+            if ($item -is [hashtable]) {
+                $item = [PSCustomObject]$item
+            }
+
             $Wrapper = New-Object PSObject
             $item.PSObject.Properties |
                 Sort-Object Name |
