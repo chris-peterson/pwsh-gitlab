@@ -379,6 +379,7 @@
         'Archive-GitlabProject'
         'Clone-GitlabGroup'
         'Fork-GitlabProject'
+        'Mark-GitlabTodoDone'
         'Play-GitlabJob'
         'Pull-GitlabGroup'
         'Remove-GitlabPersonalAccessToken'

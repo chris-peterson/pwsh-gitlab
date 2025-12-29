@@ -80,7 +80,7 @@ jobs:
         run: |
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
-          $Results = Invoke-ScriptAnalyzer -Path ./src -Recurse -ReportSummary
+          $Results = Invoke-ScriptAnalyzer -Path ./src -Recurse -Settings ./PSScriptAnalyzerSettings.psd1 -ReportSummary
           
           $Errors = $Results | Where-Object Severity -eq 'Error'
           $Warnings = $Results | Where-Object Severity -eq 'Warning'

@@ -272,28 +272,28 @@ function Remove-GitlabPipelineSchedule {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     [OutputType([PSCustomObject])]
     param (
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]
         [int]
         $PipelineScheduleId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabApiArguments = @{
         HttpMethod = 'DELETE'
-        Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId"
+        Path       = "projects/$ProjectId/pipeline_schedules/$PipelineScheduleId"
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) schedule #$PipelineScheduleId", "delete pipeline schedule")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId schedule #$PipelineScheduleId", "delete pipeline schedule")) {
         Invoke-GitlabApi @GitlabApiArguments
     }
 }
@@ -499,14 +499,14 @@ function New-GitlabScheduledPipeline {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabApiArguments = @{
         HttpMethod = 'POST'
-        Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId/play"
+        Path       = "projects/$ProjectId/pipeline_schedules/$PipelineScheduleId/play"
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) schedule #$PipelineScheduleId", "run scheduled pipeline")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId schedule #$PipelineScheduleId", "run scheduled pipeline")) {
         Invoke-GitlabApi @GitlabApiArguments | Select-Object -ExpandProperty 'message'
     }
 }

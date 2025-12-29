@@ -810,12 +810,12 @@ function Remove-GitlabGroupToProjectShare {
         $SiteUrl
     )
 
-    $Project    = Get-GitlabGroup $GroupId
-    $GroupShare = Get-GitlabGroup $GroupShareId
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "remove sharing with group '$($GroupShare.Name)'")) {
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
+    $GroupShare = Get-GitlabGroup $GroupId
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "remove sharing with group '$($GroupShare.Name)'")) {
         # https://docs.gitlab.com/api/projects/#delete-a-shared-project-link-in-a-grou
-        if (Invoke-GitlabApi DELETE "projects/$($Project.Id)/share/$($GroupShare.Id)" | Out-Null) {
-            Write-Host "Removed sharing with $($GroupShare.Name) from $($Project.PathWithNamespace)"
+        if (Invoke-GitlabApi DELETE "projects/$ProjectId/share/$($GroupShare.Id)" | Out-Null) {
+            Write-Host "Removed sharing with $($GroupShare.Name) from project $ProjectId"
         }
     }
 }

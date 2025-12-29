@@ -325,11 +325,19 @@ function Get-GitlabRunnerStats {
         }
     }
 
+    $Jobs = $Data.Jobs
+    if ($After) {
+        $Jobs = $Jobs | Where-Object { $_.startedAt -and [datetime]$_.startedAt -ge $After }
+    }
+    if ($Before) {
+        $Jobs = $Jobs | Where-Object { $_.startedAt -and [datetime]$_.startedAt -le $Before }
+    }
+
     $JobCountByStatus = [ordered]@{}
-    $Data.Jobs | Group-Object -Property status -NoElement | Sort-Object -Descending Count | ForEach-Object {
+    $Jobs | Group-Object -Property status -NoElement | Sort-Object -Descending Count | ForEach-Object {
         $JobCountByStatus[$_.Name.ToLower()] = $_.Count
     }
-    $QueuedJobs = $Data.Jobs | Where-Object { $_.queuedDuration -ne $null -and $_.queuedDuration -gt 0 }
+    $QueuedJobs = $Jobs | Where-Object { $_.queuedDuration -ne $null -and $_.queuedDuration -gt 0 }
     $LongestQueuedJobs = $QueuedJobs | Sort-Object -Property queuedDuration -Descending | Select-Object -First 5 | ForEach-Object {
       $_ | Add-Member -MemberType NoteProperty -Name 'Uri' -Value "$($_.project.webUrl)/-/jobs/$(($_.id -split '/')[-1])" -PassThru
     }
@@ -337,7 +345,7 @@ function Get-GitlabRunnerStats {
 
     [PSCustomObject]@{
         RunnerCount                  = $RunnerIds.Count
-        JobCount                     = $Data.Jobs.Count
+        JobCount                     = $Jobs.Count
         JobCountByStatus             = $JobCountByStatus
         JobQueuedDurationPercentiles = [ordered]@{
             '50' = Get-Percentile -Values $Durations -Percentile 0.50

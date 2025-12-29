@@ -179,74 +179,74 @@ function Remove-GitlabUser {
     }
 }
 
-# https://docs.gitlab.com/ee/api/events.html#get-user-contribution-events
 function Get-GitlabUserEvent {
     [CmdletBinding(DefaultParameterSetName='ByUserId')]
     [OutputType('Gitlab.Event')]
     param (
-        [Parameter(ParameterSetName='ByUserId', Mandatory=$false)]
+        [Parameter(ParameterSetName='ByUserId')]
         [Alias('Username')]
         [string]
         $UserId,
 
-        [Parameter(ParameterSetName='ByEmail', Mandatory=$false)]
+        [Parameter(ParameterSetName='ByEmail')]
         [string]
         $EmailAddress,
 
-        [Parameter(ParameterSetName='ByMe', Mandatory=$False)]
+        [Parameter(ParameterSetName='ByMe')]
         [switch]
         $Me,
 
-        [Parameter(Mandatory=$False)]
+        [Parameter()]
         [ValidateSet('approved', 'closed', 'commented', 'created', 'destroyed', 'expired', 'joined', 'left', 'merged', 'pushed', 'reopened', 'updated')]
         [string]
         $Action,
 
-        [Parameter(Mandatory=$False)]
-        [ValidateSet('issue', 'milestone', 'merge_request', 'note', 'project', 'snippet', 'user')]
+        [Parameter()]
+        [ValidateSet('epic','issue', 'merge_request', 'milestone', 'note', 'project', 'snippet', 'user')]
         [string]
         $TargetType,
 
-        [Parameter(Mandatory=$False)]
+        [Parameter()]
         [ValidateScript({Test-GitlabDate $_})]
         [string]
         $Before,
 
-        [Parameter(Mandatory=$False)]
+        [Parameter()]
         [ValidateScript({Test-GitlabDate $_})]
         [string]
         $After,
 
-        [Parameter(Mandatory=$False)]
+        [Parameter()]
         [ValidateSet('asc', 'desc')]
         [string]
         $Sort,
 
-        [Parameter(Mandatory=$False)]
+        [Parameter()]
         [uint]
         $MaxPages = 1,
 
-        [Parameter(Mandatory=$False)]
+        [Parameter()]
         [switch]
         $FetchProjects,
 
-        [Parameter(Mandatory=$False)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
 
     $GetUserParams = @{}
-    
-    if($PSCmdlet.ParameterSetName -eq 'ByUserId') {
+
+    if ($Me) {
+        $GetUserParams.UserId = $(Get-GitlabUser -Me).Id
+    }
+    elseif($PSCmdlet.ParameterSetName -eq 'ByUserId') {
         $GetUserParams.UserId = $UserId
     } 
-    
-    if ($PSCmdLet.ParameterSetName -eq 'ByEmail') {
+    elseif ($PSCmdLet.ParameterSetName -eq 'ByEmail') {
         $GetUserParams.UserId = $EmailAddress
     }
-
-    if($PSCmdlet.ParameterSetName -eq 'ByMe') {
-        $GetUserParams.Me = $true
+    else {
+        throw "Invalid parameter combination"
     }
 
     $User = Get-GitlabUser @GetUserParams
@@ -261,10 +261,14 @@ function Get-GitlabUserEvent {
     if($Action) {
         $Query.action = $Action
     }
+    if($TargetType) {
+        $Query.target_type = $TargetType
+    }
     if($Sort) {
         $Query.sort = $Sort
     }
 
+    # https://docs.gitlab.com/ee/api/events.html#get-user-contribution-events
     $Events = Invoke-GitlabApi GET "users/$($User.Id)/events" -Query $Query -MaxPages $MaxPages |
         New-GitlabObject 'Gitlab.Event'
 
