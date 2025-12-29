@@ -79,7 +79,7 @@ function Get-GitlabMergeRequest {
         [Parameter()]
         [uint]
         $MaxPages,
-    
+
         [switch]
         [Parameter()]
         $All,

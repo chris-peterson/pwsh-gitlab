@@ -341,7 +341,7 @@ function New-GitlabProject {
     if ($PSCmdlet.ShouldProcess($NamespaceId, "create new project '$ProjectName' $($Request | ConvertTo-Json)" )) {
         # https://docs.gitlab.com/ee/api/projects.html#create-project
         $Project = Invoke-GitlabApi POST "projects" -Body $Request | New-GitlabObject 'Gitlab.Project'
-    
+
         if ($CloneNow) {
             git clone $Project.SshUrlToRepo
             Set-Location $ProjectName
@@ -411,7 +411,7 @@ function Update-GitlabProject {
         [Parameter()]
         [TrueOrFalse()][bool]
         $OnlyAllowMergeIfAllDiscussionsAreResolved,
-        
+
         [Parameter()]
         [string]
         $SiteUrl
@@ -456,7 +456,7 @@ function Update-GitlabProject {
             $Request.topics = $Topics -join ','
         } else {
             $Request.topics = ''
-        } 
+        }
     }
     if ($Visibility) {
         $Request.visibility = $Visibility
@@ -476,7 +476,7 @@ function Invoke-GitlabProjectArchival {
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
-        
+
         [Parameter()]
         [string]
         $SiteUrl
@@ -499,7 +499,7 @@ function Invoke-GitlabProjectUnarchival {
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
-        
+
         [Parameter()]
         [string]
         $SiteUrl

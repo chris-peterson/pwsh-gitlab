@@ -206,12 +206,12 @@ function Remove-GitlabGroupMember {
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
-        
+
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Username')]
         [string]
         $UserId,
-        
+
         [Parameter()]
         [string]
         $SiteUrl
@@ -219,7 +219,7 @@ function Remove-GitlabGroupMember {
 
     $User = Get-GitlabUser -UserId $UserId
     $Group = Get-GitlabGroup -GroupId $GroupId
-        
+
     if ($PSCmdlet.ShouldProcess($Group.FullName, "remove $($User.Username)'s group membership")) {
         try {
             # https://docs.gitlab.com/ee/api/members.html#remove-a-member-from-a-group-or-project
@@ -239,7 +239,7 @@ function Get-GitlabProjectMember {
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
-        
+
         [Parameter()]
         [Alias('Username')]
         [string]
@@ -248,7 +248,7 @@ function Get-GitlabProjectMember {
         [switch]
         [Parameter()]
         $IncludeInherited,
-                
+
         [Parameter()]
         [uint]
         $MaxPages,
@@ -529,7 +529,7 @@ function Add-GitlabUserMembership {
         Invoke-GitlabApi POST "groups/$($Group.Id)/members" @{
             user_id = $User.Id
             access_level = Get-GitlabMemberAccessLevel $AccessLevel
-        } 
+        }
     }
 }
 
@@ -580,7 +580,7 @@ function Update-GitlabUserMembership {
             if ($PSCmdLet.ShouldProcess($Project.PathWithNamespace, "update $($User.Username)'s membership access level to '$AccessLevel' on project")) {
                 $Rows = Invoke-GitlabApi PUT "projects/$($Project.Id)/members/$($User.Id)" @{
                     access_level = $AccessLevelLiteral
-                } 
+                }
             }
         }
     }

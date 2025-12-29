@@ -6,7 +6,7 @@ function Get-LocalGitContext {
         [Parameter(Mandatory=$false)]
         $Path = '.'
     )
-    
+
     $Context = [PSCustomObject]@{
         Site = ''
         Project = ''
@@ -29,7 +29,7 @@ function Get-LocalGitContext {
                 $Context.Site = $Uri.Host
                 $Uri.AbsolutePath -match '/?(?<Project>.*)' | Out-Null
                 $Context.Project = $Matches.Project -replace '.git$', ''
-              
+
             }
             catch {
                 # git

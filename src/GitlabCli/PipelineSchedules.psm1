@@ -57,7 +57,7 @@ function Get-GitlabPipelineSchedule {
         # only returned by the single schedule API so have to fetch them individually
         # (https://docs.gitlab.com/ee/api/pipeline_schedules.html#get-a-single-pipeline-schedule)
         $Wrapper = $Wrapper | ForEach-Object { Get-GitlabPipelineSchedule -ProjectId $_.ProjectId -PipelineScheduleId $_.Id }
-    } 
+    }
 
     $Wrapper | Sort-Object NextRunAtSortable
 }
@@ -100,7 +100,7 @@ function New-GitlabPipelineSchedule {
     )
 
     $Project = Get-GitlabProject $ProjectId
-    
+
     if ([string]::IsNullOrWhiteSpace($Ref)) {
         $Ref = $ProjectId -eq '.' -or $Ref -eq '.' ? $(Get-LocalGitContext).Branch : $Project.DefaultBranch
     }
@@ -328,7 +328,7 @@ function Get-GitlabPipelineScheduleVariable {
     $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
 
     if($Key) {
-        $Wrapper = $Wrapper | Where-Object { $_.Key -eq $Key } 
+        $Wrapper = $Wrapper | Where-Object { $_.Key -eq $Key }
     }
 
     $Wrapper
@@ -359,7 +359,7 @@ function New-GitlabPipelineScheduleVariable {
         [ValidateSet("env_var","file")]
         [string]
         $VariableType="env_var",
-     
+
         [Parameter(Mandatory=$false)]
         [string]
         $SiteUrl
@@ -414,7 +414,7 @@ function Update-GitlabPipelineScheduleVariable {
         [ValidateSet('env_var', 'file')]
         [string]
         $VariableType = 'env_var',
-     
+
         [Parameter()]
         [string]
         $SiteUrl

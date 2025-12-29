@@ -250,7 +250,7 @@ function Get-GitlabRepositoryYmlFileContent {
         [string]
         $SiteUrl
     )
-    
+
     Get-GitlabRepositoryFileContent -ProjectId $ProjectId -Ref $Ref -FilePath $FilePath |
         ConvertFrom-Yaml
 }

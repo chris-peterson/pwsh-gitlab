@@ -162,48 +162,48 @@ function Protect-GitlabBranch {
         [ValidateNotNullOrEmpty()]
         [string]
         $ProjectId = '.',
-        
+
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [Alias('Name')]
         [ValidateNotNullOrEmpty()]
         [string]
         $Branch = '.',
-        
+
         [Parameter()]
         [ValidateSet('noaccess','developer','maintainer','admin')]
         [string]
         $PushAccessLevel,
-        
+
         [Parameter()]
         [ValidateSet('noaccess','developer','maintainer','admin')]
         [string]
         $MergeAccessLevel,
-        
+
         [Parameter()]
         [ValidateSet('developer','maintainer','admin')]
         [string]
         $UnprotectAccessLevel,
-        
+
         [Parameter()]
         [TrueOrFalse()][bool]
         $AllowForcePush = $false,
-        
+
         [Parameter()]
         [array]
         $AllowedToPush,
-        
+
         [Parameter()]
         [array]
         $AllowedToMerge,
-        
+
         [Parameter()]
         [array]
         $AllowedToUnprotect,
-        
+
         [Parameter()]
         [TrueOrFalse()][bool]
         $CodeOwnerApprovalRequired = $false,
-        
+
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string]
@@ -281,13 +281,13 @@ function UnProtect-GitlabBranch {
         [ValidateNotNullOrEmpty()]
         [string]
         $ProjectId = '.',
-        
+
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
         [Alias('Branch')]
         [string]
         $Name = '.',
-        
+
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string]

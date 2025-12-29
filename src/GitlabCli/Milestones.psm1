@@ -21,7 +21,7 @@ function Get-GitlabMilestone {
         [Alias('Id')]
         [string]
         $MilestoneId,
-        
+
         [Parameter()]
         [string]
         $SiteUrl

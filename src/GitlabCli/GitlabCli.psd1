@@ -321,7 +321,7 @@
 
         # User Deploy Keys
         'Get-GitlabUserDeployKey'
-        
+
         # User
         'Get-GitlabUser'
         'Get-GitlabCurrentUser'

@@ -96,12 +96,12 @@ function Stop-GitlabEnvironment {
     process {
         $Project = Get-GitlabProject -ProjectId $ProjectId
         $Environment = Get-GitlabEnvironment -ProjectId $Project.Id -Name $Name
-    
+
         $GitlabApiArguments = @{
             HttpMethod='POST'
             Path="projects/$($Project.Id)/environments/$($Environment.Id)/stop"
         }
-    
+
         if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)/$($Environment.Name)", "stop environment")) {
             Invoke-GitlabApi @GitlabApiArguments | Out-Null
             Write-Host "Environment '$($Environment.Name)' (id: $($Environment.Id)) has been stopped"
@@ -129,12 +129,12 @@ function Remove-GitlabEnvironment {
     process {
         $Project = Get-GitlabProject -ProjectId $ProjectId
         $Environment = Get-GitlabEnvironment -ProjectId $Project.Id -Name $Name
-    
+
         $GitlabApiArguments = @{
             HttpMethod='DELETE'
             Path="projects/$($Project.Id)/environments/$($Environment.Id)"
         }
-    
+
         if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)/$($Environment.Name)", "delete environment")) {
             Invoke-GitlabApi @GitlabApiArguments | Out-Null
             Write-Host "Environment '$($Environment.Name)' (id: $($Environment.Id)) has been deleted"

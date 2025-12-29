@@ -47,7 +47,7 @@ function Get-GitlabRunner {
 
     switch ($PSCmdlet.ParameterSetName) {
         # https://docs.gitlab.com/ee/api/runners.html#get-runners-details
-        RunnerId { 
+        RunnerId {
             $Params.Path = "runners/$RunnerId"
         }
         # https://docs.gitlab.com/ee/api/runners.html#list-all-runners

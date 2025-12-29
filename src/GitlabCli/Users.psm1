@@ -32,7 +32,7 @@ function Get-GitlabUser {
         [Parameter()]
         [uint]
         $MaxPages = 1,
-    
+
         [switch]
         [Parameter()]
         $All,
@@ -241,7 +241,7 @@ function Get-GitlabUserEvent {
     }
     elseif($PSCmdlet.ParameterSetName -eq 'ByUserId') {
         $GetUserParams.UserId = $UserId
-    } 
+    }
     elseif ($PSCmdLet.ParameterSetName -eq 'ByEmail') {
         $GetUserParams.UserId = $EmailAddress
     }

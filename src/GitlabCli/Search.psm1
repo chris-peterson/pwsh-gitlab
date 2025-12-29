@@ -128,13 +128,13 @@ function Search-GitlabProject {
     }
 
     $Project = Get-GitlabProject $ProjectId
-    
+
     if ($Filename) {
         $Query.search = "filename:$Filename"
     } else {
         $Query.search = $Search
     }
-    
+
     $Resource = "projects/$($ProjectId | ConvertTo-UrlEncoded)/search"
     Invoke-GitlabApi GET $Resource $Query |
         New-GitlabObject 'Gitlab.SearchResult.Blob' |
