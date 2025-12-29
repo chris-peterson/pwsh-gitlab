@@ -73,7 +73,7 @@ function Resolve-GitlabVariable {
 function ConvertTo-GitlabVariables {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Converts input to multiple GitLab CI variables')]
     [CmdletBinding()]
-    [OutputType([hashtable[]])]
+    [OutputType([hashtable])]
     param (
         [Parameter(ValueFromPipeline)]
         $Object,
@@ -108,5 +108,6 @@ function ConvertTo-GitlabVariables {
             $GitlabVars += $Var
         }
     }
-    ,$GitlabVars
+    $Hashtable = [hashtable] (,$GitlabVars)
+    $Hashtable
 }

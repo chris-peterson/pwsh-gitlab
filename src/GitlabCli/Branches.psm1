@@ -99,20 +99,21 @@ function Get-GitlabProtectedBranch {
         $Request.Path += "/$($Name | ConvertTo-UrlEncoded)"
     }
 
+    $Branches = @()
     try {
         # https://docs.gitlab.com/ee/api/protected_branches.html#list-protected-branches
-        Invoke-GitlabApi @Request
+        $Branches = Invoke-GitlabApi @Request
             | New-GitlabObject 'Gitlab.ProtectedBranch'
             | Add-Member -PassThru -NotePropertyMembers @{
                 ProjectId = $ProjectId
             }
     } catch {
         if ($_.Exception.Response.StatusCode.ToString() -eq 'NotFound') {
-            @()
         } else {
             throw
         }
     }
+    return $Branches
 }
 
 function New-GitlabBranch {
