@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Members/Get-GitlabUserMembership.md
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 12/29/2025
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabUserMembership
 ---
@@ -20,15 +20,14 @@ Gets all group and project memberships for a GitLab user.
 ### ByUsername (Default)
 
 ```
-Get-GitlabUserMembership [-Username] <string> [-SiteUrl <Parameter>] [-MaxPages <Parameter>] [-All]
+Get-GitlabUserMembership [-Username] <string> [-SiteUrl <string>] [-MaxPages <uint>] [-All]
  [<CommonParameters>]
 ```
 
 ### Me
 
 ```
-Get-GitlabUserMembership [-Me] [-SiteUrl <Parameter>] [-MaxPages <Parameter>] [-All]
- [<CommonParameters>]
+Get-GitlabUserMembership [-Me] [-SiteUrl <string>] [-MaxPages <uint>] [-All] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -83,7 +82,7 @@ HelpMessage: ''
 The maximum number of result pages to retrieve. Use -All to retrieve all pages.
 
 ```yaml
-Type: System.Management.Automation.ParameterAttribute
+Type: System.UInt32
 DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
@@ -125,7 +124,7 @@ HelpMessage: ''
 The URL of the GitLab site to connect to. If not specified, uses the default configured site.
 
 ```yaml
-Type: System.Management.Automation.ParameterAttribute
+Type: System.String
 DefaultValue: ''
 SupportsWildcards: false
 Aliases: []

@@ -424,11 +424,11 @@ function Get-GitlabUserMembership {
         [switch]
         $Me,
 
-        [Parameter]
+        [Parameter()]
         [string]
         $SiteUrl,
 
-        [Parameter]
+        [Parameter()]
         [uint]
         $MaxPages,
 
@@ -468,7 +468,7 @@ function Remove-GitlabUserMembership {
         [switch]
         $RemoveAllAccess,
 
-        [Parameter]
+        [Parameter()]
         [string]
         $SiteUrl
     )
