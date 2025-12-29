@@ -687,7 +687,9 @@ function Rename-GitlabProjectDefaultBranch {
         try {
             UnProtect-GitlabBranch -Name $OldDefaultBranch | Out-Null
         }
-        catch {}
+        catch {
+            Write-Debug "UnProtect-GitlabBranch failed for '$OldDefaultBranch': $_"
+        }
         Protect-GitlabBranch -Name $NewDefaultBranch | Out-Null
         git push --delete origin $OldDefaultBranch | Out-Null
         git remote set-head origin -a | Out-Null

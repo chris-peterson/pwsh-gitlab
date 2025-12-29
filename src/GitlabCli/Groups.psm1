@@ -43,6 +43,7 @@ function Get-GitlabGroup {
                     }
                 }
                 catch {
+                    Write-Debug "Group lookup failed for '$PossibleGroupName': $_"
                 }
                 Write-Verbose "Didn't find a group named '$PossibleGroupName'"
             }
