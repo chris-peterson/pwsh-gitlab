@@ -1,6 +1,7 @@
 # Configuration helper functions
 
 function Test-IsConfigurationEnvironmentVariables {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Tests if configuration comes from environment variables (plural)')]
     param (
     )
 

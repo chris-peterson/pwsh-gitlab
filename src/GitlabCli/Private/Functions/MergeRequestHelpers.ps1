@@ -1,6 +1,7 @@
 # Merge request helper functions
 
 function Add-GitlabMergeRequestApprovals {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Adds multiple approval properties to MR object')]
     param(
         [Parameter(Position=0, Mandatory, ValueFromPipeline)]
         $MergeRequest

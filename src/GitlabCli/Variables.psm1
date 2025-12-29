@@ -71,6 +71,7 @@ function Resolve-GitlabVariable {
     }
 }
 function ConvertTo-GitlabVariables {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Converts input to multiple GitLab CI variables')]
     [CmdletBinding()]
     [OutputType([hashtable[]])]
     param (

@@ -246,6 +246,7 @@ function Remove-GitlabRunner {
 }
 
 function Get-GitlabRunnerStats {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Stats is a singular noun (short for statistics)')]
     [CmdletBinding(DefaultParameterSetName='ByTags')]
     [OutputType('Gitlab.RunnerStats')]
     param (

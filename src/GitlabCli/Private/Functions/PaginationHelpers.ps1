@@ -28,6 +28,7 @@ $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All -Recurse:$Recurse
 #>
 function Resolve-GitlabMaxPages {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Resolves the MaxPages parameter value (plural is intentional)')]
     param (
         [Parameter()]
         [uint]
