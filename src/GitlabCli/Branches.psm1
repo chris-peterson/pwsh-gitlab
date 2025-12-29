@@ -231,7 +231,7 @@ function Protect-GitlabBranch {
         #     Invoke-GitlabApi PATCH "projects/$($Project.Id)/protected_branches/$Branch" -Body $Request | New-GitlabObject 'Gitlab.ProtectedBranch'
         # }
         # as a workaround, remove protection
-        Remove-GitlabProtectedBranch -ProjectId $ProjectId -Branch $Branch | Out-Null
+        UnProtect-GitlabBranch -ProjectId $ProjectId -Branch $Branch | Out-Null
     }
 
     $Request = @{
