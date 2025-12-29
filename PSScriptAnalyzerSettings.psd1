@@ -15,8 +15,14 @@
     # Adding process blocks would require significant refactoring and testing of ~50+ functions.
     # Pipeline collection behavior is handled explicitly where needed.
 
+    # NOTE: PSAvoidUsingWriteHost fires on Write-Host usage. However, this is a CLI tool where
+    # Write-Host is intentionally used for user feedback (confirmations, progress, colored output).
+    # These messages are distinct from pipeline output and should not go to stdout.
+    # Examples: "Deleted branch 'feature-x'", "Pipeline created...", colored status indicators.
+
     ExcludeRules = @(
         'PSReviewUnusedParameter'
         'PSUseProcessBlockForPipelineCommand'
+        'PSAvoidUsingWriteHost'
     )
 }
