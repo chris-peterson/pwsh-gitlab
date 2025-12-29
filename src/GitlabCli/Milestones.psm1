@@ -1,5 +1,5 @@
 function Get-GitlabMilestone {
-    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'ByGroup')]
+    [CmdletBinding(DefaultParameterSetName = 'ByGroup')]
     [OutputType('Gitlab.Milestone')]
     param (
 
