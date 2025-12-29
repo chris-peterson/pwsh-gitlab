@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Groups/New-GitlabGroupToGroupShare.md
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 12/29/2025
 PlatyPS schema version: 2024-05-01
 title: New-GitlabGroupToGroupShare
 ---
@@ -25,6 +25,9 @@ New-GitlabGroupToGroupShare [-GroupId] <string> [-GroupShareId] <string> [-Acces
 ```
 
 ## ALIASES
+
+- `Share-GitlabGroupWithGroup`
+
 
 ## DESCRIPTION
 

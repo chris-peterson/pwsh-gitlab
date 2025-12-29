@@ -376,6 +376,7 @@
     )
     AliasesToExport = @(
         'Add-GitlabIssueNote'
+        'Add-GitlabProjectHook'
         'Archive-GitlabProject'
         'Clone-GitlabGroup'
         'Fork-GitlabProject'
@@ -385,6 +386,7 @@
         'Remove-GitlabPersonalAccessToken'
         'Remove-GitlabProjectFork'
         'Remove-GitlabProtectedBranch'
+        'Reopen-GitlabIssue'
         'Retry-GitlabJob'
         'Review-GitlabMergeRequest'
         'Revoke-GitlabGroupAccessToken'
@@ -404,6 +406,7 @@
         'deploys'
         'pipeline'
         'pipelines'
+        'play'
         'schedule'
         'schedules'
         'job'

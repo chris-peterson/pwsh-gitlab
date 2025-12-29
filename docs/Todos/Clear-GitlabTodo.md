@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Todos/Clear-GitlabTodo.md
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 12/29/2025
 PlatyPS schema version: 2024-05-01
 title: Clear-GitlabTodo
 ---
@@ -30,6 +30,9 @@ Clear-GitlabTodo [-All] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParamet
 ```
 
 ## ALIASES
+
+- `Mark-GitlabTodoDone`
+
 
 ## DESCRIPTION
 
@@ -141,7 +144,7 @@ ParameterSets:
   Position: 0
   IsRequired: true
   ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
+  ValueFromPipelineByPropertyName: true
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []
@@ -178,6 +181,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
+
+### System.Object
+
+See [Gitlab.Todo](#gitlabtodo)
 
 ## OUTPUTS
 

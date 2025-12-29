@@ -25,7 +25,7 @@ Open-InBrowser [-InputObject] <Object> [<CommonParameters>]
 
 ## ALIASES
 
-`go`
+- `go`
 
 
 ## DESCRIPTION

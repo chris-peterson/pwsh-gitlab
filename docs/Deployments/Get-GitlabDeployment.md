@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Deployments/Get-GitlabDeployment.md
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 12/29/2025
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabDeployment
 ---
@@ -33,6 +33,9 @@ Get-GitlabDeployment -DeploymentId <string> [-ProjectId <string>] [-Select <stri
 ```
 
 ## ALIASES
+
+- `deploys`
+
 
 ## DESCRIPTION
 
