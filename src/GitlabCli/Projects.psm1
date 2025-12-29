@@ -341,7 +341,7 @@ function New-GitlabProject {
     if ($PSCmdlet.ShouldProcess($NamespaceId, "create new project '$ProjectName' $($Request | ConvertTo-Json)" )) {
         # https://docs.gitlab.com/ee/api/projects.html#create-project
         $Project = Invoke-GitlabApi POST "projects" -Body $Request | New-GitlabObject 'Gitlab.Project'
-    
+
         if ($CloneNow) {
             git clone $Project.SshUrlToRepo
             Set-Location $ProjectName
@@ -411,7 +411,7 @@ function Update-GitlabProject {
         [Parameter()]
         [TrueOrFalse()][bool]
         $OnlyAllowMergeIfAllDiscussionsAreResolved,
-        
+
         [Parameter()]
         [string]
         $SiteUrl
@@ -456,7 +456,7 @@ function Update-GitlabProject {
             $Request.topics = $Topics -join ','
         } else {
             $Request.topics = ''
-        } 
+        }
     }
     if ($Visibility) {
         $Request.visibility = $Visibility
@@ -476,7 +476,7 @@ function Invoke-GitlabProjectArchival {
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
-        
+
         [Parameter()]
         [string]
         $SiteUrl
@@ -499,7 +499,7 @@ function Invoke-GitlabProjectUnarchival {
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
-        
+
         [Parameter()]
         [string]
         $SiteUrl
@@ -687,7 +687,9 @@ function Rename-GitlabProjectDefaultBranch {
         try {
             UnProtect-GitlabBranch -Name $OldDefaultBranch | Out-Null
         }
-        catch {}
+        catch {
+            Write-Debug "UnProtect-GitlabBranch failed for '$OldDefaultBranch': $_"
+        }
         Protect-GitlabBranch -Name $NewDefaultBranch | Out-Null
         git push --delete origin $OldDefaultBranch | Out-Null
         git remote set-head origin -a | Out-Null
@@ -810,12 +812,12 @@ function Remove-GitlabGroupToProjectShare {
         $SiteUrl
     )
 
-    $Project    = Get-GitlabGroup $GroupId
-    $GroupShare = Get-GitlabGroup $GroupShareId
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "remove sharing with group '$($GroupShare.Name)'")) {
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
+    $GroupShare = Get-GitlabGroup $GroupId
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "remove sharing with group '$($GroupShare.Name)'")) {
         # https://docs.gitlab.com/api/projects/#delete-a-shared-project-link-in-a-grou
-        if (Invoke-GitlabApi DELETE "projects/$($Project.Id)/share/$($GroupShare.Id)" | Out-Null) {
-            Write-Host "Removed sharing with $($GroupShare.Name) from $($Project.PathWithNamespace)"
+        if (Invoke-GitlabApi DELETE "projects/$ProjectId/share/$($GroupShare.Id)" | Out-Null) {
+            Write-Host "Removed sharing with $($GroupShare.Name) from project $ProjectId"
         }
     }
 }

@@ -4,42 +4,53 @@ BeforeAll {
 
 Describe 'Invoke-GitlabConfigMigration' {
 
-    BeforeEach {
-        $script:OldConfigPath = Join-Path $env:HOME "/.config/powershell/gitlab.config"
-        $script:NewConfigPath = $global:GitlabConfigurationPath
+    BeforeAll {
+        # Save the real config path and HOME
+        $script:RealConfigPath = $global:GitlabConfigurationPath
+        $script:RealHome = $env:HOME
+        
+        # Create isolated temp directory that will act as fake HOME
+        $script:TestTempDir = Join-Path ([System.IO.Path]::GetTempPath()) "GitlabCliTests_$([System.Guid]::NewGuid().ToString('N'))"
+        New-Item -Type Directory $script:TestTempDir -Force | Out-Null
+    }
 
+    AfterAll {
+        # Restore real config path and HOME
+        $global:GitlabConfigurationPath = $script:RealConfigPath
+        $env:HOME = $script:RealHome
+        
+        # Clean up temp directory
+        if (Test-Path $script:TestTempDir) {
+            Remove-Item $script:TestTempDir -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    BeforeEach {
+        # Override HOME to our temp directory
+        $env:HOME = $script:TestTempDir
+        
+        # These paths match what the migration function expects
+        $script:OldConfigPath = Join-Path $env:HOME ".config/powershell/gitlab.config"
+        $script:NewConfigPath = Join-Path $env:HOME ".config/powershell/gitlabcli/config.yml"
+
+        # Point the global to our test path
+        $global:GitlabConfigurationPath = $script:NewConfigPath
+
+        # Create old config directory structure
         $OldDir = Split-Path -Parent $script:OldConfigPath
         if (-not (Test-Path $OldDir)) {
             New-Item -Type Directory $OldDir -Force | Out-Null
         }
 
-        $script:OldBackup = $null
-        $script:NewBackup = $null
-
-        if (Test-Path $script:OldConfigPath) {
-            $script:OldBackup = Get-Content $script:OldConfigPath -Raw
-            Remove-Item $script:OldConfigPath -Force
-        }
-        if (Test-Path $script:NewConfigPath) {
-            $script:NewBackup = Get-Content $script:NewConfigPath -Raw
-            Remove-Item $script:NewConfigPath -Force
-        }
+        # Clean any leftover test files
+        Remove-Item $script:OldConfigPath -Force -ErrorAction SilentlyContinue
+        Remove-Item $script:NewConfigPath -Force -ErrorAction SilentlyContinue
     }
 
     AfterEach {
+        # Clean up test files
         Remove-Item $script:OldConfigPath -Force -ErrorAction SilentlyContinue
         Remove-Item $script:NewConfigPath -Force -ErrorAction SilentlyContinue
-
-        if ($script:OldBackup) {
-            $script:OldBackup | Set-Content $script:OldConfigPath -Force
-        }
-        if ($script:NewBackup) {
-            $dir = Split-Path -Parent $script:NewConfigPath
-            if (-not (Test-Path $dir)) {
-                New-Item -Type Directory $dir | Out-Null
-            }
-            $script:NewBackup | Set-Content $script:NewConfigPath -Force
-        }
     }
 
     It 'migrates old JSON config to new YAML location' {

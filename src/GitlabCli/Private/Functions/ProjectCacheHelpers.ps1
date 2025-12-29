@@ -178,6 +178,7 @@ function Test-ProjectIdInCache {
 }
 
 function Set-ProjectIdInCache {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Internal cache helper, not user-facing state change')]
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]

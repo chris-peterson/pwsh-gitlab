@@ -67,7 +67,7 @@ function Get-GitlabPersonalAccessToken {
         [Parameter()]
         [uint]
         $MaxPages,
-    
+
         [switch]
         [Parameter()]
         $All,

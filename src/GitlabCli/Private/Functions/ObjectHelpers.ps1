@@ -14,7 +14,7 @@ function Add-CoalescedProperty {
         [Parameter(Mandatory=$true)]
         $From
     )
-    
+
     Process {
         if ($On.PSObject.Properties.Name -contains $To) {
             return # don't overwrite existing property
@@ -29,6 +29,7 @@ function Add-CoalescedProperty {
 }
 
 function New-GitlabObject {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Creates PSCustomObject wrappers, not a state-changing operation')]
     [CmdletBinding()]
     param(
         [Parameter(ValueFromPipeline)]
@@ -56,10 +57,10 @@ function New-GitlabObject {
                     $Name = if ($PreserveCasing) { $_.Name } else { $_.Name | ConvertTo-PascalCase }
                     $Wrapper | Add-Member -MemberType NoteProperty -Name $Name -Value $_.Value
                 }
-            
+
             # aliases for common property names
             $Wrapper | Add-CoalescedProperty -From @('WebUrl', 'TargetUrl') -To 'Url'
-            
+
             if ($DisplayType) {
                 $Wrapper.PSTypeNames.Insert(0, $DisplayType)
 

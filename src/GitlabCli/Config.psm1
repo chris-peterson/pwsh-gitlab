@@ -1,6 +1,7 @@
 function Get-GitlabConfiguration {
     [CmdletBinding()]
     [OutputType('Gitlab.Configuration')]
+    [OutputType('Gitlab.Site')]
     param (
         [Parameter(ParameterSetName='DefaultSite')]
         [switch]
@@ -33,9 +34,9 @@ function Get-GitlabConfiguration {
     $Config = Get-Content $global:GitlabConfigurationPath -Raw | ConvertFrom-Yaml | New-GitlabObject 'Gitlab.Configuration'
 
     if ($DefaultSite) {
-        return @($Config.Sites | Where-Object IsDefault -eq 'True')
+        $Config = @($Config.Sites | Where-Object IsDefault -eq 'True')
     } elseif ($SiteUrl) {
-        return @($Config.Sites | Where-Object Url -match $SiteUrl)
+        $Config = @($Config.Sites | Where-Object Url -match $SiteUrl)
     }
 
     return $Config
@@ -61,7 +62,7 @@ function Get-DefaultGitlabSite {
 }
 
 function Set-DefaultGitlabSite {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     [OutputType([void])]
     param (
         [Parameter(Mandatory=$true)]
@@ -82,12 +83,14 @@ function Set-DefaultGitlabSite {
         throw "'$Url' site not found"
     }
 
-    $Config.Sites | ForEach-Object {
-        $_.IsDefault = $false
-    }
-    $Site.IsDefault = $true
+    if ($PSCmdlet.ShouldProcess($Url, "Set as default GitLab site")) {
+        $Config.Sites | ForEach-Object {
+            $_.IsDefault = $false
+        }
+        $Site.IsDefault = $true
 
-    $Config | Write-GitlabConfiguration
+        $Config | Write-GitlabConfiguration
+    }
 }
 
 function Add-GitlabSite {

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Jobs/Start-GitlabJob.md
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 12/29/2025
 PlatyPS schema version: 2024-05-01
 title: Start-GitlabJob
 ---
@@ -25,6 +25,11 @@ Start-GitlabJob [-JobId] <string> [-ProjectId <string>] [-Variables <Object>] [-
 ```
 
 ## ALIASES
+
+- `Play-GitlabJob`
+- `Retry-GitlabJob`
+- `play`
+
 
 ## DESCRIPTION
 

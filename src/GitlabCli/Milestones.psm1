@@ -1,5 +1,5 @@
 function Get-GitlabMilestone {
-    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'ByGroup')]
+    [CmdletBinding(DefaultParameterSetName = 'ByGroup')]
     [OutputType('Gitlab.Milestone')]
     param (
 
@@ -21,7 +21,7 @@ function Get-GitlabMilestone {
         [Alias('Id')]
         [string]
         $MilestoneId,
-        
+
         [Parameter()]
         [string]
         $SiteUrl

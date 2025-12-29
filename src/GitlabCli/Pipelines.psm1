@@ -1,4 +1,4 @@
-function Get-GitlabPipeline {
+﻿function Get-GitlabPipeline {
 
     [Alias('pipeline')]
     [Alias('pipelines')]
@@ -182,6 +182,7 @@ function Get-GitlabPipeline {
                     $Pipeline | Add-Member -MemberType 'NoteProperty' -Name 'Upstream' -Value $Upstream
                 }
                 catch {
+                    Write-Debug "Upstream pipeline not accessible: $_"
                 }
             }
         }

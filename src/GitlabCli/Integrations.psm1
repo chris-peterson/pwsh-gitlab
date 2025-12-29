@@ -223,7 +223,9 @@ function Enable-GitlabProjectSlackNotification {
         if ($ExistingLegacyIntegration) {
             $Action = 'disable legacy integration, then enable'
         }
-    } catch {}
+    } catch {
+        Write-Debug "Legacy integration check failed: $_"
+    }
 
     if ($PSCmdlet.ShouldProcess("$Action slack notifications for $ProjectId", "notify $Channel ($($Settings | ConvertTo-Json)))")) {
         if ($ExistingLegacyIntegration) {

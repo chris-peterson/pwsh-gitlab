@@ -80,7 +80,7 @@ jobs:
         run: |
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
-          $Results = Invoke-ScriptAnalyzer -Path ./src -Recurse -ReportSummary
+          $Results = Invoke-ScriptAnalyzer -Path ./src -Recurse -Settings ./PSScriptAnalyzerSettings.psd1 -ReportSummary
           
           $Errors = $Results | Where-Object Severity -eq 'Error'
           $Warnings = $Results | Where-Object Severity -eq 'Warning'
@@ -112,10 +112,14 @@ jobs:
           if ($Results) {
             $Results | Format-Table
             if ($Errors.Count -gt 0) {
-              Write-Host "Script analysis found errors!" -ForegroundColor Red
+              Write-Host "Script analysis found errors" -ForegroundColor Red
               exit 1
             }
-            Write-Host "Script analysis found warnings (non-blocking)" -ForegroundColor Yellow
+            if ($Warnings.Count -gt 0) {
+              Write-Host "Script analysis found warnings" -ForegroundColor Yellow
+              exit 2
+            }
+            Write-Host "Script analysis found informational issues only" -ForegroundColor Cyan
           }
 
       - name: Upload security results
@@ -139,7 +143,7 @@ jobs:
           Install-Module -Name Microsoft.PowerShell.PlatyPS -Force -Scope CurrentUser
           Install-Module -Name powershell-yaml -Force -Scope CurrentUser
 
-      - name: Check help is up to date
+      - name: Ensure help is up to date
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Continue'

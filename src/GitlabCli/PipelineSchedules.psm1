@@ -57,7 +57,7 @@ function Get-GitlabPipelineSchedule {
         # only returned by the single schedule API so have to fetch them individually
         # (https://docs.gitlab.com/ee/api/pipeline_schedules.html#get-a-single-pipeline-schedule)
         $Wrapper = $Wrapper | ForEach-Object { Get-GitlabPipelineSchedule -ProjectId $_.ProjectId -PipelineScheduleId $_.Id }
-    } 
+    }
 
     $Wrapper | Sort-Object NextRunAtSortable
 }
@@ -100,7 +100,7 @@ function New-GitlabPipelineSchedule {
     )
 
     $Project = Get-GitlabProject $ProjectId
-    
+
     if ([string]::IsNullOrWhiteSpace($Ref)) {
         $Ref = $ProjectId -eq '.' -or $Ref -eq '.' ? $(Get-LocalGitContext).Branch : $Project.DefaultBranch
     }
@@ -272,28 +272,28 @@ function Remove-GitlabPipelineSchedule {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     [OutputType([PSCustomObject])]
     param (
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Id')]
         [int]
         $PipelineScheduleId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabApiArguments = @{
         HttpMethod = 'DELETE'
-        Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId"
+        Path       = "projects/$ProjectId/pipeline_schedules/$PipelineScheduleId"
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) schedule #$PipelineScheduleId", "delete pipeline schedule")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId schedule #$PipelineScheduleId", "delete pipeline schedule")) {
         Invoke-GitlabApi @GitlabApiArguments
     }
 }
@@ -328,7 +328,7 @@ function Get-GitlabPipelineScheduleVariable {
     $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
 
     if($Key) {
-        $Wrapper = $Wrapper | Where-Object { $_.Key -eq $Key } 
+        $Wrapper = $Wrapper | Where-Object { $_.Key -eq $Key }
     }
 
     $Wrapper
@@ -359,7 +359,7 @@ function New-GitlabPipelineScheduleVariable {
         [ValidateSet("env_var","file")]
         [string]
         $VariableType="env_var",
-     
+
         [Parameter(Mandatory=$false)]
         [string]
         $SiteUrl
@@ -414,7 +414,7 @@ function Update-GitlabPipelineScheduleVariable {
         [ValidateSet('env_var', 'file')]
         [string]
         $VariableType = 'env_var',
-     
+
         [Parameter()]
         [string]
         $SiteUrl
@@ -499,14 +499,14 @@ function New-GitlabScheduledPipeline {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabApiArguments = @{
         HttpMethod = 'POST'
-        Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId/play"
+        Path       = "projects/$ProjectId/pipeline_schedules/$PipelineScheduleId/play"
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace) schedule #$PipelineScheduleId", "run scheduled pipeline")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId schedule #$PipelineScheduleId", "run scheduled pipeline")) {
         Invoke-GitlabApi @GitlabApiArguments | Select-Object -ExpandProperty 'message'
     }
 }

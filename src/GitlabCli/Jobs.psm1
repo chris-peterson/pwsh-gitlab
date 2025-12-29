@@ -314,6 +314,7 @@ function Get-GitlabPipelineDefinition {
 }
 
 function Start-GitlabJobLogSection {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Writes CI log markers to console, not a state-changing operation')]
     [CmdletBinding()]
     [OutputType([void])]
     param(
@@ -339,6 +340,7 @@ function Start-GitlabJobLogSection {
 }
 
 function Stop-GitlabJobLogSection {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Writes CI log markers to console, not a state-changing operation')]
     [CmdletBinding()]
     [OutputType([void])]
     param(

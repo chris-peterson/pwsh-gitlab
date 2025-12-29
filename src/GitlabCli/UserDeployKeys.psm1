@@ -9,7 +9,7 @@ function Get-GitlabUserDeployKey {
         [Parameter()]
         [string]
         $SiteUrl
-    ) 
+    )
 
     $User = Get-GitlabUser -UserId $UserId
 

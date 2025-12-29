@@ -63,7 +63,7 @@ function Invoke-GitlabApi {
         Write-Verbose "Impersonating API call as '$($global:GitlabUserImpersonationSession.Username)'..."
         $AccessToken = $global:GitlabUserImpersonationSession.Token
     } elseif (-not $AccessToken) {
-        $AccessToken = $Site.AccessToken 
+        $AccessToken = $Site.AccessToken
     }
     $Headers.Authorization = "Bearer $AccessToken"
 
@@ -111,7 +111,7 @@ function Invoke-GitlabApi {
         Write-Verbose "Response: $($Result | ConvertTo-Json -Depth 10)"
         if($MaxPages -gt 1) {
             # Unwrap pagination container
-            $Result | ForEach-Object { 
+            $Result | ForEach-Object {
                 Write-Output $_
             }
         } else {

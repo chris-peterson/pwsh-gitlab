@@ -13,7 +13,7 @@ function Get-GitlabProjectDeployKey {
         [Parameter()]
         [string]
         $SiteUrl
-    ) 
+    )
 
     $ProjectId = Resolve-GitlabProjectId $ProjectId
 
@@ -52,7 +52,7 @@ function Add-GitlabProjectDeployKey {
         [Parameter()]
         [string]
         $SiteUrl
-    ) 
+    )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
 
@@ -100,7 +100,7 @@ function Update-GitlabProjectDeployKey {
         [Parameter()]
         [switch]
         $Force
-    ) 
+    )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
 
@@ -121,7 +121,7 @@ function Update-GitlabProjectDeployKey {
     if ($Force -and -not $PSBoundParameters.ContainsKey('Confirm')) {
         $ConfirmPreference = 'None'
     }
-    
+
 
     if($PSCmdlet.ShouldProcess("Update deploy key for project '$($Project.PathWithNamespace)'","Update-GitlabProjectDeployKey")) {
         Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-GitlabObject 'Gitlab.DeployKey'
@@ -147,7 +147,7 @@ function Remove-GitlabProjectDeployKey {
         [Parameter()]
         [switch]
         $Force
-    ) 
+    )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
 
@@ -185,7 +185,7 @@ function Enable-GitlabProjectDeployKey {
         [Parameter()]
         [switch]
         $Force
-    ) 
+    )
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
 

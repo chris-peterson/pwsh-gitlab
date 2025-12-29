@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/PersonalAccessTokens/Revoke-GitlabPersonalAccessToken.md
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 12/29/2025
 PlatyPS schema version: 2024-05-01
 title: Revoke-GitlabPersonalAccessToken
 ---
@@ -25,6 +25,9 @@ Revoke-GitlabPersonalAccessToken [-TokenId] <string> [-SiteUrl <string>] [-WhatI
 ```
 
 ## ALIASES
+
+- `Remove-GitlabPersonalAccessToken`
+
 
 ## DESCRIPTION
 

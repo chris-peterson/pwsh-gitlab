@@ -150,7 +150,7 @@ function Remove-GitlabTopic {
         [string]
         $SiteUrl
     )
-    
+
     if ($PSCmdlet.ShouldProcess("topic $TopicId", "delete")) {
         if (Invoke-GitlabApi DELETE "topics/$TopicId") {
             Write-Host "Topic $TopicId deleted"

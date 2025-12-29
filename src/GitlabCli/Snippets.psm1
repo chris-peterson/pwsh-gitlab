@@ -53,23 +53,24 @@ function Get-GitlabSnippet {
     }
 
     $Snippet = $null;
-    switch ($PSCmdlet.ParameterSetName) {
-        ById {
-            # https://docs.gitlab.com/api/snippets/#get-a-single-snippet
-            $Snippet = Invoke-GitlabApi GET "snippets/$SnippetId"
-        }
-        ByAuthor {
-            try {
-                Start-GitlabUserImpersonation -UserId $AuthorUsername
-                return Get-GitlabSnippet -Mine -CreatedAfter:$CreatedAfter -CreatedBefore:$CreatedBefore -IncludeContent:$IncludeContent -MaxPages:$MaxPages -SiteUrl:$SiteUrl
+    if ($Mine) {
+        # https://docs.gitlab.com/api/snippets/#list-all-snippets-for-current-user
+        $Snippet = Invoke-GitlabApi GET "snippets" -Query $Query -MaxPages $MaxPages
+    } else {
+        switch ($PSCmdlet.ParameterSetName) {
+            ById {
+                # https://docs.gitlab.com/api/snippets/#get-a-single-snippet
+                $Snippet = Invoke-GitlabApi GET "snippets/$SnippetId"
             }
-            finally {
-                Stop-GitlabUserImpersonation
+            ByAuthor {
+                try {
+                    Start-GitlabUserImpersonation -UserId $AuthorUsername
+                    return Get-GitlabSnippet -Mine -CreatedAfter:$CreatedAfter -CreatedBefore:$CreatedBefore -IncludeContent:$IncludeContent -MaxPages:$MaxPages -SiteUrl:$SiteUrl
+                }
+                finally {
+                    Stop-GitlabUserImpersonation
+                }
             }
-        }
-        Mine {
-            # https://docs.gitlab.com/api/snippets/#list-all-snippets-for-current-user
-            $Snippet = Invoke-GitlabApi GET "snippets" -Query $Query -MaxPages $MaxPages
         }
     }
 

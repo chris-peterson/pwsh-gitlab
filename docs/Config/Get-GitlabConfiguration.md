@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Config/Get-GitlabConfiguration.md
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 12/29/2025
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabConfiguration
 ---
@@ -107,6 +107,10 @@ Returns a configuration object containing a Sites property with all configured G
 ### System.Object
 
 See [Gitlab.Configuration](#gitlabconfiguration).
+
+### Gitlab.Site
+
+In some cases, just a site is returned (e.g. [default site](#defaultsite))
 
 ## NOTES
 

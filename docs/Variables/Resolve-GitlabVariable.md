@@ -37,7 +37,7 @@ Resolve-GitlabVariable [-Key] <string> -GroupId <Object> [-SiteUrl <string>] [<C
 
 ## ALIASES
 
-`var`
+- `var`
 
 
 ## DESCRIPTION

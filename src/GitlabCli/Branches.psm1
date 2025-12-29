@@ -64,7 +64,7 @@ function Get-GitlabBranch {
 
     Invoke-GitlabApi @Request
         | New-GitlabObject 'Gitlab.Branch'
-        | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $Project.Id -PassThru
+        | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId -PassThru
         | Sort-Object -Descending LastUpdated
 }
 
@@ -99,20 +99,21 @@ function Get-GitlabProtectedBranch {
         $Request.Path += "/$($Name | ConvertTo-UrlEncoded)"
     }
 
+    $Branches = @()
     try {
         # https://docs.gitlab.com/ee/api/protected_branches.html#list-protected-branches
-        Invoke-GitlabApi @Request
+        $Branches = Invoke-GitlabApi @Request
             | New-GitlabObject 'Gitlab.ProtectedBranch'
             | Add-Member -PassThru -NotePropertyMembers @{
                 ProjectId = $ProjectId
             }
     } catch {
         if ($_.Exception.Response.StatusCode.ToString() -eq 'NotFound') {
-            @()
         } else {
             throw
         }
     }
+    return $Branches
 }
 
 function New-GitlabBranch {
@@ -162,48 +163,48 @@ function Protect-GitlabBranch {
         [ValidateNotNullOrEmpty()]
         [string]
         $ProjectId = '.',
-        
+
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [Alias('Name')]
         [ValidateNotNullOrEmpty()]
         [string]
         $Branch = '.',
-        
+
         [Parameter()]
         [ValidateSet('noaccess','developer','maintainer','admin')]
         [string]
         $PushAccessLevel,
-        
+
         [Parameter()]
         [ValidateSet('noaccess','developer','maintainer','admin')]
         [string]
         $MergeAccessLevel,
-        
+
         [Parameter()]
         [ValidateSet('developer','maintainer','admin')]
         [string]
         $UnprotectAccessLevel,
-        
+
         [Parameter()]
         [TrueOrFalse()][bool]
         $AllowForcePush = $false,
-        
+
         [Parameter()]
         [array]
         $AllowedToPush,
-        
+
         [Parameter()]
         [array]
         $AllowedToMerge,
-        
+
         [Parameter()]
         [array]
         $AllowedToUnprotect,
-        
+
         [Parameter()]
         [TrueOrFalse()][bool]
         $CodeOwnerApprovalRequired = $false,
-        
+
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string]
@@ -281,13 +282,13 @@ function UnProtect-GitlabBranch {
         [ValidateNotNullOrEmpty()]
         [string]
         $ProjectId = '.',
-        
+
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
         [Alias('Branch')]
         [string]
         $Name = '.',
-        
+
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string]
@@ -336,34 +337,29 @@ function Remove-GitlabBranch {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
     if ($Name -eq '.') {
         $Name = $(Get-LocalGitContext).Branch
     }
     $Request = @{
         HttpMethod = 'DELETE'
-        Path       =  "projects/$($Project.Id)/repository"
+        Path       =  "projects/$ProjectId/repository"
     }
     $Label = ''
 
-    switch ($PSCmdlet.ParameterSetName) {
-        MergedBranches {
-            # https://docs.gitlab.com/ee/api/branches.html#delete-merged-branches
-            $Request.Path = "projects/$($Project.Id)/repository/merged_branches"
-            $Label = "'merged branches"
-        }
-        default {
-            if ($Name) {
-                # https://docs.gitlab.com/ee/api/branches.html#delete-repository-branch
-                $Request.Path = $Request.Path + "/branches/$($Name | ConvertTo-UrlEncoded)"
-                $Label = "branch '$Name"
-            } else {
-                throw "Unsupported parameter combination"
-            }
-        }
+    if ($MergedBranches) {
+        # https://docs.gitlab.com/ee/api/branches.html#delete-merged-branches
+        $Request.Path = "projects/$ProjectId/repository/merged_branches"
+        $Label = "'merged branches"
+    } elseif ($Name) {
+        # https://docs.gitlab.com/ee/api/branches.html#delete-repository-branch
+        $Request.Path = $Request.Path + "/branches/$($Name | ConvertTo-UrlEncoded)"
+        $Label = "branch '$Name"
+     } else {
+        throw "Unsupported parameter combination"
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "delete $Label'")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "delete $Label'")) {
         Invoke-GitlabApi @Request | Out-Null
         Write-Host "Deleted $Label"
     }

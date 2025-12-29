@@ -1,6 +1,7 @@
 # Configuration helper functions
 
 function Test-IsConfigurationEnvironmentVariables {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Tests if configuration comes from environment variables (plural)')]
     param (
     )
 
@@ -140,10 +141,9 @@ function Get-GitlabResourceFromUrl {
         $Url
     )
 
-    $Match = $null
-    Get-GitlabConfiguration | Select-Object -Expand sites | Select-Object -Expand Url | ForEach-Object {
-        if ($Url -match "$_/(?<ProjectId>.+?)(?:/-/(?:(?<ResourceType>[a-zA-Z_]+)/(?<ResourceId>\d+))?)?/?$") {
-            $Match = [PSCustomObject]@{
+    foreach ($SiteUrl in (Get-GitlabConfiguration | Select-Object -Expand sites | Select-Object -Expand Url)) {
+        if ($Url -match "$SiteUrl/(?<ProjectId>.+?)(?:/-/(?:(?<ResourceType>[a-zA-Z_]+)/(?<ResourceId>\d+))?)?/?$") {
+            return [PSCustomObject]@{
                 ProjectId    = $Matches.ProjectId
                 ResourceType = $Matches.ResourceType
                 ResourceId   = $Matches.ResourceId
@@ -151,8 +151,5 @@ function Get-GitlabResourceFromUrl {
         }
     }
 
-    if (-not $Match) {
-        throw "Could not extract a GitLab resource from '$Url'"
-    }
-    $Match
+    throw "Could not extract a GitLab resource from '$Url'"
 }

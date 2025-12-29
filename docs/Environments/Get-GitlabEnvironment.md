@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Environments/Get-GitlabEnvironment.md
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 12/29/2025
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabEnvironment
 ---
@@ -39,6 +39,9 @@ Get-GitlabEnvironment -Search <string> [-ProjectId <string>] [-State <string>] [
 ```
 
 ## ALIASES
+
+- `envs`
+
 
 ## DESCRIPTION
 

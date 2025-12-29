@@ -26,10 +26,11 @@ function Get-GitlabTodo {
 }
 
 function Clear-GitlabTodo {
+    [Alias('Mark-GitlabTodoDone')]
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName='ById')]
     [OutputType('Gitlab.Todo')]
     param (
-        [Parameter(ParameterSetName='ById', Mandatory, Position=0)]
+        [Parameter(ParameterSetName='ById', Mandatory, Position=0, ValueFromPipelineByPropertyName)]
         $TodoId,
 
         [Parameter(ParameterSetName='All')]
@@ -43,22 +44,20 @@ function Clear-GitlabTodo {
     $Request = @{
         HttpMethod = 'POST'
     }
-    
-    switch ($PSCmdlet.ParameterSetName) {
-        All {
-            # https://docs.gitlab.com/ee/api/todos.html#mark-all-to-do-items-as-done
-            $Request.Path = "todos/mark_as_done"
-            if ($PSCmdlet.ShouldProcess("all todos", "$($Request | ConvertTo-Json)")) {
-                Invoke-GitlabApi @Request | Out-Null
-                Write-Host "All todos cleared"
-            }
-        }
-        ById {
-            # https://docs.gitlab.com/ee/api/todos.html#mark-a-to-do-item-as-done
-            $Request.Path = "todos/$TodoId/mark_as_done"
-            if ($PSCmdlet.ShouldProcess("todo #$TodoId", "$($Request | ConvertTo-Json)")) {
-                Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Todo'
-            }    
-        }
+
+    $Label = ''
+    if ($All) {
+        # https://docs.gitlab.com/ee/api/todos.html#mark-all-to-do-items-as-done
+        $Request.Path = "todos/mark_as_done"
+        $Label = "all todos"
+    } else {
+        # https://docs.gitlab.com/ee/api/todos.html#mark-a-to-do-item-as-done
+        $Request.Path = "todos/$TodoId/mark_as_done"
+        $Label = "todo #$TodoId"
+    }
+
+    if ($PSCmdlet.ShouldProcess($Label, "$($Request | ConvertTo-Json)")) {
+        Invoke-GitlabApi @Request | Out-Null
+        Write-Host "Marked $Label as done"
     }
 }

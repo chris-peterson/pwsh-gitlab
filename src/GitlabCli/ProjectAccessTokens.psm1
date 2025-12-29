@@ -179,10 +179,10 @@ function Invoke-GitlabProjectAccessTokenRotation {
       Path     = "projects/$ProjectId/access_tokens/$TokenId/rotate"
     }
 
-    if($ExpiresAt) { 
-      $GitlabAPIParams.Body = @{ expires_at = $ExpiresAt.ToString('o') } 
+    if($ExpiresAt) {
+      $GitlabAPIParams.Body = @{ expires_at = $ExpiresAt.ToString('o') }
     }
-    
+
     if($PSCmdlet.ShouldProcess($GitlabAPIParams.Path,"Rotate Project Access Token")) {
       Invoke-GitlabApi @GitlabAPIParams | New-GitlabObject 'Gitlab.AccessToken'
     }
