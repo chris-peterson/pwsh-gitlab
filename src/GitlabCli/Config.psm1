@@ -61,7 +61,7 @@ function Get-DefaultGitlabSite {
 }
 
 function Set-DefaultGitlabSite {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     [OutputType([void])]
     param (
         [Parameter(Mandatory=$true)]
@@ -82,12 +82,14 @@ function Set-DefaultGitlabSite {
         throw "'$Url' site not found"
     }
 
-    $Config.Sites | ForEach-Object {
-        $_.IsDefault = $false
-    }
-    $Site.IsDefault = $true
+    if ($PSCmdlet.ShouldProcess($Url, "Set as default GitLab site")) {
+        $Config.Sites | ForEach-Object {
+            $_.IsDefault = $false
+        }
+        $Site.IsDefault = $true
 
-    $Config | Write-GitlabConfiguration
+        $Config | Write-GitlabConfiguration
+    }
 }
 
 function Add-GitlabSite {

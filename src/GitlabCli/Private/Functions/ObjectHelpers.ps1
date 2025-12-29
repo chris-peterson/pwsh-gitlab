@@ -29,6 +29,7 @@ function Add-CoalescedProperty {
 }
 
 function New-GitlabObject {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Creates PSCustomObject wrappers, not a state-changing operation')]
     [CmdletBinding()]
     param(
         [Parameter(ValueFromPipeline)]
