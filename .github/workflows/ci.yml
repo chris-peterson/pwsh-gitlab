@@ -139,7 +139,7 @@ jobs:
           Install-Module -Name Microsoft.PowerShell.PlatyPS -Force -Scope CurrentUser
           Install-Module -Name powershell-yaml -Force -Scope CurrentUser
 
-      - name: Check help is up to date
+      - name: Ensure help is up to date
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Continue'
