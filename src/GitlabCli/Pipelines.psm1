@@ -1,4 +1,4 @@
-function Get-GitlabPipeline {
+﻿function Get-GitlabPipeline {
 
     [Alias('pipeline')]
     [Alias('pipelines')]
