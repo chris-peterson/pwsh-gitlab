@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Milestones/Get-GitlabMilestone.md
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 12/29/2025
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabMilestone
 ---
@@ -21,14 +21,14 @@ Gets milestones from a GitLab group or project.
 
 ```
 Get-GitlabMilestone [-GroupId <string>] [-State <string>] [-MilestoneId <string>]
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByProject
 
 ```
 Get-GitlabMilestone [-ProjectId <string>] [-State <string>] [-MilestoneId <string>]
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -112,10 +112,14 @@ jobs:
           if ($Results) {
             $Results | Format-Table
             if ($Errors.Count -gt 0) {
-              Write-Host "Script analysis found errors!" -ForegroundColor Red
+              Write-Host "Script analysis found errors" -ForegroundColor Red
               exit 1
             }
-            Write-Host "Script analysis found warnings (non-blocking)" -ForegroundColor Yellow
+            if ($Warnings.Count -gt 0) {
+              Write-Host "Script analysis found warnings" -ForegroundColor Yellow
+              exit 2
+            }
+            Write-Host "Script analysis found informational issues only" -ForegroundColor Cyan
           }
 
       - name: Upload security results
