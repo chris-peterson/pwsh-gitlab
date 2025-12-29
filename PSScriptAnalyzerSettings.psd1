@@ -20,9 +20,15 @@
     # These messages are distinct from pipeline output and should not go to stdout.
     # Examples: "Deleted branch 'feature-x'", "Pipeline created...", colored status indicators.
 
+    # NOTE: PSAvoidGlobalVars fires on $global: variable usage. This module intentionally uses
+    # global variables for shared module state (config path, API defaults, session state, etc.).
+    # $script: scope doesn't work across module files, so $global: is the standard pattern.
+    # All globals are namespaced with 'Gitlab' prefix to avoid collisions.
+
     ExcludeRules = @(
         'PSReviewUnusedParameter'
         'PSUseProcessBlockForPipelineCommand'
         'PSAvoidUsingWriteHost'
+        'PSAvoidGlobalVars'
     )
 }
