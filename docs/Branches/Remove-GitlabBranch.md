@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Branches/Remove-GitlabBranch.md
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 12/30/2025
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabBranch
 ---
@@ -20,7 +20,7 @@ Deletes a branch or merged branches from a GitLab project repository.
 ### MergedBranches
 
 ```
-Remove-GitlabBranch [[-Name] <string>] [-ProjectId <string>] [-MergedBranches] [-SiteUrl <string>]
+Remove-GitlabBranch [[-Branch] <string>] [-ProjectId <string>] [-MergedBranches] [-SiteUrl <string>]
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -57,6 +57,28 @@ Remove-GitlabBranch -ProjectId 'mygroup/myproject' -Name 'cleanup-branch' -Confi
 Deletes the specified branch without confirmation prompt.
 
 ## PARAMETERS
+
+### -Branch
+
+{{ Fill Branch Description }}
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- Name
+ParameterSets:
+- Name: (All)
+  Position: 0
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
 ### -Confirm
 
@@ -124,7 +146,8 @@ HelpMessage: ''
 
 ### -ProjectId
 
-The ID or URL-encoded path of the project. Defaults to the current directory's git repository.
+The ID or URL-encoded path of the project.
+Defaults to the current directory's git repository.
 
 ```yaml
 Type: System.String
@@ -146,6 +169,8 @@ HelpMessage: ''
 ### -SiteUrl
 
 The URL of the GitLab site to connect to. If not specified, uses the default configured site.
+The URL of the GitLab site to connect to.
+If not specified, uses the default configured site.
 
 ```yaml
 Type: System.String

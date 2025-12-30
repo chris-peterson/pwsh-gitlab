@@ -1,4 +1,3 @@
-# https://docs.gitlab.com/ee/api/groups.html#details-of-a-group
 function Get-GitlabGroup {
     [CmdletBinding(DefaultParameterSetName='ByGroupId')]
     [OutputType('Gitlab.Group')]
@@ -30,31 +29,16 @@ function Get-GitlabGroup {
     )
 
     $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All -Recurse:$Recurse
-    if($GroupId) {
+    if ($GroupId) {
         if ($GroupId -eq '.') {
-            $LocalPath = Get-Location | Select-Object -ExpandProperty Path
-            $MaxDepth = 3
-            for ($i = 1; $i -le $MaxDepth; $i++) {
-                $PossibleGroupName = Get-PossibleGroupName $LocalPath $i
-                try {
-                    $Group = Get-GitlabGroup $PossibleGroupName
-                    if ($Group) {
-                        return $Group
-                    }
-                }
-                catch {
-                    Write-Debug "Group lookup failed for '$PossibleGroupName': $_"
-                }
-                Write-Verbose "Didn't find a group named '$PossibleGroupName'"
-            }
-        } else {
-            # https://docs.gitlab.com/ee/api/groups.html#details-of-a-group
-            $Group = Invoke-GitlabApi GET "groups/$($GroupId | ConvertTo-UrlEncoded)" @{
-                'with_projects' = 'false'
-            }
+            $GroupId = Resolve-LocalGroupPath
+        }
+        # https://docs.gitlab.com/ee/api/groups.html#details-of-a-group
+        $Group = Invoke-GitlabApi GET "groups/$($GroupId | ConvertTo-UrlEncoded)" @{
+            'with_projects' = 'false'
         }
     }
-    elseif($ParentGroupId) {
+    elseif ($ParentGroupId) {
         $SubgroupOperation = $Recurse ?
             'descendant_groups' # https://docs.gitlab.com/ee/api/groups.html#list-a-groups-descendant-groups
             :
@@ -71,16 +55,16 @@ function Get-GitlabGroup {
 
     return $Group |
         Where-Object -Not marked_for_deletion_on |
-        New-GitlabObject 'Gitlab.Group'
+        New-GitlabObject 'Gitlab.Group' |
+        Save-GroupToCache
 }
 
-# https://docs.gitlab.com/ee/api/groups.html#new-group
 function New-GitlabGroup {
 
     [CmdletBinding(SupportsShouldProcess)]
     [OutputType('Gitlab.Group')]
     param (
-        [Parameter(Position=0, Mandatory=$true)]
+        [Parameter(Position=0, Mandatory)]
         [Alias('Name')]
         [string]
         $GroupName,
@@ -98,42 +82,47 @@ function New-GitlabGroup {
         [string]
         $SiteUrl
     )
-    $Query = @{
-        name       = $GroupName
-        path       = $GroupName
-        visibility = $Visibility
+
+    $Request = @{
+          # https://docs.gitlab.com/ee/api/groups.html#new-group
+        HttpMethod = "POST"
+        Path       = "groups"
+        Body       = @{
+            name       = $GroupName
+            path       = $GroupName
+            visibility = $Visibility
+        }
     }
 
     if ($ParentGroupName) {
-        $ParentGroup = Get-GitlabGroup -GroupId $ParentGroupName
-        $Query.parent_id = $ParentGroup.Id
+        $Request.Body.parent_id = Resolve-GitlabGroupId $ParentGroupName
     }
 
     if ($PSCmdlet.ShouldProcess($GroupName, "create new $Visibility group '$GroupName'" )) {
-        Invoke-GitlabApi POST "groups" $Query -WhatIf:$WhatIfPreference |
+        Invoke-GitlabApi @Request |
             New-GitlabObject 'Gitlab.Group'
     }
 }
 
-# https://docs.gitlab.com/ee/api/groups.html#remove-group
 function Remove-GitlabGroup {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     [OutputType([void])]
     param (
-        [Parameter(Position=0, Mandatory=$false)]
+        [Parameter(Position=0)]
         [string]
         $GroupId,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
 
-    $Group = Get-GitlabGroup -GroupId $GroupId
+    $GroupId = Resolve-GitlabGroupId $GroupId
 
-    if ($PSCmdlet.ShouldProcess($Group.FullPath, "delete group")) {
-        Invoke-GitlabApi DELETE "groups/$($Group.Id)" | Out-Null
-        Write-Host "$($Group.FullPath) deleted"
+    if ($PSCmdlet.ShouldProcess($GroupId, "delete group")) {
+        # https://docs.gitlab.com/ee/api/groups.html#remove-group
+        Invoke-GitlabApi DELETE "groups/$GroupId" | Out-Null
+        Write-Host "$GroupId deleted"
     }
 }
 
@@ -300,7 +289,7 @@ function Set-GitlabGroupVariable {
         $ExpandVariables = $false
     }
 
-    $Group = Get-GitlabGroup $GroupId
+    $GroupId = Resolve-GitlabGroupId $GroupId
 
     $Request = @{
         value = $Value
@@ -321,15 +310,15 @@ function Set-GitlabGroupVariable {
         $IsExistingVariable = $False
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Group.FullName)", "set $($IsExistingVariable ? 'existing' : 'new') variable $Key to $Value")) {
+    if ($PSCmdlet.ShouldProcess("group $GroupId", "set $($IsExistingVariable ? 'existing' : 'new') variable $Key to $Value")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/group_level_variables.html#update-variable
-            Invoke-GitlabApi PUT "groups/$($Group.Id)/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable'
+            Invoke-GitlabApi PUT "groups/$GroupId/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable'
         }
         else {
             $Request.key = $Key
             # https://docs.gitlab.com/ee/api/group_level_variables.html#create-variable
-            Invoke-GitlabApi POST "groups/$($Group.Id)/variables" -Body $Request | New-GitlabObject 'Gitlab.Variable'
+            Invoke-GitlabApi POST "groups/$GroupId/variables" -Body $Request | New-GitlabObject 'Gitlab.Variable'
         }
     }
 }
@@ -352,12 +341,12 @@ function Remove-GitlabGroupVariable {
         $SiteUrl
     )
 
-    $Group = Get-GitlabGroup $GroupId
+    $GroupId = Resolve-GitlabGroupId $GroupId
 
-    if ($PSCmdlet.ShouldProcess("$($Group.FullPath)", "remove variable $Key")) {
+    if ($PSCmdlet.ShouldProcess("group $GroupId", "remove variable $Key")) {
         # https://docs.gitlab.com/ee/api/group_level_variables.html#remove-variable
-        Invoke-GitlabApi DELETE "groups/$($Group.Id)/variables/$Key" | Out-Null
-        Write-Host "Removed $Key from $($Group.FullPath)"
+        Invoke-GitlabApi DELETE "groups/$GroupId/variables/$Key" | Out-Null
+        Write-Host "Removed $Key from group $GroupId"
     }
 }
 
@@ -450,7 +439,7 @@ function Move-GitlabGroup {
 
     $Request = @{}
     if ($DestinationGroupId) {
-        $Request.group_id = Get-GitlabGroup $DestinationGroupId | Select-Object -ExpandProperty Id
+        $Request.group_id = Resolve-GitlabGroupId $DestinationGroupId
         $DestinationLabel = "group $DestinationGroupId"
     } else {
         $DestinationLabel = "top level group"
@@ -491,18 +480,15 @@ function New-GitlabGroupToGroupShare {
         $SiteUrl
     )
 
-    $Group            = Get-GitlabGroup $GroupId
-    $GroupToShareWith = Get-GitlabGroup $GroupShareId
-
     $Body = @{
-        group_id     = $GroupToShareWith.Id
+        group_id     = Resolve-GitlabGroupId $GroupShareId
         group_access = Get-GitlabMemberAccessLevel $AccessLevel
     }
     if ($ExpiresAt) {
         $Body.expires_at = $ExpiresAt
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Group.FullPath)", "share with group '$($GroupToShareWith.FullPath)' ($AccessLevel)")) {
+    if ($PSCmdlet.ShouldProcess($GroupId, "share with group '$GroupShareId' ($AccessLevel)")) {
         # https://docs.gitlab.com/ee/api/groups.html#share-groups-with-groups
         Invoke-GitlabApi POST "groups/$GroupId/share" -Body $Body | New-GitlabObject 'Gitlab.Group'
     }
@@ -526,12 +512,10 @@ function Remove-GitlabGroupToGroupShare {
         $SiteUrl
     )
 
-    $Group = Get-GitlabGroup $GroupId
-    $GroupShare = Get-GitlabGroup $GroupShareId
-    if ($PSCmdlet.ShouldProcess("$($Group.FullPath)", "remove sharing with group '$($GroupShare.Name)'")) {
+    if ($PSCmdlet.ShouldProcess($GroupId, "remove sharing with group '$GroupShareId'")) {
         # https://docs.gitlab.com/api/groups/#delete-the-link-that-shares-a-group-with-another-group
-        if (Invoke-GitlabApi DELETE "groups/$GroupId/share/$($GroupShare.Id)" | Out-Null) {
-            Write-Host "Removed sharing with $($GroupShare.Name) from $($Group.Name)"
+        if (Invoke-GitlabApi DELETE "groups/$GroupId/share/$(Resolve-GitlabGroupId $GroupShareId)" | Out-Null) {
+            Write-Host "Removed sharing with $GroupShareId from $GroupId"
         }
     }
 }

@@ -106,6 +106,7 @@ function Get-GitlabProject {
 
     $Projects |
         New-GitlabObject 'Gitlab.Project' |
+        Save-ProjectToCache |
         Get-FilteredObject $Select
 }
 
@@ -774,22 +775,20 @@ function New-GitlabGroupToProjectShare {
     )
 
     $AccessLiteral = Get-GitlabMemberAccessLevel $GroupAccess
-    $Project       = Get-GitlabProject $ProjectId
-    $Group         = Get-GitlabGroup $GroupId
 
     # https://docs.gitlab.com/api/projects/#share-a-project-with-a-group
     $Request = @{
         Method = 'POST'
-        Path = "projects/$($Project.Id)/share"
+        Path = "projects/$(Resolve-GitlabProjectId $ProjectId)/share"
         Body = @{
-            group_id     = $Group.Id
+            group_id     = Resolve-GitlabGroupId $GroupId
             group_access = $AccessLiteral
         }
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "share project with group ($($Request | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess($ProjectId, "share project with group '$GroupId'")) {
         if (Invoke-GitlabApi @Request | Out-Null) {
-            Write-Host "Successfully shared $($Project.PathWithNamespace) with $($Group.FullPath)"
+            Write-Host "Successfully shared $ProjectId with $GroupId"
         }
     }
 }
@@ -812,12 +811,10 @@ function Remove-GitlabGroupToProjectShare {
         $SiteUrl
     )
 
-    $ProjectId = Resolve-GitlabProjectId $ProjectId
-    $GroupShare = Get-GitlabGroup $GroupId
-    if ($PSCmdlet.ShouldProcess("project $ProjectId", "remove sharing with group '$($GroupShare.Name)'")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "remove sharing with group '$GroupId'")) {
         # https://docs.gitlab.com/api/projects/#delete-a-shared-project-link-in-a-grou
-        if (Invoke-GitlabApi DELETE "projects/$ProjectId/share/$($GroupShare.Id)" | Out-Null) {
-            Write-Host "Removed sharing with $($GroupShare.Name) from project $ProjectId"
+        if (Invoke-GitlabApi DELETE "projects/$(Resolve-GitlabProjectId $ProjectId)/share/$(Resolve-GitlabGroupId $GroupId)" | Out-Null) {
+            Write-Host "Removed sharing with $GroupId from project $ProjectId"
         }
     }
 }

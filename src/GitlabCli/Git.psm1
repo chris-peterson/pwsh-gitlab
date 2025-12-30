@@ -11,6 +11,7 @@ function Get-LocalGitContext {
         Site = ''
         Project = ''
         Branch = ''
+        Group = ''
     }
     if($(Get-Location).Provider.Name -ne 'FileSystem') {
         return $Context
@@ -36,6 +37,10 @@ function Get-LocalGitContext {
                 $OriginUrl -match '@(?<Site>.*?)(/|:)(?<Project>[\._a-zA-Z0-9/-]+)' | Out-Null
                 $Context.Site = $Matches.Site
                 $Context.Project = $Matches.Project -replace '.git$', ''
+            }
+
+            if ($Context.Project -and $Context.Project -match '/') {
+                $Context.Group = $Context.Project -replace '/[^/]+$', ''
             }
 
             $Ref = git status | Select-String "^HEAD detached at (?<sha>.{7,40})`|^On branch (?<branch>.*)"

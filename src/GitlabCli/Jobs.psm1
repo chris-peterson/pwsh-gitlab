@@ -192,11 +192,11 @@ function Start-GitlabJob {
         $Wait
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabApiArguments = @{
         HttpMethod = "POST"
-        Path       = "projects/$($Project.Id)/jobs/$JobId/play"
+        Path       = "projects/$ProjectId/jobs/$JobId/play"
         Body       = @{}
     }
 
@@ -204,7 +204,7 @@ function Start-GitlabJob {
         $GitlabApiArguments.Body.job_variables_attributes = $Variables | ConvertTo-GitlabVariables
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "start job $($GitlabApiArguments | ConvertTo-Json -Depth 3)")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "start job $($GitlabApiArguments | ConvertTo-Json -Depth 3)")) {
         try {
             # https://docs.gitlab.com/ee/api/jobs.html#run-a-job
             $Job = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.Job"
@@ -228,7 +228,7 @@ function Start-GitlabJob {
             do {
                 Start-Sleep -Seconds 5
                 # NOTE: we are intentionally getting by _name_ as the ID that we get from 'play' / 'retry' is the original job ID
-                $Job = Get-GitlabJob -ProjectId $Project.Id -Name $Job.Name -IncludeTrace
+                $Job = Get-GitlabJob -ProjectId $ProjectId -Name $Job.Name -IncludeTrace
 
                 $JobTail = $Job.Trace -split "`n" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Last 1
                 Write-Progress @ProgressArgs -Status $JobTail
@@ -261,8 +261,7 @@ function Test-GitlabPipelineDefinition {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
-    $ProjectId = $Project.Id
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $Params = @{
         Path    = "projects/$ProjectId/ci/lint"
@@ -284,7 +283,7 @@ function Test-GitlabPipelineDefinition {
         $Params.HttpMethod = 'GET'
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "Validate CI definition ($($Params | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "Validate CI definition ($($Params | ConvertTo-Json))")) {
         Invoke-GitlabApi @Params |
             New-GitlabObject 'Gitlab.PipelineDefinition' |
             Get-FilteredObject $Select
@@ -318,7 +317,7 @@ function Start-GitlabJobLogSection {
     [CmdletBinding()]
     [OutputType([void])]
     param(
-        [Parameter(Mandatory, Position = 0)]
+        [Parameter(Mandatory, Position=0)]
         [string]
         $HeaderText,
 

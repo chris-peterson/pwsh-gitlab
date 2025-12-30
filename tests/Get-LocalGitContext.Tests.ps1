@@ -22,6 +22,7 @@ Describe "Get-LocalGitContext" {
       $Result.Site | Should -BeNullOrEmpty
       $Result.Project | Should -BeNullOrEmpty
       $Result.Branch | Should -BeNullOrEmpty
+      $Result.Group | Should -BeNullOrEmpty
     }
   }
 
@@ -65,6 +66,11 @@ Describe "Get-LocalGitContext" {
         $Result = Get-LocalGitContext
         $Result.Branch | Should -Be "main"
       }
+
+      It "Should return the group" {
+        $Result = Get-LocalGitContext
+        $Result.Group | Should -Be "group"
+      }
     }
 
     Context "When the remote origin url is a git url with .git extension" {
@@ -90,6 +96,11 @@ Describe "Get-LocalGitContext" {
         $Result = Get-LocalGitContext
         $Result.Branch | Should -Be "main"
       }
+
+      It "Should return the group" {
+        $Result = Get-LocalGitContext
+        $Result.Group | Should -Be "group"
+      }
     }
 
     Context "When the remote origin url is a git url with periods in the path and .git extension" {
@@ -114,6 +125,11 @@ Describe "Get-LocalGitContext" {
       It "Should return the branch name" {
         $Result = Get-LocalGitContext
         $Result.Branch | Should -Be "main"
+      }
+
+      It "Should return the group" {
+        $Result = Get-LocalGitContext
+        $Result.Group | Should -Be "group"
       }
     }
 
@@ -146,6 +162,31 @@ Describe "Get-LocalGitContext" {
       It "Should return the branch name" {
         $Result = Get-LocalGitContext
         $Result.Branch | Should -Be "feature/test"
+      }
+
+      It "Should return the group" {
+        $Result = Get-LocalGitContext
+        $Result.Group | Should -Be "group"
+      }
+    }
+
+    Context "When the project is in a nested group" {
+      BeforeAll {
+        git remote add origin 'git@gitlab.com:parent/child/grandchild/project.git' 2>$null
+      }
+
+      AfterAll {
+        git remote remove origin
+      }
+
+      It "Should return the full nested group path" {
+        $Result = Get-LocalGitContext
+        $Result.Group | Should -Be "parent/child/grandchild"
+      }
+
+      It "Should return the full project path" {
+        $Result = Get-LocalGitContext
+        $Result.Project | Should -Be "parent/child/grandchild/project"
       }
     }
   }

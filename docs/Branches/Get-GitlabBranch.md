@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Branches/Get-GitlabBranch.md
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 12/30/2025
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabBranch
 ---
@@ -17,17 +17,17 @@ Gets branches from a GitLab project repository.
 
 ## SYNTAX
 
-### ByProjectId (Default)
-
-```
-Get-GitlabBranch [-ProjectId <string>] [-Search <string>] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
-```
-
-### ByRef
+### Ref (Default)
 
 ```
 Get-GitlabBranch [[-Ref] <string>] [-ProjectId <string>] [-MaxPages <uint>] [-All]
+ [-SiteUrl <string>] [<CommonParameters>]
+```
+
+### Search
+
+```
+Get-GitlabBranch [-ProjectId <string>] [-Search <string>] [-MaxPages <uint>] [-All]
  [-SiteUrl <string>] [<CommonParameters>]
 ```
 
@@ -88,7 +88,8 @@ HelpMessage: ''
 
 ### -MaxPages
 
-The maximum number of pages to retrieve. GitLab returns 20 results per page by default.
+The maximum number of pages to retrieve.
+GitLab returns 20 results per page by default.
 
 ```yaml
 Type: System.UInt32
@@ -110,6 +111,8 @@ HelpMessage: ''
 ### -ProjectId
 
 The ID or URL-encoded path of the project. Defaults to the current directory's git repository.
+The ID or URL-encoded path of the project.
+Defaults to the current directory's git repository.
 
 ```yaml
 Type: System.String
@@ -117,13 +120,7 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
-- Name: ByRef
-  Position: Named
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: true
-  ValueFromRemainingArguments: false
-- Name: ByProjectId
+- Name: (All)
   Position: Named
   IsRequired: false
   ValueFromPipeline: false
@@ -136,7 +133,8 @@ HelpMessage: ''
 
 ### -Ref
 
-The name of the branch to retrieve. Use '.' to get the current local branch.
+The name of the branch to retrieve.
+Use '.' to get the current local branch.
 
 ```yaml
 Type: System.String
@@ -145,7 +143,7 @@ SupportsWildcards: false
 Aliases:
 - Branch
 ParameterSets:
-- Name: ByRef
+- Name: Ref
   Position: 0
   IsRequired: false
   ValueFromPipeline: false
@@ -166,7 +164,7 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
-- Name: ByProjectId
+- Name: Search
   Position: Named
   IsRequired: false
   ValueFromPipeline: false
@@ -180,6 +178,8 @@ HelpMessage: ''
 ### -SiteUrl
 
 The URL of the GitLab site to connect to. If not specified, uses the default configured site.
+The URL of the GitLab site to connect to.
+If not specified, uses the default configured site.
 
 ```yaml
 Type: System.String

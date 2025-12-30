@@ -64,7 +64,7 @@ function Get-GitlabIssue {
         $Query.author_username = $AuthorUsername
     } else {
         if ($GroupId) {
-            $GroupId = $(Get-GitlabGroup -GroupId $GroupId).Id
+            $GroupId = Resolve-GitlabGroupId $GroupId
             $Path = "groups/$GroupId/issues"
         }
         elseif ($ProjectId) {
