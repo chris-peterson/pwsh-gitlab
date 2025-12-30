@@ -74,7 +74,7 @@ function New-GitlabPipelineSchedule {
         [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('Branch')]
         [string]
-        $Ref,
+        $Ref = '.',
 
         [Parameter(Mandatory)]
         [string]
@@ -101,12 +101,8 @@ function New-GitlabPipelineSchedule {
 
     $Project = Get-GitlabProject $ProjectId
 
-    if ([string]::IsNullOrWhiteSpace($Ref)) {
-        $Ref = $ProjectId -eq '.' -or $Ref -eq '.' ? $(Get-LocalGitContext).Branch : $Project.DefaultBranch
-    }
-
     $Body = @{
-        ref           = $Ref
+        ref           = Resolve-GitlabBranch $Ref
         description   = $Description
         cron          = $Cron
         cron_timezone = $CronTimezone
@@ -190,7 +186,7 @@ function Update-GitlabPipelineSchedule {
         $GitlabApiArguments.Body.description = $Description
     }
     if ($Ref) {
-        $GitlabApiArguments.Body.ref = $Ref
+        $GitlabApiArguments.Body.ref = Resolve-GitlabBranch $Ref
     }
     if ($Cron) {
         $GitlabApiArguments.Body.cron = $Cron

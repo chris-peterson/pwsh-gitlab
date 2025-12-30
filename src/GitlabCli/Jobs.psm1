@@ -317,7 +317,7 @@ function Start-GitlabJobLogSection {
     [CmdletBinding()]
     [OutputType([void])]
     param(
-        [Parameter(Mandatory, Position = 0)]
+        [Parameter(Mandatory, Position=0)]
         [string]
         $HeaderText,
 

@@ -181,14 +181,14 @@ function Add-GitlabGroupMember {
         $SiteUrl
     )
 
-    $User = Get-GitlabUser -UserId $UserId
-    $Group = Get-GitlabGroup -GroupId $GroupId
+    $User    = Get-GitlabUser -UserId $UserId
+    $GroupId = Resolve-GitlabGroupId $GroupId
 
-    if ($PSCmdlet.ShouldProcess($Group.FullName, "grant $($User.Username) '$AccessLevel'")) {
+    if ($PSCmdlet.ShouldProcess("group $GroupId", "grant $($User.Username) '$AccessLevel'")) {
         # https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project
         $Request = @{
             HttpMethod = 'POST'
-            Path       = "groups/$($Group.Id)/members"
+            Path       = "groups/$GroupId/members"
             Body = @{
                 user_id      = $User.Id
                 access_level = Get-GitlabMemberAccessLevel $AccessLevel
@@ -218,13 +218,12 @@ function Remove-GitlabGroupMember {
     )
 
     $User = Get-GitlabUser -UserId $UserId
-    $Group = Get-GitlabGroup -GroupId $GroupId
 
-    if ($PSCmdlet.ShouldProcess($Group.FullName, "remove $($User.Username)'s group membership")) {
+    if ($PSCmdlet.ShouldProcess($GroupId, "remove $($User.Username)'s group membership")) {
         try {
             # https://docs.gitlab.com/ee/api/members.html#remove-a-member-from-a-group-or-project
-            Invoke-GitlabApi DELETE "groups/$($Group.Id)/members/$($User.Id)" | Out-Null
-            Write-Host "Removed $($User.Username) from $($Group.Name)"
+            Invoke-GitlabApi DELETE "groups/$(Resolve-GitlabGroupId $GroupId)/members/$($User.Id)" | Out-Null
+            Write-Host "Removed $($User.Username) from $GroupId"
         }
         catch {
             Write-Error "Error removing $($User.Username) from $($Group.Name): $_"
@@ -521,12 +520,12 @@ function Add-GitlabUserMembership {
         $SiteUrl
     )
 
-    $Group = Get-GitlabGroup -GroupId $GroupId
+    $GroupId = Resolve-GitlabGroupId $GroupId
     $User = Get-GitlabUser -UserId $Username
 
-    if ($PSCmdlet.ShouldProcess($Group.FullName, "add $($User.Username) to group")) {
+    if ($PSCmdlet.ShouldProcess("group $GroupId", "add $($User.Username) to group")) {
         # https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project
-        Invoke-GitlabApi POST "groups/$($Group.Id)/members" @{
+        Invoke-GitlabApi POST "groups/$GroupId/members" @{
             user_id = $User.Id
             access_level = Get-GitlabMemberAccessLevel $AccessLevel
         }
@@ -568,9 +567,9 @@ function Update-GitlabUserMembership {
 
     switch ($PSCmdlet.ParameterSetName) {
         Group {
-            $Group = Get-GitlabGroup -GroupId $GroupId
-            if ($PSCmdLet.ShouldProcess($Group.FullName, "update $($User.Username)'s membership access level to '$AccessLevel' on group")) {
-                $Rows = Invoke-GitlabApi PUT "groups/$($Group.Id)/members/$($User.Id)" @{
+            $GroupId = Resolve-GitlabGroupId $GroupId
+            if ($PSCmdLet.ShouldProcess("group $GroupId", "update $($User.Username)'s membership access level to '$AccessLevel' on group")) {
+                $Rows = Invoke-GitlabApi PUT "groups/$GroupId/members/$($User.Id)" @{
                     access_level = $AccessLevelLiteral
                 }
             }

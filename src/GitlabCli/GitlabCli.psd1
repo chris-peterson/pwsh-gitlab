@@ -48,6 +48,7 @@
 
     ScriptsToProcess = @(
         'Private/Functions/BranchHelpers.ps1'
+        'Private/Functions/CacheHelpers.ps1'
         'Private/Functions/CasingHelpers.ps1'
         'Private/Functions/ConfigurationHelpers.ps1'
         'Private/Functions/GroupHelpers.ps1'
@@ -55,7 +56,6 @@
         'Private/Functions/MergeRequestHelpers.ps1'
         'Private/Functions/ObjectHelpers.ps1'
         'Private/Functions/PaginationHelpers.ps1'
-        'Private/Functions/ProjectCacheHelpers.ps1'
         'Private/Functions/RunnerHelpers.ps1'
         'Private/Globals.ps1'
         'Private/Transformations.ps1'

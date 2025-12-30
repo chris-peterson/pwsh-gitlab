@@ -1,19 +1,18 @@
 function Get-GitlabBranch {
-    [CmdletBinding(DefaultParameterSetName="ByProjectId")]
+    [CmdletBinding(DefaultParameterSetName='Ref')]
     [OutputType('Gitlab.Branch')]
     param (
-        [Parameter(ParameterSetName="ByProjectId", ValueFromPipelineByPropertyName)]
-        [Parameter(ParameterSetName="ByRef", ValueFromPipelineByPropertyName)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
         [string]
         $ProjectId = '.',
 
-        [Parameter(ParameterSetName="ByProjectId")]
+        [Parameter(ParameterSetName='Search')]
         [ValidateNotNullOrEmpty()]
         [string]
         $Search,
 
-        [Parameter(ParameterSetName="ByRef", Position=0)]
+        [Parameter(Position=0, ParameterSetName='Ref')]
         [Alias("Branch")]
         [ValidateNotNullOrEmpty()]
         [string]
@@ -36,10 +35,6 @@ function Get-GitlabBranch {
 
     $ProjectId = Resolve-GitlabProjectId $ProjectId
 
-    if ($Ref -eq '.') {
-        $Ref = $(Get-LocalGitContext).Branch
-    }
-
     # https://docs.gitlab.com/api/branches/#list-repository-branches
     $Request = @{
         HttpMethod = 'GET'
@@ -47,25 +42,18 @@ function Get-GitlabBranch {
         Query      = @{}
         MaxPages   = $MaxPages
     }
-
-    switch ($PSCmdlet.ParameterSetName) {
-        ByProjectId {
-            if($Search) {
-                $Request.Query.search = $Search
-            }
-        }
-        ByRef {
-            $Request.Path += "/$($Ref | ConvertTo-UrlEncoded)"
-        }
-        default {
-            throw "$($PSCmdlet.ParameterSetName) is not implemented"
-        }
+    if ($Ref) {
+        # https://docs.gitlab.com/api/branches/#get-single-repository-branch
+        $Request.Path += "/$((Resolve-GitlabBranch $Ref) | ConvertTo-UrlEncoded)"
+    }
+    elseif ($Search) {
+        $Request.Query.search = $Search
     }
 
-    Invoke-GitlabApi @Request
-        | New-GitlabObject 'Gitlab.Branch'
-        | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId -PassThru
-        | Sort-Object -Descending LastUpdated
+    Invoke-GitlabApi @Request |
+        New-GitlabObject 'Gitlab.Branch' |
+        Add-Member -NotePropertyMembers @{ ProjectId = $ProjectId } -PassThru |
+        Sort-Object -Descending LastUpdated
 }
 
 function Get-GitlabProtectedBranch {
@@ -213,9 +201,7 @@ function Protect-GitlabBranch {
 
     $ProjectId = Resolve-GitlabProjectId $ProjectId
 
-    if ($Branch -eq '.') {
-        $Branch = $(Get-LocalGitContext).Branch
-    }
+    $Branch = Resolve-GitlabBranch $Branch
 
     if (Get-GitlabProtectedBranch -ProjectId $ProjectId | Where-Object Name -eq $Branch) {
         # NOTE: the PATCH endpoint is crap (https://gitlab.com/gitlab-org/gitlab/-/issues/365520)
@@ -297,9 +283,7 @@ function UnProtect-GitlabBranch {
 
     $ProjectId = Resolve-GitlabProjectId $ProjectId
 
-    if ($Name -eq '.') {
-        $Name = $(Get-LocalGitContext).Branch
-    }
+    $Name = Resolve-GitlabBranch $Name
 
     $Request = @{
         HttpMethod = 'DELETE'
@@ -322,10 +306,11 @@ function Remove-GitlabBranch {
         [string]
         $ProjectId = '.',
 
+        [Alias('Name')]
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
         [string]
-        $Name = '.',
+        $Branch = '.',
 
         [switch]
         [Parameter(ParameterSetName='MergedBranches')]
@@ -338,9 +323,7 @@ function Remove-GitlabBranch {
     )
 
     $ProjectId = Resolve-GitlabProjectId $ProjectId
-    if ($Name -eq '.') {
-        $Name = $(Get-LocalGitContext).Branch
-    }
+    $Name = Resolve-GitlabBranch $Name
     $Request = @{
         HttpMethod = 'DELETE'
         Path       =  "projects/$ProjectId/repository"
@@ -351,10 +334,10 @@ function Remove-GitlabBranch {
         # https://docs.gitlab.com/ee/api/branches.html#delete-merged-branches
         $Request.Path = "projects/$ProjectId/repository/merged_branches"
         $Label = "'merged branches"
-    } elseif ($Name) {
+    } elseif ($Branch) {
         # https://docs.gitlab.com/ee/api/branches.html#delete-repository-branch
-        $Request.Path = $Request.Path + "/branches/$($Name | ConvertTo-UrlEncoded)"
-        $Label = "branch '$Name"
+        $Request.Path = $Request.Path + "/branches/$($Branch | ConvertTo-UrlEncoded)"
+        $Label = "branch '$Branch"
      } else {
         throw "Unsupported parameter combination"
     }

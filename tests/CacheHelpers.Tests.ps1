@@ -2,7 +2,7 @@ BeforeAll {
     Import-Module powershell-yaml
 
     . $PSScriptRoot/../src/GitlabCli/Private/Globals.ps1
-    . $PSScriptRoot/../src/GitlabCli/Private/Functions/ProjectCacheHelpers.ps1
+    . $PSScriptRoot/../src/GitlabCli/Private/Functions/CacheHelpers.ps1
 
     function Resolve-GitlabSite {
         param([string]$SiteUrl)

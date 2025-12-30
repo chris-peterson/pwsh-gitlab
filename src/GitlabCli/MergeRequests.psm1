@@ -125,7 +125,7 @@ function Get-GitlabMergeRequest {
             }
         }
         'ByGroupId' {
-            $GroupId = $(Get-GitlabGroup -GroupId $GroupId).Id
+            $GroupId = Resolve-GitlabGroupId $GroupId
             # https://docs.gitlab.com/ee/api/merge_requests.html#list-group-merge-requests
             $Path = "groups/$GroupId/merge_requests"
         }
@@ -141,9 +141,7 @@ function Get-GitlabMergeRequest {
         $Query.wip = $IsDraft ? 'yes' : 'no'
     }
     if ($SourceBranch) {
-        if ($SourceBranch -eq '.') {
-            $SourceBranch = Get-LocalGitContext | Select-Object -ExpandProperty Branch
-        }
+        $SourceBranch = Resolve-GitlabBranch $SourceBranch
         $Query.source_branch = $SourceBranch
     }
 
@@ -176,7 +174,7 @@ function New-GitlabMergeRequest {
 
         [Parameter(Position=1)]
         [string]
-        $SourceBranch,
+        $SourceBranch = '.',
 
         [Parameter(Position=2)]
         [string]
@@ -213,9 +211,7 @@ function New-GitlabMergeRequest {
     if (-not $TargetBranch) {
         $TargetBranch = $Project.DefaultBranch
     }
-    if (-not $SourceBranch -or $SourceBranch -eq '.') {
-        $SourceBranch = $(Get-LocalGitContext).Branch
-    }
+    $SourceBranch = Resolve-GitlabBranch $SourceBranch
     if (-not $Title) {
         $Title = $SourceBranch.Replace('-', ' ').Replace('_', ' ')
     }

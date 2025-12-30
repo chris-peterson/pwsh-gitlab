@@ -7,12 +7,12 @@
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
-        $ProjectId='.',
+        $ProjectId = '.',
 
         [Parameter()]
         [Alias('Branch')]
         [string]
-        $Ref,
+        $Ref = '.',
 
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
@@ -84,10 +84,7 @@
         $Query = @{}
 
         if($Ref) {
-            if($Ref -eq '.') {
-                $LocalContext = Get-LocalGitContext
-                $Ref = $LocalContext.Branch
-            }
+            $Ref = Resolve-GitlabBranch $Ref
             $Query.ref = $Ref
         }
         if ($Scope) {
