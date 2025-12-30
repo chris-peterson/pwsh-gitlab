@@ -174,12 +174,12 @@ function Update-GitlabPipelineSchedule {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     # https://docs.gitlab.com/ee/api/pipeline_schedules.html#edit-a-pipeline-schedule
     $GitlabApiArguments = @{
         HttpMethod = 'PUT'
-        Path       = "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId"
+        Path       = "projects/$ProjectId/pipeline_schedules/$PipelineScheduleId"
         Body       = @{}
     }
 
@@ -206,11 +206,11 @@ function Update-GitlabPipelineSchedule {
     }
 
     if ($NewOwner) {
-        if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "transfer ownership of pipeline schedule $PipelineScheduleId to $NewOwner")) {
+        if ($PSCmdlet.ShouldProcess("project $ProjectId", "transfer ownership of pipeline schedule $PipelineScheduleId to $NewOwner")) {
             $Owner = Get-GitlabUser $NewOwner
             Start-GitlabUserImpersonation -UserId $Owner.Id
             # https://docs.gitlab.com/ee/api/pipeline_schedules.html#take-ownership-of-a-pipeline-schedule
-            Invoke-GitlabApi POST "projects/$($Project.Id)/pipeline_schedules/$PipelineScheduleId/take_ownership" | Out-Null
+            Invoke-GitlabApi POST "projects/$ProjectId/pipeline_schedules/$PipelineScheduleId/take_ownership" | Out-Null
             Write-Host "Ownership of pipeline schedule $PipelineScheduleId transferred to $($Owner.Username)"
             Stop-GitlabUserImpersonation
         }
@@ -235,9 +235,9 @@ function Enable-GitlabPipelineSchedule {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "enable pipeline schedule $PipelineScheduleId")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "enable pipeline schedule $PipelineScheduleId")) {
         Update-GitlabPipelineSchedule -ProjectId $ProjectId -PipelineScheduleId $PipelineScheduleId -Active true
     }
 }
@@ -260,9 +260,9 @@ function Disable-GitlabPipelineSchedule {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "disable pipeline schedule $PipelineScheduleId")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "disable pipeline schedule $PipelineScheduleId")) {
         Update-GitlabPipelineSchedule -ProjectId $ProjectId -PipelineScheduleId $PipelineScheduleId -Active false
     }
 }

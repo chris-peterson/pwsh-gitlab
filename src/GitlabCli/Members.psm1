@@ -357,20 +357,20 @@ function Add-GitlabProjectMember {
         $SiteUrl
     )
 
-    $User    = Get-GitlabUser -UserId $UserId
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $User      = Get-GitlabUser -UserId $UserId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $Request = @{
         # https://docs.gitlab.com/ee/api/members.html#add-a-member-to-a-group-or-project
         HttpMethod = 'POST'
-        Path       = "projects/$($Project.Id)/members"
+        Path       = "projects/$ProjectId/members"
         Body       = @{
             user_id      = $User.Id
             access_level = Get-GitlabMemberAccessLevel $AccessLevel
         }
     }
 
-    if ($PSCmdlet.ShouldProcess($Project.PathWithNamespace, "grant '$($User.Username)' $AccessLevel membership")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "grant '$($User.Username)' $AccessLevel membership")) {
         Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Member'
     }
 }

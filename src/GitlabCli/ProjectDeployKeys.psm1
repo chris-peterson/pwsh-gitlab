@@ -54,7 +54,7 @@ function Add-GitlabProjectDeployKey {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $Body = @{
         title    = $Title
@@ -64,11 +64,11 @@ function Add-GitlabProjectDeployKey {
 
     $GitlabAPIParams = @{
         Method = 'POST'
-        Path   = "projects/$($Project.Id)/deploy_keys"
+        Path   = "projects/$ProjectId/deploy_keys"
         Body   = $Body
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "add deploy key '$Title'")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "add deploy key '$Title'")) {
         Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference | New-GitlabObject 'Gitlab.DeployKey'
     }
 }
@@ -102,7 +102,7 @@ function Update-GitlabProjectDeployKey {
         $Force
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $Body = @{
     }
@@ -113,7 +113,7 @@ function Update-GitlabProjectDeployKey {
 
     $GitlabAPIParams = @{
         Method = 'PUT'
-        Path   = "projects/$($Project.Id)/deploy_keys/$DeployKeyId"
+        Path   = "projects/$ProjectId/deploy_keys/$DeployKeyId"
         Body   = $Body
     }
 
@@ -123,7 +123,7 @@ function Update-GitlabProjectDeployKey {
     }
 
 
-    if($PSCmdlet.ShouldProcess("Update deploy key for project '$($Project.PathWithNamespace)'","Update-GitlabProjectDeployKey")) {
+    if($PSCmdlet.ShouldProcess("Update deploy key for project '$ProjectId'","Update-GitlabProjectDeployKey")) {
         Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-GitlabObject 'Gitlab.DeployKey'
     }
 }
@@ -149,11 +149,11 @@ function Remove-GitlabProjectDeployKey {
         $Force
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabAPIParams = @{
         Method = 'DELETE'
-        Path   = "projects/$($Project.Id)/deploy_keys/$DeployKeyId"
+        Path   = "projects/$ProjectId/deploy_keys/$DeployKeyId"
     }
 
     # https://learn.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7.5#implementing--force
@@ -161,7 +161,7 @@ function Remove-GitlabProjectDeployKey {
         $ConfirmPreference = 'None'
     }
 
-    if($PSCmdlet.ShouldProcess("Remove deploy key for project '$($Project.PathWithNamespace)'","Remove-GitlabProjectDeployKey")) {
+    if($PSCmdlet.ShouldProcess("Remove deploy key for project '$ProjectId'","Remove-GitlabProjectDeployKey")) {
         Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | Out-Null
     }
 }
@@ -187,11 +187,11 @@ function Enable-GitlabProjectDeployKey {
         $Force
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabAPIParams = @{
         Method = 'POST'
-        Path   = "projects/$($Project.Id)/deploy_keys/$DeployKeyId/enable"
+        Path   = "projects/$ProjectId/deploy_keys/$DeployKeyId/enable"
     }
 
     # https://learn.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7.5#implementing--force
@@ -199,7 +199,7 @@ function Enable-GitlabProjectDeployKey {
         $ConfirmPreference = 'None'
     }
 
-    if($PSCmdlet.ShouldProcess("Enable deploy key for project '$($Project.PathWithNamespace)'","Enable-GitlabProjectDeployKey")) {
+    if($PSCmdlet.ShouldProcess("Enable deploy key for project '$ProjectId'","Enable-GitlabProjectDeployKey")) {
         Invoke-GitlabApi @GitlabAPIParams -Verbose:$VerbosePreference -WhatIf:$WhatIfPreference | New-GitlabObject 'Gitlab.DeployKey'
     }
 }

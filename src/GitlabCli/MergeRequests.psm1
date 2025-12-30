@@ -295,12 +295,12 @@ function Merge-GitlabMergeRequest {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     # https://docs.gitlab.com/ee/api/merge_requests.html#merge-a-merge-request
     $Request = @{
         Method = 'PUT'
-        Path   = "projects/$($Project.Id)/merge_requests/$MergeRequestId/merge"
+        Path   = "projects/$ProjectId/merge_requests/$MergeRequestId/merge"
         Body   = @{}
     }
     if ($MergeCommitMessage) {
@@ -321,7 +321,7 @@ function Merge-GitlabMergeRequest {
     if ($MergeWhenPipelineSucceeds) {
         $Request.Body.merge_when_pipeline_succeeds = $MergeWhenPipelineSucceeds
     }
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "merge ($($Request.Body | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "merge ($($Request.Body | ConvertTo-Json))")) {
         Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.MergeRequest'
     }
 }
@@ -413,7 +413,7 @@ function Update-GitlabMergeRequest {
         [string]
         $SiteUrl
     )
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
     $Request = @{}
 
     if ($Reopen) {
@@ -453,7 +453,7 @@ function Update-GitlabMergeRequest {
         $Request.milestone_id = $MilestoneId
     }
 
-    if ($PSCmdlet.ShouldProcess("MR $MergeRequestId in $($Project.PathWithNamespace)", "update $($Request | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("MR $MergeRequestId in project $ProjectId", "update $($Request | ConvertTo-Json)")) {
         # https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
         Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" -Body $Request | New-GitlabObject 'Gitlab.MergeRequest'
     }

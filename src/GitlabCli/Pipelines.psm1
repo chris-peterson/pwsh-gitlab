@@ -109,14 +109,14 @@
         $GitlabApiParameters.MaxPages = $MaxPages
     }
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $GitlabApiParameters.Path = if ($PipelineId) {
         # https://docs.gitlab.com/api/pipelines/#get-a-single-pipeline
-        "projects/$($Project.Id)/pipelines/$PipelineId"
+        "projects/$ProjectId/pipelines/$PipelineId"
     } else {
         # https://docs.gitlab.com/ee/api/pipelines.html#list-project-pipelines
-        "projects/$($Project.Id)/pipelines"
+        "projects/$ProjectId/pipelines"
     }
 
     $Pipelines = Invoke-GitlabApi @GitlabApiParameters | New-GitlabObject 'Gitlab.Pipeline'

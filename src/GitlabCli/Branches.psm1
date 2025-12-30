@@ -140,17 +140,17 @@ function New-GitlabBranch {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId -ProjectId $ProjectId
     $Request = @{
         HttpMethod = 'POST'
-        Path       = "projects/$($Project.Id)/repository/branches"
+        Path       = "projects/$($ProjectId)/repository/branches"
         Body       = @{
             branch = $Branch
             ref    = $Ref
         }
     }
 
-    if( $PSCmdlet.ShouldProcess("Project $($Project.PathWithNamespace)", "create branch $($Branch) from $($Ref) `nArguments:`n$($Request | ConvertTo-Json)") ) {
+    if( $PSCmdlet.ShouldProcess("Project $($ProjectId)", "create branch $($Branch) from $($Ref) `nArguments:`n$($Request | ConvertTo-Json)") ) {
         Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Branch'
     }
 }
@@ -211,13 +211,13 @@ function Protect-GitlabBranch {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     if ($Branch -eq '.') {
         $Branch = $(Get-LocalGitContext).Branch
     }
 
-    if ($Project | Get-GitlabProtectedBranch | Where-Object Name -eq $Branch) {
+    if (Get-GitlabProtectedBranch -ProjectId $ProjectId | Where-Object Name -eq $Branch) {
         # NOTE: the PATCH endpoint is crap (https://gitlab.com/gitlab-org/gitlab/-/issues/365520)
         # $Request = @{
         #     allow_force_push             = $AllowForcePush
@@ -236,7 +236,7 @@ function Protect-GitlabBranch {
 
     $Request = @{
         HttpMethod = 'POST'
-        Path       = "projects/$($Project.Id)/protected_branches"
+        Path       = "projects/$ProjectId/protected_branches"
         Body       = @{
                         name = $Branch
                       }
@@ -267,7 +267,7 @@ function Protect-GitlabBranch {
         $Request.Body.allowed_to_unprotect = @($AllowedToUnprotect | ConvertTo-SnakeCase)
     }
 
-    if ($PSCmdlet.ShouldProcess("Project $($Project.PathWithNamespace)", "protect branch name $Branch with `nArguments:`n$($Request | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("Project $ProjectId", "protect branch name $Branch with `nArguments:`n$($Request | ConvertTo-Json)")) {
         # https://docs.gitlab.com/ee/api/protected_branches.html#protect-repository-branches
         Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.ProtectedBranch'
     }
@@ -295,7 +295,7 @@ function UnProtect-GitlabBranch {
         $SiteUrl
     )
 
-    $Project = Get-GitlabProject -ProjectId $ProjectId
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     if ($Name -eq '.') {
         $Name = $(Get-LocalGitContext).Branch
@@ -303,10 +303,10 @@ function UnProtect-GitlabBranch {
 
     $Request = @{
         HttpMethod = 'DELETE'
-        Path       = "projects/$($Project.Id)/protected_branches/$($Name | ConvertTo-UrlEncoded)"
+        Path       = "projects/$ProjectId/protected_branches/$($Name | ConvertTo-UrlEncoded)"
     }
 
-    if ($PSCmdlet.ShouldProcess("Project $($Project.PathWithNamespace)", "unprotect branch $($Name) with `nArguments:`n$($Request | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("Project $ProjectId", "unprotect branch $($Name) with `nArguments:`n$($Request | ConvertTo-Json)")) {
         # https://docs.gitlab.com/ee/api/protected_branches.html#unprotect-repository-branches
         Invoke-GitlabApi @Request | Out-Null
         Write-Host "Unprotected branch '$Name'"
