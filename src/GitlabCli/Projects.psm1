@@ -106,6 +106,7 @@ function Get-GitlabProject {
 
     $Projects |
         New-GitlabObject 'Gitlab.Project' |
+        Save-ProjectToCache |
         Get-FilteredObject $Select
 }
 

@@ -30,6 +30,9 @@ function Get-GitlabGroup {
 
     $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All -Recurse:$Recurse
     if ($GroupId) {
+        if ($GroupId -eq '.') {
+            $GroupId = Resolve-LocalGroupPath
+        }
         # https://docs.gitlab.com/ee/api/groups.html#details-of-a-group
         $Group = Invoke-GitlabApi GET "groups/$($GroupId | ConvertTo-UrlEncoded)" @{
             'with_projects' = 'false'
@@ -52,7 +55,8 @@ function Get-GitlabGroup {
 
     return $Group |
         Where-Object -Not marked_for_deletion_on |
-        New-GitlabObject 'Gitlab.Group'
+        New-GitlabObject 'Gitlab.Group' |
+        Save-GroupToCache
 }
 
 function New-GitlabGroup {

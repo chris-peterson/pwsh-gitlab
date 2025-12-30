@@ -76,11 +76,63 @@ function Save-GitlabSiteCache {
     }
 
     try {
-        $script:GitlabCache[$ResolvedSiteUrl] | ConvertTo-Yaml | Set-Content -Path $CachePath -Force
+        $Cache = $script:GitlabCache[$ResolvedSiteUrl]
+        $SortedCache = [ordered]@{}
+        if ($Cache.projects) {
+            $SortedCache.projects = [ordered]@{}
+            $Cache.projects.GetEnumerator() | Sort-Object Key | ForEach-Object { $SortedCache.projects[$_.Key] = $_.Value }
+        }
+        if ($Cache.groups) {
+            $SortedCache.groups = [ordered]@{}
+            $Cache.groups.GetEnumerator() | Sort-Object Key | ForEach-Object { $SortedCache.groups[$_.Key] = $_.Value }
+        }
+        $SortedCache | ConvertTo-Yaml | Set-Content -Path $CachePath -Force
         Write-Debug "GitlabCache: Persisted cache to '$CachePath'"
     } catch {
         Write-Debug "GitlabCache: Error saving cache to disk: $_"
     }
+}
+
+function Resolve-LocalGroupPath {
+    [CmdletBinding()]
+    [OutputType([string])]
+    param()
+
+    $GitGroup = $(Get-LocalGitContext).Group
+    if ($GitGroup) {
+        Write-Debug "GitlabCache: Resolved '.' to '$GitGroup' from git context"
+        return $GitGroup
+    }
+
+    $LocalPath = Get-Location | Select-Object -ExpandProperty Path
+    $Parts = $LocalPath.Split([IO.Path]::DirectorySeparatorChar) | Where-Object { $_ }
+    $Site = Resolve-GitlabSite
+    $MaxDepth = [Math]::Min(3, $Parts.Count)
+
+    for ($depth = 1; $depth -le $MaxDepth; $depth++) {
+        $PossibleGroupName = ($Parts | Select-Object -Last $depth) -join '/'
+        $CachedId = Get-GroupIdFromCache -GroupPath $PossibleGroupName -ResolvedSiteUrl $Site.Url
+        if ($CachedId) {
+            Write-Debug "GitlabCache: Resolved '.' to cached group '$PossibleGroupName'"
+            return $PossibleGroupName
+        }
+        try {
+            $Group = Invoke-GitlabApi GET "groups/$($PossibleGroupName | ConvertTo-UrlEncoded)" @{
+                'with_projects' = 'false'
+            } -SiteUrl $Site.Url
+            if ($Group) {
+                Set-GroupIdInCache -GroupPath $Group.FullPath -GroupId $Group.Id -ResolvedSiteUrl $Site.Url
+                Write-Debug "GitlabCache: Resolved '.' to group '$($Group.FullPath)' (cached)"
+                return $Group.FullPath
+            }
+        }
+        catch {
+            Write-Debug "Group lookup failed for '$PossibleGroupName': $_"
+        }
+        Write-Verbose "Didn't find a group named '$PossibleGroupName'"
+    }
+
+    throw "Could not infer group based on current directory ($(Get-Location))"
 }
 
 function Resolve-GitlabProjectId {
@@ -103,8 +155,10 @@ function Resolve-GitlabProjectId {
             Write-Debug "GitlabCache: Numeric ID $NumericId is cached (known valid)"
             return $NumericId
         }
-        Write-Debug "GitlabCache: Numeric ID $NumericId not cached, returning as-is"
-        return $NumericId
+        Write-Debug "GitlabCache: Numeric ID $NumericId not cached, validating via API"
+        $Project = Get-GitlabProject -ProjectId $NumericId -SiteUrl $Site.Url
+        Set-ProjectIdInCache -ProjectPath $Project.PathWithNamespace -ProjectId $Project.Id -ResolvedSiteUrl $Site.Url
+        return $Project.Id
     }
 
     if ($ProjectId -eq '.') {
@@ -203,15 +257,16 @@ function Set-ProjectIdInCache {
         $Cache.projects = @{}
     }
 
+    if ($Cache.projects[$ProjectPath] -eq $ProjectId) {
+        Write-Debug "GitlabCache: '$ProjectPath' -> $ProjectId (unchanged, skip save)"
+        return
+    }
+
     $Cache.projects[$ProjectPath] = $ProjectId
     Write-Debug "GitlabCache: Set '$ProjectPath' -> $ProjectId"
 
     Save-GitlabSiteCache -ResolvedSiteUrl $ResolvedSiteUrl
 }
-
-# ============================================================================
-# Group Cache Functions
-# ============================================================================
 
 function Resolve-GitlabGroupId {
     [CmdletBinding()]
@@ -233,47 +288,14 @@ function Resolve-GitlabGroupId {
             Write-Debug "GitlabCache: Numeric group ID $NumericId is cached (known valid)"
             return $NumericId
         }
-        Write-Debug "GitlabCache: Numeric group ID $NumericId not cached, returning as-is"
-        return $NumericId
+        Write-Debug "GitlabCache: Numeric group ID $NumericId not cached, validating via API"
+        $Group = Get-GitlabGroup -GroupId $NumericId -SiteUrl $Site.Url
+        Set-GroupIdInCache -GroupPath $Group.FullPath -GroupId $Group.Id -ResolvedSiteUrl $Site.Url
+        return $Group.Id
     }
 
     if ($GroupId -eq '.') {
-        # First try git context (if in a git repo)
-        $GitGroup = $(Get-LocalGitContext).Group
-        if ($GitGroup) {
-            $GroupId = $GitGroup
-            Write-Debug "GitlabCache: Resolved '.' to '$GroupId' from git context"
-        } else {
-            # Fall back to directory-based inference (deepest to shallowest)
-            $LocalPath = Get-Location | Select-Object -ExpandProperty Path
-            $PossibleNames = Get-PossibleGroupName $LocalPath
-            $MaxDepth = [Math]::Min(3, $PossibleNames.Count)
-            for ($i = 1; $i -le $MaxDepth; $i++) {
-                $PossibleGroupName = $PossibleNames[-$i]  # negative index: deepest to shallowest
-                # Check cache first
-                $CachedId = Get-GroupIdFromCache -GroupPath $PossibleGroupName -ResolvedSiteUrl $Site.Url
-                if ($CachedId) {
-                    Write-Debug "GitlabCache: Resolved '.' to cached group '$PossibleGroupName' -> $CachedId"
-                    return $CachedId
-                }
-                # Try API lookup
-                try {
-                    $Group = Invoke-GitlabApi GET "groups/$($PossibleGroupName | ConvertTo-UrlEncoded)" @{
-                        'with_projects' = 'false'
-                    } -SiteUrl $Site.Url
-                    if ($Group) {
-                        Set-GroupIdInCache -GroupPath $PossibleGroupName -GroupId $Group.Id -ResolvedSiteUrl $Site.Url
-                        Write-Debug "GitlabCache: Resolved '.' to group '$PossibleGroupName' -> $($Group.Id) (cached)"
-                        return $Group.Id
-                    }
-                }
-                catch {
-                    Write-Debug "Group lookup failed for '$PossibleGroupName': $_"
-                }
-                Write-Verbose "Didn't find a group named '$PossibleGroupName'"
-            }
-            throw "Could not infer group based on current directory ($(Get-Location))"
-        }
+        $GroupId = Resolve-LocalGroupPath
         if ($GroupId -match '^\d+$') {
             return [int]$GroupId
         }
@@ -364,8 +386,53 @@ function Set-GroupIdInCache {
         $Cache.groups = @{}
     }
 
+    if ($Cache.groups[$GroupPath] -eq $GroupId) {
+        Write-Debug "GitlabCache: group '$GroupPath' -> $GroupId (unchanged, skip save)"
+        return
+    }
+
     $Cache.groups[$GroupPath] = $GroupId
     Write-Debug "GitlabCache: Set group '$GroupPath' -> $GroupId"
 
     Save-GitlabSiteCache -ResolvedSiteUrl $ResolvedSiteUrl
+}
+
+function Save-ProjectToCache {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Internal cache helper, not user-facing state change')]
+    [CmdletBinding()]
+    [OutputType('Gitlab.Project')]
+    param(
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [PSObject]
+        $Project
+    )
+
+    begin {
+        $Site = Resolve-GitlabSite
+    }
+
+    process {
+        Set-ProjectIdInCache -ProjectPath $Project.PathWithNamespace -ProjectId $Project.Id -ResolvedSiteUrl $Site.Url
+        $Project
+    }
+}
+
+function Save-GroupToCache {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Internal cache helper, not user-facing state change')]
+    [CmdletBinding()]
+    [OutputType('Gitlab.Group')]
+    param(
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [PSObject]
+        $Group
+    )
+
+    begin {
+        $Site = Resolve-GitlabSite
+    }
+
+    process {
+        Set-GroupIdInCache -GroupPath $Group.FullPath -GroupId $Group.Id -ResolvedSiteUrl $Site.Url
+        $Group
+    }
 }
