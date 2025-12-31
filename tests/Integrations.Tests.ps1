@@ -2,9 +2,9 @@ BeforeAll {
     . $PSScriptRoot/../src/GitlabCli/Private/Globals.ps1
     . $PSScriptRoot/../src/GitlabCli/Private/Functions/CasingHelpers.ps1
     . $PSScriptRoot/../src/GitlabCli/Private/Functions/ObjectHelpers.ps1
+    . $PSScriptRoot/../src/GitlabCli/Private/Functions/ValidateSetGenerators.ps1
     . $PSScriptRoot/../src/GitlabCli/Private/Transformations.ps1
 
-    # Mock dependencies
     function Resolve-GitlabProjectId { param($ProjectId) return 123 }
     function Get-GitlabProject { param($ProjectId) [PSCustomObject]@{ Id = 123; PathWithNamespace = 'group/project' } }
     function Get-GitlabProjectIntegration { param($ProjectId, $Integration) [PSCustomObject]@{ Active = $false } }
@@ -12,7 +12,6 @@ BeforeAll {
     function Update-GitlabProjectIntegration { param($ProjectId, $Integration, $Settings) [PSCustomObject]@{ Active = $true } }
     function Invoke-GitlabApi { param($Method, $Resource, $Body) [PSCustomObject]@{} }
 
-    # Import the module under test
     . $PSScriptRoot/../src/GitlabCli/Integrations.psm1
 }
 
@@ -20,22 +19,20 @@ Describe 'Enable-GitlabProjectSlackNotification' {
 
     Context 'KnownEvents array' {
         It 'Should include alert in KnownEvents' {
-            # The ValidateSet includes 'alert', so KnownEvents must also include it for -AllEvents to work
-            $KnownEvents = @('alert', 'commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')
+            $KnownEvents = [SlackNotificationEvent]::new().GetValidValues()
             $KnownEvents | Should -Contain 'alert'
         }
 
         It 'Should include vulnerability in KnownEvents' {
-            $KnownEvents = @('alert', 'commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')
+            $KnownEvents = [SlackNotificationEvent]::new().GetValidValues()
             $KnownEvents | Should -Contain 'vulnerability'
         }
 
-        It 'ValidateSet and KnownEvents should match' {
-            # This ensures consistency between ValidateSet and KnownEvents
-            $ValidateSetEvents = @('alert', 'commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')
-            $KnownEvents = @('alert', 'commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')
+        It 'ValidateSet generator should provide consistent events' {
+            $ExpectedEvents = @('alert', 'commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')
+            $KnownEvents = [SlackNotificationEvent]::new().GetValidValues()
             
-            $ValidateSetEvents | Sort-Object | Should -Be ($KnownEvents | Sort-Object)
+            $ExpectedEvents | Sort-Object | Should -Be ($KnownEvents | Sort-Object)
         }
     }
 

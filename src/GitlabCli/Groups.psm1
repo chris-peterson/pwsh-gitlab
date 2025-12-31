@@ -74,7 +74,7 @@ function New-GitlabGroup {
         $ParentGroupName,
 
         [Parameter()]
-        [ValidateSet('private', 'internal', 'public')]
+        [ValidateSet([VisibilityLevel])]
         [string]
         $Visibility = 'internal',
 
@@ -369,7 +369,7 @@ function Update-GitlabGroup {
         $Path,
 
         [Parameter()]
-        [ValidateSet('private', 'internal', 'public')]
+        [ValidateSet([VisibilityLevel])]
         [string]
         $Visibility,
 

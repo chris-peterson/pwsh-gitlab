@@ -159,6 +159,26 @@ Describe "Add-CoalescedProperty" {
         }
     }
 
+    Context "Falsy but valid values" {
+        It "Should add alias when source property is 0" {
+            $Obj = [PSCustomObject]@{ Count = 0 }
+            $Obj | Add-CoalescedProperty -From 'Count' -To 'Total'
+            $Obj.Total | Should -Be 0
+        }
+
+        It "Should add alias when source property is empty string" {
+            $Obj = [PSCustomObject]@{ Name = '' }
+            $Obj | Add-CoalescedProperty -From 'Name' -To 'Title'
+            $Obj.Title | Should -Be ''
+        }
+
+        It "Should add alias when source property is false" {
+            $Obj = [PSCustomObject]@{ Active = $false }
+            $Obj | Add-CoalescedProperty -From 'Active' -To 'IsActive'
+            $Obj.IsActive | Should -Be $false
+        }
+    }
+
     Context "Pipeline support" {
         It "Should process objects from pipeline" {
             $Obj = [PSCustomObject]@{ WebUrl = 'https://example.com' }
