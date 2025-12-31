@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/PipelineSchedules/Update-GitlabPipelineSchedule.md
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 12/31/2025
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabPipelineSchedule
 ---
@@ -22,7 +22,7 @@ Updates an existing pipeline schedule for a GitLab project.
 ```
 Update-GitlabPipelineSchedule [[-ProjectId] <string>] [-PipelineScheduleId] <int>
  [[-Description] <string>] [[-Ref] <string>] [[-Cron] <string>] [[-CronTimezone] <string>]
- [[-Active] <string>] [[-NewOwner] <string>] [[-SiteUrl] <string>] [-WhatIf] [-Confirm]
+ [[-Active] <bool>] [[-NewOwner] <string>] [[-SiteUrl] <string>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
@@ -62,10 +62,11 @@ Transfers ownership of the schedule to user 'jsmith'.
 
 ### -Active
 
-Whether the schedule should be active. Set to 'true' to enable or 'false' to disable.
+Whether the schedule should be active.
+Set to 'true' to enable or 'false' to disable.
 
 ```yaml
-Type: System.String
+Type: System.Boolean
 DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
@@ -168,7 +169,8 @@ HelpMessage: ''
 
 ### -NewOwner
 
-The username of the new owner to transfer the schedule to. Uses impersonation to take ownership on behalf of the user.
+The username of the new owner to transfer the schedule to.
+Uses impersonation to take ownership on behalf of the user.
 
 ```yaml
 Type: System.String
@@ -211,7 +213,8 @@ HelpMessage: ''
 
 ### -ProjectId
 
-The ID or URL-encoded path of the project. Defaults to the current directory's git repository.
+The ID or URL-encoded path of the project.
+Defaults to the current directory's git repository.
 
 ```yaml
 Type: System.String
@@ -254,7 +257,8 @@ HelpMessage: ''
 
 ### -SiteUrl
 
-The URL of the GitLab instance. Uses the default site if not specified.
+The URL of the GitLab instance.
+Uses the default site if not specified.
 
 ```yaml
 Type: System.String

@@ -126,7 +126,7 @@ function New-GitlabSnippet {
         $Files,
 
         [Parameter()]
-        [ValidateSet('public', 'private', 'internal')]
+        [ValidateSet([VisibilityLevel])]
         [string]
         $Visibility = 'private',
 
@@ -186,7 +186,7 @@ function Update-GitlabSnippet {
         $Description,
 
         [Parameter()]
-        [ValidateSet('public', 'private', 'internal')]
+        [ValidateSet([VisibilityLevel])]
         [string]
         $Visibility,
 

@@ -114,15 +114,15 @@ function ConvertTo-GitlabTriggerYaml {
     [CmdletBinding()]
     [OutputType([string])]
     param (
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        [Parameter(Mandatory, ValueFromPipeline)]
         $InputObject,
 
-        [Parameter(Mandatory=$false)]
-        [ValidateSet($null, 'depend')]
+        [Parameter()]
+        [ValidateSet('depend')]
         [string]
-        $Strategy = $null,
+        $Strategy,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [string]
         $StageName = 'trigger'
     )
@@ -302,7 +302,7 @@ function New-GitlabProject {
         $Personal,
 
         [Parameter()]
-        [ValidateSet('private', 'internal', 'public')]
+        [ValidateSet([VisibilityLevel])]
         [string]
         $Visibility = 'internal',
 
@@ -362,7 +362,7 @@ function Update-GitlabProject {
         $ProjectId = '.',
 
         [Parameter()]
-        [ValidateSet('private', 'internal', 'public')]
+        [ValidateSet([VisibilityLevel])]
         [string]
         $Visibility,
 
@@ -719,7 +719,7 @@ function Get-GitlabProjectEvent {
         $After,
 
         [Parameter(Mandatory=$False)]
-        [ValidateSet("asc","desc")]
+        [ValidateSet([SortDirection])]
         [string]
         $Sort,
 

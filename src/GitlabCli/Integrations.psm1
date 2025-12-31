@@ -8,7 +8,7 @@ function Get-GitlabProjectIntegration {
         $ProjectId = '.',
 
         [Parameter(Position=0)]
-        [ValidateSet($null, 'assana', 'assembla', 'bamboo', 'bugzilla', 'buildkite', 'campfire', 'datadog', 'unify-circuit', 'pumble', 'webex-teams', 'custom-issue-tracker', 'discord', 'drone-ci', 'emails-on-push', 'ewm', 'confluence', 'external-wiki', 'flowdock', 'github', 'hangouts-chat', 'irker', 'jira', 'slack-slash-commands', 'mattermost-slash-commands', 'packagist', 'pipelines-email', 'pivotaltracker', 'prometheus', 'pushover', 'redmine', 'slack', 'gitlab-slack-application', 'microsoft-teams', 'mattermost', 'teamcity', 'jenkins', 'jenkins-deprecated', 'mock-ci', 'youtrack')]
+        [ValidateSet('assana', 'assembla', 'bamboo', 'bugzilla', 'buildkite', 'campfire', 'datadog', 'unify-circuit', 'pumble', 'webex-teams', 'custom-issue-tracker', 'discord', 'drone-ci', 'emails-on-push', 'ewm', 'confluence', 'external-wiki', 'flowdock', 'github', 'hangouts-chat', 'irker', 'jira', 'slack-slash-commands', 'mattermost-slash-commands', 'packagist', 'pipelines-email', 'pivotaltracker', 'prometheus', 'pushover', 'redmine', 'slack', 'gitlab-slack-application', 'microsoft-teams', 'mattermost', 'teamcity', 'jenkins', 'jenkins-deprecated', 'mock-ci', 'youtrack')]
         [string]
         $Integration,
 
@@ -40,7 +40,7 @@ function Update-GitlabProjectIntegration {
 
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Slug')]
-        [ValidateSet('slack', 'gitlab-slack-application')]
+        [ValidateSet([SupportedIntegrations])]
         [string]
         $Integration,
 
@@ -75,7 +75,7 @@ function Remove-GitlabProjectIntegration {
 
         [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Slug')]
-        [ValidateSet('slack', 'gitlab-slack-application')]
+        [ValidateSet([SupportedIntegrations])]
         [string]
         $Integration,
 
@@ -135,12 +135,12 @@ function Enable-GitlabProjectSlackNotification {
         $JobEvents,
 
         [Parameter(ParameterSetName='SpecificEvents')]
-        [ValidateSet('alert', 'commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')]
+        [ValidateSet([SlackNotificationEvent])]
         [string []]
         $Enable,
 
         [Parameter(ParameterSetName='SpecificEvents')]
-        [ValidateSet('alert', 'commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')]
+        [ValidateSet([SlackNotificationEvent])]
         [string []]
         $Disable,
 
@@ -153,7 +153,7 @@ function Enable-GitlabProjectSlackNotification {
         $NoEvents,
 
         [Parameter()]
-        [ValidateSet('slack', 'gitlab-slack-application')]
+        [ValidateSet([SupportedIntegrations])]
         [string]
         $Integration = 'gitlab-slack-application',
 
@@ -166,7 +166,7 @@ function Enable-GitlabProjectSlackNotification {
         Write-Warning "The 'slack' integration is deprecated.  Should use 'gitlab-slack-application' instead."
     }
 
-    $KnownEvents = @('alert', 'commit', 'confidential_issue', 'confidential_note', 'deployment', 'issue', 'merge_request', 'note', 'pipeline', 'push', 'tag_push', 'vulnerability', 'wiki_page')
+    $KnownEvents = [SlackNotificationEvent]::new().GetValidValues()
     if ($AllEvents) {
         $Enable = $KnownEvents
     }

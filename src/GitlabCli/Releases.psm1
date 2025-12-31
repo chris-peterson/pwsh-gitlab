@@ -11,7 +11,7 @@ function Get-GitlabRelease {
         $Tag,
 
         [Parameter()]
-        [ValidateSet('desc', 'asc')]
+        [ValidateSet([SortDirection])]
         [string]
         $Sort = 'desc',
 

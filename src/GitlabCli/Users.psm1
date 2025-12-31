@@ -217,7 +217,7 @@ function Get-GitlabUserEvent {
         $After,
 
         [Parameter()]
-        [ValidateSet('asc', 'desc')]
+        [ValidateSet([SortDirection])]
         [string]
         $Sort,
 
