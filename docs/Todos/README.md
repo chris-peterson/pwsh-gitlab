@@ -2,5 +2,5 @@
 
 Manage todo items
 
-- [Clear-GitlabTodo](Clear-GitlabTodo.md)
-- [Get-GitlabTodo](Get-GitlabTodo.md)
+- [Clear-GitlabTodo](Todos/Clear-GitlabTodo.md)
+- [Get-GitlabTodo](Todos/Get-GitlabTodo.md)

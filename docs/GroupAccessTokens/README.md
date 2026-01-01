@@ -2,6 +2,6 @@
 
 Manage group access tokens
 
-- [Get-GitlabGroupAccessToken](Get-GitlabGroupAccessToken.md)
-- [New-GitlabGroupAccessToken](New-GitlabGroupAccessToken.md)
-- [Remove-GitlabGroupAccessToken](Remove-GitlabGroupAccessToken.md)
+- [Get-GitlabGroupAccessToken](GroupAccessTokens/Get-GitlabGroupAccessToken.md)
+- [New-GitlabGroupAccessToken](GroupAccessTokens/New-GitlabGroupAccessToken.md)
+- [Remove-GitlabGroupAccessToken](GroupAccessTokens/Remove-GitlabGroupAccessToken.md)

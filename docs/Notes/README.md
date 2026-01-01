@@ -2,6 +2,6 @@
 
 Comments on issues and merge requests
 
-- [Get-GitlabIssueNote](Get-GitlabIssueNote.md)
-- [Get-GitlabMergeRequestNote](Get-GitlabMergeRequestNote.md)
-- [New-GitlabIssueNote](New-GitlabIssueNote.md)
+- [Get-GitlabIssueNote](Notes/Get-GitlabIssueNote.md)
+- [Get-GitlabMergeRequestNote](Notes/Get-GitlabMergeRequestNote.md)
+- [New-GitlabIssueNote](Notes/New-GitlabIssueNote.md)

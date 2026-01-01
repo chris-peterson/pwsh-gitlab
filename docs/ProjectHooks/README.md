@@ -2,7 +2,7 @@
 
 Configure webhooks
 
-- [Get-GitlabProjectHook](Get-GitlabProjectHook.md)
-- [New-GitlabProjectHook](New-GitlabProjectHook.md)
-- [Remove-GitlabProjectHook](Remove-GitlabProjectHook.md)
-- [Update-GitlabProjectHook](Update-GitlabProjectHook.md)
+- [Get-GitlabProjectHook](ProjectHooks/Get-GitlabProjectHook.md)
+- [New-GitlabProjectHook](ProjectHooks/New-GitlabProjectHook.md)
+- [Remove-GitlabProjectHook](ProjectHooks/Remove-GitlabProjectHook.md)
+- [Update-GitlabProjectHook](ProjectHooks/Update-GitlabProjectHook.md)

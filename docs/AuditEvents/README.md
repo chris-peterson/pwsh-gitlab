@@ -2,4 +2,4 @@
 
 Track important actions within GitLab
 
-- [Get-GitlabAuditEvent](Get-GitlabAuditEvent.md)
+- [Get-GitlabAuditEvent](AuditEvents/Get-GitlabAuditEvent.md)

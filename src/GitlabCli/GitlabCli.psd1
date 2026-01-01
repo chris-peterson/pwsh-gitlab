@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.160.4'
+    ModuleVersion = '1.160.5'
 
     RequiredModules = @(
         @{
@@ -11,7 +11,7 @@
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-gitlab/blob/main/LICENSE'
-            ProjectUri = 'https://github.com/chris-peterson/pwsh-gitlab'
+            ProjectUri = 'https://chris-peterson.github.io/pwsh-gitlab/'
             IconUri = 'https://raw.githubusercontent.com/chris-peterson/pwsh-gitlab/main/assets/icon.png'
             Tags = @(
                 'GitLab',

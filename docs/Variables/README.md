@@ -2,5 +2,5 @@
 
 CI/CD variables
 
-- [ConvertTo-GitlabVariables](ConvertTo-GitlabVariables.md)
-- [Resolve-GitlabVariable](Resolve-GitlabVariable.md)
+- [ConvertTo-GitlabVariables](Variables/ConvertTo-GitlabVariables.md)
+- [Resolve-GitlabVariable](Variables/Resolve-GitlabVariable.md)

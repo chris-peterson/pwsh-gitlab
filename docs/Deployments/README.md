@@ -2,4 +2,4 @@
 
 View deployments
 
-- [Get-GitlabDeployment](Get-GitlabDeployment.md)
+- [Get-GitlabDeployment](Deployments/Get-GitlabDeployment.md)

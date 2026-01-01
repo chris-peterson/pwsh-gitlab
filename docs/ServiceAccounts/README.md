@@ -2,7 +2,7 @@
 
 Manage service accounts
 
-- [Get-GitlabServiceAccount](Get-GitlabServiceAccount.md)
-- [New-GitlabServiceAccount](New-GitlabServiceAccount.md)
-- [Remove-GitlabServiceAccount](Remove-GitlabServiceAccount.md)
-- [Update-GitlabServiceAccount](Update-GitlabServiceAccount.md)
+- [Get-GitlabServiceAccount](ServiceAccounts/Get-GitlabServiceAccount.md)
+- [New-GitlabServiceAccount](ServiceAccounts/New-GitlabServiceAccount.md)
+- [Remove-GitlabServiceAccount](ServiceAccounts/Remove-GitlabServiceAccount.md)
+- [Update-GitlabServiceAccount](ServiceAccounts/Update-GitlabServiceAccount.md)

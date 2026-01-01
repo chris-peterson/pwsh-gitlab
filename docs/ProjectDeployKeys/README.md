@@ -2,8 +2,8 @@
 
 Manage project deploy keys
 
-- [Add-GitlabProjectDeployKey](Add-GitlabProjectDeployKey.md)
-- [Enable-GitlabProjectDeployKey](Enable-GitlabProjectDeployKey.md)
-- [Get-GitlabProjectDeployKey](Get-GitlabProjectDeployKey.md)
-- [Remove-GitlabProjectDeployKey](Remove-GitlabProjectDeployKey.md)
-- [Update-GitlabProjectDeployKey](Update-GitlabProjectDeployKey.md)
+- [Add-GitlabProjectDeployKey](ProjectDeployKeys/Add-GitlabProjectDeployKey.md)
+- [Enable-GitlabProjectDeployKey](ProjectDeployKeys/Enable-GitlabProjectDeployKey.md)
+- [Get-GitlabProjectDeployKey](ProjectDeployKeys/Get-GitlabProjectDeployKey.md)
+- [Remove-GitlabProjectDeployKey](ProjectDeployKeys/Remove-GitlabProjectDeployKey.md)
+- [Update-GitlabProjectDeployKey](ProjectDeployKeys/Update-GitlabProjectDeployKey.md)

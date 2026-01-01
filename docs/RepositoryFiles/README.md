@@ -2,9 +2,9 @@
 
 Access repository files
 
-- [Get-GitlabRepositoryFile](Get-GitlabRepositoryFile.md)
-- [Get-GitlabRepositoryFileContent](Get-GitlabRepositoryFileContent.md)
-- [Get-GitlabRepositoryTree](Get-GitlabRepositoryTree.md)
-- [Get-GitlabRepositoryYmlFileContent](Get-GitlabRepositoryYmlFileContent.md)
-- [New-GitlabRepositoryFile](New-GitlabRepositoryFile.md)
-- [Update-GitlabRepositoryFile](Update-GitlabRepositoryFile.md)
+- [Get-GitlabRepositoryFile](RepositoryFiles/Get-GitlabRepositoryFile.md)
+- [Get-GitlabRepositoryFileContent](RepositoryFiles/Get-GitlabRepositoryFileContent.md)
+- [Get-GitlabRepositoryTree](RepositoryFiles/Get-GitlabRepositoryTree.md)
+- [Get-GitlabRepositoryYmlFileContent](RepositoryFiles/Get-GitlabRepositoryYmlFileContent.md)
+- [New-GitlabRepositoryFile](RepositoryFiles/New-GitlabRepositoryFile.md)
+- [Update-GitlabRepositoryFile](RepositoryFiles/Update-GitlabRepositoryFile.md)

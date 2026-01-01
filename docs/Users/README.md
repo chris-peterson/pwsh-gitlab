@@ -2,11 +2,11 @@
 
 User management
 
-- [Block-GitlabUser](Block-GitlabUser.md)
-- [Get-GitlabCurrentUser](Get-GitlabCurrentUser.md)
-- [Get-GitlabUser](Get-GitlabUser.md)
-- [Get-GitlabUserEvent](Get-GitlabUserEvent.md)
-- [Remove-GitlabUser](Remove-GitlabUser.md)
-- [Start-GitlabUserImpersonation](Start-GitlabUserImpersonation.md)
-- [Stop-GitlabUserImpersonation](Stop-GitlabUserImpersonation.md)
-- [Unblock-GitlabUser](Unblock-GitlabUser.md)
+- [Block-GitlabUser](Users/Block-GitlabUser.md)
+- [Get-GitlabCurrentUser](Users/Get-GitlabCurrentUser.md)
+- [Get-GitlabUser](Users/Get-GitlabUser.md)
+- [Get-GitlabUserEvent](Users/Get-GitlabUserEvent.md)
+- [Remove-GitlabUser](Users/Remove-GitlabUser.md)
+- [Start-GitlabUserImpersonation](Users/Start-GitlabUserImpersonation.md)
+- [Stop-GitlabUserImpersonation](Users/Stop-GitlabUserImpersonation.md)
+- [Unblock-GitlabUser](Users/Unblock-GitlabUser.md)

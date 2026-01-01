@@ -2,8 +2,8 @@
 
 Trigger and monitor pipelines
 
-- [Get-GitlabPipeline](Get-GitlabPipeline.md)
-- [Get-GitlabPipelineBridge](Get-GitlabPipelineBridge.md)
-- [Get-GitlabPipelineVariable](Get-GitlabPipelineVariable.md)
-- [New-GitlabPipeline](New-GitlabPipeline.md)
-- [Remove-GitlabPipeline](Remove-GitlabPipeline.md)
+- [Get-GitlabPipeline](Pipelines/Get-GitlabPipeline.md)
+- [Get-GitlabPipelineBridge](Pipelines/Get-GitlabPipelineBridge.md)
+- [Get-GitlabPipelineVariable](Pipelines/Get-GitlabPipelineVariable.md)
+- [New-GitlabPipeline](Pipelines/New-GitlabPipeline.md)
+- [Remove-GitlabPipeline](Pipelines/Remove-GitlabPipeline.md)

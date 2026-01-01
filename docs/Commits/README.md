@@ -2,4 +2,4 @@
 
 View commit information
 
-- [Get-GitlabCommit](Get-GitlabCommit.md)
+- [Get-GitlabCommit](Commits/Get-GitlabCommit.md)

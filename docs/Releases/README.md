@@ -2,4 +2,4 @@
 
 View releases
 
-- [Get-GitlabRelease](Get-GitlabRelease.md)
+- [Get-GitlabRelease](Releases/Get-GitlabRelease.md)

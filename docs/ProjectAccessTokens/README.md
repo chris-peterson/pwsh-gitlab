@@ -2,7 +2,7 @@
 
 Manage project access tokens
 
-- [Get-GitlabProjectAccessToken](Get-GitlabProjectAccessToken.md)
-- [Invoke-GitlabProjectAccessTokenRotation](Invoke-GitlabProjectAccessTokenRotation.md)
-- [New-GitlabProjectAccessToken](New-GitlabProjectAccessToken.md)
-- [Remove-GitlabProjectAccessToken](Remove-GitlabProjectAccessToken.md)
+- [Get-GitlabProjectAccessToken](ProjectAccessTokens/Get-GitlabProjectAccessToken.md)
+- [Invoke-GitlabProjectAccessTokenRotation](ProjectAccessTokens/Invoke-GitlabProjectAccessTokenRotation.md)
+- [New-GitlabProjectAccessToken](ProjectAccessTokens/New-GitlabProjectAccessToken.md)
+- [Remove-GitlabProjectAccessToken](ProjectAccessTokens/Remove-GitlabProjectAccessToken.md)

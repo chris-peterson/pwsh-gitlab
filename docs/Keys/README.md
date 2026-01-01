@@ -2,4 +2,4 @@
 
 SSH key operations
 
-- [Get-GitlabKey](Get-GitlabKey.md)
+- [Get-GitlabKey](Keys/Get-GitlabKey.md)

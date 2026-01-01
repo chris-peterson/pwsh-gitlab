@@ -2,8 +2,8 @@
 
 Configure GitLab sites and connections
 
-- [Add-GitlabSite](Add-GitlabSite.md)
-- [Get-DefaultGitlabSite](Get-DefaultGitlabSite.md)
-- [Get-GitlabConfiguration](Get-GitlabConfiguration.md)
-- [Remove-GitlabSite](Remove-GitlabSite.md)
-- [Set-DefaultGitlabSite](Set-DefaultGitlabSite.md)
+- [Add-GitlabSite](Config/Add-GitlabSite.md)
+- [Get-DefaultGitlabSite](Config/Get-DefaultGitlabSite.md)
+- [Get-GitlabConfiguration](Config/Get-GitlabConfiguration.md)
+- [Remove-GitlabSite](Config/Remove-GitlabSite.md)
+- [Set-DefaultGitlabSite](Config/Set-DefaultGitlabSite.md)

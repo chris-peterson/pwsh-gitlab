@@ -2,4 +2,4 @@
 
 Track milestones
 
-- [Get-GitlabMilestone](Get-GitlabMilestone.md)
+- [Get-GitlabMilestone](Milestones/Get-GitlabMilestone.md)

@@ -2,4 +2,4 @@
 
 Manage deploy keys
 
-- [Get-GitlabDeployKey](Get-GitlabDeployKey.md)
+- [Get-GitlabDeployKey](DeployKeys/Get-GitlabDeployKey.md)

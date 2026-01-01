@@ -2,7 +2,7 @@
 
 Manage project topics
 
-- [Get-GitlabTopic](Get-GitlabTopic.md)
-- [New-GitlabTopic](New-GitlabTopic.md)
-- [Remove-GitlabTopic](Remove-GitlabTopic.md)
-- [Update-GitlabTopic](Update-GitlabTopic.md)
+- [Get-GitlabTopic](Topics/Get-GitlabTopic.md)
+- [New-GitlabTopic](Topics/New-GitlabTopic.md)
+- [Remove-GitlabTopic](Topics/Remove-GitlabTopic.md)
+- [Update-GitlabTopic](Topics/Update-GitlabTopic.md)

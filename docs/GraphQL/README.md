@@ -2,4 +2,4 @@
 
 Execute GraphQL queries
 
-- [Invoke-GitlabGraphQL](Invoke-GitlabGraphQL.md)
+- [Invoke-GitlabGraphQL](GraphQL/Invoke-GitlabGraphQL.md)

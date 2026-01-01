@@ -2,6 +2,6 @@
 
 Manage environments
 
-- [Get-GitlabEnvironment](Get-GitlabEnvironment.md)
-- [Remove-GitlabEnvironment](Remove-GitlabEnvironment.md)
-- [Stop-GitlabEnvironment](Stop-GitlabEnvironment.md)
+- [Get-GitlabEnvironment](Environments/Get-GitlabEnvironment.md)
+- [Remove-GitlabEnvironment](Environments/Remove-GitlabEnvironment.md)
+- [Stop-GitlabEnvironment](Environments/Stop-GitlabEnvironment.md)

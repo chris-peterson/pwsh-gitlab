@@ -2,7 +2,7 @@
 
 Configure project integrations
 
-- [Enable-GitlabProjectSlackNotification](Enable-GitlabProjectSlackNotification.md)
-- [Get-GitlabProjectIntegration](Get-GitlabProjectIntegration.md)
-- [Remove-GitlabProjectIntegration](Remove-GitlabProjectIntegration.md)
-- [Update-GitlabProjectIntegration](Update-GitlabProjectIntegration.md)
+- [Enable-GitlabProjectSlackNotification](Integrations/Enable-GitlabProjectSlackNotification.md)
+- [Get-GitlabProjectIntegration](Integrations/Get-GitlabProjectIntegration.md)
+- [Remove-GitlabProjectIntegration](Integrations/Remove-GitlabProjectIntegration.md)
+- [Update-GitlabProjectIntegration](Integrations/Update-GitlabProjectIntegration.md)

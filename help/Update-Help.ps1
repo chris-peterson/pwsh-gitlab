@@ -132,7 +132,7 @@ foreach ($Category in $Categories) {
         $LandingContent += $Description
         $LandingContent += ''
         foreach ($CmdletFile in $CmdletFiles) {
-            $LandingContent += "- [$($CmdletFile.BaseName)]($($CmdletFile.Name))"
+            $LandingContent += "- [$($CmdletFile.BaseName)]($($Category.Name)/$($CmdletFile.Name))"
         }
         $LandingContent += ''
 

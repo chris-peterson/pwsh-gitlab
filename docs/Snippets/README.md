@@ -2,8 +2,8 @@
 
 Manage code snippets
 
-- [Get-GitlabSnippet](Get-GitlabSnippet.md)
-- [Get-GitlabSnippetContent](Get-GitlabSnippetContent.md)
-- [New-GitlabSnippet](New-GitlabSnippet.md)
-- [Remove-GitlabSnippet](Remove-GitlabSnippet.md)
-- [Update-GitlabSnippet](Update-GitlabSnippet.md)
+- [Get-GitlabSnippet](Snippets/Get-GitlabSnippet.md)
+- [Get-GitlabSnippetContent](Snippets/Get-GitlabSnippetContent.md)
+- [New-GitlabSnippet](Snippets/New-GitlabSnippet.md)
+- [Remove-GitlabSnippet](Snippets/Remove-GitlabSnippet.md)
+- [Update-GitlabSnippet](Snippets/Update-GitlabSnippet.md)

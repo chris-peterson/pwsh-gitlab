@@ -2,4 +2,4 @@
 
 Local git context utilities
 
-- [Get-LocalGitContext](Get-LocalGitContext.md)
+- [Get-LocalGitContext](Git/Get-LocalGitContext.md)
