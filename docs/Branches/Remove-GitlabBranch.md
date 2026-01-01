@@ -24,7 +24,6 @@ Remove-GitlabBranch [[-Branch] <string>] [-ProjectId <string>] [-SiteUrl <string
  [-Confirm] [<CommonParameters>]
 ```
 
-
 ### MergedBranches
 
 ```
