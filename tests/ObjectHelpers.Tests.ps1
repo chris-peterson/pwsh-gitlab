@@ -30,6 +30,69 @@ Describe "New-GitlabObject" {
         }
     }
 
+    Context "DateTime Sortable properties" {
+        It "Should auto-generate Sortable property for datetime values" {
+            $TestDate = [datetime]'2024-03-15 14:30:00'
+            $Input = [PSCustomObject]@{ created_at = $TestDate }
+            $Result = $Input | New-GitlabObject
+            $Result.CreatedAtSortable | Should -Be '2024-03-15 14:30'
+        }
+
+        It "Should generate Sortable properties for multiple datetime fields" {
+            $CreatedDate = [datetime]'2024-01-01 09:00:00'
+            $UpdatedDate = [datetime]'2024-06-15 16:45:00'
+            $Input = [PSCustomObject]@{ created_at = $CreatedDate; updated_at = $UpdatedDate }
+            $Result = $Input | New-GitlabObject
+            $Result.CreatedAtSortable | Should -Be '2024-01-01 09:00'
+            $Result.UpdatedAtSortable | Should -Be '2024-06-15 16:45'
+        }
+
+        It "Should not generate Sortable property for non-datetime values" {
+            $Input = [PSCustomObject]@{ name = 'test'; count = 42 }
+            $Result = $Input | New-GitlabObject
+            $Result.PSObject.Properties.Name | Should -Not -Contain 'NameSortable'
+            $Result.PSObject.Properties.Name | Should -Not -Contain 'CountSortable'
+        }
+
+        It "Should not generate Sortable property for null datetime values" {
+            $Input = [PSCustomObject]@{ created_at = $null; name = 'test' }
+            $Result = $Input | New-GitlabObject
+            $Result.PSObject.Properties.Name | Should -Not -Contain 'CreatedAtSortable'
+        }
+
+        It "Should preserve original datetime value alongside Sortable property" {
+            $TestDate = [datetime]'2024-03-15 14:30:00'
+            $Input = [PSCustomObject]@{ created_at = $TestDate }
+            $Result = $Input | New-GitlabObject
+            $Result.CreatedAt | Should -Be $TestDate
+            $Result.CreatedAtSortable | Should -Be '2024-03-15 14:30'
+        }
+
+        It "Should respect PreserveCasing for Sortable property names" {
+            $TestDate = [datetime]'2024-03-15 14:30:00'
+            $Input = [PSCustomObject]@{ created_at = $TestDate }
+            $Result = $Input | New-GitlabObject -PreserveCasing
+            $Result.created_atSortable | Should -Be '2024-03-15 14:30'
+        }
+
+        It "Should parse date-only strings (YYYY-MM-DD) as datetime" {
+            $Input = [PSCustomObject]@{ expires_at = '2026-12-19' }
+            $Result = $Input | New-GitlabObject
+            $Result.ExpiresAt | Should -BeOfType [datetime]
+            $Result.ExpiresAt.Year | Should -Be 2026
+            $Result.ExpiresAt.Month | Should -Be 12
+            $Result.ExpiresAt.Day | Should -Be 19
+            $Result.ExpiresAtSortable | Should -Be '2026-12-19 00:00'
+        }
+
+        It "Should not parse strings that are not date-only format" {
+            $Input = [PSCustomObject]@{ name = '2024-03-15-suffix'; version = '1.2.3' }
+            $Result = $Input | New-GitlabObject
+            $Result.Name | Should -BeOfType [string]
+            $Result.Version | Should -BeOfType [string]
+        }
+    }
+
     Context "URL aliasing" {
         It "Should create Url alias from WebUrl" {
             $Input = [PSCustomObject]@{ web_url = 'https://gitlab.com/project' }

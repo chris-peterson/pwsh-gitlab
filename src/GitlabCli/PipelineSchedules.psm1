@@ -59,7 +59,7 @@ function Get-GitlabPipelineSchedule {
         $Wrapper = $Wrapper | ForEach-Object { Get-GitlabPipelineSchedule -ProjectId $_.ProjectId -PipelineScheduleId $_.Id }
     }
 
-    $Wrapper | Sort-Object NextRunAtSortable
+    $Wrapper | Sort-Object NextRunAt
 }
 
 # https://docs.gitlab.com/ee/api/pipeline_schedules.html#create-a-new-pipeline-schedule

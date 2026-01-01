@@ -117,16 +117,9 @@ function Get-GitlabPersonalAccessToken {
     if ($LastUsedBefore) {
         $Request.Query.last_used_before = $LastUsedBefore
     }
-    $Results = Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.PersonalAccessToken' | ForEach-Object {
-        if ($_.ExpiresAt) {
-            $ExpiresAt = [datetime]::Parse($_.ExpiresAt)
-            $_.PSObject.Properties.Remove('ExpiresAt')
-            $_ | Add-Member -NotePropertyMembers @{
-                ExpiresAt = $ExpiresAt
-            }
-        }
-        $_
-    } | Sort-Object LastUsedAtSortable -Descending
+    $Results = Invoke-GitlabApi @Request |
+        New-GitlabObject 'Gitlab.PersonalAccessToken' |
+        Sort-Object LastUsedAt -Descending
 
     if ($FetchUsers) {
         $Users = @{}

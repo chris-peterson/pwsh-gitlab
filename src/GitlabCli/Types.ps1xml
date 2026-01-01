@@ -88,10 +88,6 @@
   <Type>
     <Name>Gitlab.Milestone</Name>
     <Members>
-      <ScriptProperty>
-        <Name>UpdatedAtSortable</Name>
-        <GetScriptBlock>$this.UpdatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
-      </ScriptProperty>
     </Members>
   </Type>
   <Type>
@@ -112,18 +108,6 @@
   <Type>
     <Name>Gitlab.PersonalAccessToken</Name>
     <Members>
-      <ScriptProperty>
-        <Name>CreatedAtSortable</Name>
-        <GetScriptBlock>$this.CreatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>ExpiresAtSortable</Name>
-        <GetScriptBlock>$this.ExpiresAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>LastUsedAtSortable</Name>
-        <GetScriptBlock>$this.LastUsedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
-      </ScriptProperty>
       <ScriptProperty>
         <Name>ScopesDisplay</Name>
         <GetScriptBlock>$this.Scopes -join ', '</GetScriptBlock>
@@ -172,10 +156,6 @@
   <Type>
     <Name>Gitlab.PipelineSchedule</Name>
     <Members>
-      <ScriptProperty>
-        <Name>NextRunAtSortable</Name>
-        <GetScriptBlock>$this.NextRunAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
-      </ScriptProperty>
       <ScriptProperty>
         <Name>OwnerUsername</Name>
         <GetScriptBlock>$this.Owner.username</GetScriptBlock>
@@ -366,10 +346,6 @@
         }
         </GetScriptBlock>
       </ScriptProperty>
-      <ScriptProperty>
-        <Name>CreatedAtSortable</Name>
-        <GetScriptBlock>$this.CreatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
-      </ScriptProperty>
     </Members>
   </Type>
   <Type>
@@ -379,19 +355,11 @@
         <Name>AuthorUsername</Name>
         <GetScriptBlock>$this.Author.Username</GetScriptBlock>
       </ScriptProperty>
-      <ScriptProperty>
-        <Name>UpdatedAtSortable</Name>
-        <GetScriptBlock>$this.UpdatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
-      </ScriptProperty>
     </Members>
   </Type>
   <Type>
     <Name>Gitlab.Commit</Name>
     <Members>
-      <ScriptProperty>
-        <Name>CommittedDateSortable</Name>
-        <GetScriptBlock>$this.CommittedDate.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
-      </ScriptProperty>
     </Members>
   </Type>
   <Type>
@@ -534,10 +502,6 @@
     <Name>Gitlab.AuditEvent</Name>
     <Members>
       <ScriptProperty>
-        <Name>CreatedAtSortable</Name>
-        <GetScriptBlock>$this.CreatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
         <Name>AuthorUserId</Name>
         <GetScriptBlock>
           if ($this.AuthorId -eq '-1') {
@@ -597,10 +561,6 @@
     <Name>Gitlab.Release</Name>
     <Members>
       <ScriptProperty>
-        <Name>ReleasedAtSortable</Name>
-        <GetScriptBlock>$this.ReleasedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
         <Name>Releaser</Name>
         <GetScriptBlock>$this.Author.username</GetScriptBlock>
       </ScriptProperty>
@@ -620,14 +580,6 @@
       <ScriptProperty>
         <Name>AuthorName</Name>
         <GetScriptBlock>$this.Author.username</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>CreatedAtSortable</Name>
-        <GetScriptBlock>$this.CreatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>UpdatedAtSortable</Name>
-        <GetScriptBlock>$this.UpdatedAt.ToString('yyyy-MM-dd HH:mm')</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>

@@ -949,7 +949,7 @@
         <TableHeaders>
           <TableColumnHeader/>
           <TableColumnHeader>
-            <Label>Created</Label>
+            <Label>CreatedAt</Label>
           </TableColumnHeader>
           <TableColumnHeader/>
           <TableColumnHeader/>
@@ -964,7 +964,6 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>CreatedAtSortable</PropertyName>
-                <Alignment>Right</Alignment>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>AuthorUsername</PropertyName>
@@ -989,7 +988,7 @@
         <TableHeaders>
           <TableColumnHeader/>
           <TableColumnHeader>
-            <Label>Updated</Label>
+            <Label>UpdatedAt</Label>
           </TableColumnHeader>
           <TableColumnHeader/>
           <TableColumnHeader/>
@@ -1003,7 +1002,6 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>UpdatedAtSortable</PropertyName>
-                <Alignment>Right</Alignment>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>AuthorUsername</PropertyName>
@@ -1027,7 +1025,7 @@
             <Label>Id</Label>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>CommittedAt</Label>
+            <Label>CommittedDate</Label>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Author</Label>
@@ -1042,7 +1040,6 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>CommittedDateSortable</PropertyName>
-                <Alignment>Right</Alignment>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>AuthorName</PropertyName>
@@ -1437,7 +1434,6 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>CreatedAtSortable</PropertyName>
-                <Alignment>Right</Alignment>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>AuthorUserId</PropertyName>

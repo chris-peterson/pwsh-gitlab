@@ -55,7 +55,19 @@ function New-GitlabObject {
                 Sort-Object Name |
                 ForEach-Object {
                     $Name = if ($PreserveCasing) { $_.Name } else { $_.Name | ConvertTo-PascalCase }
-                    $Wrapper | Add-Member -MemberType NoteProperty -Name $Name -Value $_.Value
+                    $Value = $_.Value
+
+                    if ($Value -is [string] -and $Value -match '^\d{4}-\d{2}-\d{2}$') {
+                        $Value = [datetime]::Parse($Value)
+                    }
+
+                    $Wrapper | Add-Member -MemberType NoteProperty -Name $Name -Value $Value
+
+                    if ($Value -is [datetime]) {
+                        $SortableName = "${Name}Sortable"
+                        $SortableValue = $Value.ToString('yyyy-MM-dd HH:mm')
+                        $Wrapper | Add-Member -MemberType NoteProperty -Name $SortableName -Value $SortableValue
+                    }
                 }
 
             # aliases for common property names
