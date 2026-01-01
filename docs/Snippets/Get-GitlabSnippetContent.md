@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Snippets/Get-GitlabSnippetContent
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabSnippetContent
 ---
@@ -17,12 +17,10 @@ Retrieves the raw content of a GitLab snippet.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabSnippetContent
-    [-SnippetId] <int> [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabSnippetContent [-SnippetId] <int> [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Branches/Get-GitlabBranch
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/30/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabBranch
 ---
@@ -27,13 +27,8 @@ Get-GitlabBranch [[-Ref] <string>] [-ProjectId <string>] [-MaxPages <uint>] [-Al
 ### Search
 
 ```
-Get-GitlabBranch
-    [-ProjectId <string>]
-    [-Search <string>]
-    [-MaxPages <uint>]
-    [-All]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabBranch [-ProjectId <string>] [-Search <string>] [-MaxPages <uint>] [-All]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/New-GitlabProject
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabProject
 ---
@@ -20,29 +20,15 @@ Creates a new GitLab project.
 ### Group
 
 ```
-New-GitlabProject
-    [-ProjectName] <string> [-DestinationGroup <string>]
-    [-Visibility <string>]
-    [-BuildTimeout <uint>]
-    [-CloneNow]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+New-GitlabProject [-ProjectName] <string> [-DestinationGroup <string>] [-Visibility <string>]
+ [-BuildTimeout <uint>] [-CloneNow] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Personal
 
 ```
-New-GitlabProject
-    [-ProjectName] <string> [-Personal]
-    [-Visibility <string>]
-    [-BuildTimeout <uint>]
-    [-CloneNow]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+New-GitlabProject [-ProjectName] <string> [-Personal] [-Visibility <string>] [-BuildTimeout <uint>]
+ [-CloneNow] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

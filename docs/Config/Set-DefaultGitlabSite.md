@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Config/Set-DefaultGitlabSite
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Set-DefaultGitlabSite
 ---
@@ -17,13 +17,10 @@ Sets the default GitLab site for API operations.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Set-DefaultGitlabSite
-    [-Url] <string> [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Set-DefaultGitlabSite [-Url] <string> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

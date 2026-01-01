@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ServiceAccounts/Get-GitlabServiceAccount
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabServiceAccount
 ---
@@ -27,11 +27,8 @@ Get-GitlabServiceAccount [[-ServiceAccountId] <int>] [-SiteUrl <string>] [-MaxPa
 ### Group
 
 ```
-Get-GitlabServiceAccount
-    [[-ServiceAccountId] <int>] -GroupId <string> [-SiteUrl <string>]
-    [-MaxPages <uint>]
-    [-All]
-    [<CommonParameters>]
+Get-GitlabServiceAccount [[-ServiceAccountId] <int>] -GroupId <string> [-SiteUrl <string>]
+ [-MaxPages <uint>] [-All] [<CommonParameters>]
 ```
 
 ## ALIASES

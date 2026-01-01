@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Search/Search-GitlabProject
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Search-GitlabProject
 ---
@@ -17,15 +17,11 @@ Searches for blobs within a specific GitLab project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Search-GitlabProject
-    [[-ProjectId] <string>]
-    [-Search] <string>]
-    [-Filename] <string>]
-    [-SiteUrl] <string>]
-    [<CommonParameters>]
+Search-GitlabProject [[-ProjectId] <string>] [[-Search] <string>] [[-Filename] <string>]
+ [[-SiteUrl] <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

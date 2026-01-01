@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Runners/Suspend-GitlabRunner
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Suspend-GitlabRunner
 ---
@@ -17,14 +17,11 @@ Pauses a GitLab runner.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Suspend-GitlabRunner
-    [-RunnerId] <string> [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Suspend-GitlabRunner [-RunnerId] <string> [-SiteUrl <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

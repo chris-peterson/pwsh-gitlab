@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Milestones/Get-GitlabMilestone
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabMilestone
 ---
@@ -27,12 +27,8 @@ Get-GitlabMilestone [-GroupId <string>] [-State <string>] [-MilestoneId <string>
 ### ByProject
 
 ```
-Get-GitlabMilestone
-    [-ProjectId <string>]
-    [-State <string>]
-    [-MilestoneId <string>]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabMilestone [-ProjectId <string>] [-State <string>] [-MilestoneId <string>]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

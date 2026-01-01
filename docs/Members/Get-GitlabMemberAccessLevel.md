@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Get-GitlabMemberAccessLevel
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabMemberAccessLevel
 ---
@@ -17,12 +17,10 @@ Gets the valid GitLab member access levels or converts an access level name to i
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabMemberAccessLevel
-    [[-AccessLevel] <Object>]
-    [<CommonParameters>]
+Get-GitlabMemberAccessLevel [[-AccessLevel] <Object>] [<CommonParameters>]
 ```
 
 ## ALIASES

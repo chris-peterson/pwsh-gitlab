@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Set-GitlabMergeRequest
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Set-GitlabMergeRequest
 ---
@@ -17,13 +17,10 @@ Gets an existing merge request for the current branch or creates a new one.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Set-GitlabMergeRequest
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Set-GitlabMergeRequest [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

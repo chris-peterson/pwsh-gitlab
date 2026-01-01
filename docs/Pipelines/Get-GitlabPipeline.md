@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/Get-GitlabPipeline
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabPipeline
 ---
@@ -17,26 +17,13 @@ Gets pipelines from a GitLab project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabPipeline
-    [[-PipelineId] <string>]
-    [-ProjectId <string>]
-    [-Ref <string>]
-    [-Url <string>]
-    [-Scope <string>]
-    [-Status <string>]
-    [-Source <string>]
-    [-Username <string>]
-    [-Mine]
-    [-Latest]
-    [-IncludeTestReport]
-    [-FetchDownstream]
-    [-MaxPages <uint>]
-    [-All]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabPipeline [[-PipelineId] <string>] [-ProjectId <string>] [-Ref <string>] [-Url <string>]
+ [-Scope <string>] [-Status <string>] [-Source <string>] [-Username <string>] [-Mine] [-Latest]
+ [-IncludeTestReport] [-FetchDownstream] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

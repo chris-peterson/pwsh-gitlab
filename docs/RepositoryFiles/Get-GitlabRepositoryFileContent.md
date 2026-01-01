@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/RepositoryFiles/Get-GitlabRepositoryFileContent
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabRepositoryFileContent
 ---
@@ -17,14 +17,11 @@ Gets the decoded content of a file from a GitLab repository.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabRepositoryFileContent
-    [-FilePath] <string> [-ProjectId <string>]
-    [-Ref <string>]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabRepositoryFileContent [-FilePath] <string> [-ProjectId <string>] [-Ref <string>]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

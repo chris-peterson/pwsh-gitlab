@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Runners/Get-GitlabRunner
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabRunner
 ---
@@ -27,12 +27,8 @@ Get-GitlabRunner [-Type <string>] [-Status <string>] [-Tags <string[]>] [-FetchD
 ### RunnerId
 
 ```
-Get-GitlabRunner
-    [-RunnerId] <string> [-FetchDetails]
-    [-MaxPages <uint>]
-    [-All]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabRunner [-RunnerId] <string> [-FetchDetails] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

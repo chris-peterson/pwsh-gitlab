@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Utilities/Open-InBrowser
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Open-InBrowser
 ---
@@ -17,11 +17,10 @@ Opens a URL or GitLab object in the default web browser.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Open-InBrowser
-    [-InputObject] <Object> [<CommonParameters>]
+Open-InBrowser [-InputObject] <Object> [<CommonParameters>]
 ```
 
 ## ALIASES

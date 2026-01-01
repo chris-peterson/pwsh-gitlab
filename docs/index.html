@@ -191,12 +191,72 @@
   </script>
   <!-- Docsify core -->
   <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
-  <!-- Custom front matter stripping (handles PlatyPS YAML with space-containing keys) -->
+  <!-- Custom content transformations -->
   <script>
     window.$docsify.plugins = (window.$docsify.plugins || []).concat(function(hook) {
       hook.beforeEach(function(content) {
         // Strip YAML front matter (handles invalid YAML with spaces in keys)
-        return content.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, '');
+        content = content.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, '');
+        
+        // Replace "__AllParameterSets" with "Default" for cleaner display
+        content = content.replace(/### __AllParameterSets/g, '### Default');
+        
+        // Clean up verbose YAML parameter blocks
+        content = content.replace(/(```yaml\n)([\s\S]*?)(```)/g, function(match, before, yaml, after) {
+          var lines = yaml.split('\n');
+          var cleanLines = [];
+          
+          for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            var trimmed = line.trim();
+            
+            // Skip fields with empty/false/useless values
+            if (trimmed === "DefaultValue: ''" ||
+                trimmed === "SupportsWildcards: false" ||
+                trimmed === "Aliases: []" ||
+                trimmed === "DontShow: false" ||
+                trimmed === "AcceptedValues: []" ||
+                trimmed === "HelpMessage: ''") {
+              continue;
+            }
+            
+            cleanLines.push(line);
+          }
+          
+          return before + cleanLines.join('\n') + after;
+        });
+        
+        // Reformat syntax blocks: one parameter per line
+        content = content.replace(/(### (?:Default|\w+)\s*\n\n```\n)([\s\S]*?)(```)/g, function(match, before, syntax, after) {
+          // Normalize whitespace
+          var normalized = syntax.replace(/\s+/g, ' ').trim();
+          
+          // Check if already formatted (cmdlet alone on first line)
+          var lines = syntax.trim().split('\n');
+          if (lines.length > 1 && /^[A-Z][a-zA-Z]+-[a-zA-Z]+$/.test(lines[0])) {
+            return match;
+          }
+          
+          // Match cmdlet name and parameters
+          var cmdletMatch = normalized.match(/^([A-Z][a-zA-Z]+-[a-zA-Z]+)\s+(.*)$/);
+          if (cmdletMatch) {
+            var cmdlet = cmdletMatch[1];
+            var params = cmdletMatch[2];
+            
+            // Split parameters on "] [" pattern
+            var paramList = params.split(/\]\s+\[/).map(function(p) {
+              p = p.trim();
+              if (!p.startsWith('[')) p = '[' + p;
+              if (!p.endsWith(']')) p = p + ']';
+              return '    ' + p;
+            });
+            
+            return before + cmdlet + '\n' + paramList.join('\n') + '\n' + after;
+          }
+          return match;
+        });
+        
+        return content;
       });
     });
   </script>

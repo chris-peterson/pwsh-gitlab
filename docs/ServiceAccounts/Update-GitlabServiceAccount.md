@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ServiceAccounts/Update-GitlabServiceAccount
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabServiceAccount
 ---
@@ -27,14 +27,9 @@ Update-GitlabServiceAccount -ServiceAccountId <int> [-Name <string>] [-Username 
 ### Group
 
 ```
-Update-GitlabServiceAccount
-    [-ServiceAccountId <int> -GroupId <string> [-Name <string>]
-    [-Username <string>]
-    [-Email <string>]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Update-GitlabServiceAccount -ServiceAccountId <int> -GroupId <string> [-Name <string>]
+ [-Username <string>] [-Email <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

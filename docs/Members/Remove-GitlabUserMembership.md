@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Remove-GitlabUserMembership
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabUserMembership
 ---
@@ -17,17 +17,11 @@ Removes a user's membership from specified groups and/or projects.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Remove-GitlabUserMembership
-    [-Username] <string> [-Group <Object>]
-    [-Project <Object>]
-    [-RemoveAllAccess]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Remove-GitlabUserMembership [-Username] <string> [-Group <Object>] [-Project <Object>]
+ [-RemoveAllAccess] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

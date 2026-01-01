@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Write-GitlabJobTrace
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Write-GitlabJobTrace
 ---
@@ -17,13 +17,10 @@ Writes colored text to the GitLab CI/CD job log.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Write-GitlabJobTrace
-    [[-Text] <string>]
-    [-Color] <string>]
-    [<CommonParameters>]
+Write-GitlabJobTrace [[-Text] <string>] [[-Color] <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

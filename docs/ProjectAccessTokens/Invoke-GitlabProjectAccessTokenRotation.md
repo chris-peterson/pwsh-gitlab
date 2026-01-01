@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectAccessTokens/Invoke-GitlabProjectAccessTokenRotation
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Invoke-GitlabProjectAccessTokenRotation
 ---
@@ -17,16 +17,11 @@ Rotates a project access token, generating a new token with a new value.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Invoke-GitlabProjectAccessTokenRotation
-    [-ProjectId] <string> -TokenId <string> [-ExpiresAt <datetime>]
-    [-SiteUrl <string>]
-    [-Force]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Invoke-GitlabProjectAccessTokenRotation [-ProjectId] <string> -TokenId <string>
+ [-ExpiresAt <datetime>] [-SiteUrl <string>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Get-GitlabJob
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabJob
 ---
@@ -28,32 +28,17 @@ Get-GitlabJob [-ProjectId <string>] [-Scope <string>] [-Stage <string>] [-Name <
 ### ByPipeline
 
 ```
-Get-GitlabJob
-    [-PipelineId <string> [-ProjectId <string>]
-    [-Stage <string>]
-    [-Name <string>]
-    [-IncludeRetried]
-    [-IncludeTrace]
-    [-IncludeVariables]
-    [-MaxPages <uint>]
-    [-All]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabJob -PipelineId <string> [-ProjectId <string>] [-Stage <string>] [-Name <string>]
+ [-IncludeRetried] [-IncludeTrace] [-IncludeVariables] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
+ [<CommonParameters>]
 ```
 
 ### ById
 
 ```
-Get-GitlabJob
-    [-JobId <string> [-ProjectId <string>]
-    [-Stage <string>]
-    [-Name <string>]
-    [-IncludeTrace]
-    [-IncludeVariables]
-    [-MaxPages <uint>]
-    [-All]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabJob -JobId <string> [-ProjectId <string>] [-Stage <string>] [-Name <string>]
+ [-IncludeTrace] [-IncludeVariables] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

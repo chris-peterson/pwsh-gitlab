@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Branches/Remove-GitlabBranch
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/30/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabBranch
 ---
@@ -17,17 +17,19 @@ Deletes a branch or merged branches from a GitLab project repository.
 
 ## SYNTAX
 
+### ByBranch (Default)
+
+```
+Remove-GitlabBranch [[-Branch] <string>] [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
+```
+
+
 ### MergedBranches
 
 ```
-Remove-GitlabBranch
-    [[-Branch] <string>]
-    [-ProjectId <string>]
-    [-MergedBranches]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Remove-GitlabBranch [-ProjectId <string>] [-MergedBranches] [-SiteUrl <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -66,7 +68,7 @@ Deletes the specified branch without confirmation prompt.
 
 ### -Branch
 
-{{ Fill Branch Description }}
+Branch name to remove.  Defaults to `.` which is interpreted as the current branch.
 
 ```yaml
 Type: System.String
@@ -75,7 +77,7 @@ SupportsWildcards: false
 Aliases:
 - Name
 ParameterSets:
-- Name: (All)
+- Name: ByBranch
   Position: 0
   IsRequired: false
   ValueFromPipeline: false

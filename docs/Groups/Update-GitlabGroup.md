@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Update-GitlabGroup
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabGroup
 ---
@@ -17,17 +17,11 @@ Updates properties of a GitLab group.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Update-GitlabGroup
-    [-GroupId] <string> [-Name <string>]
-    [-Path <string>]
-    [-Visibility <string>]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Update-GitlabGroup [-GroupId] <string> [-Name <string>] [-Path <string>] [-Visibility <string>]
+ [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

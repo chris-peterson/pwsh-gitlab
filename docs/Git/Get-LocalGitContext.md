@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Git/Get-LocalGitContext
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-LocalGitContext
 ---
@@ -17,12 +17,10 @@ Retrieves the local Git repository context including the GitLab site, project pa
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-LocalGitContext
-    [[-Path] <string>]
-    [<CommonParameters>]
+Get-LocalGitContext [[-Path] <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

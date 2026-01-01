@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Config/Get-GitlabConfiguration
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabConfiguration
 ---
@@ -17,20 +17,10 @@ Gets the current GitLab CLI configuration.
 
 ## SYNTAX
 
-### Default
-
-```
-Get-GitlabConfiguration
-    [<CommonParameters>]
-```
-
 ### DefaultSite
 
 ```
-Get-GitlabConfiguration
-    [-DefaultSite]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabConfiguration [-DefaultSite] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

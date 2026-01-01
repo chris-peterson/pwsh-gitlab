@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Start-GitlabUserImpersonation
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Start-GitlabUserImpersonation
 ---
@@ -17,14 +17,11 @@ Starts an impersonation session for a GitLab user.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Start-GitlabUserImpersonation
-    [-UserId] <string> [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Start-GitlabUserImpersonation [-UserId] <string> [-SiteUrl <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

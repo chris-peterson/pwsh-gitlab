@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Environments/Get-GitlabEnvironment
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabEnvironment
 ---
@@ -27,26 +27,15 @@ Get-GitlabEnvironment [-ProjectId <string>] [-State <string>] [-Enrich] [-MaxPag
 ### Name
 
 ```
-Get-GitlabEnvironment
-    [-ProjectId <string>]
-    [-Name <string>]
-    [-State <string>]
-    [-Enrich]
-    [-MaxPages <int>]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabEnvironment [-ProjectId <string>] [-Name <string>] [-State <string>] [-Enrich]
+ [-MaxPages <int>] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### Search
 
 ```
-Get-GitlabEnvironment
-    [-Search <string> [-ProjectId <string>]
-    [-State <string>]
-    [-Enrich]
-    [-MaxPages <int>]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabEnvironment -Search <string> [-ProjectId <string>] [-State <string>] [-Enrich]
+ [-MaxPages <int>] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

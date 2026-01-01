@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Get-GitlabMembershipSortKey
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabMembershipSortKey
 ---
@@ -17,10 +17,10 @@ Gets the default sort keys used for sorting membership results.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabMembershipSortKey
+Get-GitlabMembershipSortKey [<CommonParameters>]
 ```
 
 ## ALIASES

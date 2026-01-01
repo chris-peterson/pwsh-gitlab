@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Get-GitlabGroupMember
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabGroupMember
 ---
@@ -17,18 +17,11 @@ Gets members of a GitLab group.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabGroupMember
-    [[-GroupId] <string>]
-    [-UserId <string>]
-    [-IncludeInherited]
-    [-MinAccessLevel <string>]
-    [-MaxPages <uint>]
-    [-All]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabGroupMember [[-GroupId] <string>] [-UserId <string>] [-IncludeInherited]
+ [-MinAccessLevel <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

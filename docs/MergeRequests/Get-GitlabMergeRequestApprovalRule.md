@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Get-GitlabMergeRequestApprovalRule
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabMergeRequestApprovalRule
 ---
@@ -17,14 +17,11 @@ Gets merge request approval rules for a project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabMergeRequestApprovalRule
-    [[-ProjectId] <string>]
-    [-ApprovalRuleId] <string>]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabMergeRequestApprovalRule [[-ProjectId] <string>] [[-ApprovalRuleId] <string>]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

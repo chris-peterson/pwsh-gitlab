@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Todos/Get-GitlabTodo
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabTodo
 ---
@@ -17,14 +17,10 @@ Retrieves the to-do items for the current user.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabTodo
-    [[-MaxPages] <uint>]
-    [-SiteUrl] <string>]
-    [-All]
-    [<CommonParameters>]
+Get-GitlabTodo [[-MaxPages] <uint>] [[-SiteUrl] <string>] [-All] [<CommonParameters>]
 ```
 
 ## ALIASES

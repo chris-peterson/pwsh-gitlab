@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Environments/Stop-GitlabEnvironment
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Stop-GitlabEnvironment
 ---
@@ -17,15 +17,11 @@ Stops a GitLab environment.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Stop-GitlabEnvironment
-    [[-ProjectId] <string>]
-    [-Name] <string> [[-SiteUrl] <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Stop-GitlabEnvironment [[-ProjectId] <string>] [-Name] <string> [[-SiteUrl] <string>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

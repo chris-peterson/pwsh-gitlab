@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Close-GitlabMergeRequest
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Close-GitlabMergeRequest
 ---
@@ -17,14 +17,11 @@ Closes a GitLab merge request without merging.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Close-GitlabMergeRequest
-    [-ProjectId] <string> [-MergeRequestId] <string> [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Close-GitlabMergeRequest [-ProjectId] <string> [-MergeRequestId] <string> [-SiteUrl <string>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

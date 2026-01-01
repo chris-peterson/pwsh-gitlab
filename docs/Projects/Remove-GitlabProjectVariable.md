@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Remove-GitlabProjectVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabProjectVariable
 ---
@@ -17,15 +17,11 @@ Deletes a CI/CD variable from a GitLab project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Remove-GitlabProjectVariable
-    [-Key] <string> [-ProjectId <string>]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Remove-GitlabProjectVariable [-Key] <string> [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

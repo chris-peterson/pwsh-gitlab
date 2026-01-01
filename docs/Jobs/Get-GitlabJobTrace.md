@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Get-GitlabJobTrace
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabJobTrace
 ---
@@ -17,13 +17,10 @@ Retrieves the log (trace) output of a GitLab CI/CD job.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabJobTrace
-    [-JobId] <string> [-ProjectId <string>]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabJobTrace [-JobId] <string> [-ProjectId <string>] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

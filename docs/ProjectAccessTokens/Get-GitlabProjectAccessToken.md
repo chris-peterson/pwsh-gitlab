@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectAccessTokens/Get-GitlabProjectAccessToken
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabProjectAccessToken
 ---
@@ -20,31 +20,17 @@ Retrieves project access tokens from a GitLab project.
 ### ByTokenId
 
 ```
-Get-GitlabProjectAccessToken
-    [-ProjectId] <string> -TokenId <string> [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Get-GitlabProjectAccessToken [-ProjectId] <string> -TokenId <string> [-SiteUrl <string>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### All
 
 ```
-Get-GitlabProjectAccessToken
-    [-ProjectId] <string> [-CreatedAfter <datetime>]
-    [-CreatedBefore <datetime>]
-    [-ExpiresAfter <datetime>]
-    [-ExpiresBefore <datetime>]
-    [-LastUsedAfter <datetime>]
-    [-LastUsedBefore <datetime>]
-    [-Revoked <bool>]
-    [-Search <string>]
-    [-Sort <string>]
-    [-State <string>]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Get-GitlabProjectAccessToken [-ProjectId] <string> [-CreatedAfter <datetime>]
+ [-CreatedBefore <datetime>] [-ExpiresAfter <datetime>] [-ExpiresBefore <datetime>]
+ [-LastUsedAfter <datetime>] [-LastUsedBefore <datetime>] [-Revoked <bool>] [-Search <string>]
+ [-Sort <string>] [-State <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

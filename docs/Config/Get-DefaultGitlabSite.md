@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Config/Get-DefaultGitlabSite
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-DefaultGitlabSite
 ---
@@ -17,7 +17,7 @@ Gets the default GitLab site configuration.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
 Get-DefaultGitlabSite

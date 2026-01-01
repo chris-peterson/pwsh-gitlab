@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Update-GitlabProject
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabProject
 ---
@@ -17,27 +17,15 @@ Updates an existing GitLab project's settings.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Update-GitlabProject
-    [[-ProjectId] <string>]
-    [-Visibility] <string>]
-    [-Name] <string>]
-    [-Path] <string>]
-    [-DefaultBranch] <string>]
-    [-Topics] <string[]>]
-    [-BuildGitStrategy] <string>]
-    [-CiDefaultGitDepth] <uint>]
-    [-CiForwardDeployment] <bool>]
-    [-BuildTimeout] <uint>]
-    [-RepositoryAccessLevel] <string>]
-    [-BuildsAccessLevel] <string>]
-    [-OnlyAllowMergeIfAllDiscussionsAreResolved] <bool>]
-    [-SiteUrl] <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Update-GitlabProject [[-ProjectId] <string>] [[-Visibility] <string>] [[-Name] <string>]
+ [[-Path] <string>] [[-DefaultBranch] <string>] [[-Topics] <string[]>]
+ [[-BuildGitStrategy] <string>] [[-CiDefaultGitDepth] <uint>] [[-CiForwardDeployment] <bool>]
+ [[-BuildTimeout] <uint>] [[-RepositoryAccessLevel] <string>] [[-BuildsAccessLevel] <string>]
+ [[-OnlyAllowMergeIfAllDiscussionsAreResolved] <bool>] [[-SiteUrl] <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

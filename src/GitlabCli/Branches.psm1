@@ -298,7 +298,7 @@ function UnProtect-GitlabBranch {
 }
 
 function Remove-GitlabBranch {
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High', DefaultParameterSetName='ByBranch')]
     [OutputType([void])]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]
@@ -307,7 +307,7 @@ function Remove-GitlabBranch {
         $ProjectId = '.',
 
         [Alias('Name')]
-        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
+        [Parameter(Position=0, ValueFromPipelineByPropertyName, ParameterSetName='ByBranch')]
         [ValidateNotNullOrEmpty()]
         [string]
         $Branch = '.',

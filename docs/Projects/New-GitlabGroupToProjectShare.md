@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/New-GitlabGroupToProjectShare
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabGroupToProjectShare
 ---
@@ -17,17 +17,11 @@ Shares a GitLab project with a group.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-New-GitlabGroupToProjectShare
-    [[-ProjectId] <string>]
-    [-GroupId] <string>]
-    [-GroupAccess] <string>]
-    [-SiteUrl] <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+New-GitlabGroupToProjectShare [[-ProjectId] <string>] [[-GroupId] <string>]
+ [[-GroupAccess] <string>] [[-SiteUrl] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

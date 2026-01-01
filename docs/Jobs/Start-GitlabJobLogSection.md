@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Start-GitlabJobLogSection
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Start-GitlabJobLogSection
 ---
@@ -17,12 +17,10 @@ Starts a collapsible section in GitLab CI/CD job logs.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Start-GitlabJobLogSection
-    [-HeaderText] <string> [-Collapsed]
-    [<CommonParameters>]
+Start-GitlabJobLogSection [-HeaderText] <string> [-Collapsed] [<CommonParameters>]
 ```
 
 ## ALIASES

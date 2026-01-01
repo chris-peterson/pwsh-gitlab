@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Add-GitlabProjectTopic
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Add-GitlabProjectTopic
 ---
@@ -17,14 +17,11 @@ Adds one or more topics to a GitLab project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Add-GitlabProjectTopic
-    [-Topic] <string[]> [-ProjectId <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Add-GitlabProjectTopic [-Topic] <string[]> [-ProjectId <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

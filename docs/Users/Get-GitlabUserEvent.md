@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Get-GitlabUserEvent
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabUserEvent
 ---
@@ -28,33 +28,17 @@ Get-GitlabUserEvent [-UserId <string>] [-Action <string>] [-TargetType <string>]
 ### ByEmail
 
 ```
-Get-GitlabUserEvent
-    [-EmailAddress <string>]
-    [-Action <string>]
-    [-TargetType <string>]
-    [-Before <string>]
-    [-After <string>]
-    [-Sort <string>]
-    [-MaxPages <uint>]
-    [-FetchProjects]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabUserEvent [-EmailAddress <string>] [-Action <string>] [-TargetType <string>]
+ [-Before <string>] [-After <string>] [-Sort <string>] [-MaxPages <uint>] [-FetchProjects]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByMe
 
 ```
-Get-GitlabUserEvent
-    [-Me]
-    [-Action <string>]
-    [-TargetType <string>]
-    [-Before <string>]
-    [-After <string>]
-    [-Sort <string>]
-    [-MaxPages <uint>]
-    [-FetchProjects]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabUserEvent [-Me] [-Action <string>] [-TargetType <string>] [-Before <string>]
+ [-After <string>] [-Sort <string>] [-MaxPages <uint>] [-FetchProjects] [-SiteUrl <string>]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

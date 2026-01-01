@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Utilities/Get-FilteredObject
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FilteredObject
 ---
@@ -17,11 +17,10 @@ Filters and selects properties from input objects.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-FilteredObject
-    [[-Select] <string>] -InputObject <Object> [<CommonParameters>]
+Get-FilteredObject [[-Select] <string>] -InputObject <Object> [<CommonParameters>]
 ```
 
 ## ALIASES

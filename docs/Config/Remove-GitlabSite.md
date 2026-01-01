@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Config/Remove-GitlabSite
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabSite
 ---
@@ -17,13 +17,10 @@ Removes a GitLab site from the configuration.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Remove-GitlabSite
-    [-Url] <string> [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Remove-GitlabSite [-Url] <string> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Commits/Get-GitlabCommit
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabCommit
 ---
@@ -17,18 +17,11 @@ Retrieves commits from a GitLab project repository.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabCommit
-    [[-ProjectId] <string>]
-    [-Before] <string>]
-    [-After] <string>]
-    [-Ref] <string>]
-    [-Sha] <string>]
-    [-MaxPages] <uint>]
-    [-SiteUrl] <string>]
-    [<CommonParameters>]
+Get-GitlabCommit [[-ProjectId] <string>] [[-Before] <string>] [[-After] <string>] [[-Ref] <string>]
+ [[-Sha] <string>] [[-MaxPages] <uint>] [[-SiteUrl] <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

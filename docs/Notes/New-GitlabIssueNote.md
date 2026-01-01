@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Notes/New-GitlabIssueNote
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabIssueNote
 ---
@@ -17,16 +17,11 @@ Creates a new note (comment) on a GitLab issue.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-New-GitlabIssueNote
-    [-Note] <string> [-ProjectId <string>]
-    [-IssueId <string>]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+New-GitlabIssueNote [-Note] <string> [-ProjectId <string>] [-IssueId <string>] [-SiteUrl <string>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

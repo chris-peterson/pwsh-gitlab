@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Get-GitlabJobArtifact
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabJobArtifact
 ---
@@ -17,14 +17,11 @@ Downloads job artifacts from a GitLab CI/CD job.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabJobArtifact
-    [-JobId] <string> [[-ProjectId] <string>]
-    [-ArtifactPath] <string>]
-    [-OutFile] <string> [[-SiteUrl] <string>]
-    [<CommonParameters>]
+Get-GitlabJobArtifact [-JobId] <string> [[-ProjectId] <string>] [[-ArtifactPath] <string>]
+ [-OutFile] <string> [[-SiteUrl] <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

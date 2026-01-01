@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Runners/Remove-GitlabRunner
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabRunner
 ---
@@ -17,14 +17,11 @@ Deletes a GitLab runner.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Remove-GitlabRunner
-    [-RunnerId] <string> [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Remove-GitlabRunner [-RunnerId] <string> [-SiteUrl <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectDeployKeys/Add-GitlabProjectDeployKey
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Add-GitlabProjectDeployKey
 ---
@@ -17,15 +17,11 @@ Adds a new deploy key to a GitLab project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Add-GitlabProjectDeployKey
-    [-ProjectId] <string> -Title <string> -Key <string> [-CanPush]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Add-GitlabProjectDeployKey [-ProjectId] <string> -Title <string> -Key <string> [-CanPush]
+ [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

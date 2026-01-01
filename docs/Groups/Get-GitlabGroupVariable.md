@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Get-GitlabGroupVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabGroupVariable
 ---
@@ -17,15 +17,11 @@ Retrieves CI/CD variables defined at the group level.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabGroupVariable
-    [-GroupId] <string> [[-Key] <string>]
-    [-SiteUrl <string>]
-    [-MaxPages <uint>]
-    [-All]
-    [<CommonParameters>]
+Get-GitlabGroupVariable [-GroupId] <string> [[-Key] <string>] [-SiteUrl <string>] [-MaxPages <uint>]
+ [-All] [<CommonParameters>]
 ```
 
 ## ALIASES

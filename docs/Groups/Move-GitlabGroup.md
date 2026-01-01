@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Move-GitlabGroup
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Move-GitlabGroup
 ---
@@ -17,16 +17,11 @@ Transfers a GitLab group to a new parent group or to the top level.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Move-GitlabGroup
-    [[-GroupId] <string>]
-    [-DestinationGroupId] <string>]
-    [-SiteUrl] <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Move-GitlabGroup [[-GroupId] <string>] [[-DestinationGroupId] <string>] [[-SiteUrl] <string>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Get-GitlabUser
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabUser
 ---
@@ -27,22 +27,13 @@ Get-GitlabUser [-Active] [-External] [-Blocked] [-ExcludeActive] [-ExcludeExtern
 ### Id
 
 ```
-Get-GitlabUser
-    [-UserId] <string> [-MaxPages <uint>]
-    [-All]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabUser [-UserId] <string> [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### Me
 
 ```
-Get-GitlabUser
-    [-MaxPages <uint>]
-    [-All]
-    [-Me]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabUser [-MaxPages <uint>] [-All] [-Me] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

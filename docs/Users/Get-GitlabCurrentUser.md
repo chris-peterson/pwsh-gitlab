@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Get-GitlabCurrentUser
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabCurrentUser
 ---
@@ -17,12 +17,10 @@ Retrieves the currently authenticated GitLab user.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabCurrentUser
-    [[-SiteUrl] <string>]
-    [<CommonParameters>]
+Get-GitlabCurrentUser [[-SiteUrl] <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Snippets/Update-GitlabSnippet
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabSnippet
 ---
@@ -17,18 +17,12 @@ Updates an existing GitLab snippet.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Update-GitlabSnippet
-    [-SnippetId] <int> [-Title <string>]
-    [-Description <string>]
-    [-Visibility <string>]
-    [-Files <hashtable[]>]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Update-GitlabSnippet [-SnippetId] <int> [-Title <string>] [-Description <string>]
+ [-Visibility <string>] [-Files <hashtable[]>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

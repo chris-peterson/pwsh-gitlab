@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Remove-GitlabGroupVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabGroupVariable
 ---
@@ -17,14 +17,11 @@ Deletes a CI/CD variable from a group.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Remove-GitlabGroupVariable
-    [-Key] <string> -GroupId <string> [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Remove-GitlabGroupVariable [-Key] <string> -GroupId <string> [-SiteUrl <string>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

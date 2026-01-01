@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Merge-GitlabMergeRequest
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Merge-GitlabMergeRequest
 ---
@@ -17,21 +17,13 @@ Merges a GitLab merge request.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Merge-GitlabMergeRequest
-    [[-ProjectId] <string>]
-    [-MergeRequestId] <string> [-MergeCommitMessage <string>]
-    [-SquashCommitMessage <string>]
-    [-ConfirmSha <string>]
-    [-Squash]
-    [-KeepSourceBranch]
-    [-MergeWhenPipelineSucceeds]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Merge-GitlabMergeRequest [[-ProjectId] <string>] [-MergeRequestId] <string>
+ [-MergeCommitMessage <string>] [-SquashCommitMessage <string>] [-ConfirmSha <string>] [-Squash]
+ [-KeepSourceBranch] [-MergeWhenPipelineSucceeds] [-SiteUrl <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Notes/Get-GitlabMergeRequestNote
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabMergeRequestNote
 ---
@@ -17,14 +17,11 @@ Retrieves notes (comments) from a GitLab merge request.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabMergeRequestNote
-    [-MergeRequestId] <string> [[-NoteId] <string>]
-    [-ProjectId <string>]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabMergeRequestNote [-MergeRequestId] <string> [[-NoteId] <string>] [-ProjectId <string>]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Branches/Protect-GitlabBranch
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Protect-GitlabBranch
 ---
@@ -17,24 +17,13 @@ Protects a branch in a GitLab project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Protect-GitlabBranch
-    [[-Branch] <string>]
-    [-ProjectId <string>]
-    [-PushAccessLevel <string>]
-    [-MergeAccessLevel <string>]
-    [-UnprotectAccessLevel <string>]
-    [-AllowForcePush <bool>]
-    [-AllowedToPush <array>]
-    [-AllowedToMerge <array>]
-    [-AllowedToUnprotect <array>]
-    [-CodeOwnerApprovalRequired <bool>]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Protect-GitlabBranch [[-Branch] <string>] [-ProjectId <string>] [-PushAccessLevel <string>]
+ [-MergeAccessLevel <string>] [-UnprotectAccessLevel <string>] [-AllowForcePush <bool>]
+ [-AllowedToPush <array>] [-AllowedToMerge <array>] [-AllowedToUnprotect <array>]
+ [-CodeOwnerApprovalRequired <bool>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

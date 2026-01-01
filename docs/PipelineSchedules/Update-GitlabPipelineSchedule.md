@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/Update-GitlabPipelineSchedule
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/31/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabPipelineSchedule
 ---
@@ -17,21 +17,13 @@ Updates an existing pipeline schedule for a GitLab project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Update-GitlabPipelineSchedule
-    [[-ProjectId] <string>]
-    [-PipelineScheduleId] <int> [[-Description] <string>]
-    [-Ref] <string>]
-    [-Cron] <string>]
-    [-CronTimezone] <string>]
-    [-Active] <bool>]
-    [-NewOwner] <string>]
-    [-SiteUrl] <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Update-GitlabPipelineSchedule [[-ProjectId] <string>] [-PipelineScheduleId] <int>
+ [[-Description] <string>] [[-Ref] <string>] [[-Cron] <string>] [[-CronTimezone] <string>]
+ [[-Active] <bool>] [[-NewOwner] <string>] [[-SiteUrl] <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

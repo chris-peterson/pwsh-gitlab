@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/New-GitlabPipeline
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabPipeline
 ---
@@ -17,19 +17,11 @@ Creates a new pipeline in a GitLab project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-New-GitlabPipeline
-    [[-ProjectId] <string>]
-    [-Ref] <string>]
-    [-Variables] <Object>]
-    [-SiteUrl] <string>]
-    [-Wait]
-    [-Follow]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+New-GitlabPipeline [[-ProjectId] <string>] [[-Ref] <string>] [[-Variables] <Object>]
+ [[-SiteUrl] <string>] [-Wait] [-Follow] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Snippets/Get-GitlabSnippet
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabSnippet
 ---
@@ -27,28 +27,15 @@ Get-GitlabSnippet [-Mine] [-CreatedAfter <string>] [-CreatedBefore <string>] [-I
 ### ById
 
 ```
-Get-GitlabSnippet
-    [-SnippetId] <int> [-CreatedAfter <string>]
-    [-CreatedBefore <string>]
-    [-IncludeContent]
-    [-MaxPages <uint>]
-    [-All]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabSnippet [-SnippetId] <int> [-CreatedAfter <string>] [-CreatedBefore <string>]
+ [-IncludeContent] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByAuthor
 
 ```
-Get-GitlabSnippet
-    [-AuthorUsername <string>]
-    [-CreatedAfter <string>]
-    [-CreatedBefore <string>]
-    [-IncludeContent]
-    [-MaxPages <uint>]
-    [-All]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabSnippet [-AuthorUsername <string>] [-CreatedAfter <string>] [-CreatedBefore <string>]
+ [-IncludeContent] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

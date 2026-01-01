@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Stop-GitlabUserImpersonation
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Stop-GitlabUserImpersonation
 ---
@@ -17,14 +17,10 @@ Stops the current GitLab user impersonation session.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Stop-GitlabUserImpersonation
-    [[-SiteUrl] <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Stop-GitlabUserImpersonation [[-SiteUrl] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

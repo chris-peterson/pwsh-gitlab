@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/New-GitlabIssue
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabIssue
 ---
@@ -17,19 +17,11 @@ Creates a new issue in a GitLab project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-New-GitlabIssue
-    [-Title] <string> [[-Description] <string>]
-    [-ProjectId <string>]
-    [-MarkTodoAsRead]
-    [-MilestoneId <string>]
-    [-Follow]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+New-GitlabIssue [-Title] <string> [[-Description] <string>] [-ProjectId <string>] [-MarkTodoAsRead]
+ [-MilestoneId <string>] [-Follow] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

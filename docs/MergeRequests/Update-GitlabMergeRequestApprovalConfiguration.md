@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Update-GitlabMergeRequestApprovalConfiguration
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabMergeRequestApprovalConfiguration
 ---
@@ -17,21 +17,14 @@ Updates the merge request approval configuration for a project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Update-GitlabMergeRequestApprovalConfiguration
-    [[-ProjectId] <string>]
-    [-DisableOverridingApproversPerMergeRequest <bool>]
-    [-MergeRequestsAuthorApproval <bool>]
-    [-MergeRequestsDisableCommittersApproval <bool>]
-    [-RequirePasswordToApprove <bool>]
-    [-ResetApprovalsOnPush <bool>]
-    [-SelectiveCodeOwnerRemovals <bool>]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Update-GitlabMergeRequestApprovalConfiguration [[-ProjectId] <string>]
+ [-DisableOverridingApproversPerMergeRequest <bool>] [-MergeRequestsAuthorApproval <bool>]
+ [-MergeRequestsDisableCommittersApproval <bool>] [-RequirePasswordToApprove <bool>]
+ [-ResetApprovalsOnPush <bool>] [-SelectiveCodeOwnerRemovals <bool>] [-SiteUrl <string>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

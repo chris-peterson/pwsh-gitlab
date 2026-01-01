@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PersonalAccessTokens/Revoke-GitlabPersonalAccessToken
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Revoke-GitlabPersonalAccessToken
 ---
@@ -17,14 +17,11 @@ Revokes a personal access token, permanently invalidating it.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Revoke-GitlabPersonalAccessToken
-    [-TokenId] <string> [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Revoke-GitlabPersonalAccessToken [-TokenId] <string> [-SiteUrl <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

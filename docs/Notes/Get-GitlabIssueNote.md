@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Notes/Get-GitlabIssueNote
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabIssueNote
 ---
@@ -17,13 +17,11 @@ Retrieves notes (comments) from a GitLab issue.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabIssueNote
-    [-IssueId] <string> [-ProjectId <string>]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabIssueNote [-IssueId] <string> [-ProjectId <string>] [-SiteUrl <string>]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

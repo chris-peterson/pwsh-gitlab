@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Update-LocalGitlabGroup
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Update-LocalGitlabGroup
 ---
@@ -17,13 +17,10 @@ Pulls the latest changes for all local git repositories.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Update-LocalGitlabGroup
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Update-LocalGitlabGroup [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

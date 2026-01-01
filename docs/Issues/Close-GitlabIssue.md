@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/Close-GitlabIssue
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Close-GitlabIssue
 ---
@@ -17,15 +17,11 @@ Closes an open GitLab issue.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Close-GitlabIssue
-    [-IssueId] <string> [-ProjectId <string>]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+Close-GitlabIssue [-IssueId] <string> [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

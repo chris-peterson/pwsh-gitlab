@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/GroupAccessTokens/New-GitlabGroupAccessToken
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabGroupAccessToken
 ---
@@ -17,16 +17,12 @@ Creates a new access token for a GitLab group.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-New-GitlabGroupAccessToken
-    [-GroupId] <string> -Name <string> -Scope <string[]> -AccessLevel <string> [-ExpiresAt <datetime>]
-    [-CopyToClipboard]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+New-GitlabGroupAccessToken [-GroupId] <string> -Name <string> -Scope <string[]>
+ -AccessLevel <string> [-ExpiresAt <datetime>] [-CopyToClipboard] [-SiteUrl <string>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES

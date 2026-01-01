@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/Get-GitlabPipelineBridge
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabPipelineBridge
 ---
@@ -17,14 +17,11 @@ Gets bridge jobs (downstream pipeline triggers) from a GitLab pipeline.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabPipelineBridge
-    [[-ProjectId] <string>]
-    [-PipelineId] <string> [[-Scope] <string>]
-    [-SiteUrl] <string>]
-    [<CommonParameters>]
+Get-GitlabPipelineBridge [[-ProjectId] <string>] [-PipelineId] <string> [[-Scope] <string>]
+ [[-SiteUrl] <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

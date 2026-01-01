@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/Get-GitlabPipelineSchedule
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabPipelineSchedule
 ---
@@ -27,10 +27,8 @@ Get-GitlabPipelineSchedule [-ProjectId <string>] [-Scope <string>] [-IncludeVari
 ### ByPipelineScheduleId
 
 ```
-Get-GitlabPipelineSchedule
-    [-PipelineScheduleId <int> [-ProjectId <string>]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabPipelineSchedule -PipelineScheduleId <int> [-ProjectId <string>] [-SiteUrl <string>]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

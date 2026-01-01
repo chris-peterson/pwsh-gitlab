@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Get-GitlabProjectEvent
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabProjectEvent
 ---
@@ -17,17 +17,11 @@ Retrieves events (activity) for a GitLab project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabProjectEvent
-    [[-ProjectId] <string>]
-    [-Before <string>]
-    [-After <string>]
-    [-Sort <string>]
-    [-MaxPages <int>]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabProjectEvent [[-ProjectId] <string>] [-Before <string>] [-After <string>] [-Sort <string>]
+ [-MaxPages <int>] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

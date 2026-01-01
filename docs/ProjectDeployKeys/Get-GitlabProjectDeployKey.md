@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectDeployKeys/Get-GitlabProjectDeployKey
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabProjectDeployKey
 ---
@@ -17,13 +17,11 @@ Retrieves deploy keys for a GitLab project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabProjectDeployKey
-    [-ProjectId] <string> [-DeployKeyId <string>]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabProjectDeployKey [-ProjectId] <string> [-DeployKeyId <string>] [-SiteUrl <string>]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

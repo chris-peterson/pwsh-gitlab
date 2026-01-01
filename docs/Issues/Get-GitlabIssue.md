@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/Get-GitlabIssue
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabIssue
 ---
@@ -28,30 +28,17 @@ Get-GitlabIssue [[-IssueId] <string>] [-ProjectId <string>] [-State <string>]
 ### ByGroupId
 
 ```
-Get-GitlabIssue
-    [[-IssueId] <string>]
-    [-GroupId] <string> [-State <string>]
-    [-CreatedAfter <string>]
-    [-CreatedBefore <string>]
-    [-AuthorUsername <Object>]
-    [-MaxPages <uint>]
-    [-All]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabIssue [[-IssueId] <string>] [-GroupId] <string> [-State <string>] [-CreatedAfter <string>]
+ [-CreatedBefore <string>] [-AuthorUsername <Object>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
+ [<CommonParameters>]
 ```
 
 ### Mine
 
 ```
-Get-GitlabIssue
-    [[-IssueId] <string>] -Mine [-State <string>]
-    [-CreatedAfter <string>]
-    [-CreatedBefore <string>]
-    [-AuthorUsername <Object>]
-    [-MaxPages <uint>]
-    [-All]
-    [-SiteUrl <string>]
-    [<CommonParameters>]
+Get-GitlabIssue [[-IssueId] <string>] -Mine [-State <string>] [-CreatedAfter <string>]
+ [-CreatedBefore <string>] [-AuthorUsername <Object>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

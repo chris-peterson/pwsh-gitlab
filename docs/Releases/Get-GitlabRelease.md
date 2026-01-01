@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Releases/Get-GitlabRelease
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabRelease
 ---
@@ -17,18 +17,11 @@ Gets releases from a GitLab project.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Get-GitlabRelease
-    [[-ProjectId] <string>]
-    [-Tag] <string>]
-    [-Sort] <string>]
-    [-MaxPages] <uint>]
-    [-SiteUrl] <string>]
-    [-IncludeHtml]
-    [-All]
-    [<CommonParameters>]
+Get-GitlabRelease [[-ProjectId] <string>] [[-Tag] <string>] [[-Sort] <string>] [[-MaxPages] <uint>]
+ [[-SiteUrl] <string>] [-IncludeHtml] [-All] [<CommonParameters>]
 ```
 
 ## ALIASES

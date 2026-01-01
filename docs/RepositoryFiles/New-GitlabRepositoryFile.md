@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/RepositoryFiles/New-GitlabRepositoryFile
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabRepositoryFile
 ---
@@ -17,17 +17,12 @@ Creates a new file in a GitLab repository.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-New-GitlabRepositoryFile
-    [-FilePath] <string> -Content <string> -CommitMessage <string> [-ProjectId <string>]
-    [-Branch <string>]
-    [-SkipCi <bool>]
-    [-SiteUrl <string>]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+New-GitlabRepositoryFile [-FilePath] <string> -Content <string> -CommitMessage <string>
+ [-ProjectId <string>] [-Branch <string>] [-SkipCi <bool>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES

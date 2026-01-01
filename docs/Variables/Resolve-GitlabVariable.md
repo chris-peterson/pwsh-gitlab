@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Variables/Resolve-GitlabVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/27/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Resolve-GitlabVariable
 ---
@@ -26,17 +26,13 @@ Resolve-GitlabVariable [-Key] <string> -Context <Object> [-SiteUrl <string>] [<C
 ### ByProject
 
 ```
-Resolve-GitlabVariable
-    [-Key] <string> -ProjectId <Object> [-SiteUrl <string>]
-    [<CommonParameters>]
+Resolve-GitlabVariable [-Key] <string> -ProjectId <Object> [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByGroup
 
 ```
-Resolve-GitlabVariable
-    [-Key] <string> -GroupId <Object> [-SiteUrl <string>]
-    [<CommonParameters>]
+Resolve-GitlabVariable [-Key] <string> -GroupId <Object> [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES

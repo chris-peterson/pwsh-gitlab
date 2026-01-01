@@ -50,44 +50,44 @@ Get-Help Get-GitlabProject -Online
 
 Browse the sidebar to find cmdlets organized by category:
 
-- [AuditEvents](AuditEvents/Get-GitlabAuditEvent.md) - Track important actions within GitLab
-- [Branches](Branches/Get-GitlabBranch.md) - Manage repository branches
-- [Commits](Commits/Get-GitlabCommit.md) - View commit information
-- [Config](Config/Add-GitlabSite.md) - Configure GitLab sites and connections
-- [DeployKeys](DeployKeys/Get-GitlabDeployKey.md) - Manage deploy keys
-- [Deployments](Deployments/Get-GitlabDeployment.md) - View deployments
-- [Environments](Environments/Get-GitlabEnvironment.md) - Manage environments
-- [Git](Git/Get-LocalGitContext.md) - Local git context utilities
-- [GraphQL](GraphQL/Invoke-GitlabGraphQL.md) - Execute GraphQL queries
-- [GroupAccessTokens](GroupAccessTokens/Get-GitlabGroupAccessToken.md) - Manage group access tokens
-- [Groups](Groups/Copy-GitlabGroupToLocalFileSystem.md) - Manage GitLab groups
-- [Integrations](Integrations/Enable-GitlabProjectSlackNotification.md) - Configure project integrations
-- [Issues](Issues/Close-GitlabIssue.md) - Work with issues
-- [Jobs](Jobs/Get-GitlabJob.md) - Manage CI/CD jobs
-- [Keys](Keys/Get-GitlabKey.md) - SSH key operations
-- [Members](Members/Add-GitlabGroupMember.md) - Manage group and project members
-- [MergeRequests](MergeRequests/Approve-GitlabMergeRequest.md) - Handle merge requests
-- [Milestones](Milestones/Get-GitlabMilestone.md) - Track milestones
-- [Notes](Notes/Get-GitlabIssueNote.md) - Comments on issues and merge requests
-- [PersonalAccessTokens](PersonalAccessTokens/Get-GitlabPersonalAccessToken.md) - Manage personal access tokens
-- [PipelineSchedules](PipelineSchedules/Disable-GitlabPipelineSchedule.md) - Schedule pipelines
-- [Pipelines](Pipelines/Get-GitlabPipeline.md) - Trigger and monitor pipelines
-- [ProjectAccessTokens](ProjectAccessTokens/Get-GitlabProjectAccessToken.md) - Manage project access tokens
-- [ProjectDeployKeys](ProjectDeployKeys/Add-GitlabProjectDeployKey.md) - Manage project deploy keys
-- [ProjectHooks](ProjectHooks/Get-GitlabProjectHook.md) - Configure webhooks
-- [Projects](Projects/Add-GitlabProjectTopic.md) - Manage projects
-- [Releases](Releases/Get-GitlabRelease.md) - View releases
-- [RepositoryFiles](RepositoryFiles/Get-GitlabRepositoryFile.md) - Access repository files
-- [Runners](Runners/Get-GitlabRunner.md) - Configure CI/CD runners
-- [Search](Search/Search-Gitlab.md) - Search GitLab
-- [ServiceAccounts](ServiceAccounts/Get-GitlabServiceAccount.md) - Manage service accounts
-- [Snippets](Snippets/Get-GitlabSnippet.md) - Manage code snippets
-- [Todos](Todos/Clear-GitlabTodo.md) - Manage todo items
-- [Topics](Topics/Get-GitlabTopic.md) - Manage project topics
-- [UserDeployKeys](UserDeployKeys/Get-GitlabUserDeployKey.md) - Manage user deploy keys
-- [Users](Users/Block-GitlabUser.md) - User management
-- [Utilities](Utilities/Get-FilteredObject.md) - Helper utilities
-- [Variables](Variables/ConvertTo-GitlabVariables.md) - CI/CD variables
+- [AuditEvents](AuditEvents/) - Track important actions within GitLab
+- [Branches](Branches/) - Manage repository branches
+- [Commits](Commits/) - View commit information
+- [Config](Config/) - Configure GitLab sites and connections
+- [DeployKeys](DeployKeys/) - Manage deploy keys
+- [Deployments](Deployments/) - View deployments
+- [Environments](Environments/) - Manage environments
+- [Git](Git/) - Local git context utilities
+- [GraphQL](GraphQL/) - Execute GraphQL queries
+- [GroupAccessTokens](GroupAccessTokens/) - Manage group access tokens
+- [Groups](Groups/) - Manage GitLab groups
+- [Integrations](Integrations/) - Configure project integrations
+- [Issues](Issues/) - Work with issues
+- [Jobs](Jobs/) - Manage CI/CD jobs
+- [Keys](Keys/) - SSH key operations
+- [Members](Members/) - Manage group and project members
+- [MergeRequests](MergeRequests/) - Handle merge requests
+- [Milestones](Milestones/) - Track milestones
+- [Notes](Notes/) - Comments on issues and merge requests
+- [PersonalAccessTokens](PersonalAccessTokens/) - Manage personal access tokens
+- [Pipelines](Pipelines/) - Trigger and monitor pipelines
+- [PipelineSchedules](PipelineSchedules/) - Schedule pipelines
+- [ProjectAccessTokens](ProjectAccessTokens/) - Manage project access tokens
+- [ProjectDeployKeys](ProjectDeployKeys/) - Manage project deploy keys
+- [ProjectHooks](ProjectHooks/) - Configure webhooks
+- [Projects](Projects/) - Manage projects
+- [Releases](Releases/) - View releases
+- [RepositoryFiles](RepositoryFiles/) - Access repository files
+- [Runners](Runners/) - Configure CI/CD runners
+- [Search](Search/) - Search GitLab
+- [ServiceAccounts](ServiceAccounts/) - Manage service accounts
+- [Snippets](Snippets/) - Manage code snippets
+- [Todos](Todos/) - Manage todo items
+- [Topics](Topics/) - Manage project topics
+- [UserDeployKeys](UserDeployKeys/) - Manage user deploy keys
+- [Users](Users/) - User management
+- [Utilities](Utilities/) - Helper utilities
+- [Variables](Variables/) - CI/CD variables
 
 ## Links
 

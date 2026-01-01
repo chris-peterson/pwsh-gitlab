@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Invoke-GitlabMergeRequestReview
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 12/29/2025
+ms.date: 01/01/2026
 PlatyPS schema version: 2024-05-01
 title: Invoke-GitlabMergeRequestReview
 ---
@@ -17,12 +17,10 @@ Checks out a merge request branch locally for review.
 
 ## SYNTAX
 
-### Default
+### __AllParameterSets
 
 ```
-Invoke-GitlabMergeRequestReview
-    [-MergeRequestId] <string> [-SiteUrl <string>]
-    [<CommonParameters>]
+Invoke-GitlabMergeRequestReview [-MergeRequestId] <string> [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
