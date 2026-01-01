@@ -186,7 +186,8 @@
       relativePath: false,
       alias: {
         '/.*/_sidebar.md': '/_sidebar.md',
-        '/([^/]+)/$': '/$1/README.md'
+        // Handle folder URLs (with or without trailing slash) -> README.md
+        '/([A-Za-z]+)/?$': '/$1/README.md'
       }
     }
   </script>
