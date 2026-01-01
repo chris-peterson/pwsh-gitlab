@@ -154,6 +154,40 @@
     .expand-toggle-btn:hover {
       opacity: 1;
     }
+    
+    /* Keep sidebar header and search bar always visible */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .sidebar > h1,
+    .sidebar > .app-name {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--sidebar-background);
+      margin: 0;
+      padding: 10px 15px;
+    }
+    
+    .sidebar .search {
+      position: sticky;
+      top: 60px;
+      z-index: 10;
+      background: var(--sidebar-background);
+      margin: 0;
+      padding: 8px 15px;
+    }
+    
+    .sidebar .search input {
+      width: 100%;
+    }
+    
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body>
