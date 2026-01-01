@@ -4,6 +4,12 @@ on:
   push:
     branches: [ '*' ]
   pull_request:
+  workflow_dispatch:
+    inputs:
+      deploy_docs:
+        description: 'Deploy docs from this branch'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -179,6 +185,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "All checks passed, proceeding with deployment"
+
+  deploy-docs:
+    name: Deploy Documentation
+    needs: release-gate
+    if: always() && (needs.release-gate.result == 'success' || (github.event_name == 'workflow_dispatch' && inputs.deploy_docs))
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
   publish-module:
     name: Publish Module to PowerShell Gallery

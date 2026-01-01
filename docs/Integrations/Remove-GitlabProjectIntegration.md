@@ -1,7 +1,7 @@
 ﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
-HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Integrations/Remove-GitlabProjectIntegration.md
+HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Integrations/Remove-GitlabProjectIntegration
 Locale: en-US
 Module Name: GitlabCli
 ms.date: 12/27/2025

@@ -1,7 +1,7 @@
 ﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
-HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Runners/Get-GitlabRunner.md
+HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Runners/Get-GitlabRunner
 Locale: en-US
 Module Name: GitlabCli
 ms.date: 12/27/2025

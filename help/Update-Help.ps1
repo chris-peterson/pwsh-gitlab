@@ -29,8 +29,9 @@ $NewFiles = New-MarkdownCommandHelp -Module $Module -OutputFolder $DocsFolder -W
 
 foreach ($File in $NewFiles) {
     $RelativePath = $File.FullName -replace [regex]::Escape((Resolve-Path $DocsFolder).Path + '/'), ''
+    $UrlPath = $RelativePath -replace '\.md$', ''
     $Help = Import-MarkdownCommandHelp -Path $File.FullName
-    $Help.OnlineVersionUrl = "https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/$RelativePath"
+    $Help.OnlineVersionUrl = "https://chris-peterson.github.io/pwsh-gitlab/#/$UrlPath"
     $Help.ModuleName = 'GitlabCli'
     $Help | Export-MarkdownCommandHelp -OutputFolder $DocsFolder -Force
 }

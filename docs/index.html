@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>pwsh-gitlab Documentation</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="PowerShell module for GitLab automation">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <!-- Dark theme by default -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.min.css">
+  <style>
+    :root {
+      --theme-color: #FC6D26; /* GitLab orange */
+      --base-background-color: #1e1e1e;
+      --sidebar-background: #252526;
+      --sidebar-nav-link-color--active: #FC6D26;
+      --sidebar-nav-link-border-color--active: #FC6D26;
+      --link-color: #FC6D26;
+      --link-color--hover: #e85d20;
+      --code-inline-background: #2d2d2d;
+      --code-theme-background: #1e1e1e;
+      --blockquote-border-color: #FC6D26;
+    }
+    
+    /* Light theme overrides */
+    [data-theme="light"] {
+      --base-background-color: #fff;
+      --sidebar-background: #f8f8f8;
+      --code-inline-background: #f0f0f0;
+      --code-inline-color: #c75300;
+      --code-theme-background: #f6f8fa;
+      --code-theme-text: #333;
+      --base-color: #333;
+      --search-background: #fff;
+      --search-result-heading-color: #333;
+      --search-result-item-color: #555;
+      --search-input-background-color: #fff;
+      --search-input-color: #333;
+      --search-input-placeholder-color: #999;
+      --search-result-keyword-background: rgba(252, 109, 38, 0.2);
+      --search-result-keyword-color: #c75300;
+      --sidebar-nav-link-color: #333;
+      --sidebar-name-color: #333;
+      --heading-color: #333;
+      --cover-background-color: #fff;
+      --notice-tip-background: #f0f0f0;
+      --notice-important-background: #f0f0f0;
+      --notice-warn-background: #fff8e6;
+      --blockquote-background: #f6f8fa;
+      --blockquote-color: #555;
+    }
+    
+    /* Light theme code blocks */
+    [data-theme="light"] pre,
+    [data-theme="light"] code {
+      background-color: #f6f8fa !important;
+      color: #333 !important;
+    }
+    
+    [data-theme="light"] .token.function { color: #6f42c1; }
+    [data-theme="light"] .token.keyword { color: #d73a49; }
+    [data-theme="light"] .token.string { color: #032f62; }
+    [data-theme="light"] .token.comment { color: #6a737d; }
+    [data-theme="light"] .token.operator { color: #d73a49; }
+    [data-theme="light"] .token.variable { color: #e36209; }
+    
+    /* Light theme blockquote */
+    [data-theme="light"] blockquote {
+      background-color: #f6f8fa !important;
+      color: #555 !important;
+      border-left-color: var(--theme-color) !important;
+    }
+    
+    .sidebar-nav > ul > li > a {
+      font-weight: bold;
+    }
+    
+    /* Sidebar name area with toggle */
+    .sidebar > h1 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-right: 10px;
+    }
+    
+    .app-name-link {
+      flex: 1;
+    }
+    
+    /* Theme toggle in sidebar header */
+    .theme-toggle {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 3px 8px;
+      opacity: 0.9;
+      transition: all 0.2s ease;
+    }
+    
+    .theme-toggle:hover {
+      opacity: 1;
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.05);
+    }
+    
+    /* Light mode toggle styling */
+    [data-theme="light"] .theme-toggle {
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.15);
+    }
+    
+    [data-theme="light"] .theme-toggle:hover {
+      background: rgba(0,0,0,0.1);
+    }
+    
+    /* Keep GitHub corner fixed */
+    .github-corner {
+      position: fixed !important;
+      top: 0;
+      right: 0;
+      z-index: 999;
+    }
+    
+    /* Light mode hamburger/sidebar toggle */
+    [data-theme="light"] .sidebar-toggle-button {
+      background-color: #f0f0f0 !important;
+      border: 1px solid #ccc !important;
+    }
+    [data-theme="light"] .sidebar-toggle-button span {
+      background-color: #555 !important;
+    }
+    
+    /* Expand/Collapse toggle in header */
+    .expand-toggle {
+      display: flex;
+      gap: 4px;
+      margin-right: 8px;
+    }
+    
+    .expand-toggle-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 2px;
+      color: inherit;
+      opacity: 0.7;
+      transition: all 0.2s ease;
+      line-height: 1;
+    }
+    
+    .expand-toggle-btn:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">Loading...</div>
+  <script>
+    window.$docsify = {
+      name: 'pwsh-gitlab',
+      repo: 'chris-peterson/pwsh-gitlab',
+      loadSidebar: true,
+      subMaxLevel: 2,
+      search: {
+        placeholder: 'Search cmdlets...',
+        noData: 'No results',
+        paths: 'auto'
+      },
+      auto2top: true,
+      coverpage: false,
+      notFoundPage: true,
+      relativePath: true,
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md'
+      }
+    }
+  </script>
+  <!-- Docsify core -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
+  <!-- Front matter plugin (hides YAML metadata) -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-front-matter@1/dist/docsify-front-matter.min.js"></script>
+  <!-- Search plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <!-- Copy code plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
+  <!-- Syntax highlighting -->
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-powershell.min.js"></script>
+  <!-- Theme toggle script -->
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const btn = document.querySelector('.theme-toggle');
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+      btn.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+      localStorage.setItem('theme', newTheme);
+    }
+    
+    // Load saved theme preference (default to dark)
+    (function() {
+      const saved = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+    
+    // Inject toggle into sidebar header
+    function injectThemeToggle() {
+      const sidebarName = document.querySelector('.sidebar > h1, .app-name');
+      if (sidebarName && !document.querySelector('.theme-toggle')) {
+        const saved = localStorage.getItem('theme') || 'dark';
+        const btn = document.createElement('button');
+        btn.className = 'theme-toggle';
+        btn.onclick = toggleTheme;
+        btn.title = 'Toggle theme';
+        btn.textContent = saved === 'dark' ? '🌙' : '☀️';
+        sidebarName.appendChild(btn);
+      }
+    }
+    
+    // Run after docsify renders
+    window.$docsify = window.$docsify || {};
+    window.$docsify.plugins = (window.$docsify.plugins || []).concat(function(hook) {
+      hook.doneEach(injectThemeToggle);
+      hook.doneEach(injectSidebarControls);
+    });
+    
+    // Inject collapse/expand toggle into sidebar header
+    function injectSidebarControls() {
+      const sidebarName = document.querySelector('.sidebar > h1, .app-name');
+      const appNameLink = document.querySelector('.app-name-link');
+      if (sidebarName && !document.querySelector('.expand-toggle')) {
+        const toggle = document.createElement('span');
+        toggle.className = 'expand-toggle';
+        
+        const expandBtn = document.createElement('button');
+        expandBtn.className = 'expand-toggle-btn';
+        expandBtn.innerHTML = '⊞';
+        expandBtn.onclick = function(e) { e.preventDefault(); e.stopPropagation(); expandAll(); };
+        expandBtn.title = 'Expand all';
+        
+        const collapseBtn = document.createElement('button');
+        collapseBtn.className = 'expand-toggle-btn';
+        collapseBtn.innerHTML = '⊟';
+        collapseBtn.onclick = function(e) { e.preventDefault(); e.stopPropagation(); collapseAll(); };
+        collapseBtn.title = 'Collapse all';
+        
+        toggle.appendChild(expandBtn);
+        toggle.appendChild(collapseBtn);
+        
+        // Insert at start of header (before app-name-link)
+        if (appNameLink) {
+          sidebarName.insertBefore(toggle, appNameLink);
+        } else {
+          sidebarName.insertBefore(toggle, sidebarName.firstChild);
+        }
+      }
+    }
+    
+    function collapseAll() {
+      const folders = document.querySelectorAll('.sidebar-nav .folder.open');
+      folders.forEach(folder => {
+        folder.classList.remove('open');
+      });
+      // For docsify-themeable, toggle the parent li elements
+      const expandedItems = document.querySelectorAll('.sidebar-nav li.open, .sidebar-nav li[class*="open"]');
+      expandedItems.forEach(item => {
+        item.classList.remove('open');
+      });
+      // Also collapse nested ul elements
+      const nestedLists = document.querySelectorAll('.sidebar-nav ul ul');
+      nestedLists.forEach(ul => {
+        ul.style.display = 'none';
+      });
+    }
+    
+    function expandAll() {
+      const folders = document.querySelectorAll('.sidebar-nav .folder');
+      folders.forEach(folder => {
+        folder.classList.add('open');
+      });
+      // For docsify-themeable, expand all li elements
+      const items = document.querySelectorAll('.sidebar-nav li');
+      items.forEach(item => {
+        item.classList.add('open');
+      });
+      // Also expand nested ul elements
+      const nestedLists = document.querySelectorAll('.sidebar-nav ul ul');
+      nestedLists.forEach(ul => {
+        ul.style.display = '';
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 ﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
-HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Users/Remove-GitlabUser.md
+HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Remove-GitlabUser
 Locale: en-US
 Module Name: GitlabCli
 ms.date: 12/27/2025
