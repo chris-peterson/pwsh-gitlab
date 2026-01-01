@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectAccessTokens/Invoke-GitlabProjectAccessTokenRotation
@@ -17,11 +17,16 @@ Rotates a project access token, generating a new token with a new value.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Invoke-GitlabProjectAccessTokenRotation [-ProjectId] <string> -TokenId <string>
- [-ExpiresAt <datetime>] [-SiteUrl <string>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Invoke-GitlabProjectAccessTokenRotation
+    [-ProjectId] <string> -TokenId <string> [-ExpiresAt <datetime>]
+    [-SiteUrl <string>]
+    [-Force]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

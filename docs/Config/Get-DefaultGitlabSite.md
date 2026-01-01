@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Config/Get-DefaultGitlabSite
@@ -17,7 +17,7 @@ Gets the default GitLab site configuration.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
 Get-DefaultGitlabSite

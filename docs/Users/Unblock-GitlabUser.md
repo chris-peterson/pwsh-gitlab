@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Unblock-GitlabUser
@@ -17,10 +17,14 @@ Unblocks a GitLab user.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Unblock-GitlabUser [-UserId] <string> [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Unblock-GitlabUser
+    [-UserId] <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

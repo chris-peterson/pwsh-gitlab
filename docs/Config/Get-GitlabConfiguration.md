@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Config/Get-GitlabConfiguration
@@ -17,16 +17,20 @@ Gets the current GitLab CLI configuration.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabConfiguration [<CommonParameters>]
+Get-GitlabConfiguration
+    [<CommonParameters>]
 ```
 
 ### DefaultSite
 
 ```
-Get-GitlabConfiguration [-DefaultSite] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabConfiguration
+    [-DefaultSite]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Merge-GitlabMergeRequest
@@ -17,13 +17,21 @@ Merges a GitLab merge request.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Merge-GitlabMergeRequest [[-ProjectId] <string>] [-MergeRequestId] <string>
- [-MergeCommitMessage <string>] [-SquashCommitMessage <string>] [-ConfirmSha <string>] [-Squash]
- [-KeepSourceBranch] [-MergeWhenPipelineSucceeds] [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Merge-GitlabMergeRequest
+    [[-ProjectId] <string>]
+    [-MergeRequestId] <string> [-MergeCommitMessage <string>]
+    [-SquashCommitMessage <string>]
+    [-ConfirmSha <string>]
+    [-Squash]
+    [-KeepSourceBranch]
+    [-MergeWhenPipelineSucceeds]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

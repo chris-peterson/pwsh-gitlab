@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Get-GitlabProjectVariable
@@ -17,11 +17,16 @@ Retrieves CI/CD variables for a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabProjectVariable [[-Key] <string>] [-ProjectId <string>] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabProjectVariable
+    [[-Key] <string>]
+    [-ProjectId <string>]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

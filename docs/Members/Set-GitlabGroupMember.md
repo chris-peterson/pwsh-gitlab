@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Set-GitlabGroupMember
@@ -17,11 +17,14 @@ Sets or updates a user's membership in a GitLab group.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Set-GitlabGroupMember [-UserId] <string> [-AccessLevel] <string> -SiteUrl <string>
- [-GroupId <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-GitlabGroupMember
+    [-UserId] <string> [-AccessLevel] <string> -SiteUrl <string> [-GroupId <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

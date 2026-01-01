@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/GraphQL/Invoke-GitlabGraphQL
@@ -17,10 +17,14 @@ Executes a GraphQL query against the GitLab API.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Invoke-GitlabGraphQL [-Query] <string> [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Invoke-GitlabGraphQL
+    [-Query] <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

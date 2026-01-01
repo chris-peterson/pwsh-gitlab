@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Get-GitlabJob
@@ -28,17 +28,32 @@ Get-GitlabJob [-ProjectId <string>] [-Scope <string>] [-Stage <string>] [-Name <
 ### ByPipeline
 
 ```
-Get-GitlabJob -PipelineId <string> [-ProjectId <string>] [-Stage <string>] [-Name <string>]
- [-IncludeRetried] [-IncludeTrace] [-IncludeVariables] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabJob
+    [-PipelineId <string> [-ProjectId <string>]
+    [-Stage <string>]
+    [-Name <string>]
+    [-IncludeRetried]
+    [-IncludeTrace]
+    [-IncludeVariables]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ### ById
 
 ```
-Get-GitlabJob -JobId <string> [-ProjectId <string>] [-Stage <string>] [-Name <string>]
- [-IncludeTrace] [-IncludeVariables] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabJob
+    [-JobId <string> [-ProjectId <string>]
+    [-Stage <string>]
+    [-Name <string>]
+    [-IncludeTrace]
+    [-IncludeVariables]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

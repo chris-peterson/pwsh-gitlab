@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Remove-GitlabGroupToGroupShare
@@ -17,11 +17,14 @@ Removes a group-to-group share link.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabGroupToGroupShare [-GroupId] <string> [-GroupShareId] <string> [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-GitlabGroupToGroupShare
+    [-GroupId] <string> [-GroupShareId] <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Remove-GitlabGroupToProjectShare
@@ -17,11 +17,15 @@ Removes a group's access to a shared GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabGroupToProjectShare [[-ProjectId] <string>] [-GroupId] <string> [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-GitlabGroupToProjectShare
+    [[-ProjectId] <string>]
+    [-GroupId] <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

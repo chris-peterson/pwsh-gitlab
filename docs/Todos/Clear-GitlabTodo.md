@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Todos/Clear-GitlabTodo
@@ -26,7 +26,12 @@ Clear-GitlabTodo [-TodoId] <Object> [-SiteUrl <string>] [-WhatIf] [-Confirm] [<C
 ### All
 
 ```
-Clear-GitlabTodo [-All] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Clear-GitlabTodo
+    [-All]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

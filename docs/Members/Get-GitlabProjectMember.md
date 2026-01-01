@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Get-GitlabProjectMember
@@ -17,11 +17,17 @@ Gets members of a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabProjectMember [[-ProjectId] <string>] [[-UserId] <string>] [[-MaxPages] <uint>]
- [[-SiteUrl] <string>] [-IncludeInherited] [-All] [<CommonParameters>]
+Get-GitlabProjectMember
+    [[-ProjectId] <string>]
+    [-UserId] <string>]
+    [-MaxPages] <uint>]
+    [-SiteUrl] <string>]
+    [-IncludeInherited]
+    [-All]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/RepositoryFiles/Get-GitlabRepositoryFile
@@ -17,11 +17,14 @@ Gets file metadata from a GitLab repository.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabRepositoryFile [-FilePath] <string> [-ProjectId <string>] [-Ref <string>]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabRepositoryFile
+    [-FilePath] <string> [-ProjectId <string>]
+    [-Ref <string>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

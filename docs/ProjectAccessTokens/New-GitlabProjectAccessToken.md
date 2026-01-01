@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectAccessTokens/New-GitlabProjectAccessToken
@@ -17,12 +17,17 @@ Creates a new project access token.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabProjectAccessToken [-ProjectId] <string> -Name <string> -Scopes <string[]>
- [-Description <string>] [-AccessLevel <string>] [-ExpiresAt <datetime>] [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabProjectAccessToken
+    [-ProjectId] <string> -Name <string> -Scopes <string[]> [-Description <string>]
+    [-AccessLevel <string>]
+    [-ExpiresAt <datetime>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/Get-GitlabPipeline
@@ -17,13 +17,26 @@ Gets pipelines from a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabPipeline [[-PipelineId] <string>] [-ProjectId <string>] [-Ref <string>] [-Url <string>]
- [-Scope <string>] [-Status <string>] [-Source <string>] [-Username <string>] [-Mine] [-Latest]
- [-IncludeTestReport] [-FetchDownstream] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabPipeline
+    [[-PipelineId] <string>]
+    [-ProjectId <string>]
+    [-Ref <string>]
+    [-Url <string>]
+    [-Scope <string>]
+    [-Status <string>]
+    [-Source <string>]
+    [-Username <string>]
+    [-Mine]
+    [-Latest]
+    [-IncludeTestReport]
+    [-FetchDownstream]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

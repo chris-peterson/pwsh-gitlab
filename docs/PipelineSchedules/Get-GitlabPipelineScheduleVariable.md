@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/Get-GitlabPipelineScheduleVariable
@@ -17,11 +17,14 @@ Gets variables associated with a pipeline schedule.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabPipelineScheduleVariable [[-ProjectId] <string>] [-PipelineScheduleId] <int>
- [[-Key] <Object>] [[-SiteUrl] <string>] [<CommonParameters>]
+Get-GitlabPipelineScheduleVariable
+    [[-ProjectId] <string>]
+    [-PipelineScheduleId] <int> [[-Key] <Object>]
+    [-SiteUrl] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

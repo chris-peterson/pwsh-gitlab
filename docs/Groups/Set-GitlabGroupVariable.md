@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Set-GitlabGroupVariable
@@ -17,12 +17,18 @@ Creates or updates a CI/CD variable at the group level.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Set-GitlabGroupVariable [-Key] <string> [-Value] <string> -GroupId <string> [-Protect <bool>]
- [-Mask <bool>] [-ExpandVariables <bool>] [-NoExpand] [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Set-GitlabGroupVariable
+    [-Key] <string> [-Value] <string> -GroupId <string> [-Protect <bool>]
+    [-Mask <bool>]
+    [-ExpandVariables <bool>]
+    [-NoExpand]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

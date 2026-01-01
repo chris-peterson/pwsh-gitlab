@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Runners/Update-GitlabRunner
@@ -17,12 +17,22 @@ Updates the configuration of a GitLab runner.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-GitlabRunner [-RunnerId] <string> [-Id <string>] [-Description <string>] [-Active <bool>]
- [-Tags <string>] [-RunUntaggedJobs <bool>] [-Locked <bool>] [-AccessLevel <string>]
- [-MaximumTimeoutSeconds <uint>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-GitlabRunner
+    [-RunnerId] <string> [-Id <string>]
+    [-Description <string>]
+    [-Active <bool>]
+    [-Tags <string>]
+    [-RunUntaggedJobs <bool>]
+    [-Locked <bool>]
+    [-AccessLevel <string>]
+    [-MaximumTimeoutSeconds <uint>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

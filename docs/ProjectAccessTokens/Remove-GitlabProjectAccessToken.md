@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectAccessTokens/Remove-GitlabProjectAccessToken
@@ -17,11 +17,15 @@ Revokes (removes) a project access token.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabProjectAccessToken [-ProjectId] <string> -TokenId <string> [-SiteUrl <string>] [-Force]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-GitlabProjectAccessToken
+    [-ProjectId] <string> -TokenId <string> [-SiteUrl <string>]
+    [-Force]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

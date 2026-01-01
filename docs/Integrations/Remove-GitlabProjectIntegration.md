@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Integrations/Remove-GitlabProjectIntegration
@@ -17,11 +17,15 @@ Removes an integration from a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabProjectIntegration [-Integration] <string> [-ProjectId <string>] [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-GitlabProjectIntegration
+    [-Integration] <string> [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

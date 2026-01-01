@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectHooks/Get-GitlabProjectHook
@@ -17,11 +17,14 @@ Gets webhooks configured for a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabProjectHook [[-ProjectId] <string>] [[-Id] <int>] [[-SiteUrl] <string>]
- [<CommonParameters>]
+Get-GitlabProjectHook
+    [[-ProjectId] <string>]
+    [-Id] <int>]
+    [-SiteUrl] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

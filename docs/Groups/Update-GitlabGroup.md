@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Update-GitlabGroup
@@ -17,11 +17,17 @@ Updates properties of a GitLab group.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-GitlabGroup [-GroupId] <string> [-Name <string>] [-Path <string>] [-Visibility <string>]
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-GitlabGroup
+    [-GroupId] <string> [-Name <string>]
+    [-Path <string>]
+    [-Visibility <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

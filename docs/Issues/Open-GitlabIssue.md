@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/Open-GitlabIssue
@@ -17,11 +17,15 @@ Reopens a closed GitLab issue.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Open-GitlabIssue [-IssueId] <string> [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Open-GitlabIssue
+    [-IssueId] <string> [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

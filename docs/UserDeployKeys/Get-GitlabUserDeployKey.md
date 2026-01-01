@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/UserDeployKeys/Get-GitlabUserDeployKey
@@ -17,10 +17,12 @@ Retrieves deploy keys associated with a user's projects.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabUserDeployKey [-UserId] <string> [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabUserDeployKey
+    [-UserId] <string> [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

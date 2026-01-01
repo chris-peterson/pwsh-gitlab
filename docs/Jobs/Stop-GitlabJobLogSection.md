@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Stop-GitlabJobLogSection
@@ -17,10 +17,11 @@ Closes a collapsible section in GitLab CI/CD job logs.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Stop-GitlabJobLogSection [<CommonParameters>]
+Stop-GitlabJobLogSection
+    [<CommonParameters>]
 ```
 
 ## ALIASES

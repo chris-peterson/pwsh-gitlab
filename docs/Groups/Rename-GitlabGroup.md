@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Rename-GitlabGroup
@@ -17,11 +17,15 @@ Renames a GitLab group.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Rename-GitlabGroup [-NewName] <string> [-GroupId <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Rename-GitlabGroup
+    [-NewName] <string> [-GroupId <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

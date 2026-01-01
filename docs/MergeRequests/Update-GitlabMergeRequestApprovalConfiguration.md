@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Update-GitlabMergeRequestApprovalConfiguration
@@ -17,14 +17,21 @@ Updates the merge request approval configuration for a project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-GitlabMergeRequestApprovalConfiguration [[-ProjectId] <string>]
- [-DisableOverridingApproversPerMergeRequest <bool>] [-MergeRequestsAuthorApproval <bool>]
- [-MergeRequestsDisableCommittersApproval <bool>] [-RequirePasswordToApprove <bool>]
- [-ResetApprovalsOnPush <bool>] [-SelectiveCodeOwnerRemovals <bool>] [-SiteUrl <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Update-GitlabMergeRequestApprovalConfiguration
+    [[-ProjectId] <string>]
+    [-DisableOverridingApproversPerMergeRequest <bool>]
+    [-MergeRequestsAuthorApproval <bool>]
+    [-MergeRequestsDisableCommittersApproval <bool>]
+    [-RequirePasswordToApprove <bool>]
+    [-ResetApprovalsOnPush <bool>]
+    [-SelectiveCodeOwnerRemovals <bool>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

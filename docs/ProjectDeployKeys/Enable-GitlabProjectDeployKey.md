@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectDeployKeys/Enable-GitlabProjectDeployKey
@@ -17,11 +17,15 @@ Enables an existing deploy key for a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Enable-GitlabProjectDeployKey [-ProjectId] <string> -DeployKeyId <string> [-SiteUrl <string>]
- [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Enable-GitlabProjectDeployKey
+    [-ProjectId] <string> -DeployKeyId <string> [-SiteUrl <string>]
+    [-Force]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

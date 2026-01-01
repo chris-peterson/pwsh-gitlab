@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/RepositoryFiles/Get-GitlabRepositoryTree
@@ -17,11 +17,16 @@ Gets the repository tree (file and directory listing) from a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabRepositoryTree [[-Path] <string>] [-ProjectId <string>] [-Ref <string>] [-Recurse]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabRepositoryTree
+    [[-Path] <string>]
+    [-ProjectId <string>]
+    [-Ref <string>]
+    [-Recurse]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

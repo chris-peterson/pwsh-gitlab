@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/New-GitlabPipelineSchedule
@@ -17,12 +17,18 @@ Creates a new pipeline schedule for a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabPipelineSchedule [[-ProjectId] <string>] [[-Ref] <string>] [-Description] <string>
- [-Cron] <string> [[-CronTimezone] <string>] [[-Active] <bool>] [[-SiteUrl] <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+New-GitlabPipelineSchedule
+    [[-ProjectId] <string>]
+    [-Ref] <string>]
+    [-Description] <string> [-Cron] <string> [[-CronTimezone] <string>]
+    [-Active] <bool>]
+    [-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Get-GitlabPipelineDefinition
@@ -17,11 +17,14 @@ Retrieves the GitLab CI/CD pipeline definition (.gitlab-ci.yml) for a project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabPipelineDefinition [[-ProjectId] <string>] [[-Ref] <string>] [[-SiteUrl] <string>]
- [<CommonParameters>]
+Get-GitlabPipelineDefinition
+    [[-ProjectId] <string>]
+    [-Ref] <string>]
+    [-SiteUrl] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

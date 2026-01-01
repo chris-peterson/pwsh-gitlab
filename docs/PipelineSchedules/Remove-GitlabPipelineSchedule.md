@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/Remove-GitlabPipelineSchedule
@@ -17,11 +17,15 @@ Deletes a pipeline schedule from a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabPipelineSchedule [[-ProjectId] <string>] [-PipelineScheduleId] <int>
- [[-SiteUrl] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-GitlabPipelineSchedule
+    [[-ProjectId] <string>]
+    [-PipelineScheduleId] <int> [[-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

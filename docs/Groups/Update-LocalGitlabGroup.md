@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Update-LocalGitlabGroup
@@ -17,10 +17,13 @@ Pulls the latest changes for all local git repositories.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-LocalGitlabGroup [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-LocalGitlabGroup
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

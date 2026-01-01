@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ServiceAccounts/New-GitlabServiceAccount
@@ -27,8 +27,14 @@ New-GitlabServiceAccount [-Name <string>] [-Username <string>] [-Email <string>]
 ### Group
 
 ```
-New-GitlabServiceAccount -GroupId <string> [-Name <string>] [-Username <string>] [-Email <string>]
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabServiceAccount
+    [-GroupId <string> [-Name <string>]
+    [-Username <string>]
+    [-Email <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

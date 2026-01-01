@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/RepositoryFiles/Get-GitlabRepositoryFileContent
@@ -17,11 +17,14 @@ Gets the decoded content of a file from a GitLab repository.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabRepositoryFileContent [-FilePath] <string> [-ProjectId <string>] [-Ref <string>]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabRepositoryFileContent
+    [-FilePath] <string> [-ProjectId <string>]
+    [-Ref <string>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

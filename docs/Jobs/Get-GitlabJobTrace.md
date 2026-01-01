@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Get-GitlabJobTrace
@@ -17,10 +17,13 @@ Retrieves the log (trace) output of a GitLab CI/CD job.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabJobTrace [-JobId] <string> [-ProjectId <string>] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabJobTrace
+    [-JobId] <string> [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

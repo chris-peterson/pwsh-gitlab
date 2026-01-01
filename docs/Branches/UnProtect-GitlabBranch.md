@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Branches/UnProtect-GitlabBranch
@@ -17,11 +17,16 @@ Removes protection from a branch in a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-UnProtect-GitlabBranch [[-Name] <string>] [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+UnProtect-GitlabBranch
+    [[-Name] <string>]
+    [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

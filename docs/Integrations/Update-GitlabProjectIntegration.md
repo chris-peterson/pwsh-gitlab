@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Integrations/Update-GitlabProjectIntegration
@@ -17,11 +17,15 @@ Updates or enables an integration for a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-GitlabProjectIntegration [-Integration] <string> [-Settings] <hashtable>
- [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-GitlabProjectIntegration
+    [-Integration] <string> [-Settings] <hashtable> [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectDeployKeys/Remove-GitlabProjectDeployKey
@@ -17,11 +17,15 @@ Removes a deploy key from a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabProjectDeployKey [-ProjectId] <string> -DeployKeyId <string> [-SiteUrl <string>]
- [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-GitlabProjectDeployKey
+    [-ProjectId] <string> -DeployKeyId <string> [-SiteUrl <string>]
+    [-Force]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

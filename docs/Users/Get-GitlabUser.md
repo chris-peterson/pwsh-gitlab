@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Get-GitlabUser
@@ -27,13 +27,22 @@ Get-GitlabUser [-Active] [-External] [-Blocked] [-ExcludeActive] [-ExcludeExtern
 ### Id
 
 ```
-Get-GitlabUser [-UserId] <string> [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabUser
+    [-UserId] <string> [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ### Me
 
 ```
-Get-GitlabUser [-MaxPages <uint>] [-All] [-Me] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabUser
+    [-MaxPages <uint>]
+    [-All]
+    [-Me]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

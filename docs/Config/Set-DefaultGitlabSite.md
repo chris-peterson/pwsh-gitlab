@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Config/Set-DefaultGitlabSite
@@ -17,10 +17,13 @@ Sets the default GitLab site for API operations.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Set-DefaultGitlabSite [-Url] <string> [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-DefaultGitlabSite
+    [-Url] <string> [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Topics/Remove-GitlabTopic
@@ -17,11 +17,14 @@ Deletes a GitLab topic.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabTopic [-TopicId] <string> [[-SiteUrl] <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-GitlabTopic
+    [-TopicId] <string> [[-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

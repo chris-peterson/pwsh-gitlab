@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Invoke-GitlabProjectUnarchival
@@ -17,11 +17,15 @@ Unarchives a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Invoke-GitlabProjectUnarchival [[-ProjectId] <string>] [[-SiteUrl] <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Invoke-GitlabProjectUnarchival
+    [[-ProjectId] <string>]
+    [-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

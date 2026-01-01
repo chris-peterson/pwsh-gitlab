@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Utilities/Get-FilteredObject
@@ -17,10 +17,11 @@ Filters and selects properties from input objects.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-FilteredObject [[-Select] <string>] -InputObject <Object> [<CommonParameters>]
+Get-FilteredObject
+    [[-Select] <string>] -InputObject <Object> [<CommonParameters>]
 ```
 
 ## ALIASES

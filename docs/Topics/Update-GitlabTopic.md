@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Topics/Update-GitlabTopic
@@ -17,11 +17,17 @@ Updates an existing GitLab topic.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-GitlabTopic [-TopicId] <string> [[-Name] <string>] [[-Title] <string>]
- [[-Description] <string>] [[-SiteUrl] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-GitlabTopic
+    [-TopicId] <string> [[-Name] <string>]
+    [-Title] <string>]
+    [-Description] <string>]
+    [-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

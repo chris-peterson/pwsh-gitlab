@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Variables/ConvertTo-GitlabVariables
@@ -17,10 +17,13 @@ Converts a hashtable or PSCustomObject to GitLab CI/CD variable format.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-ConvertTo-GitlabVariables [[-Object] <Object>] [[-VariableType] <string>] [<CommonParameters>]
+ConvertTo-GitlabVariables
+    [[-Object] <Object>]
+    [-VariableType] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

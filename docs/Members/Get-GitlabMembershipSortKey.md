@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Get-GitlabMembershipSortKey
@@ -17,7 +17,7 @@ Gets the default sort keys used for sorting membership results.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
 Get-GitlabMembershipSortKey

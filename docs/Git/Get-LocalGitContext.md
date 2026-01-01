@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Git/Get-LocalGitContext
@@ -17,10 +17,12 @@ Retrieves the local Git repository context including the GitLab site, project pa
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-LocalGitContext [[-Path] <string>] [<CommonParameters>]
+Get-LocalGitContext
+    [[-Path] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

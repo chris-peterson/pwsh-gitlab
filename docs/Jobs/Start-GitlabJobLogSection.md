@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Start-GitlabJobLogSection
@@ -17,10 +17,12 @@ Starts a collapsible section in GitLab CI/CD job logs.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Start-GitlabJobLogSection [-HeaderText] <string> [-Collapsed] [<CommonParameters>]
+Start-GitlabJobLogSection
+    [-HeaderText] <string> [-Collapsed]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

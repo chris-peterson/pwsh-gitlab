@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Runners/Get-GitlabRunnerJob
@@ -17,11 +17,14 @@ Gets jobs executed by a specific GitLab runner.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabRunnerJob [-RunnerId] <string> [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabRunnerJob
+    [-RunnerId] <string> [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

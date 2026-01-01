@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Snippets/Get-GitlabSnippet
@@ -27,15 +27,28 @@ Get-GitlabSnippet [-Mine] [-CreatedAfter <string>] [-CreatedBefore <string>] [-I
 ### ById
 
 ```
-Get-GitlabSnippet [-SnippetId] <int> [-CreatedAfter <string>] [-CreatedBefore <string>]
- [-IncludeContent] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabSnippet
+    [-SnippetId] <int> [-CreatedAfter <string>]
+    [-CreatedBefore <string>]
+    [-IncludeContent]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ### ByAuthor
 
 ```
-Get-GitlabSnippet [-AuthorUsername <string>] [-CreatedAfter <string>] [-CreatedBefore <string>]
- [-IncludeContent] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabSnippet
+    [-AuthorUsername <string>]
+    [-CreatedAfter <string>]
+    [-CreatedBefore <string>]
+    [-IncludeContent]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

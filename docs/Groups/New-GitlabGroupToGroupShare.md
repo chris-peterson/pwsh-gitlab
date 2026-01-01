@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/New-GitlabGroupToGroupShare
@@ -17,11 +17,15 @@ Shares a GitLab group with another group.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabGroupToGroupShare [-GroupId] <string> [-GroupShareId] <string> [-AccessLevel] <string>
- [-ExpiresAt <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabGroupToGroupShare
+    [-GroupId] <string> [-GroupShareId] <string> [-AccessLevel] <string> [-ExpiresAt <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

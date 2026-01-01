@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Snippets/New-GitlabSnippet
@@ -20,15 +20,25 @@ Creates a new GitLab snippet.
 ### SingleFile
 
 ```
-New-GitlabSnippet [-Title] <string> -FileName <string> -Content <string> [-Description <string>]
- [-Visibility <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabSnippet
+    [-Title] <string> -FileName <string> -Content <string> [-Description <string>]
+    [-Visibility <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ### MultipleFiles
 
 ```
-New-GitlabSnippet [-Title] <string> -Files <hashtable[]> [-Description <string>]
- [-Visibility <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabSnippet
+    [-Title] <string> -Files <hashtable[]> [-Description <string>]
+    [-Visibility <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

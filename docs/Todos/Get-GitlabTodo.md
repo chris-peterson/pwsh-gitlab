@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Todos/Get-GitlabTodo
@@ -17,10 +17,14 @@ Retrieves the to-do items for the current user.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabTodo [[-MaxPages] <uint>] [[-SiteUrl] <string>] [-All] [<CommonParameters>]
+Get-GitlabTodo
+    [[-MaxPages] <uint>]
+    [-SiteUrl] <string>]
+    [-All]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

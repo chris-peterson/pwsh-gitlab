@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Copy-GitlabProject
@@ -17,12 +17,17 @@ Forks (copies) a GitLab project to a different namespace.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Copy-GitlabProject [-DestinationGroup] <string> [-ProjectId <string>]
- [-DestinationProjectName <string>] [-PreserveForkRelationship <bool>] [-SiteUrl <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Copy-GitlabProject
+    [-DestinationGroup] <string> [-ProjectId <string>]
+    [-DestinationProjectName <string>]
+    [-PreserveForkRelationship <bool>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

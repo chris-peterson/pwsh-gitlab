@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Set-GitlabProjectVariable
@@ -17,12 +17,19 @@ Creates or updates a CI/CD variable for a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Set-GitlabProjectVariable [-Key] <string> [-Value] <string> [-ProjectId <string>] [-Protect <bool>]
- [-Mask <bool>] [-ExpandVariables <bool>] [-NoExpand] [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Set-GitlabProjectVariable
+    [-Key] <string> [-Value] <string> [-ProjectId <string>]
+    [-Protect <bool>]
+    [-Mask <bool>]
+    [-ExpandVariables <bool>]
+    [-NoExpand]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Get-GitlabGroupMember
@@ -17,11 +17,18 @@ Gets members of a GitLab group.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabGroupMember [[-GroupId] <string>] [-UserId <string>] [-IncludeInherited]
- [-MinAccessLevel <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabGroupMember
+    [[-GroupId] <string>]
+    [-UserId <string>]
+    [-IncludeInherited]
+    [-MinAccessLevel <string>]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

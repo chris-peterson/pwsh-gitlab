@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Environments/Remove-GitlabEnvironment
@@ -17,11 +17,15 @@ Deletes a GitLab environment.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabEnvironment [[-ProjectId] <string>] [-Name] <string> [[-SiteUrl] <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-GitlabEnvironment
+    [[-ProjectId] <string>]
+    [-Name] <string> [[-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

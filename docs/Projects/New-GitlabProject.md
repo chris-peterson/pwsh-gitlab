@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/New-GitlabProject
@@ -20,15 +20,29 @@ Creates a new GitLab project.
 ### Group
 
 ```
-New-GitlabProject [-ProjectName] <string> [-DestinationGroup <string>] [-Visibility <string>]
- [-BuildTimeout <uint>] [-CloneNow] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabProject
+    [-ProjectName] <string> [-DestinationGroup <string>]
+    [-Visibility <string>]
+    [-BuildTimeout <uint>]
+    [-CloneNow]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ### Personal
 
 ```
-New-GitlabProject [-ProjectName] <string> [-Personal] [-Visibility <string>] [-BuildTimeout <uint>]
- [-CloneNow] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabProject
+    [-ProjectName] <string> [-Personal]
+    [-Visibility <string>]
+    [-BuildTimeout <uint>]
+    [-CloneNow]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

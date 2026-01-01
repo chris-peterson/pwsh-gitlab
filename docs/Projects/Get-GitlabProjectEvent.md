@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Get-GitlabProjectEvent
@@ -17,11 +17,17 @@ Retrieves events (activity) for a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabProjectEvent [[-ProjectId] <string>] [-Before <string>] [-After <string>] [-Sort <string>]
- [-MaxPages <int>] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabProjectEvent
+    [[-ProjectId] <string>]
+    [-Before <string>]
+    [-After <string>]
+    [-Sort <string>]
+    [-MaxPages <int>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

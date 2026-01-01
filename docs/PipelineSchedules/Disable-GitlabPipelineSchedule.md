@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/Disable-GitlabPipelineSchedule
@@ -17,11 +17,15 @@ Disables a pipeline schedule for a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Disable-GitlabPipelineSchedule [[-ProjectId] <string>] [-PipelineScheduleId] <int>
- [[-SiteUrl] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Disable-GitlabPipelineSchedule
+    [[-ProjectId] <string>]
+    [-PipelineScheduleId] <int> [[-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

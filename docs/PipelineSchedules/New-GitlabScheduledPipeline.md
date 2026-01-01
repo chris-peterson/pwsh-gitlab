@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/New-GitlabScheduledPipeline
@@ -17,11 +17,15 @@ Triggers a scheduled pipeline to run immediately.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabScheduledPipeline [-PipelineScheduleId] <int> [-ProjectId <string>] [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabScheduledPipeline
+    [-PipelineScheduleId] <int> [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

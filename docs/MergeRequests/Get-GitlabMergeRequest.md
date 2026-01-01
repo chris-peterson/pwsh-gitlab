@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Get-GitlabMergeRequest
@@ -29,37 +29,80 @@ Get-GitlabMergeRequest [[-MergeRequestId] <string>] [-ProjectId <string>] [-Stat
 ### ByGroupId
 
 ```
-Get-GitlabMergeRequest [-GroupId] <string> [-State <string>] [-CreatedAfter <string>]
- [-CreatedBefore <string>] [-IsDraft <bool>] [-SourceBranch <string>] [-IncludeChangeSummary]
- [-IncludeDiffs] [-IncludeApprovals] [-Scope <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabMergeRequest
+    [-GroupId] <string> [-State <string>]
+    [-CreatedAfter <string>]
+    [-CreatedBefore <string>]
+    [-IsDraft <bool>]
+    [-SourceBranch <string>]
+    [-IncludeChangeSummary]
+    [-IncludeDiffs]
+    [-IncludeApprovals]
+    [-Scope <string>]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ### ByUrl
 
 ```
-Get-GitlabMergeRequest [-Url] <string> [-State <string>] [-CreatedAfter <string>]
- [-CreatedBefore <string>] [-IsDraft <bool>] [-SourceBranch <string>] [-IncludeChangeSummary]
- [-IncludeDiffs] [-IncludeApprovals] [-Scope <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabMergeRequest
+    [-Url] <string> [-State <string>]
+    [-CreatedAfter <string>]
+    [-CreatedBefore <string>]
+    [-IsDraft <bool>]
+    [-SourceBranch <string>]
+    [-IncludeChangeSummary]
+    [-IncludeDiffs]
+    [-IncludeApprovals]
+    [-Scope <string>]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ### ByUser
 
 ```
-Get-GitlabMergeRequest [-State <string>] [-CreatedAfter <string>] [-CreatedBefore <string>]
- [-IsDraft <bool>] [-SourceBranch <string>] [-IncludeChangeSummary] [-IncludeDiffs]
- [-IncludeApprovals] [-Username <string>] [-Role <string>] [-Scope <string>] [-MaxPages <uint>]
- [-All] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabMergeRequest
+    [-State <string>]
+    [-CreatedAfter <string>]
+    [-CreatedBefore <string>]
+    [-IsDraft <bool>]
+    [-SourceBranch <string>]
+    [-IncludeChangeSummary]
+    [-IncludeDiffs]
+    [-IncludeApprovals]
+    [-Username <string>]
+    [-Role <string>]
+    [-Scope <string>]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ### Mine
 
 ```
-Get-GitlabMergeRequest [-State <string>] [-CreatedAfter <string>] [-CreatedBefore <string>]
- [-IsDraft <bool>] [-SourceBranch <string>] [-IncludeChangeSummary] [-IncludeDiffs]
- [-IncludeApprovals] [-Mine] [-Scope <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabMergeRequest
+    [-State <string>]
+    [-CreatedAfter <string>]
+    [-CreatedBefore <string>]
+    [-IsDraft <bool>]
+    [-SourceBranch <string>]
+    [-IncludeChangeSummary]
+    [-IncludeDiffs]
+    [-IncludeApprovals]
+    [-Mine]
+    [-Scope <string>]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

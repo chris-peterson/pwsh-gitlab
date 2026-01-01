@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Notes/Get-GitlabIssueNote
@@ -17,11 +17,13 @@ Retrieves notes (comments) from a GitLab issue.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabIssueNote [-IssueId] <string> [-ProjectId <string>] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabIssueNote
+    [-IssueId] <string> [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

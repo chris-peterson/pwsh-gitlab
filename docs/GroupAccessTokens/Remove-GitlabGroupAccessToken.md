@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/GroupAccessTokens/Remove-GitlabGroupAccessToken
@@ -17,11 +17,14 @@ Revokes a group access token.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabGroupAccessToken [-GroupId] <string> [-TokenId] <string> [-SiteUrl <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-GitlabGroupAccessToken
+    [-GroupId] <string> [-TokenId] <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

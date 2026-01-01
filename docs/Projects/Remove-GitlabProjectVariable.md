@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Remove-GitlabProjectVariable
@@ -17,11 +17,15 @@ Deletes a CI/CD variable from a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabProjectVariable [-Key] <string> [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-GitlabProjectVariable
+    [-Key] <string> [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

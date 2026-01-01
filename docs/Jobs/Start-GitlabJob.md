@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Start-GitlabJob
@@ -17,11 +17,17 @@ Starts or retries a GitLab CI/CD job.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Start-GitlabJob [-JobId] <string> [-ProjectId <string>] [-Variables <Object>] [-SiteUrl <string>]
- [-Wait] [-WhatIf] [-Confirm] [<CommonParameters>]
+Start-GitlabJob
+    [-JobId] <string> [-ProjectId <string>]
+    [-Variables <Object>]
+    [-SiteUrl <string>]
+    [-Wait]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

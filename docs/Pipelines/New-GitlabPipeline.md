@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/New-GitlabPipeline
@@ -17,11 +17,19 @@ Creates a new pipeline in a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabPipeline [[-ProjectId] <string>] [[-Ref] <string>] [[-Variables] <Object>]
- [[-SiteUrl] <string>] [-Wait] [-Follow] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabPipeline
+    [[-ProjectId] <string>]
+    [-Ref] <string>]
+    [-Variables] <Object>]
+    [-SiteUrl] <string>]
+    [-Wait]
+    [-Follow]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

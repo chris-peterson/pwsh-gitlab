@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Branches/New-GitlabBranch
@@ -17,11 +17,15 @@ Creates a new branch in a GitLab project repository.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabBranch [[-ProjectId] <string>] [-Branch] <string> [-Ref] <string> [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabBranch
+    [[-ProjectId] <string>]
+    [-Branch] <string> [-Ref] <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Runners/Get-GitlabRunnerStats
@@ -27,8 +27,12 @@ Get-GitlabRunnerStats [-RunnerTag] <string[]> [-Before <datetime>] [-After <date
 ### ById
 
 ```
-Get-GitlabRunnerStats [-RunnerId] <string> [-Before <datetime>] [-After <datetime>]
- [-JobLimit <int>] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabRunnerStats
+    [-RunnerId] <string> [-Before <datetime>]
+    [-After <datetime>]
+    [-JobLimit <int>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

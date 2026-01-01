@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/New-GitlabPipelineScheduleVariable
@@ -17,12 +17,16 @@ Creates a new variable for a pipeline schedule.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabPipelineScheduleVariable [[-ProjectId] <string>] [-PipelineScheduleId] <int>
- [-Key] <string> [-Value] <string> [[-VariableType] <string>] [[-SiteUrl] <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+New-GitlabPipelineScheduleVariable
+    [[-ProjectId] <string>]
+    [-PipelineScheduleId] <int> [-Key] <string> [-Value] <string> [[-VariableType] <string>]
+    [-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

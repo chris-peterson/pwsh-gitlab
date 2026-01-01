@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Runners/Get-GitlabRunner
@@ -27,8 +27,12 @@ Get-GitlabRunner [-Type <string>] [-Status <string>] [-Tags <string[]>] [-FetchD
 ### RunnerId
 
 ```
-Get-GitlabRunner [-RunnerId] <string> [-FetchDetails] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabRunner
+    [-RunnerId] <string> [-FetchDetails]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

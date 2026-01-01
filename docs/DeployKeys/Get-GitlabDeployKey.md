@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/DeployKeys/Get-GitlabDeployKey
@@ -17,10 +17,13 @@ Gets deploy keys from the GitLab instance.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabDeployKey [[-DeployKeyId] <string>] [[-SiteUrl] <string>] [<CommonParameters>]
+Get-GitlabDeployKey
+    [[-DeployKeyId] <string>]
+    [-SiteUrl] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

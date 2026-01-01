@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/Get-GitlabPipelineSchedule
@@ -27,8 +27,10 @@ Get-GitlabPipelineSchedule [-ProjectId <string>] [-Scope <string>] [-IncludeVari
 ### ByPipelineScheduleId
 
 ```
-Get-GitlabPipelineSchedule -PipelineScheduleId <int> [-ProjectId <string>] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabPipelineSchedule
+    [-PipelineScheduleId <int> [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

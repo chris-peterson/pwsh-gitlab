@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Remove-GitlabProjectTopic
@@ -17,11 +17,14 @@ Removes one or more topics from a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabProjectTopic [-Topic] <string[]> [-ProjectId <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-GitlabProjectTopic
+    [-Topic] <string[]> [-ProjectId <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

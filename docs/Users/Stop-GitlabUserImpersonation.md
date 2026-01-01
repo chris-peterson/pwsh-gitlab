@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Stop-GitlabUserImpersonation
@@ -17,10 +17,14 @@ Stops the current GitLab user impersonation session.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Stop-GitlabUserImpersonation [[-SiteUrl] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Stop-GitlabUserImpersonation
+    [[-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

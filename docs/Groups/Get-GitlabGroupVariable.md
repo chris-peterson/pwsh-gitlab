@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Get-GitlabGroupVariable
@@ -17,11 +17,15 @@ Retrieves CI/CD variables defined at the group level.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabGroupVariable [-GroupId] <string> [[-Key] <string>] [-SiteUrl <string>] [-MaxPages <uint>]
- [-All] [<CommonParameters>]
+Get-GitlabGroupVariable
+    [-GroupId] <string> [[-Key] <string>]
+    [-SiteUrl <string>]
+    [-MaxPages <uint>]
+    [-All]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

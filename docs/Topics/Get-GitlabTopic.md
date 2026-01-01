@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Topics/Get-GitlabTopic
@@ -27,7 +27,9 @@ Get-GitlabTopic [[-Search] <string>] [-WithoutProjects] [-MaxPages <uint>] [-All
 ### Id
 
 ```
-Get-GitlabTopic -TopicId <string> [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabTopic
+    [-TopicId <string> [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

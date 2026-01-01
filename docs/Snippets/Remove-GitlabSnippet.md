@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Snippets/Remove-GitlabSnippet
@@ -17,11 +17,14 @@ Deletes a GitLab snippet.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabSnippet [-SnippetId] <int> [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-GitlabSnippet
+    [-SnippetId] <int> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

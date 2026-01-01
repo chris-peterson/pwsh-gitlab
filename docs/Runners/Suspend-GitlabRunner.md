@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Runners/Suspend-GitlabRunner
@@ -17,11 +17,14 @@ Pauses a GitLab runner.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Suspend-GitlabRunner [-RunnerId] <string> [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Suspend-GitlabRunner
+    [-RunnerId] <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

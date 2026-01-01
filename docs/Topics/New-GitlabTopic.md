@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Topics/New-GitlabTopic
@@ -17,11 +17,16 @@ Creates a new GitLab topic.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabTopic [-Name] <string> [-Title <string>] [-Description <string>] [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabTopic
+    [-Name] <string> [-Title <string>]
+    [-Description <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

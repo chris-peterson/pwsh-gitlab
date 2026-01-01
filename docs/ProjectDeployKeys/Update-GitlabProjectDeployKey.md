@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectDeployKeys/Update-GitlabProjectDeployKey
@@ -17,11 +17,17 @@ Updates an existing deploy key for a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-GitlabProjectDeployKey [-ProjectId] <string> -DeployKeyId <string> [-Title <string>]
- [-CanPush <bool>] [-SiteUrl <string>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-GitlabProjectDeployKey
+    [-ProjectId] <string> -DeployKeyId <string> [-Title <string>]
+    [-CanPush <bool>]
+    [-SiteUrl <string>]
+    [-Force]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

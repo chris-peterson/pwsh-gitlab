@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/New-GitlabMergeRequestApprovalRule
@@ -17,11 +17,15 @@ Creates a new merge request approval rule for a project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabMergeRequestApprovalRule [[-ProjectId] <string>] [-Name] <string>
- [-ApprovalsRequired] <uint> [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabMergeRequestApprovalRule
+    [[-ProjectId] <string>]
+    [-Name] <string> [-ApprovalsRequired] <uint> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

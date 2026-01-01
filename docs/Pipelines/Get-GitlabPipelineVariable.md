@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/Get-GitlabPipelineVariable
@@ -17,11 +17,15 @@ Gets variables from a GitLab pipeline.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabPipelineVariable [-PipelineId] <string> [[-Variable] <string>] [-ProjectId <string>]
- [-As <string>] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabPipelineVariable
+    [-PipelineId] <string> [[-Variable] <string>]
+    [-ProjectId <string>]
+    [-As <string>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Runners/Resume-GitlabRunner
@@ -17,11 +17,14 @@ Reactivates a paused GitLab runner.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Resume-GitlabRunner [-RunnerId] <string> [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Resume-GitlabRunner
+    [-RunnerId] <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

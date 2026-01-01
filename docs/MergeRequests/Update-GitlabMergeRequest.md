@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Update-GitlabMergeRequest
@@ -17,13 +17,25 @@ Updates properties of an existing GitLab merge request.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-GitlabMergeRequest [-ProjectId] <string> [-MergeRequestId] <string> [-Title <string>]
- [-Draft] [-MarkReady] [-Description <string>] [-AssignTo <string[]>] [-Unassign]
- [-Reviewers <string[]>] [-UnsetReviewers] [-Close] [-Reopen] [-MilestoneId <string>]
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-GitlabMergeRequest
+    [-ProjectId] <string> [-MergeRequestId] <string> [-Title <string>]
+    [-Draft]
+    [-MarkReady]
+    [-Description <string>]
+    [-AssignTo <string[]>]
+    [-Unassign]
+    [-Reviewers <string[]>]
+    [-UnsetReviewers]
+    [-Close]
+    [-Reopen]
+    [-MilestoneId <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Update-GitlabProject
@@ -17,15 +17,27 @@ Updates an existing GitLab project's settings.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-GitlabProject [[-ProjectId] <string>] [[-Visibility] <string>] [[-Name] <string>]
- [[-Path] <string>] [[-DefaultBranch] <string>] [[-Topics] <string[]>]
- [[-BuildGitStrategy] <string>] [[-CiDefaultGitDepth] <uint>] [[-CiForwardDeployment] <bool>]
- [[-BuildTimeout] <uint>] [[-RepositoryAccessLevel] <string>] [[-BuildsAccessLevel] <string>]
- [[-OnlyAllowMergeIfAllDiscussionsAreResolved] <bool>] [[-SiteUrl] <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Update-GitlabProject
+    [[-ProjectId] <string>]
+    [-Visibility] <string>]
+    [-Name] <string>]
+    [-Path] <string>]
+    [-DefaultBranch] <string>]
+    [-Topics] <string[]>]
+    [-BuildGitStrategy] <string>]
+    [-CiDefaultGitDepth] <uint>]
+    [-CiForwardDeployment] <bool>]
+    [-BuildTimeout] <uint>]
+    [-RepositoryAccessLevel] <string>]
+    [-BuildsAccessLevel] <string>]
+    [-OnlyAllowMergeIfAllDiscussionsAreResolved] <bool>]
+    [-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

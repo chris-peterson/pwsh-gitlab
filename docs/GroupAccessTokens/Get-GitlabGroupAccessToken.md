@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/GroupAccessTokens/Get-GitlabGroupAccessToken
@@ -17,11 +17,13 @@ Gets access tokens for a GitLab group.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabGroupAccessToken [-GroupId] <string> [[-TokenId] <string>] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabGroupAccessToken
+    [-GroupId] <string> [[-TokenId] <string>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

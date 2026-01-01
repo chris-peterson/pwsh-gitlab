@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectHooks/Update-GitlabProjectHook
@@ -17,16 +17,30 @@ Updates an existing webhook for a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-GitlabProjectHook [[-ProjectId] <string>] [-Id] <int> [-Url] <string>
- [[-ConfidentialIssuesEvents] <bool>] [[-ConfidentialNoteEvents] <bool>]
- [[-DeploymentEvents] <bool>] [[-EnableSSLVerification] <bool>] [[-IssuesEvents] <bool>]
- [[-JobEvents] <bool>] [[-MergeRequestsEvents] <bool>] [[-NoteEvents] <bool>]
- [[-PipelineEvents] <bool>] [[-PushEventsBranchFilter] <string>] [[-PushEvents] <bool>]
- [[-ReleasesEvents] <bool>] [[-TagPushEvents] <bool>] [[-Token] <string>] [[-WikiPageEvents] <bool>]
- [[-SiteUrl] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-GitlabProjectHook
+    [[-ProjectId] <string>]
+    [-Id] <int> [-Url] <string> [[-ConfidentialIssuesEvents] <bool>]
+    [-ConfidentialNoteEvents] <bool>]
+    [-DeploymentEvents] <bool>]
+    [-EnableSSLVerification] <bool>]
+    [-IssuesEvents] <bool>]
+    [-JobEvents] <bool>]
+    [-MergeRequestsEvents] <bool>]
+    [-NoteEvents] <bool>]
+    [-PipelineEvents] <bool>]
+    [-PushEventsBranchFilter] <string>]
+    [-PushEvents] <bool>]
+    [-ReleasesEvents] <bool>]
+    [-TagPushEvents] <bool>]
+    [-Token] <string>]
+    [-WikiPageEvents] <bool>]
+    [-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

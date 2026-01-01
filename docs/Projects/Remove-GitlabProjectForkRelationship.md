@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Remove-GitlabProjectForkRelationship
@@ -17,11 +17,15 @@ Removes the fork relationship from a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabProjectForkRelationship [[-ProjectId] <string>] [[-SiteUrl] <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-GitlabProjectForkRelationship
+    [[-ProjectId] <string>]
+    [-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Get-GitlabProject
@@ -27,29 +27,49 @@ Get-GitlabProject [[-ProjectId] <string>] [-Select <string>] [-MaxPages <uint>] 
 ### ByGroup
 
 ```
-Get-GitlabProject [-GroupId] <string> [-Recurse] [-Select <string>] [-IncludeArchived]
- [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabProject
+    [-GroupId] <string> [-Recurse]
+    [-Select <string>]
+    [-IncludeArchived]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ### ByUser
 
 ```
-Get-GitlabProject [-UserId <string>] [-Mine] [-Select <string>] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabProject
+    [-UserId <string>]
+    [-Mine]
+    [-Select <string>]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ### ByTopics
 
 ```
-Get-GitlabProject [-Topics] <string[]> [-Select <string>] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabProject
+    [-Topics] <string[]> [-Select <string>]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ### ByUrl
 
 ```
-Get-GitlabProject [-Url] <string> [-Select <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabProject
+    [-Url] <string> [-Select <string>]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

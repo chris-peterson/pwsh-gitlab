@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Invoke-GitlabMergeRequestReview
@@ -17,10 +17,12 @@ Checks out a merge request branch locally for review.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Invoke-GitlabMergeRequestReview [-MergeRequestId] <string> [-SiteUrl <string>] [<CommonParameters>]
+Invoke-GitlabMergeRequestReview
+    [-MergeRequestId] <string> [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

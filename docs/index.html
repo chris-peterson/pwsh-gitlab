@@ -132,29 +132,6 @@
       background-color: #555 !important;
     }
     
-    /* Expand/Collapse toggle in header */
-    .expand-toggle {
-      display: flex;
-      gap: 4px;
-      margin-right: 8px;
-    }
-    
-    .expand-toggle-btn {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      padding: 2px;
-      color: inherit;
-      opacity: 0.7;
-      transition: all 0.2s ease;
-      line-height: 1;
-    }
-    
-    .expand-toggle-btn:hover {
-      opacity: 1;
-    }
-    
     /* Keep sidebar header and search bar always visible */
     .sidebar {
       display: flex;
@@ -225,6 +202,8 @@
   </script>
   <!-- Search plugin -->
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <!-- Sidebar collapse plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
   <!-- Copy code plugin -->
   <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
   <!-- Syntax highlighting -->
@@ -265,74 +244,7 @@
     window.$docsify = window.$docsify || {};
     window.$docsify.plugins = (window.$docsify.plugins || []).concat(function(hook) {
       hook.doneEach(injectThemeToggle);
-      hook.doneEach(injectSidebarControls);
     });
-    
-    // Inject collapse/expand toggle into sidebar header
-    function injectSidebarControls() {
-      const sidebarName = document.querySelector('.sidebar > h1, .app-name');
-      const appNameLink = document.querySelector('.app-name-link');
-      if (sidebarName && !document.querySelector('.expand-toggle')) {
-        const toggle = document.createElement('span');
-        toggle.className = 'expand-toggle';
-        
-        const expandBtn = document.createElement('button');
-        expandBtn.className = 'expand-toggle-btn';
-        expandBtn.innerHTML = '⊞';
-        expandBtn.onclick = function(e) { e.preventDefault(); e.stopPropagation(); expandAll(); };
-        expandBtn.title = 'Expand all';
-        
-        const collapseBtn = document.createElement('button');
-        collapseBtn.className = 'expand-toggle-btn';
-        collapseBtn.innerHTML = '⊟';
-        collapseBtn.onclick = function(e) { e.preventDefault(); e.stopPropagation(); collapseAll(); };
-        collapseBtn.title = 'Collapse all';
-        
-        toggle.appendChild(expandBtn);
-        toggle.appendChild(collapseBtn);
-        
-        // Insert at start of header (before app-name-link)
-        if (appNameLink) {
-          sidebarName.insertBefore(toggle, appNameLink);
-        } else {
-          sidebarName.insertBefore(toggle, sidebarName.firstChild);
-        }
-      }
-    }
-    
-    function collapseAll() {
-      const folders = document.querySelectorAll('.sidebar-nav .folder.open');
-      folders.forEach(folder => {
-        folder.classList.remove('open');
-      });
-      // For docsify-themeable, toggle the parent li elements
-      const expandedItems = document.querySelectorAll('.sidebar-nav li.open, .sidebar-nav li[class*="open"]');
-      expandedItems.forEach(item => {
-        item.classList.remove('open');
-      });
-      // Also collapse nested ul elements
-      const nestedLists = document.querySelectorAll('.sidebar-nav ul ul');
-      nestedLists.forEach(ul => {
-        ul.style.display = 'none';
-      });
-    }
-    
-    function expandAll() {
-      const folders = document.querySelectorAll('.sidebar-nav .folder');
-      folders.forEach(folder => {
-        folder.classList.add('open');
-      });
-      // For docsify-themeable, expand all li elements
-      const items = document.querySelectorAll('.sidebar-nav li');
-      items.forEach(item => {
-        item.classList.add('open');
-      });
-      // Also expand nested ul elements
-      const nestedLists = document.querySelectorAll('.sidebar-nav ul ul');
-      nestedLists.forEach(ul => {
-        ul.style.display = '';
-      });
-    }
   </script>
 </body>
 </html>

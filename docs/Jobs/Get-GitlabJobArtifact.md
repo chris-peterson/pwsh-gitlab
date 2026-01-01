@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Get-GitlabJobArtifact
@@ -17,11 +17,14 @@ Downloads job artifacts from a GitLab CI/CD job.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabJobArtifact [-JobId] <string> [[-ProjectId] <string>] [[-ArtifactPath] <string>]
- [-OutFile] <string> [[-SiteUrl] <string>] [<CommonParameters>]
+Get-GitlabJobArtifact
+    [-JobId] <string> [[-ProjectId] <string>]
+    [-ArtifactPath] <string>]
+    [-OutFile] <string> [[-SiteUrl] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

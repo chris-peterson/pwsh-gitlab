@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Snippets/Update-GitlabSnippet
@@ -17,12 +17,18 @@ Updates an existing GitLab snippet.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-GitlabSnippet [-SnippetId] <int> [-Title <string>] [-Description <string>]
- [-Visibility <string>] [-Files <hashtable[]>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Update-GitlabSnippet
+    [-SnippetId] <int> [-Title <string>]
+    [-Description <string>]
+    [-Visibility <string>]
+    [-Files <hashtable[]>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

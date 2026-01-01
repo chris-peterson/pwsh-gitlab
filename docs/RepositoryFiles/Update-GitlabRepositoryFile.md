@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/RepositoryFiles/Update-GitlabRepositoryFile
@@ -17,12 +17,18 @@ Updates an existing file in a GitLab repository.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-GitlabRepositoryFile [-FilePath] <string> -Content <string> -CommitMessage <string>
- [-ProjectId <string>] [-Branch <string>] [-SkipCi <bool>] [-SkipEqualityCheck] [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-GitlabRepositoryFile
+    [-FilePath] <string> -Content <string> -CommitMessage <string> [-ProjectId <string>]
+    [-Branch <string>]
+    [-SkipCi <bool>]
+    [-SkipEqualityCheck]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

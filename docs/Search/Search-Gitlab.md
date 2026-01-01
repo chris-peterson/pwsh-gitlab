@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Search/Search-Gitlab
@@ -17,12 +17,21 @@ Searches GitLab for blobs, merge requests, or projects.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Search-Gitlab [-Search] <string> [-Scope <string>] [-GroupId <string>] [-Filename <string>]
- [-MaxResults <uint>] [-All] [-Select <string>] [-OpenInBrowser] [-SiteUrl <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Search-Gitlab
+    [-Search] <string> [-Scope <string>]
+    [-GroupId <string>]
+    [-Filename <string>]
+    [-MaxResults <uint>]
+    [-All]
+    [-Select <string>]
+    [-OpenInBrowser]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

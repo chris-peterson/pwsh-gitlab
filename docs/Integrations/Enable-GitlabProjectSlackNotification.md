@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Integrations/Enable-GitlabProjectSlackNotification
@@ -29,18 +29,37 @@ Enable-GitlabProjectSlackNotification -Channel <string> [-ProjectId <string>] [-
 ### AllEvents
 
 ```
-Enable-GitlabProjectSlackNotification -Channel <string> [-ProjectId <string>] [-Webhook <string>]
- [-Username <string>] [-BranchesToBeNotified <string>] [-NotifyOnlyBrokenPipelines <bool>]
- [-JobEvents <bool>] [-AllEvents] [-Integration <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Enable-GitlabProjectSlackNotification
+    [-Channel <string> [-ProjectId <string>]
+    [-Webhook <string>]
+    [-Username <string>]
+    [-BranchesToBeNotified <string>]
+    [-NotifyOnlyBrokenPipelines <bool>]
+    [-JobEvents <bool>]
+    [-AllEvents]
+    [-Integration <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ### NoEvents
 
 ```
-Enable-GitlabProjectSlackNotification [-ProjectId <string>] [-Webhook <string>] [-Username <string>]
- [-BranchesToBeNotified <string>] [-NotifyOnlyBrokenPipelines <bool>] [-JobEvents <bool>]
- [-NoEvents] [-Integration <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Enable-GitlabProjectSlackNotification
+    [-ProjectId <string>]
+    [-Webhook <string>]
+    [-Username <string>]
+    [-BranchesToBeNotified <string>]
+    [-NotifyOnlyBrokenPipelines <bool>]
+    [-JobEvents <bool>]
+    [-NoEvents]
+    [-Integration <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Write-GitlabJobTrace
@@ -17,10 +17,13 @@ Writes colored text to the GitLab CI/CD job log.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Write-GitlabJobTrace [[-Text] <string>] [[-Color] <string>] [<CommonParameters>]
+Write-GitlabJobTrace
+    [[-Text] <string>]
+    [-Color] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

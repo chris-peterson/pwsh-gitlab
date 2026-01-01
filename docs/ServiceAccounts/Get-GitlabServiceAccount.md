@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ServiceAccounts/Get-GitlabServiceAccount
@@ -27,8 +27,11 @@ Get-GitlabServiceAccount [[-ServiceAccountId] <int>] [-SiteUrl <string>] [-MaxPa
 ### Group
 
 ```
-Get-GitlabServiceAccount [[-ServiceAccountId] <int>] -GroupId <string> [-SiteUrl <string>]
- [-MaxPages <uint>] [-All] [<CommonParameters>]
+Get-GitlabServiceAccount
+    [[-ServiceAccountId] <int>] -GroupId <string> [-SiteUrl <string>]
+    [-MaxPages <uint>]
+    [-All]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

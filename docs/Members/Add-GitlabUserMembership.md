@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Add-GitlabUserMembership
@@ -17,11 +17,14 @@ Adds a user as a member of a GitLab group.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Add-GitlabUserMembership [-Username] <string> [-GroupId] <string> [-AccessLevel] <string>
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Add-GitlabUserMembership
+    [-Username] <string> [-GroupId] <string> [-AccessLevel] <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Branches/Get-GitlabBranch
@@ -27,8 +27,13 @@ Get-GitlabBranch [[-Ref] <string>] [-ProjectId <string>] [-MaxPages <uint>] [-Al
 ### Search
 
 ```
-Get-GitlabBranch [-ProjectId <string>] [-Search <string>] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabBranch
+    [-ProjectId <string>]
+    [-Search <string>]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

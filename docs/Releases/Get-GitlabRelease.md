@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Releases/Get-GitlabRelease
@@ -17,11 +17,18 @@ Gets releases from a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabRelease [[-ProjectId] <string>] [[-Tag] <string>] [[-Sort] <string>] [[-MaxPages] <uint>]
- [[-SiteUrl] <string>] [-IncludeHtml] [-All] [<CommonParameters>]
+Get-GitlabRelease
+    [[-ProjectId] <string>]
+    [-Tag] <string>]
+    [-Sort] <string>]
+    [-MaxPages] <uint>]
+    [-SiteUrl] <string>]
+    [-IncludeHtml]
+    [-All]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

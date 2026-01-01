@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/AuditEvents/Get-GitlabAuditEvent
@@ -17,12 +17,22 @@ Retrieves audit events from GitLab at the instance, group, or project level.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabAuditEvent [[-ProjectId] <string>] [[-GroupId] <string>] [[-AuditEventId] <string>]
- [[-EntityType] <string>] [[-EntityId] <string>] [[-MaxPages] <uint>] [[-Before] <string>]
- [[-After] <string>] [[-SiteUrl] <string>] [-FetchAuthors] [-All] [<CommonParameters>]
+Get-GitlabAuditEvent
+    [[-ProjectId] <string>]
+    [-GroupId] <string>]
+    [-AuditEventId] <string>]
+    [-EntityType] <string>]
+    [-EntityId] <string>]
+    [-MaxPages] <uint>]
+    [-Before] <string>]
+    [-After] <string>]
+    [-SiteUrl] <string>]
+    [-FetchAuthors]
+    [-All]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

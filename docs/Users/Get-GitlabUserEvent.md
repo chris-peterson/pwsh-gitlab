@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Get-GitlabUserEvent
@@ -28,17 +28,33 @@ Get-GitlabUserEvent [-UserId <string>] [-Action <string>] [-TargetType <string>]
 ### ByEmail
 
 ```
-Get-GitlabUserEvent [-EmailAddress <string>] [-Action <string>] [-TargetType <string>]
- [-Before <string>] [-After <string>] [-Sort <string>] [-MaxPages <uint>] [-FetchProjects]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabUserEvent
+    [-EmailAddress <string>]
+    [-Action <string>]
+    [-TargetType <string>]
+    [-Before <string>]
+    [-After <string>]
+    [-Sort <string>]
+    [-MaxPages <uint>]
+    [-FetchProjects]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ### ByMe
 
 ```
-Get-GitlabUserEvent [-Me] [-Action <string>] [-TargetType <string>] [-Before <string>]
- [-After <string>] [-Sort <string>] [-MaxPages <uint>] [-FetchProjects] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabUserEvent
+    [-Me]
+    [-Action <string>]
+    [-TargetType <string>]
+    [-Before <string>]
+    [-After <string>]
+    [-Sort <string>]
+    [-MaxPages <uint>]
+    [-FetchProjects]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

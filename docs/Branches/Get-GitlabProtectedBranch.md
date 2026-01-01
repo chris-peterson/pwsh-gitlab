@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Branches/Get-GitlabProtectedBranch
@@ -17,11 +17,14 @@ Gets protected branches from a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabProtectedBranch [[-ProjectId] <string>] [[-Name] <string>] [[-SiteUrl] <string>]
- [<CommonParameters>]
+Get-GitlabProtectedBranch
+    [[-ProjectId] <string>]
+    [-Name] <string>]
+    [-SiteUrl] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Get-GitlabUserMembership
@@ -27,7 +27,12 @@ Get-GitlabUserMembership [-Username] <string> [-SiteUrl <string>] [-MaxPages <ui
 ### Me
 
 ```
-Get-GitlabUserMembership [-Me] [-SiteUrl <string>] [-MaxPages <uint>] [-All] [<CommonParameters>]
+Get-GitlabUserMembership
+    [-Me]
+    [-SiteUrl <string>]
+    [-MaxPages <uint>]
+    [-All]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

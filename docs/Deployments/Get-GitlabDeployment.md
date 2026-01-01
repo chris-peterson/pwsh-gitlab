@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Deployments/Get-GitlabDeployment
@@ -28,8 +28,11 @@ Get-GitlabDeployment [-ProjectId <string>] [-EnvironmentName <string>] [-Status 
 ### ById
 
 ```
-Get-GitlabDeployment -DeploymentId <string> [-ProjectId <string>] [-Select <string>]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabDeployment
+    [-DeploymentId <string> [-ProjectId <string>]
+    [-Select <string>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

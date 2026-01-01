@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/Get-GitlabIssue
@@ -28,17 +28,30 @@ Get-GitlabIssue [[-IssueId] <string>] [-ProjectId <string>] [-State <string>]
 ### ByGroupId
 
 ```
-Get-GitlabIssue [[-IssueId] <string>] [-GroupId] <string> [-State <string>] [-CreatedAfter <string>]
- [-CreatedBefore <string>] [-AuthorUsername <Object>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabIssue
+    [[-IssueId] <string>]
+    [-GroupId] <string> [-State <string>]
+    [-CreatedAfter <string>]
+    [-CreatedBefore <string>]
+    [-AuthorUsername <Object>]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ### Mine
 
 ```
-Get-GitlabIssue [[-IssueId] <string>] -Mine [-State <string>] [-CreatedAfter <string>]
- [-CreatedBefore <string>] [-AuthorUsername <Object>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabIssue
+    [[-IssueId] <string>] -Mine [-State <string>]
+    [-CreatedAfter <string>]
+    [-CreatedBefore <string>]
+    [-AuthorUsername <Object>]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

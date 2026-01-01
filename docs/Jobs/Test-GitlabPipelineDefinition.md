@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Test-GitlabPipelineDefinition
@@ -17,11 +17,17 @@ Validates a GitLab CI/CD pipeline definition.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Test-GitlabPipelineDefinition [[-ProjectId] <string>] [[-Content] <string>] [[-Select] <string>]
- [[-SiteUrl] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Test-GitlabPipelineDefinition
+    [[-ProjectId] <string>]
+    [-Content] <string>]
+    [-Select] <string>]
+    [-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

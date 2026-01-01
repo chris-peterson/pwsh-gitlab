@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/Close-GitlabIssue
@@ -17,11 +17,15 @@ Closes an open GitLab issue.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Close-GitlabIssue [-IssueId] <string> [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Close-GitlabIssue
+    [-IssueId] <string> [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

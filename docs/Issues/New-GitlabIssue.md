@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/New-GitlabIssue
@@ -17,11 +17,19 @@ Creates a new issue in a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabIssue [-Title] <string> [[-Description] <string>] [-ProjectId <string>] [-MarkTodoAsRead]
- [-MilestoneId <string>] [-Follow] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabIssue
+    [-Title] <string> [[-Description] <string>]
+    [-ProjectId <string>]
+    [-MarkTodoAsRead]
+    [-MilestoneId <string>]
+    [-Follow]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

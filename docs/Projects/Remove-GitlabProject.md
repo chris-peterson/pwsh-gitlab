@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Remove-GitlabProject
@@ -17,11 +17,14 @@ Deletes a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabProject [-ProjectId] <string> [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-GitlabProject
+    [-ProjectId] <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

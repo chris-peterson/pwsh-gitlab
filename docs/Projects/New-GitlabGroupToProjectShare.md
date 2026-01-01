@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/New-GitlabGroupToProjectShare
@@ -17,11 +17,17 @@ Shares a GitLab project with a group.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabGroupToProjectShare [[-ProjectId] <string>] [[-GroupId] <string>]
- [[-GroupAccess] <string>] [[-SiteUrl] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabGroupToProjectShare
+    [[-ProjectId] <string>]
+    [-GroupId] <string>]
+    [-GroupAccess] <string>]
+    [-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

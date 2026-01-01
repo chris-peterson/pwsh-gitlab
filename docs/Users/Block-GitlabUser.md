@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Block-GitlabUser
@@ -17,10 +17,14 @@ Blocks a GitLab user.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Block-GitlabUser [-UserId] <string> [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Block-GitlabUser
+    [-UserId] <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

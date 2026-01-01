@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/RepositoryFiles/Get-GitlabRepositoryYmlFileContent
@@ -17,11 +17,14 @@ Gets and parses YAML file content from a GitLab repository.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabRepositoryYmlFileContent [-FilePath] <string> [-ProjectId <string>] [-Ref <string>]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabRepositoryYmlFileContent
+    [-FilePath] <string> [-ProjectId <string>]
+    [-Ref <string>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

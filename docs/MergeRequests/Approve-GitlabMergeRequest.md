@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Approve-GitlabMergeRequest
@@ -17,11 +17,15 @@ Approves a GitLab merge request.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Approve-GitlabMergeRequest [[-MergeRequestId] <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Approve-GitlabMergeRequest
+    [[-MergeRequestId] <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Remove-GitlabMergeRequestApprovalRule
@@ -17,11 +17,15 @@ Removes a merge request approval rule from a project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabMergeRequestApprovalRule [[-ProjectId] <string>] [-MergeRequestApprovalRuleId] <string>
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-GitlabMergeRequestApprovalRule
+    [[-ProjectId] <string>]
+    [-MergeRequestApprovalRuleId] <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

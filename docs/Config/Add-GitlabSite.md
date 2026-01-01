@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Config/Add-GitlabSite
@@ -17,11 +17,17 @@ Adds a new GitLab site configuration.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Add-GitlabSite [[-Url] <string>] [[-AccessToken] <string>] [[-ProxyUrl] <string>] [-IsDefault]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Add-GitlabSite
+    [[-Url] <string>]
+    [-AccessToken] <string>]
+    [-ProxyUrl] <string>]
+    [-IsDefault]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

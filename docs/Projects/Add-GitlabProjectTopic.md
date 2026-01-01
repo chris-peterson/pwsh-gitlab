@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Add-GitlabProjectTopic
@@ -17,11 +17,14 @@ Adds one or more topics to a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Add-GitlabProjectTopic [-Topic] <string[]> [-ProjectId <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Add-GitlabProjectTopic
+    [-Topic] <string[]> [-ProjectId <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

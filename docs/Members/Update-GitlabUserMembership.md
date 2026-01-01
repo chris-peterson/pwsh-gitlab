@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Update-GitlabUserMembership
@@ -27,8 +27,11 @@ Update-GitlabUserMembership [-Username] <string> -GroupId <string> -AccessLevel 
 ### Project
 
 ```
-Update-GitlabUserMembership [-Username] <string> -ProjectId <string> -AccessLevel <string>
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-GitlabUserMembership
+    [-Username] <string> -ProjectId <string> -AccessLevel <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

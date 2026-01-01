@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Move-GitlabProject
@@ -17,11 +17,15 @@ Transfers a GitLab project to a different namespace (group).
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Move-GitlabProject [[-ProjectId] <string>] [-DestinationGroup] <string> [[-SiteUrl] <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Move-GitlabProject
+    [[-ProjectId] <string>]
+    [-DestinationGroup] <string> [[-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Set-GitlabProjectMember
@@ -17,11 +17,14 @@ Sets or updates a user's membership in a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Set-GitlabProjectMember [-UserId] <string> [-AccessLevel] <string> -SiteUrl <string>
- [-ProjectId <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-GitlabProjectMember
+    [-UserId] <string> [-AccessLevel] <string> -SiteUrl <string> [-ProjectId <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

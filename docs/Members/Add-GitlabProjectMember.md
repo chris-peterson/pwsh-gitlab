@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Add-GitlabProjectMember
@@ -17,11 +17,15 @@ Adds a user as a member of a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Add-GitlabProjectMember [-UserId] <string> [-AccessLevel] <string> [-ProjectId <string>]
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Add-GitlabProjectMember
+    [-UserId] <string> [-AccessLevel] <string> [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

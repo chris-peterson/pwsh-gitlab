@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Milestones/Get-GitlabMilestone
@@ -27,8 +27,12 @@ Get-GitlabMilestone [-GroupId <string>] [-State <string>] [-MilestoneId <string>
 ### ByProject
 
 ```
-Get-GitlabMilestone [-ProjectId <string>] [-State <string>] [-MilestoneId <string>]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabMilestone
+    [-ProjectId <string>]
+    [-State <string>]
+    [-MilestoneId <string>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PersonalAccessTokens/Invoke-GitlabPersonalAccessTokenRotation
@@ -17,11 +17,15 @@ Rotates a personal access token, generating a new token value.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Invoke-GitlabPersonalAccessTokenRotation [-TokenId] <string> [-ExpiresAt <string>]
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Invoke-GitlabPersonalAccessTokenRotation
+    [-TokenId] <string> [-ExpiresAt <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

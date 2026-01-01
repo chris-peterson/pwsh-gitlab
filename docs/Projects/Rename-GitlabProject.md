@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Rename-GitlabProject
@@ -17,11 +17,15 @@ Renames a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Rename-GitlabProject [-NewName] <string> [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Rename-GitlabProject
+    [-NewName] <string> [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

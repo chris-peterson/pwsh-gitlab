@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Config/Remove-GitlabSite
@@ -17,10 +17,13 @@ Removes a GitLab site from the configuration.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabSite [-Url] <string> [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-GitlabSite
+    [-Url] <string> [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

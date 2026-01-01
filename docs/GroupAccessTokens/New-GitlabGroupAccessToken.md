@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/GroupAccessTokens/New-GitlabGroupAccessToken
@@ -17,12 +17,16 @@ Creates a new access token for a GitLab group.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabGroupAccessToken [-GroupId] <string> -Name <string> -Scope <string[]>
- -AccessLevel <string> [-ExpiresAt <datetime>] [-CopyToClipboard] [-SiteUrl <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+New-GitlabGroupAccessToken
+    [-GroupId] <string> -Name <string> -Scope <string[]> -AccessLevel <string> [-ExpiresAt <datetime>]
+    [-CopyToClipboard]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

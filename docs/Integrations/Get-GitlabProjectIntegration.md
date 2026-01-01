@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Integrations/Get-GitlabProjectIntegration
@@ -17,11 +17,14 @@ Gets integration settings for a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabProjectIntegration [[-Integration] <string>] [-ProjectId <string>] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabProjectIntegration
+    [[-Integration] <string>]
+    [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

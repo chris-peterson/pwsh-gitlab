@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/RepositoryFiles/New-GitlabRepositoryFile
@@ -17,12 +17,17 @@ Creates a new file in a GitLab repository.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabRepositoryFile [-FilePath] <string> -Content <string> -CommitMessage <string>
- [-ProjectId <string>] [-Branch <string>] [-SkipCi <bool>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+New-GitlabRepositoryFile
+    [-FilePath] <string> -Content <string> -CommitMessage <string> [-ProjectId <string>]
+    [-Branch <string>]
+    [-SkipCi <bool>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

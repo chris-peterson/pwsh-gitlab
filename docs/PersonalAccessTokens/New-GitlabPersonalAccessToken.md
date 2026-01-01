@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PersonalAccessTokens/New-GitlabPersonalAccessToken
@@ -17,12 +17,18 @@ Creates a new personal access token for a GitLab user.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabPersonalAccessToken [[-UserId] <string>] [-Name] <string> [-Scope] <string[]>
- [[-ExpiresAt] <string>] [[-ExpireInMonths] <uint>] [[-SiteUrl] <string>] [-CopyToClipboard]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabPersonalAccessToken
+    [[-UserId] <string>]
+    [-Name] <string> [-Scope] <string[]> [[-ExpiresAt] <string>]
+    [-ExpireInMonths] <uint>]
+    [-SiteUrl] <string>]
+    [-CopyToClipboard]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

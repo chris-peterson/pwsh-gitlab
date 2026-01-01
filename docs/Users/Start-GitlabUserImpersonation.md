@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Start-GitlabUserImpersonation
@@ -17,11 +17,14 @@ Starts an impersonation session for a GitLab user.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Start-GitlabUserImpersonation [-UserId] <string> [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Start-GitlabUserImpersonation
+    [-UserId] <string> [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

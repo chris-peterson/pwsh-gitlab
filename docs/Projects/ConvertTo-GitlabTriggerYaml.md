@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/ConvertTo-GitlabTriggerYaml
@@ -17,11 +17,13 @@ Converts GitLab projects to a trigger YAML configuration.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-ConvertTo-GitlabTriggerYaml [-InputObject] <Object> [[-Strategy] <string>] [[-StageName] <string>]
- [<CommonParameters>]
+ConvertTo-GitlabTriggerYaml
+    [-InputObject] <Object> [[-Strategy] <string>]
+    [-StageName] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

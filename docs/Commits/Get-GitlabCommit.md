@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Commits/Get-GitlabCommit
@@ -17,11 +17,18 @@ Retrieves commits from a GitLab project repository.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabCommit [[-ProjectId] <string>] [[-Before] <string>] [[-After] <string>] [[-Ref] <string>]
- [[-Sha] <string>] [[-MaxPages] <uint>] [[-SiteUrl] <string>] [<CommonParameters>]
+Get-GitlabCommit
+    [[-ProjectId] <string>]
+    [-Before] <string>]
+    [-After] <string>]
+    [-Ref] <string>]
+    [-Sha] <string>]
+    [-MaxPages] <uint>]
+    [-SiteUrl] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

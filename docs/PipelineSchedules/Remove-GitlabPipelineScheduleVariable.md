@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/Remove-GitlabPipelineScheduleVariable
@@ -17,11 +17,15 @@ Deletes a variable from a pipeline schedule.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabPipelineScheduleVariable [[-ProjectId] <string>] [-PipelineScheduleId] <int>
- [-Key] <string> [[-SiteUrl] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-GitlabPipelineScheduleVariable
+    [[-ProjectId] <string>]
+    [-PipelineScheduleId] <int> [-Key] <string> [[-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

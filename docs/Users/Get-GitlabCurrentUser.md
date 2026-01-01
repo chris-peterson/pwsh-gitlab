@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Get-GitlabCurrentUser
@@ -17,10 +17,12 @@ Retrieves the currently authenticated GitLab user.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabCurrentUser [[-SiteUrl] <string>] [<CommonParameters>]
+Get-GitlabCurrentUser
+    [[-SiteUrl] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

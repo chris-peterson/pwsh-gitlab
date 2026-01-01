@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/Remove-GitlabPipeline
@@ -17,11 +17,15 @@ Deletes a pipeline from a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabPipeline [[-ProjectId] <string>] [-PipelineId] <string> [[-SiteUrl] <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-GitlabPipeline
+    [[-ProjectId] <string>]
+    [-PipelineId] <string> [[-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

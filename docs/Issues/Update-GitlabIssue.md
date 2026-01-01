@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/Update-GitlabIssue
@@ -17,14 +17,28 @@ Updates an existing GitLab issue.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-GitlabIssue [-IssueId] <string> [-ProjectId <string>] [-AssigneeId <string[]>]
- [-Confidential] [-Description <string>] [-DiscussionLocked] [-DueDate <string>]
- [-IssueType <string>] [-Label <string[]>] [-LabelBehaviorAdd] [-LabelBehaviorRemove]
- [-MilestoneId <string>] [-StateEvent <string>] [-Title <string>] [-Weight <uint>]
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-GitlabIssue
+    [-IssueId] <string> [-ProjectId <string>]
+    [-AssigneeId <string[]>]
+    [-Confidential]
+    [-Description <string>]
+    [-DiscussionLocked]
+    [-DueDate <string>]
+    [-IssueType <string>]
+    [-Label <string[]>]
+    [-LabelBehaviorAdd]
+    [-LabelBehaviorRemove]
+    [-MilestoneId <string>]
+    [-StateEvent <string>]
+    [-Title <string>]
+    [-Weight <uint>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

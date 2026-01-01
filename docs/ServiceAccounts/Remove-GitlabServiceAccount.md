@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ServiceAccounts/Remove-GitlabServiceAccount
@@ -27,8 +27,12 @@ Remove-GitlabServiceAccount [-ServiceAccountId] <int> [-SiteUrl <string>] [-Forc
 ### Group
 
 ```
-Remove-GitlabServiceAccount [-ServiceAccountId] <int> -GroupId <string> [-SiteUrl <string>] [-Force]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-GitlabServiceAccount
+    [-ServiceAccountId] <int> -GroupId <string> [-SiteUrl <string>]
+    [-Force]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

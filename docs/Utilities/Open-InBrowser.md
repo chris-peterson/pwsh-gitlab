@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Utilities/Open-InBrowser
@@ -17,10 +17,11 @@ Opens a URL or GitLab object in the default web browser.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Open-InBrowser [-InputObject] <Object> [<CommonParameters>]
+Open-InBrowser
+    [-InputObject] <Object> [<CommonParameters>]
 ```
 
 ## ALIASES

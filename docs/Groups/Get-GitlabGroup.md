@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Get-GitlabGroup
@@ -27,8 +27,12 @@ Get-GitlabGroup [[-GroupId] <string>] [-MaxPages <uint>] [-All] [-SiteUrl <strin
 ### ByParentGroup
 
 ```
-Get-GitlabGroup -ParentGroupId <string> [-Recurse] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabGroup
+    [-ParentGroupId <string> [-Recurse]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

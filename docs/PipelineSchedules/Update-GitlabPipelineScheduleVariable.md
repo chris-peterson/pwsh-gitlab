@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/Update-GitlabPipelineScheduleVariable
@@ -17,12 +17,16 @@ Updates an existing variable on a pipeline schedule.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Update-GitlabPipelineScheduleVariable [[-ProjectId] <string>] [-PipelineScheduleId] <int>
- [-Key] <string> [-Value] <string> [[-VariableType] <string>] [[-SiteUrl] <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Update-GitlabPipelineScheduleVariable
+    [[-ProjectId] <string>]
+    [-PipelineScheduleId] <int> [-Key] <string> [-Value] <string> [[-VariableType] <string>]
+    [-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

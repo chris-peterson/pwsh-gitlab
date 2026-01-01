@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Remove-GitlabProjectMember
@@ -17,11 +17,15 @@ Removes a user from a GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Remove-GitlabProjectMember [-UserId] <string> [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-GitlabProjectMember
+    [-UserId] <string> [-ProjectId <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

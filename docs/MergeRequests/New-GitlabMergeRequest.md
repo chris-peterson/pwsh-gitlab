@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/New-GitlabMergeRequest
@@ -17,12 +17,21 @@ Creates a new GitLab merge request.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabMergeRequest [[-ProjectId] <string>] [[-SourceBranch] <string>] [[-TargetBranch] <string>]
- [[-Title] <string>] [-MilestoneId <string>] [-MarkTodoAsRead] [-Follow] [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabMergeRequest
+    [[-ProjectId] <string>]
+    [-SourceBranch] <string>]
+    [-TargetBranch] <string>]
+    [-Title] <string>]
+    [-MilestoneId <string>]
+    [-MarkTodoAsRead]
+    [-Follow]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

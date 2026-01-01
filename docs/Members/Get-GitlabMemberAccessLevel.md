@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Get-GitlabMemberAccessLevel
@@ -17,10 +17,12 @@ Gets the valid GitLab member access levels or converts an access level name to i
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabMemberAccessLevel [[-AccessLevel] <Object>] [<CommonParameters>]
+Get-GitlabMemberAccessLevel
+    [[-AccessLevel] <Object>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

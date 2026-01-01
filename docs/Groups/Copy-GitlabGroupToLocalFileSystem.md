@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Copy-GitlabGroupToLocalFileSystem
@@ -17,11 +17,16 @@ Clones all projects from a GitLab group to the local file system.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Copy-GitlabGroupToLocalFileSystem [-GroupId] <string> [-ProjectLike <string>]
- [-ProjectNotLike <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Copy-GitlabGroupToLocalFileSystem
+    [-GroupId] <string> [-ProjectLike <string>]
+    [-ProjectNotLike <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

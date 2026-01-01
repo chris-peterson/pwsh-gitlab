@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Search/Search-GitlabProject
@@ -17,11 +17,15 @@ Searches for blobs within a specific GitLab project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Search-GitlabProject [[-ProjectId] <string>] [[-Search] <string>] [[-Filename] <string>]
- [[-SiteUrl] <string>] [<CommonParameters>]
+Search-GitlabProject
+    [[-ProjectId] <string>]
+    [-Search] <string>]
+    [-Filename] <string>]
+    [-SiteUrl] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Get-GitlabMergeRequestApprovalConfiguration
@@ -17,11 +17,13 @@ Gets the merge request approval configuration for a project.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabMergeRequestApprovalConfiguration [[-ProjectId] <string>] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabMergeRequestApprovalConfiguration
+    [[-ProjectId] <string>]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

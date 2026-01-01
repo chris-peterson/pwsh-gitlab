@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Utilities/Invoke-GitlabApi
@@ -17,12 +17,21 @@ Makes direct REST API calls to a GitLab instance.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Invoke-GitlabApi [-HttpMethod] <string> [-Path] <string> [[-Query] <hashtable>] [-Body <hashtable>]
- [-MaxPages <uint>] [-Api <string>] [-SiteUrl <string>] [-AccessToken <string>] [-ProxyUrl <string>]
- [-OutFile <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Invoke-GitlabApi
+    [-HttpMethod] <string> [-Path] <string> [[-Query] <hashtable>]
+    [-Body <hashtable>]
+    [-MaxPages <uint>]
+    [-Api <string>]
+    [-SiteUrl <string>]
+    [-AccessToken <string>]
+    [-ProxyUrl <string>]
+    [-OutFile <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

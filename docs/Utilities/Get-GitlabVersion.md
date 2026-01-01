@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Utilities/Get-GitlabVersion
@@ -17,10 +17,13 @@ Gets the version information of a GitLab instance.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Get-GitlabVersion [[-Select] <string>] [[-SiteUrl] <string>] [<CommonParameters>]
+Get-GitlabVersion
+    [[-Select] <string>]
+    [-SiteUrl] <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Notes/New-GitlabIssueNote
@@ -17,11 +17,16 @@ Creates a new note (comment) on a GitLab issue.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-New-GitlabIssueNote [-Note] <string> [-ProjectId <string>] [-IssueId <string>] [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabIssueNote
+    [-Note] <string> [-ProjectId <string>]
+    [-IssueId <string>]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

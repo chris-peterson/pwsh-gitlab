@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PersonalAccessTokens/Get-GitlabPersonalAccessToken
@@ -29,22 +29,40 @@ Get-GitlabPersonalAccessToken [[-TokenId] <string>] [-UserId <string>] [-Created
 ### Mine
 
 ```
-Get-GitlabPersonalAccessToken [-Mine] [-FetchUsers] [-ForExport] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabPersonalAccessToken
+    [-Mine]
+    [-FetchUsers]
+    [-ForExport]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ### Token
 
 ```
-Get-GitlabPersonalAccessToken [-Token <string>] [-FetchUsers] [-ForExport] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabPersonalAccessToken
+    [-Token <string>]
+    [-FetchUsers]
+    [-ForExport]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ### Self
 
 ```
-Get-GitlabPersonalAccessToken [-Self] [-FetchUsers] [-ForExport] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabPersonalAccessToken
+    [-Self]
+    [-FetchUsers]
+    [-ForExport]
+    [-MaxPages <uint>]
+    [-All]
+    [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

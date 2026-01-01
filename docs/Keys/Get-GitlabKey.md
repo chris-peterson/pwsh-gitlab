@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Keys/Get-GitlabKey
@@ -26,7 +26,9 @@ Get-GitlabKey -Id <string> [-SiteUrl <string>] [<CommonParameters>]
 ### ByFingerprint
 
 ```
-Get-GitlabKey -Fingerprint <string> [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabKey
+    [-Fingerprint <string> [-SiteUrl <string>]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

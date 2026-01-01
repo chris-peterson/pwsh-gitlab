@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Set-GitlabMergeRequest
@@ -17,10 +17,13 @@ Gets an existing merge request for the current branch or creates a new one.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Set-GitlabMergeRequest [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-GitlabMergeRequest
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Environments/Stop-GitlabEnvironment
@@ -17,11 +17,15 @@ Stops a GitLab environment.
 
 ## SYNTAX
 
-### __AllParameterSets
+### Default
 
 ```
-Stop-GitlabEnvironment [[-ProjectId] <string>] [-Name] <string> [[-SiteUrl] <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Stop-GitlabEnvironment
+    [[-ProjectId] <string>]
+    [-Name] <string> [[-SiteUrl] <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES

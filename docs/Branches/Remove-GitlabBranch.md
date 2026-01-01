@@ -1,4 +1,4 @@
-﻿---
+---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Branches/Remove-GitlabBranch
@@ -20,8 +20,14 @@ Deletes a branch or merged branches from a GitLab project repository.
 ### MergedBranches
 
 ```
-Remove-GitlabBranch [[-Branch] <string>] [-ProjectId <string>] [-MergedBranches] [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-GitlabBranch
+    [[-Branch] <string>]
+    [-ProjectId <string>]
+    [-MergedBranches]
+    [-SiteUrl <string>]
+    [-WhatIf]
+    [-Confirm]
+    [<CommonParameters>]
 ```
 
 ## ALIASES
