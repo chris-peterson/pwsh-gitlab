@@ -1,7 +1,7 @@
 ﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
-HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/PipelineSchedules/Update-GitlabPipelineSchedule.md
+HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/Update-GitlabPipelineSchedule
 Locale: en-US
 Module Name: GitlabCli
 ms.date: 12/31/2025

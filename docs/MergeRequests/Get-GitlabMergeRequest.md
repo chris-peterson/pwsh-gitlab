@@ -1,7 +1,7 @@
 ﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
-HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/MergeRequests/Get-GitlabMergeRequest.md
+HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Get-GitlabMergeRequest
 Locale: en-US
 Module Name: GitlabCli
 ms.date: 12/29/2025

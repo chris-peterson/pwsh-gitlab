@@ -1,7 +1,7 @@
 ﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
-HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Projects/Invoke-GitlabProjectArchival.md
+HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Invoke-GitlabProjectArchival
 Locale: en-US
 Module Name: GitlabCli
 ms.date: 12/29/2025

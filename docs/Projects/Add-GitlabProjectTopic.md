@@ -1,7 +1,7 @@
 ﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
-HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Projects/Add-GitlabProjectTopic.md
+HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Add-GitlabProjectTopic
 Locale: en-US
 Module Name: GitlabCli
 ms.date: 12/27/2025

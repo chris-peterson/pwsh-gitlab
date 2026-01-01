@@ -1,7 +1,7 @@
 ﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
-HelpUri: https://github.com/chris-peterson/pwsh-gitlab/blob/main/docs/Branches/Remove-GitlabBranch.md
+HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Branches/Remove-GitlabBranch
 Locale: en-US
 Module Name: GitlabCli
 ms.date: 12/30/2025
