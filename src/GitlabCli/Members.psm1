@@ -66,8 +66,8 @@ function Get-GitlabGroupMember {
         $IncludeInherited,
 
         [Parameter()]
+        [AccessLevel()]
         [string]
-        [ValidateScript({Test-GitlabSettableAccessLevel $_})]
         $MinAccessLevel,
 
         [Parameter()]
@@ -123,7 +123,7 @@ function Set-GitlabGroupMember {
         $UserId,
 
         [Parameter(Position=1, Mandatory)]
-        [ValidateScript({Test-GitlabSettableAccessLevel $_})]
+        [AccessLevel()]
         [string]
         $AccessLevel,
 
@@ -172,7 +172,7 @@ function Add-GitlabGroupMember {
         $UserId,
 
         [Parameter(Mandatory)]
-        [ValidateScript({Test-GitlabSettableAccessLevel $_})]
+        [AccessLevel()]
         [string]
         $AccessLevel,
 
@@ -297,7 +297,7 @@ function Set-GitlabProjectMember {
         $UserId,
 
         [Parameter(Position=1, Mandatory)]
-        [ValidateScript({Test-GitlabSettableAccessLevel $_})]
+        [AccessLevel()]
         [string]
         $AccessLevel,
 
@@ -347,7 +347,7 @@ function Add-GitlabProjectMember {
         $UserId,
 
         [Parameter(Position=1, Mandatory)]
-        [ValidateScript({Test-GitlabSettableAccessLevel $_})]
+        [AccessLevel()]
         [string]
         $AccessLevel,
 

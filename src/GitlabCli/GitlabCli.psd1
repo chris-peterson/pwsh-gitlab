@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.158.0'
+    ModuleVersion = '1.159.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* https://github.com/chris-peterson/pwsh-gitlab/issues/102
+* https://github.com/chris-peterson/pwsh-gitlab/issues/120
 '@
         }
     }
@@ -40,7 +40,7 @@
 
     Author = 'Chris Peterson'
     CompanyName = 'Chris Peterson'
-    Copyright = '(c) 2021-2025'
+    Copyright = '(c) 2021-2026'
 
     Description = 'Interact with GitLab via PowerShell'
     PowerShellVersion = '7.1'
@@ -57,7 +57,7 @@
         'Private/Functions/ObjectHelpers.ps1'
         'Private/Functions/PaginationHelpers.ps1'
         'Private/Functions/RunnerHelpers.ps1'
-        'Private/Functions/ValidateSetGenerators.ps1'
+        'Private/Validations.ps1'
         'Private/Globals.ps1'
         'Private/Transformations.ps1'
     )
@@ -102,7 +102,6 @@
         'UserDeployKeys.psm1'
         'Users.psm1'
         'Utilities.psm1'
-        'Validation.psm1'
         'Variables.psm1'
     )
     FunctionsToExport = @(
@@ -367,10 +366,6 @@
         'Get-GitlabVersion'
         'Invoke-GitlabApi'
         'Open-InBrowser'
-
-        # Validation
-        'Test-GitlabDate'
-        'Test-GitlabSettableAccessLevel'
 
         # Variables
         'Resolve-GitlabVariable'

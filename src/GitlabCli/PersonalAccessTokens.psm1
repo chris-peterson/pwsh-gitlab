@@ -28,23 +28,19 @@ function Get-GitlabPersonalAccessToken {
         $Self,
 
         [Parameter(ParameterSetName='Default')]
-        [ValidateScript({Test-GitlabDate $_})]
-        [string]
+        [GitlabDate()][string]
         $CreatedAfter,
 
         [Parameter(ParameterSetName='Default')]
-        [ValidateScript({Test-GitlabDate $_})]
-        [string]
+        [GitlabDate()][string]
         $CreatedBefore,
 
         [Parameter(ParameterSetName='Default')]
-        [ValidateScript({Test-GitlabDate $_})]
-        [string]
+        [GitlabDate()][string]
         $LastUsedAfter,
 
         [Parameter(ParameterSetName='Default')]
-        [ValidateScript({Test-GitlabDate $_})]
-        [string]
+        [GitlabDate()][string]
         $LastUsedBefore,
 
         [Parameter(ParameterSetName='Default')]
@@ -173,8 +169,7 @@ function New-GitlabPersonalAccessToken {
         $Scope,
 
         [Parameter()]
-        [ValidateScript({Test-GitlabDate $_})]
-        [string]
+        [GitlabDate()][string]
         $ExpiresAt,
 
         [Parameter()]
@@ -233,8 +228,7 @@ function Invoke-GitlabPersonalAccessTokenRotation {
         $TokenId,
 
         [Parameter()]
-        [string]
-        [ValidateScript({Test-GitlabDate $_})]
+        [GitlabDate()][string]
         $ExpiresAt,
 
         [Parameter()]

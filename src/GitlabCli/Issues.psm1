@@ -187,8 +187,7 @@ function Update-GitlabIssue {
         $DiscussionLocked,
 
         [Parameter(Mandatory=$false)]
-        [string]
-        [ValidateScript({Test-GitlabDate $_})]
+        [GitlabDate()][string]
         $DueDate,
 
         [Parameter(Mandatory=$false)]

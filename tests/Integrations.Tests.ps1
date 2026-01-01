@@ -2,7 +2,7 @@ BeforeAll {
     . $PSScriptRoot/../src/GitlabCli/Private/Globals.ps1
     . $PSScriptRoot/../src/GitlabCli/Private/Functions/CasingHelpers.ps1
     . $PSScriptRoot/../src/GitlabCli/Private/Functions/ObjectHelpers.ps1
-    . $PSScriptRoot/../src/GitlabCli/Private/Functions/ValidateSetGenerators.ps1
+    . $PSScriptRoot/../src/GitlabCli/Private/Validations.ps1
     . $PSScriptRoot/../src/GitlabCli/Private/Transformations.ps1
 
     function Resolve-GitlabProjectId { param($ProjectId) return 123 }

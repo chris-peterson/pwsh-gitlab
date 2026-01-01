@@ -15,13 +15,11 @@ function Get-GitlabSnippet {
         $Mine,
 
         [Parameter()]
-        [ValidateScript({-not $_ -or (Test-GitlabDate $_)})]
-        [string]
+        [GitlabDate()][string]
         $CreatedAfter,
 
         [Parameter()]
-        [ValidateScript({-not $_ -or (Test-GitlabDate $_)})]
-        [string]
+        [GitlabDate()][string]
         $CreatedBefore,
 
         [Parameter()]
