@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.160.0'
+    ModuleVersion = '1.160.1'
 
     RequiredModules = @(
         @{
