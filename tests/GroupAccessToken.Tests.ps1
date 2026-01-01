@@ -2,6 +2,8 @@ BeforeAll {
   $TestModuleName = "GroupAccessTokens"
   Get-Module -Name $TestModuleName -All | Remove-Module -Force -ErrorAction SilentlyContinue
 
+  . $PSScriptRoot/../src/GitlabCli/Private/Transformations.ps1
+
   Import-Module (New-Module -Name $TestModuleName -ScriptBlock ([scriptblock]::Create(
     @(
       Get-Content "$PSScriptRoot/../src/GitlabCli/GroupAccessTokens.psm1" -Raw
@@ -15,7 +17,6 @@ BeforeAll {
     )
     process { $InputObject }
   }
-  function global:Test-GitlabSettableAccessLevel {}
   function global:Get-GitlabMemberAccessLevel {}
 }
 
@@ -63,8 +64,6 @@ Describe "New-GitlabGroupAccessToken" {
         }
       Mock -CommandName Get-GitlabMemberAccessLevel -ModuleName $TestModuleName `
         -MockWith { return 30 }
-      Mock -CommandName Test-GitlabSettableAccessLevel -ModuleName $TestModuleName `
-        -MockWith { return $true }
     }
 
     It "Should return the new group access token" {

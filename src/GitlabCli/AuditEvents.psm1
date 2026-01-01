@@ -38,14 +38,12 @@ function Get-GitlabAuditEvent {
 
         [Alias('Until')]
         [Parameter()]
-        [ValidateScript({Test-GitlabDate $_})]
-        [string]
+        [GitlabDate()][string]
         $Before,
 
         [Alias('Since')]
         [Parameter()]
-        [ValidateScript({Test-GitlabDate $_})]
-        [string]
+        [GitlabDate()][string]
         $After,
 
         [Parameter()]

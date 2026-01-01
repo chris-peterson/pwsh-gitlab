@@ -207,13 +207,11 @@ function Get-GitlabUserEvent {
         $TargetType,
 
         [Parameter()]
-        [ValidateScript({Test-GitlabDate $_})]
-        [string]
+        [GitlabDate()][string]
         $Before,
 
         [Parameter()]
-        [ValidateScript({Test-GitlabDate $_})]
-        [string]
+        [GitlabDate()][string]
         $After,
 
         [Parameter()]

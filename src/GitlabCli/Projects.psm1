@@ -709,13 +709,11 @@ function Get-GitlabProjectEvent {
         $ProjectId = '.',
 
         [Parameter(Mandatory=$False)]
-        [ValidateScript({Test-GitlabDate $_})]
-        [string]
+        [GitlabDate()][string]
         $Before,
 
         [Parameter(Mandatory=$False)]
-        [ValidateScript({Test-GitlabDate $_})]
-        [string]
+        [GitlabDate()][string]
         $After,
 
         [Parameter(Mandatory=$False)]
@@ -765,8 +763,8 @@ function New-GitlabGroupToProjectShare {
 
         [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('Access')]
+        [AccessLevel()]
         [string]
-        [ValidateScript({Test-GitlabSettableAccessLevel $_})]
         $GroupAccess,
 
         [Parameter()]

@@ -42,8 +42,8 @@ function New-GitlabGroupAccessToken {
         $Scope,
 
         [Parameter(Mandatory)]
+        [AccessLevel()]
         [string]
-        [ValidateScript({Test-GitlabSettableAccessLevel $_})]
         $AccessLevel,
 
         [Parameter()]

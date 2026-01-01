@@ -1,5 +1,5 @@
 BeforeAll {
-    . $PSScriptRoot/../src/GitlabCli/Private/Functions/ValidateSetGenerators.ps1
+    . $PSScriptRoot/../src/GitlabCli/Private/Validations.ps1
 }
 
 Describe 'ValidateSetGenerators' {

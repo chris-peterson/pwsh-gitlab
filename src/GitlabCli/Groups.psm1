@@ -471,8 +471,7 @@ function New-GitlabGroupToGroupShare {
         $AccessLevel,
 
         [Parameter()]
-        [ValidateScript({Test-GitlabDate $_})]
-        [string]
+        [GitlabDate()][string]
         $ExpiresAt,
 
         [Parameter()]

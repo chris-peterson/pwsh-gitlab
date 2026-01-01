@@ -26,13 +26,11 @@ function Get-GitlabMergeRequest {
         $State = 'all',
 
         [Parameter()]
-        [string]
-        [ValidateScript({Test-GitlabDate $_})]
+        [GitlabDate()][string]
         $CreatedAfter,
 
         [Parameter()]
-        [string]
-        [ValidateScript({Test-GitlabDate $_})]
+        [GitlabDate()][string]
         $CreatedBefore,
 
         [TrueOrFalse()][bool]
