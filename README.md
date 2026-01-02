@@ -7,261 +7,112 @@
 [![GitHub license](https://img.shields.io/github/license/chris-peterson/pwsh-gitlab.svg)](LICENSE)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/chris-peterson/pwsh-gitlab/ci.yml?branch=main&label=ci)](https://github.com/chris-peterson/pwsh-gitlab/actions/workflows/ci.yml)
 
- Interact with [GitLab](https://about.gitlab.com/) via [PowerShell](https://github.com/powershell/powershell#-powershell)
+Interact with [GitLab](https://about.gitlab.com/) via [PowerShell](https://github.com/powershell/powershell#-powershell).
 
-## Getting Started
+📖 **[Full Documentation](https://chris-peterson.github.io/pwsh-gitlab)** — Browse cmdlets, examples, and guides.
 
-### Module
+## Installation
+
+### PowerShell Gallery
 
 ```powershell
 Install-Module -Name GitlabCli
 ```
 
-### Docker Image
+### Docker
 
 ```sh
 docker run -it ghcr.io/chris-peterson/pwsh-gitlab/gitlab-cli
 ```
 
-### Configuration
+## Quick Start
 
-#### Environment Variables
+### 1. Get a Personal Access Token
 
-##### `$env:GITLAB_ACCESS_TOKEN`
+Create a PAT at `https://<your-gitlab-instance>/-/profile/personal_access_tokens`
 
-Obtain a "Personal Access Token" (PAT) for your GitLab instance
+### 2. Configure
 
-`https://<your gitlab instance>/-/profile/personal_access_tokens`
-
-<img width=600 src="PersonalAccessToken.jpg"/>
-
-Make the value available via
-
-`$env:GITLAB_ACCESS_TOKEN='<your pat>'`.
-
-One way to do this would be to add a line to your `$PROFILE`
-
-##### `$env:GITLAB_URL`
-
-(Optional) If using a gitlab instance that is not `gitlab.com`, provide it via:
-
-`$env:GITLAB_URL='<your gitlab instance>'`
-
-#### Example PowerShell Profile
+**Option A: Environment Variables** (simple)
 
 ```powershell
-$env:GITLAB_URL='gitlab.mydomain.com'
-$env:GITLAB_ACCESS_TOKEN='<my token>'
-Import-Module GitlabCli
+$env:GITLAB_ACCESS_TOKEN = '<your-token>'
+$env:GITLAB_URL = 'gitlab.example.com'  # optional, defaults to gitlab.com
 ```
 
-#### Configuration File
-
-The following commands can be used to configure your system for use with **multiple** gitlab sites.
-
-* `Add-GitlabSite`
-* `Remove-GitlabSite`
-* `Set-DefaultGitlabSite`
-
-## Common Parameters: Paging
-
-The following parameters control pagination for query operations:
-
-| Parameter | Description |
-| --- | --- |
-| `-MaxPages` | Maximum number of pages to return _(default: `$global:GitlabDefaultMaxPages`)_ |
-| `-All` | Return all pages. _NOTE:_ Overrides `-MaxPages` |
-| `-Recurse` | Recurse child objects (e.g. `Get-GitlabProject -GroupId 'mygroup' -Recurse`). _NOTE:_ Implies `-All` pages |
-
-## Common Parameters: Safety
-
-Mutable operations in this module support ["should process"](https://learn.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7.5).
-
-| Parameter | Description |
-| --- | --- |
-| `-WhatIf` | Preview what actions would be taken without executing them |
-| `-Confirm` | Prompt for confirmation before executing mutable operations |
-
-## Common Parameters: Navigation
-
-The following parameters control post-operation behavior:
-
-| Parameter | Description |
-| --- | --- |
-| `-Follow` | For operations that create a resource, follow the URL after creation |
-| `-Wait` | For long-running operations (e.g. running a job/pipeline), wait for operation to complete. In the meantime, the status is polled and reported to the terminal |
-
-## Common Parameters: Other
-
-The following parameters are supported when possible:
-
-| Parameter | Description |
-| --- | --- |
-| `-Select` | Select subset of response. A shortcut for `\| Select-Object -ExpandProperty`.  _NOTE:_ can select multiple properties (comma-separated) |
-| `-SiteUrl` | Override site url _(default: inferred from local git context)_ |
-
-## Global Behaviors
-
-If invoking commands from within a git repository, `.` can be used for `ProjectId` / `BranchName` to use the local context.
-
-Most objects returned from commands have a `Url` property.  This makes it so you can pipe one or more objects to `Open-InBrowser` (aka `go`)
-
-## Examples
-
-### Groups
-
-#### `Get-GitlabGroup`
+**Option B: Configuration File** (multiple sites)
 
 ```powershell
-Get-GitlabGroup 'mygroup'
+Add-GitlabSite -Url 'https://gitlab.example.com' -AccessToken '<your-token>' -IsDefault
 ```
 
-```plaintext
-  ID Name     Url
-  -- ----     ---
-  23 mygroup  https://gitlab.mydomain.com/mygroup
-```
-
-#### `Remove-GitlabGroup`
+### 3. Start Using
 
 ```powershell
-Remove-GitlabGroup 'mygroup'
-```
+# Get the current project (from local git context)
+Get-GitlabProject
 
-#### `Clone-GitlabGroup` (aka `Copy-GitlabGroupToLocalFileSystem`)
-
-```powershell
-Clone-GitlabGroup 'mygroup'
-```
-
-### Projects
-
-#### `Get-GitlabProject` (by id)
-
-```powershell
-Get-GitlabProject 'mygroup/myproject'
-# OR
-Get-GitlabProject 42
-# OR
-Get-GitlabProject # use local context
-```
-
-```plaintext
-  ID Name        Group     Url
-  -- ----        -----     ---
-  42 myproject   mygroup   https://gitlab.mydomain.com/mygroup/myproject
-```
-
-#### `Get-GitlabProject` (by group)
-
-```powershell
-Get-GitlabProject -GroupId 'mygroup/subgroup'
-```
-
-```plaintext
-  ID Name        Group             Url
-  -- ----        -----             ---
-   1 database    mygroup/subgroup  https://gitlab.mydomain.com/mygroup/subgroup/database
-   2 infra       mygroup/subgroup  https://gitlab.mydomain.com/mygroup/subgroup/infra
-   3 service     mygroup/subgroup  https://gitlab.mydomain.com/mygroup/subgroup/service
-   4 website     mygroup/subgroup  https://gitlab.mydomain.com/mygroup/subgroup/website
-```
-
-_Optional Parameters_
-
-`-IncludeArchived` - Set this switch to include archived projects.  _By default, archived projects are not returned_
-
-#### `Transfer-GitlabProject` (aka `Move-GitlabProject`)
-
-```powershell
-Transfer-GitlabProject -ProjectId 'this-project' -DestinationGroup 'that-group'
-```
-
-### Merge Requests
-
-#### `New-GitlabMergeRequest`
-
-```powershell
+# Create a merge request from your current branch
 New-GitlabMergeRequest
+
+# Trigger a pipeline
+New-GitlabPipeline
+
+# Search for code
+Search-Gitlab 'TODO'
 ```
 
-_Optional Parameters_
+## Features at a Glance
 
-`-ProjectId` - Defaults to local git context
+| Category | What You Can Do |
+|----------|-----------------|
+| **[Projects](https://chris-peterson.github.io/pwsh-gitlab/#/Projects/)** | Create, clone, archive, manage variables and settings |
+| **[Merge Requests](https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/)** | Create, review, approve, and merge |
+| **[Pipelines](https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/)** | Trigger, monitor, and manage CI/CD |
+| **[Groups](https://chris-peterson.github.io/pwsh-gitlab/#/Groups/)** | Organize projects, manage membership |
+| **[And more...](https://chris-peterson.github.io/pwsh-gitlab)** | Issues, Runners, Environments, GraphQL, etc. |
 
-`-SourceBranch` - Defaults to local git context
+## Highlights
 
-`-TargetBranch` - Defaults to the default branch set in repository config (typically `main`)
+### Context-Aware Commands
 
-`-Title` - Defaults to space-delimited source branch name
-
-## Other Examples
-
-### `mr`
-
-Create or get merge request for current git context
-
-### Get Deployment
+Run commands from within a git repo — the module automatically detects your project:
 
 ```powershell
-Get-GitlabDeployment -Status 'created' -Environment 'nuget.org'
+~/src/myproject> Get-GitlabPipeline -Latest
+~/src/myproject> New-GitlabMergeRequest
 ```
 
-```plaintext
-        ID Status     EnvironmentName      Ref                     CreatedAt
-        -- ------     ---------------      ---                     ---------
- 196679897 created    nuget.org            main         9/26/2021 5:56:57 AM
- ```
-
-### Open Web Browser
+### Convenient Aliases
 
 ```powershell
-~/src/your-project> Get-GitlabProject |
-  pipelines -Latest -Branch 'main' -Status 'success' | go
+pipelines          # Get-GitlabPipeline
+jobs               # Get-GitlabJob
+mr                 # Get or create merge request
+build              # New-GitlabPipeline
+go                 # Open-InBrowser
 ```
 
-Opens latest successful pipeline in browser.
-
-### Resolve Variable
-
-`Resolve-GitlabVariable` (aka `var`) checks a project or group for a variable.  Walks up the group hierarchy until found, or no other nodes to check.
-Automatically expands the value.
-
-Example
-```powershell
-Get-GitlabProject | var APPLICATION_NAME
-```
-```text
-Your application
-```
-
- ### Get pipeline for latest deployement
- 
- ```powershell
- envs -Search prod | deploys -Latest -Select Pipeline [| go]
- ```
-
-### Deploy To Production
+### Pipeline to Browser
 
 ```powershell
-~/src/your-project> pipelines -Branch 'main' -Status 'success' -Latest |
-  jobs -Stage deploy -Name prod |
-  Play-GitlabJob
+Get-GitlabProject | Get-GitlabPipeline -Latest | Open-InBrowser
 ```
 
-### Get Pipeline Schedule
+## Documentation
 
-```powershell
-~/src/your-project> schedule
+📖 **[chris-peterson.github.io/pwsh-gitlab](https://chris-peterson.github.io/pwsh-gitlab)**
 
-   ID Active Description                              Cron         NextRunAt
-   -- ------ -----------                              ----         ---------
- 1948 True   Weekly restore for database              0 3 * * 0    9/26/2021 10:04:00 AM
- ```
+- [Configuration Guide](https://chris-peterson.github.io/pwsh-gitlab/#/Config/)
+- [All Cmdlets by Category](https://chris-peterson.github.io/pwsh-gitlab)
+- [CI/CD: Pipelines & Jobs](https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/)
+- [Working with Merge Requests](https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/)
 
-## References / Acknowledgements
+## Contributing
 
-* [PSGitLab](https://github.com/ngetchell/PSGitLab) (now archived)
-* [python-gitlab CLI documentation](https://python-gitlab.readthedocs.io/en/stable)
-* [GitLab API docs](https://docs.gitlab.com/ee/api/rest/index.html)
-* [powershell-yaml](https://github.com/cloudbase/powershell-yaml)
+Contributions welcome! Please see the [GitHub repository](https://github.com/chris-peterson/pwsh-gitlab) for issues and pull requests.
+
+## References
+
+* [GitLab REST API Documentation](https://docs.gitlab.com/ee/api/rest/index.html)
+* [PowerShell Gallery Package](https://www.powershellgallery.com/packages/GitlabCli)

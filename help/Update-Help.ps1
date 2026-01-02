@@ -116,33 +116,49 @@ $Categories = Get-ChildItem -Path $DocsFolder -Directory |
     Where-Object { $_.Name -notmatch '^_' -and $_.Name -ne 'assets' } |
     Sort-Object Name
 
-Write-Host "Generating category landing pages..." -ForegroundColor Cyan
+Write-Host "Validating category landing pages..." -ForegroundColor Cyan
 foreach ($Category in $Categories) {
     $CmdletFiles = Get-ChildItem -Path $Category.FullName -Filter '*.md' |
         Where-Object { $_.Name -ne 'README.md' } |
         Sort-Object BaseName
 
     if ($CmdletFiles) {
-        $Description = $CategoryDescriptions[$Category.Name]
-        if (-not $Description) { $Description = "Manage $($Category.Name)" }
-
-        $LandingContent = @()
-        $LandingContent += "# $($Category.Name)"
-        $LandingContent += ''
-        $LandingContent += $Description
-        $LandingContent += ''
-        foreach ($CmdletFile in $CmdletFiles) {
-            $LandingContent += "- [$($CmdletFile.BaseName)]($($Category.Name)/$($CmdletFile.Name))"
-        }
-        $LandingContent += ''
-
         $LandingPath = Join-Path $Category.FullName 'README.md'
-        $NewLandingContent = $LandingContent -join "`n"
-        $ExistingLandingContent = if (Test-Path $LandingPath) { Get-Content $LandingPath -Raw } else { '' }
+        
+        # Check if README exists; if not, create a basic one
+        if (-not (Test-Path $LandingPath)) {
+            $Description = $CategoryDescriptions[$Category.Name]
+            if (-not $Description) { $Description = "Manage $($Category.Name)" }
 
-        if ($NewLandingContent.TrimEnd() -ne $ExistingLandingContent.TrimEnd()) {
-            Set-Content $LandingPath -Value $NewLandingContent -NoNewline
-            Write-Host "  Updated $($Category.Name)/README.md" -ForegroundColor Yellow
+            $LandingContent = @()
+            $LandingContent += "# $($Category.Name)"
+            $LandingContent += ''
+            $LandingContent += $Description
+            $LandingContent += ''
+            $LandingContent += '## Cmdlets'
+            $LandingContent += ''
+            $LandingContent += '| Cmdlet | Description |'
+            $LandingContent += '|--------|-------------|'
+            foreach ($CmdletFile in $CmdletFiles) {
+                $LandingContent += "| [$($CmdletFile.BaseName)]($($Category.Name)/$($CmdletFile.Name)) | |"
+            }
+            $LandingContent += ''
+
+            Set-Content $LandingPath -Value ($LandingContent -join "`n") -NoNewline
+            Write-Host "  Created $($Category.Name)/README.md (please add descriptions)" -ForegroundColor Yellow
+        }
+        else {
+            # Validate that all cmdlets are documented in the README
+            $ReadmeContent = Get-Content $LandingPath -Raw
+            $MissingCmdlets = @()
+            foreach ($CmdletFile in $CmdletFiles) {
+                if ($ReadmeContent -notmatch [regex]::Escape($CmdletFile.BaseName)) {
+                    $MissingCmdlets += $CmdletFile.BaseName
+                }
+            }
+            if ($MissingCmdlets) {
+                Write-Host "  WARNING: $($Category.Name)/README.md is missing cmdlets: $($MissingCmdlets -join ', ')" -ForegroundColor Yellow
+            }
         }
     }
 }
