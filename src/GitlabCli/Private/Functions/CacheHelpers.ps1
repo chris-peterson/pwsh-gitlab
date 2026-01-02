@@ -96,43 +96,86 @@ function Save-GitlabSiteCache {
 function Resolve-LocalGroupPath {
     [CmdletBinding()]
     [OutputType([string])]
-    param()
+    param(
+        [Parameter(ValueFromPipeline)]
+        [string]
+        $GroupId = '.'
+    )
 
-    $GitGroup = $(Get-LocalGitContext).Group
-    if ($GitGroup) {
-        Write-Debug "GitlabCache: Resolved '.' to '$GitGroup' from git context"
-        return $GitGroup
+    # Handle '../..' notation for parent group navigation
+    if ($GroupId -match '^\.\.(/\.\.)*$') {
+        $LevelsUp = ($GroupId -split '/').Count  # '..' = 1 level, '../..' = 2 levels
+        $GitGroup = $(Get-LocalGitContext).Group
+        if (-not $GitGroup) {
+            throw "Cannot use '$GroupId' - not in a git repository with a valid group context"
+        }
+        $GroupParts = $GitGroup -split '/'
+        if ($LevelsUp -ge $GroupParts.Count) {
+            throw "Cannot navigate $LevelsUp level(s) up from '$GitGroup' - already at root"
+        }
+        $ParentPath = ($GroupParts | Select-Object -First ($GroupParts.Count - $LevelsUp)) -join '/'
+        Write-Debug "GitlabCache: Resolved '$GroupId' to parent group '$ParentPath'"
+        return $ParentPath
     }
 
-    $LocalPath = Get-Location | Select-Object -ExpandProperty Path
-    $Parts = $LocalPath.Split([IO.Path]::DirectorySeparatorChar) | Where-Object { $_ }
-    $Site = Resolve-GitlabSite
-    $MaxDepth = [Math]::Min(3, $Parts.Count)
-
-    for ($depth = 1; $depth -le $MaxDepth; $depth++) {
-        $PossibleGroupName = ($Parts | Select-Object -Last $depth) -join '/'
-        $CachedId = Get-GroupIdFromCache -GroupPath $PossibleGroupName -ResolvedSiteUrl $Site.Url
-        if ($CachedId) {
-            Write-Debug "GitlabCache: Resolved '.' to cached group '$PossibleGroupName'"
-            return $PossibleGroupName
+    # Handle '.' notation for current group
+    if ($GroupId -eq '.') {
+        $GitGroup = $(Get-LocalGitContext).Group
+        if ($GitGroup) {
+            Write-Debug "GitlabCache: Resolved '.' to '$GitGroup' from git context"
+            return $GitGroup
         }
-        try {
-            $Group = Invoke-GitlabApi GET "groups/$($PossibleGroupName | ConvertTo-UrlEncoded)" @{
-                'with_projects' = 'false'
-            } -SiteUrl $Site.Url
-            if ($Group) {
-                Set-GroupIdInCache -GroupPath $Group.FullPath -GroupId $Group.Id -ResolvedSiteUrl $Site.Url
-                Write-Debug "GitlabCache: Resolved '.' to group '$($Group.FullPath)' (cached)"
-                return $Group.FullPath
+
+        # Fallback: probe directory path from deepest to shallowest
+        $LocalPath = Get-Location | Select-Object -ExpandProperty Path
+        $Parts = $LocalPath.Split([IO.Path]::DirectorySeparatorChar) | Where-Object { $_ }
+        $Site = Resolve-GitlabSite
+        $MaxDepth = [Math]::Min(5, $Parts.Count)
+
+        $MatchedGroups = @()
+
+        # Probe from deepest to shallowest (i.e. prefer more specific matches)
+        for ($depth = $MaxDepth; $depth -ge 1; $depth--) {
+            $PossibleGroupName = ($Parts | Select-Object -Last $depth) -join '/'
+            $CachedId = Get-GroupIdFromCache -GroupPath $PossibleGroupName -ResolvedSiteUrl $Site.Url
+            if ($CachedId) {
+                Write-Debug "GitlabCache: Found cached group '$PossibleGroupName'"
+                $MatchedGroups += $PossibleGroupName
+                continue
+            }
+            try {
+                $Group = Invoke-GitlabApi GET "groups/$($PossibleGroupName | ConvertTo-UrlEncoded)" @{
+                    'with_projects' = 'false'
+                } -SiteUrl $Site.Url
+                if ($Group) {
+                    # Use snake_case properties from raw API response
+                    Set-GroupIdInCache -GroupPath $Group.full_path -GroupId $Group.id -ResolvedSiteUrl $Site.Url
+                    Write-Debug "GitlabCache: Found group '$($Group.full_path)' via API"
+                    $MatchedGroups += $Group.full_path
+                }
+            }
+            catch {
+                Write-Debug "Group lookup failed for '$PossibleGroupName': $_"
             }
         }
-        catch {
-            Write-Debug "Group lookup failed for '$PossibleGroupName': $_"
+
+        if ($MatchedGroups.Count -eq 0) {
+            throw "Could not infer group based on current directory ($(Get-Location))"
         }
-        Write-Verbose "Didn't find a group named '$PossibleGroupName'"
+
+        if ($MatchedGroups.Count -gt 1) {
+            Write-Warning "Ambiguous group resolution from directory path. Found multiple matches:"
+            $MatchedGroups | ForEach-Object { Write-Warning "  - $_" }
+            Write-Warning "Using most specific match: $($MatchedGroups[0])"
+        }
+
+        # Return the deepest (most specific) match
+        Write-Debug "GitlabCache: Resolved '.' to group '$($MatchedGroups[0])'"
+        return $MatchedGroups[0]
     }
 
-    throw "Could not infer group based on current directory ($(Get-Location))"
+    # Pass through non-special values as-is
+    return $GroupId
 }
 
 function Resolve-GitlabProjectId {
@@ -296,6 +339,12 @@ function Resolve-GitlabGroupId {
 
     if ($GroupId -eq '.') {
         $GroupId = Resolve-LocalGroupPath
+        if ($GroupId -match '^\d+$') {
+            return [int]$GroupId
+        }
+    }
+    elseif ($GroupId -match '^\.\.(/\.\.)*$') {
+        $GroupId = Resolve-LocalGroupPath -GroupId $GroupId
         if ($GroupId -match '^\d+$') {
             return [int]$GroupId
         }

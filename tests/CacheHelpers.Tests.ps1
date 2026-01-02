@@ -8,6 +8,65 @@ BeforeAll {
         param([string]$SiteUrl)
         [PSCustomObject]@{ Url = $SiteUrl }
     }
+
+    function Get-LocalGitContext {
+        # Default mock - can be overridden in tests
+        [PSCustomObject]@{
+            Site = ''
+            Project = ''
+            Branch = ''
+            Group = ''
+        }
+    }
+}
+
+Describe 'Resolve-LocalGroupPath with parent navigation' {
+    BeforeAll {
+        function Get-LocalGitContext {
+            [PSCustomObject]@{
+                Site = 'gitlab.example.com'
+                Project = 'myco/mygroup/infrastructure/myproject'
+                Branch = 'main'
+                Group = 'myco/mygroup/infrastructure'
+            }
+        }
+    }
+
+    It 'Should resolve . to current group' {
+        $Result = Resolve-LocalGroupPath -GroupId '.'
+        $Result | Should -Be 'myco/mygroup/infrastructure'
+    }
+
+    It 'Should resolve .. to parent group' {
+        $Result = Resolve-LocalGroupPath -GroupId '..'
+        $Result | Should -Be 'myco/mygroup'
+    }
+
+    It 'Should resolve ../.. to grandparent group' {
+        $Result = Resolve-LocalGroupPath -GroupId '../..'
+        $Result | Should -Be 'myco'
+    }
+
+    It 'Should throw when navigating too far up' {
+        { Resolve-LocalGroupPath -GroupId '../../..' } | Should -Throw "*already at root*"
+    }
+}
+
+Describe 'Resolve-LocalGroupPath without git context' {
+    BeforeAll {
+        function Get-LocalGitContext {
+            [PSCustomObject]@{
+                Site = ''
+                Project = ''
+                Branch = ''
+                Group = ''
+            }
+        }
+    }
+
+    It 'Should throw when using .. without git context' {
+        { Resolve-LocalGroupPath -GroupId '..' } | Should -Throw "*not in a git repository*"
+    }
 }
 
 Describe 'Get-GitlabCachePath' {

@@ -30,9 +30,7 @@ function Get-GitlabGroup {
 
     $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All -Recurse:$Recurse
     if ($GroupId) {
-        if ($GroupId -eq '.') {
-            $GroupId = Resolve-LocalGroupPath
-        }
+        $GroupId = Resolve-LocalGroupPath -GroupId $GroupId
         # https://docs.gitlab.com/ee/api/groups.html#details-of-a-group
         $Group = Invoke-GitlabApi GET "groups/$($GroupId | ConvertTo-UrlEncoded)" @{
             'with_projects' = 'false'

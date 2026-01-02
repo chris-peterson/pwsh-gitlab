@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Get-GitlabGroup
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabGroup
 ---
@@ -35,33 +35,43 @@ Get-GitlabGroup -ParentGroupId <string> [-Recurse] [-MaxPages <uint>] [-All] [-S
 
 ## DESCRIPTION
 
-Gets one or more GitLab groups. Can retrieve a specific group by ID, list subgroups of a parent group, or list all top-level groups. When using the '.' as GroupId, attempts to infer the group from the current local git directory. Groups that are marked for deletion are automatically filtered out.
+Gets one or more GitLab groups. Can retrieve a specific group by ID, list subgroups of a parent group, or list all top-level groups.
+
+When using '.' as GroupId, attempts to infer the group from the current local git directory. Use '..' to get the parent group, '../..' for grandparent, etc. Groups that are marked for deletion are omitted.
 
 ## EXAMPLES
 
 ### Example 1: Get a specific group
 
 ```powershell
-Get-GitlabGroup -GroupId "my-group"
+Get-GitlabGroup -GroupId 'my-group'
 ```
 
-Retrieves details about the group with the path "my-group".
+Retrieves details about the group with the path 'my-group'.
 
 ### Example 2: Get subgroups of a parent group
 
 ```powershell
-Get-GitlabGroup -ParentGroupId "my-org" -Recurse
+Get-GitlabGroup -ParentGroupId 'my-org' -Recurse
 ```
 
-Retrieves all descendant groups under "my-org" recursively.
+Retrieves all descendant groups under 'my-org' recursively.
 
 ### Example 3: Get group from current directory
 
 ```powershell
-Get-GitlabGroup -GroupId "."
+Get-GitlabGroup -GroupId '.'
 ```
 
 Infers and retrieves the group based on the current local git repository path.
+
+### Example 4: Get parent group
+
+```powershell
+Get-GitlabGroup -GroupId '..'
+```
+
+Gets the parent group of the current git repository's group. For example, if you're in 'myco/mygroup/infrastructure/myproject', this returns 'myco/mygroup' (skipping the direct ['.'] parent `infrastructure`).
 
 ## PARAMETERS
 
@@ -88,7 +98,7 @@ HelpMessage: ''
 
 ### -GroupId
 
-The ID or URL-encoded path of the group. Use '.' to infer the group from the current local git directory.
+The ID or URL-encoded path of the group. Use '.' to infer the group from the current local git directory. Use '..' to get the parent group, '../..' for grandparent, etc.
 
 ```yaml
 Type: System.String
