@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectAccessTokens/Invoke-GitlabProjectAccessTokenRotation
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Invoke-GitlabProjectAccessTokenRotation
 ---
@@ -231,7 +231,7 @@ Returns the newly rotated GitLab access token object containing the new token va
 
 ### System.Object
 
-See [Gitlab.AccessToken](#gitlabaccesstoken)
+HIDE_ME
 
 ## NOTES
 

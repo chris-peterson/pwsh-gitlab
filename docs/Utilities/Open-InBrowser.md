@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Utilities/Open-InBrowser
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Open-InBrowser
 ---
@@ -92,13 +92,15 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.Object
 
+HIDE_ME
+
 Accepts any object from the pipeline.
 
 ## OUTPUTS
 
 ### System.Object
 
-See [System.Void](#systemvoid)
+HIDE_ME
 
 ### System.Void
 

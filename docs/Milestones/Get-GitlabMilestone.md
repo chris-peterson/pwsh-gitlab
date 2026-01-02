@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Milestones/Get-GitlabMilestone
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabMilestone
 ---
@@ -242,7 +242,7 @@ Returns milestone objects containing details such as title, description, due dat
 
 ### System.Object
 
-See [Gitlab.Milestone](#gitlabmilestone)
+HIDE_ME
 
 ## NOTES
 

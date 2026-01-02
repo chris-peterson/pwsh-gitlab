@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Commits/Get-GitlabCommit
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabCommit
 ---
@@ -245,7 +245,7 @@ Returns one or more GitLab commit objects containing commit details such as SHA,
 
 ### System.Object
 
-See [Gitlab.Commit](#gitlabcommit).
+HIDE_ME
 
 ## NOTES
 

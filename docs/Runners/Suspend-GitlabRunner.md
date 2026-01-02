@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Runners/Suspend-GitlabRunner
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Suspend-GitlabRunner
 ---
@@ -165,7 +165,7 @@ Returns the updated runner object.
 
 ### System.Object
 
-See [Gitlab.Runner](#gitlabrunner)
+HIDE_ME
 
 ## NOTES
 

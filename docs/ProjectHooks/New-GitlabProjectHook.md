@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectHooks/New-GitlabProjectHook
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabProjectHook
 ---
@@ -508,7 +508,7 @@ Returns the created project hook object containing webhook configuration details
 
 ### System.Object
 
-See [Gitlab.ProjectHook](#gitlabprojecthook)
+HIDE_ME
 
 ## NOTES
 

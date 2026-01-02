@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PersonalAccessTokens/Get-GitlabPersonalAccessToken
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabPersonalAccessToken
 ---
@@ -441,7 +441,7 @@ Returns personal access token objects containing Id, Name, Scopes, Active, Revok
 
 ### System.Object
 
-See [Gitlab.PersonalAccessToken](#gitlabpersonalaccesstoken)
+HIDE_ME
 
 ## NOTES
 

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Update-LocalGitlabGroup
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Update-LocalGitlabGroup
 ---
@@ -113,7 +113,7 @@ This cmdlet does not return any output. Git pull output is displayed for each re
 
 ### System.Object
 
-See [System.Void](#systemvoid).
+HIDE_ME
 
 ### System.Void
 

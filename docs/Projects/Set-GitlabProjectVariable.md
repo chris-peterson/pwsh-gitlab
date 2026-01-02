@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Set-GitlabProjectVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Set-GitlabProjectVariable
 ---
@@ -296,7 +296,7 @@ Returns the created or updated GitLab variable object.
 
 ### System.Object
 
-See [Gitlab.Variable](#gitlabvariable)
+HIDE_ME
 
 ## NOTES
 

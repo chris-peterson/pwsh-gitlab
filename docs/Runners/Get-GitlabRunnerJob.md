@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Runners/Get-GitlabRunnerJob
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabRunnerJob
 ---
@@ -163,7 +163,7 @@ Returns runner job objects containing job information including project, status,
 
 ### System.Object
 
-See [Gitlab.RunnerJob](#gitlabrunnerjob)
+HIDE_ME
 
 ## NOTES
 

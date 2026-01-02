@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectDeployKeys/Enable-GitlabProjectDeployKey
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Enable-GitlabProjectDeployKey
 ---
@@ -207,7 +207,7 @@ Returns the enabled deploy key object containing properties such as Id, Title, K
 
 ### System.Object
 
-See [Gitlab.DeployKey](#gitlabdeploykey)
+HIDE_ME
 
 ## NOTES
 

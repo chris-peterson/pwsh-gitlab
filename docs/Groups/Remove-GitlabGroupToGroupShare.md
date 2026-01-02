@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Remove-GitlabGroupToGroupShare
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabGroupToGroupShare
 ---
@@ -178,7 +178,7 @@ This cmdlet does not return any output. A confirmation message is displayed upon
 
 ### System.Object
 
-See [System.Void](#systemvoid).
+HIDE_ME
 
 ### System.Void
 

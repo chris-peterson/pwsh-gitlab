@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Branches/Protect-GitlabBranch
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Protect-GitlabBranch
 ---
@@ -345,7 +345,7 @@ You can pipe a project ID and branch name to this cmdlet.
 
 ### System.Object
 
-See [Gitlab.ProtectedBranch](#gitlabprotectedbranch).
+HIDE_ME
 
 ### Gitlab.ProtectedBranch
 

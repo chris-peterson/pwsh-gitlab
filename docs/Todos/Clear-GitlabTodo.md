@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Todos/Clear-GitlabTodo
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Clear-GitlabTodo
 ---
@@ -184,13 +184,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.Object
 
-See [Gitlab.Todo](#gitlabtodo)
+HIDE_ME
 
 ## OUTPUTS
 
 ### System.Object
 
-See [Gitlab.Todo](#gitlabtodo)
+HIDE_ME
 
 ### Gitlab.Todo
 

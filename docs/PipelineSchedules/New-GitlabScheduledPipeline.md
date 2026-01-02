@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/New-GitlabScheduledPipeline
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabScheduledPipeline
 ---
@@ -190,7 +190,7 @@ Returns a message from the API confirming the pipeline was triggered.
 
 ### System.Object
 
-See [System.String](#systemstring)
+HIDE_ME
 
 ## NOTES
 

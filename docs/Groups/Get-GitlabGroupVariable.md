@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Get-GitlabGroupVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabGroupVariable
 ---
@@ -176,7 +176,7 @@ Returns one or more GitLab variable objects.
 
 ### System.Object
 
-See [Gitlab.Variable](#gitlabvariable).
+HIDE_ME
 
 ## NOTES
 

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectDeployKeys/Get-GitlabProjectDeployKey
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabProjectDeployKey
 ---
@@ -142,7 +142,7 @@ Returns one or more deploy key objects containing properties such as Id, Title, 
 
 ### System.Object
 
-See [Gitlab.DeployKey](#gitlabdeploykey)
+HIDE_ME
 
 ## NOTES
 

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Integrations/Update-GitlabProjectIntegration
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabProjectIntegration
 ---
@@ -207,7 +207,7 @@ Returns the updated project integration object.
 
 ### System.Object
 
-See [Gitlab.ProjectIntegration](#gitlabprojectintegration).
+HIDE_ME
 
 ## NOTES
 

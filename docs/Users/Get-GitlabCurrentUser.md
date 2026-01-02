@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Get-GitlabCurrentUser
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabCurrentUser
 ---
@@ -95,7 +95,7 @@ Returns the GitLab user object for the currently authenticated user.
 
 ### System.Object
 
-See [Gitlab.User](#gitlabuser)
+HIDE_ME
 
 ## NOTES
 

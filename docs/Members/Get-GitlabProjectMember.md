@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Get-GitlabProjectMember
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabProjectMember
 ---
@@ -202,7 +202,7 @@ You can pipe a ProjectId string to this cmdlet.
 
 ### System.Object
 
-See [Gitlab.Member](#gitlabmember)
+HIDE_ME
 
 ### Gitlab.Member
 

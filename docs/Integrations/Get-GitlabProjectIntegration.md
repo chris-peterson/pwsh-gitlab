@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Integrations/Get-GitlabProjectIntegration
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabProjectIntegration
 ---
@@ -142,7 +142,7 @@ Returns one or more project integration objects containing integration settings 
 
 ### System.Object
 
-See [Gitlab.ProjectIntegration](#gitlabprojectintegration).
+HIDE_ME
 
 ## NOTES
 

@@ -219,7 +219,7 @@ Returns one or more GitLab group objects.
 
 ### System.Object
 
-See [Gitlab.Group](#gitlabgroup).
+HIDE_ME
 
 ## NOTES
 

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Jobs/Get-GitlabJob
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabJob
 ---
@@ -361,7 +361,7 @@ Returns one or more GitLab job objects with properties such as Id, Name, Stage, 
 
 ### System.Object
 
-See [Gitlab.Job](#gitlabjob)
+HIDE_ME
 
 ## NOTES
 

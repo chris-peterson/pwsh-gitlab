@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Config/Get-DefaultGitlabSite
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-DefaultGitlabSite
 ---
@@ -53,7 +53,7 @@ Returns the default GitLab site object containing Url, AccessToken, and IsDefaul
 
 ### System.Object
 
-See [Gitlab.Site](#gitlabsite).
+HIDE_ME
 
 ## NOTES
 

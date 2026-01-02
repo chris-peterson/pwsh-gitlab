@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PersonalAccessTokens/New-GitlabPersonalAccessToken
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabPersonalAccessToken
 ---
@@ -272,7 +272,7 @@ Returns the newly created token object including the Token property containing t
 
 ### System.Object
 
-See [Gitlab.NewPersonalAccessToken](#gitlabnewpersonalaccesstoken)
+HIDE_ME
 
 ## NOTES
 

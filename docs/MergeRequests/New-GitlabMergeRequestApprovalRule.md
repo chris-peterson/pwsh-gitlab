@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/New-GitlabMergeRequestApprovalRule
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabMergeRequestApprovalRule
 ---
@@ -199,7 +199,7 @@ Returns the newly created merge request approval rule object.
 
 ### System.Object
 
-See [Gitlab.MergeRequestApprovalRule](#gitlabmergerequestapprovalrule)
+HIDE_ME
 
 ## NOTES
 

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Rename-GitlabGroup
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Rename-GitlabGroup
 ---
@@ -178,7 +178,7 @@ Returns the updated GitLab group object.
 
 ### System.Object
 
-See [Gitlab.Group](#gitlabgroup).
+HIDE_ME
 
 ## NOTES
 

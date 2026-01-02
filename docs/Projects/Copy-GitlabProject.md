@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Copy-GitlabProject
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Copy-GitlabProject
 ---
@@ -228,7 +228,7 @@ Returns the newly forked GitLab project object.
 
 ### System.Object
 
-See [System.Management.Automation.PSObject](#systemmanagementautomationpsobject)
+HIDE_ME
 
 ### System.Management.Automation.PSObject
 

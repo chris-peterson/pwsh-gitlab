@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Remove-GitlabGroupMember
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabGroupMember
 ---
@@ -175,7 +175,7 @@ You can pipe GroupId and UserId strings to this cmdlet.
 
 ### System.Object
 
-See [System.Void](#systemvoid)
+HIDE_ME
 
 ### System.Void
 

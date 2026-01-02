@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/Get-GitlabPipelineVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabPipelineVariable
 ---
@@ -184,7 +184,7 @@ Returns pipeline variable objects with Key and Value properties (when using KeyV
 
 ### System.Object
 
-See [Gitlab.PipelineVariable](#gitlabpipelinevariable)
+HIDE_ME
 
 ## NOTES
 

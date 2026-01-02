@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/Get-GitlabPipelineBridge
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabPipelineBridge
 ---
@@ -163,7 +163,7 @@ Returns bridge job objects with properties including the downstream pipeline inf
 
 ### System.Object
 
-See [Gitlab.PipelineBridge](#gitlabpipelinebridge)
+HIDE_ME
 
 ## NOTES
 

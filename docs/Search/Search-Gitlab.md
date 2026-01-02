@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Search/Search-Gitlab
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Search-Gitlab
 ---
@@ -309,7 +309,7 @@ The GroupId parameter accepts pipeline input by property name.
 
 ### System.Object
 
-See [System.Management.Automation.PSObject](#systemmanagementautomationpsobject)
+HIDE_ME
 
 ### System.Management.Automation.PSObject
 

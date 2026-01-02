@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Get-GitlabUserEvent
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabUserEvent
 ---
@@ -324,7 +324,7 @@ Returns one or more GitLab event objects containing properties such as ActionNam
 
 ### System.Object
 
-See [Gitlab.Event](#gitlabevent)
+HIDE_ME
 
 ## NOTES
 

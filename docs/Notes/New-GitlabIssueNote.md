@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Notes/New-GitlabIssueNote
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabIssueNote
 ---
@@ -210,7 +210,7 @@ Returns the newly created note object containing the note body, author, creation
 
 ### System.Object
 
-See [Gitlab.Note](#gitlabnote)
+HIDE_ME
 
 ## NOTES
 

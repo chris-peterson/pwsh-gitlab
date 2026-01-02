@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Close-GitlabMergeRequest
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Close-GitlabMergeRequest
 ---
@@ -179,7 +179,7 @@ Returns the closed merge request object.
 
 ### System.Object
 
-See [Gitlab.MergeRequest](#gitlabmergerequest)
+HIDE_ME
 
 ## NOTES
 

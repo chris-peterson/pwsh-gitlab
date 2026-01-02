@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Utilities/Get-GitlabVersion
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabVersion
 ---
@@ -120,7 +120,7 @@ When using `-Select '*'`, returns an object with `Version` and `Revision` proper
 
 ### System.Object
 
-See [System.Management.Automation.PSObject](#systemmanagementautomationpsobject)
+HIDE_ME
 
 ### System.Management.Automation.PSObject
 

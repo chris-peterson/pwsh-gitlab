@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Variables/Resolve-GitlabVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Resolve-GitlabVariable
 ---
@@ -192,6 +192,8 @@ A GitLab project or group object to use as the resolution context.
 
 ### System.Object
 
+HIDE_ME
+
 Accepts any object from the pipeline.
 
 ## OUTPUTS
@@ -202,7 +204,7 @@ The value of the resolved variable, or `$null` if the variable was not found at 
 
 ### System.Object
 
-See [System.String](#systemstring)
+HIDE_ME
 
 ## NOTES
 

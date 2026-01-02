@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/RepositoryFiles/Get-GitlabRepositoryFileContent
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabRepositoryFileContent
 ---
@@ -164,7 +164,7 @@ Returns the UTF-8 decoded content of the file as a string.
 
 ### System.Object
 
-See [System.String](#systemstring)
+HIDE_ME
 
 ## NOTES
 

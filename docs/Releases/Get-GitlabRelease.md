@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Releases/Get-GitlabRelease
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabRelease
 ---
@@ -226,7 +226,7 @@ Returns GitLab release objects containing information about releases, including 
 
 ### System.Object
 
-See [Gitlab.Release](#gitlabrelease)
+HIDE_ME
 
 ## NOTES
 

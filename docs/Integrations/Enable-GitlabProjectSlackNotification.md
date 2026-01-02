@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Integrations/Enable-GitlabProjectSlackNotification
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Enable-GitlabProjectSlackNotification
 ---
@@ -429,7 +429,7 @@ Returns the configured Slack integration object.
 
 ### System.Object
 
-See [Gitlab.ProjectIntegration](#gitlabprojectintegration).
+HIDE_ME
 
 ## NOTES
 

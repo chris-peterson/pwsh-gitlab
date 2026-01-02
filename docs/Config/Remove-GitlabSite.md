@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Config/Remove-GitlabSite
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabSite
 ---
@@ -123,7 +123,7 @@ Returns the updated GitLab configuration object after the site is removed.
 
 ### System.Object
 
-See [Gitlab.Configuration](#gitlabconfiguration).
+HIDE_ME
 
 ## NOTES
 

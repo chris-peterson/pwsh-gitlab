@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Deployments/Get-GitlabDeployment
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabDeployment
 ---
@@ -317,7 +317,7 @@ Returns GitLab deployment objects containing deployment details such as ID, envi
 
 ### System.Object
 
-See [Gitlab.Deployment](#gitlabdeployment).
+HIDE_ME
 
 ## NOTES
 

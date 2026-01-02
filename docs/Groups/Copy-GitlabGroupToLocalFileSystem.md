@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Copy-GitlabGroupToLocalFileSystem
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Copy-GitlabGroupToLocalFileSystem
 ---
@@ -210,7 +210,7 @@ This cmdlet does not return any output. Projects are cloned to the local file sy
 
 ### System.Object
 
-See [System.Void](#systemvoid).
+HIDE_ME
 
 ### System.Void
 

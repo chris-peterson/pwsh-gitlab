@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/RepositoryFiles/Get-GitlabRepositoryFile
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabRepositoryFile
 ---
@@ -164,7 +164,7 @@ Returns a repository file object containing file metadata including file name, p
 
 ### System.Object
 
-See [Gitlab.RepositoryFile](#gitlabrepositoryfile)
+HIDE_ME
 
 ## NOTES
 

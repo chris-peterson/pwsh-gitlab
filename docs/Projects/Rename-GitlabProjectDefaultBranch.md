@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Rename-GitlabProjectDefaultBranch
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Rename-GitlabProjectDefaultBranch
 ---
@@ -145,7 +145,7 @@ Returns the updated GitLab project object with the new default branch.
 
 ### System.Object
 
-See [Gitlab.Project](#gitlabproject)
+HIDE_ME
 
 ## NOTES
 

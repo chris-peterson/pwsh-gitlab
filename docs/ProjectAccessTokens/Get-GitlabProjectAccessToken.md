@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectAccessTokens/Get-GitlabProjectAccessToken
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabProjectAccessToken
 ---
@@ -411,7 +411,7 @@ Returns one or more GitLab access token objects containing token details such as
 
 ### System.Object
 
-See [Gitlab.AccessToken](#gitlabaccesstoken)
+HIDE_ME
 
 ## NOTES
 

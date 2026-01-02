@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Variables/ConvertTo-GitlabVariables
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: ConvertTo-GitlabVariables
 ---
@@ -116,13 +116,15 @@ A hashtable or PSCustomObject containing key-value pairs to convert to GitLab va
 
 ### System.Object
 
+HIDE_ME
+
 Accepts any object from the pipeline.
 
 ## OUTPUTS
 
 ### System.Object
 
-See [System.Collections.Hashtable](#systemcollectionshashtable)
+HIDE_ME
 
 ### System.Collections.Hashtable
 

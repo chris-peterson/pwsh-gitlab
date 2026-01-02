@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/Update-GitlabPipelineSchedule
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabPipelineSchedule
 ---
@@ -324,7 +324,7 @@ A custom object representing the updated pipeline schedule.
 
 ### System.Object
 
-See [Gitlab.PipelineSchedule](#gitlabpipelineschedule)
+HIDE_ME
 
 ## NOTES
 

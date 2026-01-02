@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ServiceAccounts/Update-GitlabServiceAccount
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabServiceAccount
 ---
@@ -254,7 +254,7 @@ The ServiceAccountId parameter accepts pipeline input by property name.
 
 ### System.Object
 
-See [Gitlab.ServiceAccount](#gitlabserviceaccount)
+HIDE_ME
 
 ### Gitlab.ServiceAccount
 

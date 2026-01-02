@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Runners/Remove-GitlabRunner
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabRunner
 ---
@@ -162,7 +162,7 @@ You can pipe a runner ID to this cmdlet.
 
 ### System.Object
 
-See [System.Void](#systemvoid)
+HIDE_ME
 
 ### System.Void
 

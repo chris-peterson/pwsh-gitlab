@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectAccessTokens/New-GitlabProjectAccessToken
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabProjectAccessToken
 ---
@@ -271,7 +271,7 @@ Returns the newly created GitLab access token object containing the token value.
 
 ### System.Object
 
-See [Gitlab.AccessToken](#gitlabaccesstoken)
+HIDE_ME
 
 ## NOTES
 

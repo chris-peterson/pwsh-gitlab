@@ -203,6 +203,18 @@
         // Replace "__AllParameterSets" with "Default" for cleaner display
         content = content.replace(/### __AllParameterSets/g, '### Default');
         
+        // Remove empty ALIASES section
+        content = content.replace(/## ALIASES\s*\n+(?=##|$)/g, '');
+        
+        // Remove empty INPUTS section
+        content = content.replace(/## INPUTS\s*\n+(?=##|$)/g, '');
+        
+        // Remove empty NOTES section
+        content = content.replace(/## NOTES\s*\n+(?=##|$)/g, '');
+        
+        // Remove sections marked HIDE_ME
+        content = content.replace(/### [^\n]+\s*\n+HIDE_ME\s*\n+/g, '');
+        
         // Clean up verbose YAML parameter blocks
         content = content.replace(/(```yaml\n)([\s\S]*?)(```)/g, function(match, before, yaml, after) {
           var lines = yaml.split('\n');
@@ -218,7 +230,12 @@
                 trimmed === "Aliases: []" ||
                 trimmed === "DontShow: false" ||
                 trimmed === "AcceptedValues: []" ||
-                trimmed === "HelpMessage: ''") {
+                trimmed === "HelpMessage: ''" ||
+                trimmed === "Position: Named" ||
+                trimmed === "IsRequired: false" ||
+                trimmed === "ValueFromPipeline: false" ||
+                trimmed === "ValueFromPipelineByPropertyName: false" ||
+                trimmed === "ValueFromRemainingArguments: false") {
               continue;
             }
             

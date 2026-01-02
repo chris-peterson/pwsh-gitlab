@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/Get-GitlabPipelineScheduleVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/01/2026
+ms.date: 01/02/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabPipelineScheduleVariable
 ---
@@ -163,7 +163,7 @@ A custom object representing the pipeline schedule variable with properties: Key
 
 ### System.Object
 
-See [Gitlab.PipelineScheduleVariable](#gitlabpipelineschedulevariable)
+HIDE_ME
 
 ## NOTES
 
