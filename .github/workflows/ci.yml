@@ -4,17 +4,28 @@ on:
   push:
     branches: [ '*' ]
   pull_request:
-  workflow_dispatch:
-    inputs:
-      deploy_docs:
-        description: 'Deploy docs from this branch'
-        type: boolean
-        default: false
 
 permissions:
   contents: read
 
 jobs:
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      docs: ${{ steps.filter.outputs.docs }}
+      src: ${{ steps.filter.outputs.src }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dorny/paths-filter@v3.0.2
+        id: filter
+        with:
+          filters: |
+            docs:
+              - 'docs/**'
+            src:
+              - 'src/**'
+
   test:
     name: Run Tests
     runs-on: ubuntu-latest
@@ -188,8 +199,8 @@ jobs:
 
   deploy-docs:
     name: Deploy Documentation
-    needs: release-gate
-    if: always() && (needs.release-gate.result == 'success' || (github.event_name == 'workflow_dispatch' && inputs.deploy_docs))
+    needs: [changes, release-gate]
+    if: needs.release-gate.result == 'success' && needs.changes.outputs.docs == 'true'
     runs-on: ubuntu-latest
     permissions:
       pages: write
@@ -215,7 +226,8 @@ jobs:
 
   publish-module:
     name: Publish Module to PowerShell Gallery
-    needs: release-gate
+    needs: [changes, release-gate]
+    if: needs.release-gate.result == 'success' && needs.changes.outputs.src == 'true'
     runs-on: ubuntu-latest
     environment:
       name: PowerShell Gallery
@@ -241,7 +253,8 @@ jobs:
 
   publish-docker:
     name: Publish Docker Image to GitHub Container Registry
-    needs: release-gate
+    needs: [changes, release-gate]
+    if: needs.release-gate.result == 'success'
     runs-on: ubuntu-latest
 
     env:
