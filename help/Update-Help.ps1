@@ -113,7 +113,6 @@ $CategoryDescriptions = @{
 
 # Get all category folders (exclude files and special folders)
 $Categories = Get-ChildItem -Path $DocsFolder -Directory |
-    Where-Object { $_.Name -notmatch '^_' -and $_.Name -ne 'assets' } |
     Sort-Object Name
 
 Write-Host "Generating category landing pages..." -ForegroundColor Cyan
