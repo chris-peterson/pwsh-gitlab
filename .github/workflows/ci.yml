@@ -9,23 +9,6 @@ permissions:
   contents: read
 
 jobs:
-  changes:
-    name: Detect Changes
-    runs-on: ubuntu-latest
-    outputs:
-      docs: ${{ steps.filter.outputs.docs }}
-      src: ${{ steps.filter.outputs.src }}
-    steps:
-      - uses: actions/checkout@v6
-      - uses: dorny/paths-filter@v3.0.2
-        id: filter
-        with:
-          filters: |
-            docs:
-              - 'docs/**'
-            src:
-              - 'src/**'
-
   test:
     name: Run Tests
     runs-on: ubuntu-latest
@@ -194,40 +177,26 @@ jobs:
     needs: [test, security, docs]
     if: github.event.repository.fork == false && github.ref_name == 'main'
     runs-on: ubuntu-latest
-    steps:
-      - run: echo "All checks passed, proceeding with deployment"
-
-  deploy-docs:
-    name: Deploy Documentation
-    needs: [changes, release-gate]
-    if: needs.release-gate.result == 'success' && needs.changes.outputs.docs == 'true'
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
+    outputs:
+      changes_in_docs: ${{ steps.changes.outputs.docs }}
+      changes_in_src: ${{ steps.changes.outputs.src }}
     steps:
       - uses: actions/checkout@v6
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Detect changes
+        uses: dorny/paths-filter@v3.0.2
+        id: changes
         with:
-          path: docs
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          filters: |
+            docs:
+              - 'docs/**'
+            src:
+              - 'src/**'
+      - run: echo "All checks passed, proceeding with deployment"
 
   publish-module:
-    name: Publish Module to PowerShell Gallery
-    needs: [changes, release-gate]
-    if: needs.release-gate.result == 'success' && needs.changes.outputs.src == 'true'
+    name: Publish Module
+    needs: release-gate
+    if: needs.release-gate.outputs.changes_in_src == 'true'
     runs-on: ubuntu-latest
     environment:
       name: PowerShell Gallery
@@ -252,9 +221,8 @@ jobs:
           ApiKey: ${{ secrets.PSGALLERY_API_KEY }}
 
   publish-docker:
-    name: Publish Docker Image to GitHub Container Registry
-    needs: [changes, release-gate]
-    if: needs.release-gate.result == 'success'
+    name: Publish Docker Image
+    needs: release-gate
     runs-on: ubuntu-latest
 
     env:
@@ -307,3 +275,30 @@ jobs:
           subject-name: ${{ env.IMAGE_ID }}
           subject-digest: ${{ steps.build.outputs.digest }}
           push-to-registry: true
+
+  publish-docs:
+    name: Publish Documentation
+    needs: release-gate
+    if: needs.release-gate.outputs.changes_in_docs == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
