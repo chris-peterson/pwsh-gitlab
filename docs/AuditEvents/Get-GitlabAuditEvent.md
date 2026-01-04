@@ -69,7 +69,7 @@ Retrieves instance-level audit events for the specified user.
 
 ### -After
 
-Filter audit events created after this date. Use ISO 8601 format (YYYY-MM-DD). Alias: Since.
+Filter audit events created after this date. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value. Alias: Since.
 
 ```yaml
 Type: System.String
@@ -133,7 +133,7 @@ HelpMessage: ''
 
 ### -Before
 
-Filter audit events created before this date. Use ISO 8601 format (YYYY-MM-DD). Alias: Until.
+Filter audit events created before this date. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value. Alias: Until.
 
 ```yaml
 Type: System.String

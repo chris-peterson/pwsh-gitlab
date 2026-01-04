@@ -1,8 +1,8 @@
 $Module       = 'GitlabCli'
 $Language     = 'en-US'
 $ScriptDir    = Split-Path -Parent $MyInvocation.MyCommand.Path
-$DocsFolder   = Resolve-Path (Join-Path $ScriptDir '../docs')
-$ModuleFolder = Resolve-Path (Join-Path $ScriptDir "../src/$Module")
+$DocsFolder   = Resolve-Path (Join-Path $ScriptDir '../..')
+$ModuleFolder = Resolve-Path (Join-Path $ScriptDir "../../../src/$Module")
 $OutputFolder = Join-Path $ModuleFolder $Language
 
 Import-Module Microsoft.PowerShell.PlatyPS

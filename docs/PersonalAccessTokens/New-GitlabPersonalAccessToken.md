@@ -125,7 +125,7 @@ HelpMessage: ''
 
 ### -ExpiresAt
 
-The expiration date for the token in ISO 8601 format (e.g., '2025-12-31'). If not specified, the token may have no expiration depending on instance settings.
+The expiration date for the token. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value. If not specified, the token may have no expiration depending on instance settings.
 
 ```yaml
 Type: System.String

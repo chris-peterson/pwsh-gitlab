@@ -12,7 +12,7 @@ BeforeAll {
     function Update-GitlabProjectIntegration { param($ProjectId, $Integration, $Settings) [PSCustomObject]@{ Active = $true } }
     function Invoke-GitlabApi { param($Method, $Resource, $Body) [PSCustomObject]@{} }
 
-    . $PSScriptRoot/../src/GitlabCli/Integrations.psm1
+    Import-Module $PSScriptRoot/../src/GitlabCli/Integrations.psm1 -Force
 }
 
 Describe 'Enable-GitlabProjectSlackNotification' {

@@ -17,10 +17,33 @@ Install-Module -Name GitlabCli
 
 ## Quick Start
 
-```powershell
-# Configure your GitLab connection
-Add-GitlabSite -Url "https://gitlab.com" -AccessToken $token
+### 1. Get a Personal Access Token (PAT)
 
+Navigate to your GitLab instance's token page:
+`https://<your-gitlab-instance>/-/profile/personal_access_tokens`
+
+Create a token with the scopes you need (typically `api` for full access).
+
+<img width="600" src=".support/content/PersonalAccessToken.jpg"/>
+
+### 2. Configure Authentication
+
+**Option A: Environment Variables** (simple, CI/CD)
+
+```powershell
+$env:GITLAB_ACCESS_TOKEN = '<your-token>'
+$env:GITLAB_URL = 'gitlab.example.com'  # optional, defaults to gitlab.com
+```
+
+**Option B: Configuration File** (multiple sites)
+
+```powershell
+Add-GitlabSite -Url 'https://gitlab.example.com' -AccessToken '<your-token>' -IsDefault
+```
+
+### 3. Start Using
+
+```powershell
 # Get projects
 Get-GitlabProject -GroupId "mygroup"
 

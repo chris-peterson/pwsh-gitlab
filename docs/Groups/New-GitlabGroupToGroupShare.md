@@ -98,7 +98,7 @@ HelpMessage: ''
 
 ### -ExpiresAt
 
-The expiration date for the share in ISO 8601 format (YYYY-MM-DD). After this date, the share is automatically removed.
+The expiration date for the share. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value. After this date, the share is automatically removed.
 
 ```yaml
 Type: System.String
