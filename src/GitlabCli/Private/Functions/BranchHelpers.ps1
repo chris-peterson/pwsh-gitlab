@@ -13,13 +13,17 @@ function Resolve-GitlabBranch {
     param(
         [Parameter(Mandatory, ValueFromPipeline)]
         [string]
-        $Branch
+        $Branch,
+
+        [Parameter()]
+        [scriptblock]
+        $OnBranchNotInferred = { throw "Could not infer branch based on current directory ($(Get-Location))" }
     )
 
     if ($Branch -eq '.') {
         $Branch = $(Get-LocalGitContext).Branch
         if (-not $Branch) {
-            throw "Could not infer branch based on current directory ($(Get-Location))"
+            return & $OnBranchNotInferred
         }
         Write-Debug "Resolve-GitlabBranch: Resolved '.' to '$Branch'"
     }

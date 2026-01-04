@@ -104,7 +104,7 @@ HelpMessage: ''
 
 ### -CreatedAfter
 
-Filter tokens created after the specified date. Use ISO 8601 format (e.g., '2024-01-01').
+Filter tokens created after the specified date. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value.
 
 ```yaml
 Type: System.String
@@ -125,7 +125,7 @@ HelpMessage: ''
 
 ### -CreatedBefore
 
-Filter tokens created before the specified date. Use ISO 8601 format (e.g., '2024-12-31').
+Filter tokens created before the specified date. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value.
 
 ```yaml
 Type: System.String
@@ -188,7 +188,7 @@ HelpMessage: ''
 
 ### -LastUsedAfter
 
-Filter tokens last used after the specified date. Use ISO 8601 format (e.g., '2024-01-01').
+Filter tokens last used after the specified date. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value.
 
 ```yaml
 Type: System.String
@@ -209,7 +209,7 @@ HelpMessage: ''
 
 ### -LastUsedBefore
 
-Filter tokens last used before the specified date. Use ISO 8601 format (e.g., '2024-12-31').
+Filter tokens last used before the specified date. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value.
 
 ```yaml
 Type: System.String

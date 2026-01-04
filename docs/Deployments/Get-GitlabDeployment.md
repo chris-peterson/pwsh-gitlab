@@ -256,7 +256,7 @@ HelpMessage: ''
 
 ### -UpdatedAfter
 
-Return deployments updated after the specified date/time (ISO 8601 format).
+Return deployments updated after the specified date/time. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value.
 
 ```yaml
 Type: System.String
@@ -277,7 +277,7 @@ HelpMessage: ''
 
 ### -UpdatedBefore
 
-Return deployments updated before the specified date/time (ISO 8601 format).
+Return deployments updated before the specified date/time. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value.
 
 ```yaml
 Type: System.String

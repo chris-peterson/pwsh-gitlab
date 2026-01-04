@@ -131,7 +131,7 @@ HelpMessage: ''
 
 ### -CreatedAfter
 
-Return issues created on or after the given date (ISO 8601 format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ).
+Return issues created on or after the given date. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value.
 
 ```yaml
 Type: System.String
@@ -152,7 +152,7 @@ HelpMessage: ''
 
 ### -CreatedBefore
 
-Return issues created on or before the given date (ISO 8601 format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ).
+Return issues created on or before the given date. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value.
 
 ```yaml
 Type: System.String

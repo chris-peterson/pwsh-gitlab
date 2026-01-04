@@ -116,7 +116,7 @@ HelpMessage: ''
 
 ### -CreatedAfter
 
-Return snippets created on or after the specified date (ISO 8601 format).
+Return snippets created on or after the specified date. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value.
 
 ```yaml
 Type: System.String
@@ -137,7 +137,7 @@ HelpMessage: ''
 
 ### -CreatedBefore
 
-Return snippets created on or before the specified date (ISO 8601 format).
+Return snippets created on or before the specified date. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value.
 
 ```yaml
 Type: System.String

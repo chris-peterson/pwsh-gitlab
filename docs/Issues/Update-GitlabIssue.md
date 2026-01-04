@@ -177,7 +177,7 @@ HelpMessage: ''
 
 ### -DueDate
 
-The due date for the issue in ISO 8601 format (YYYY-MM-DD).
+The due date for the issue. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value.
 
 ```yaml
 Type: System.String

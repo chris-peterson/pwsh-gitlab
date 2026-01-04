@@ -148,7 +148,7 @@ jobs:
         run: |
           $ErrorActionPreference = 'Continue'
           try {
-            ./help/Update-Help.ps1 -ThrowOnChanges
+            ./docs/.support/scripts/Update-Help.ps1 -ThrowOnChanges
             $CmdletCount = (Get-ChildItem -Path ./docs -Filter *.md -Recurse).Count
             $Summary = "## Documentation Validation`n`n"
             $Summary += "**$CmdletCount cmdlets** up-to-date`n"
@@ -166,7 +166,7 @@ jobs:
             foreach ($file in $PendingChanges) {
               $Summary += "- ``$file```n"
             }
-            $Summary += "`nRun ``help/Update-Help.ps1`` locally and commit the changes.`n"
+            $Summary += "`nRun ``just help-update`` locally and commit the changes.`n"
             $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
             
             throw $_.Exception.Message
@@ -213,7 +213,7 @@ jobs:
 
       - name: Export MAML help
         shell: pwsh
-        run: ./help/Export-Help.ps1
+        run: ./docs/.support/scripts/Export-Help.ps1
 
       - name: Publish PowerShell Module
         uses: chris-peterson/publish-powershell-modules@v1

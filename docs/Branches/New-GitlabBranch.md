@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Branches/New-GitlabBranch
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 01/04/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabBranch
 ---
@@ -20,7 +20,7 @@ Creates a new branch in a GitLab project repository.
 ### __AllParameterSets
 
 ```
-New-GitlabBranch [[-ProjectId] <string>] [-Branch] <string> [-Ref] <string> [-SiteUrl <string>]
+New-GitlabBranch [[-ProjectId] <string>] [-Branch] <string> [[-Ref] <string>] [-SiteUrl <string>]
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -118,15 +118,18 @@ HelpMessage: ''
 
 The branch name, tag, or commit SHA to create the new branch from.
 
+Defaults to `.` which means the new branch is created relative to the current branch (if you have a git context), otherwise, the
+default branch for the repository.
+
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
   Position: 2
-  IsRequired: true
+  IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false

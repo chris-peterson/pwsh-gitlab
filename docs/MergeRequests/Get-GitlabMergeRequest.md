@@ -138,7 +138,7 @@ HelpMessage: ''
 
 ### -CreatedAfter
 
-Filter merge requests created after this date. Use ISO 8601 format (YYYY-MM-DD).
+Filter merge requests created after this date. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value.
 
 ```yaml
 Type: System.String
@@ -159,7 +159,7 @@ HelpMessage: ''
 
 ### -CreatedBefore
 
-Filter merge requests created before this date. Use ISO 8601 format (YYYY-MM-DD).
+Filter merge requests created before this date. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value.
 
 ```yaml
 Type: System.String

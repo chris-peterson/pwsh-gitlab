@@ -108,20 +108,20 @@ function New-GitlabBranch {
     [CmdletBinding(SupportsShouldProcess)]
     [OutputType('Gitlab.Branch')]
     param (
-        [Parameter(Position=0, Mandatory=$false)]
+        [Parameter(Position=0)]
         [ValidateNotNullOrEmpty()]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=1, Mandatory=$true)]
+        [Parameter(Position=1, Mandatory)]
         [ValidateNotNullOrEmpty()]
         [string]
         $Branch,
 
-        [Parameter(Position=2, Mandatory=$true)]
+        [Parameter(Position=2)]
         [ValidateNotNullOrEmpty()]
         [string]
-        $Ref,
+        $Ref = '.',
 
         [Parameter()]
         [string]
@@ -129,7 +129,11 @@ function New-GitlabBranch {
     )
 
     $ProjectId = Resolve-GitlabProjectId -ProjectId $ProjectId
+    $Ref       = Resolve-GitlabBranch -Branch $Ref -OnBranchNotInferred {
+        Get-GitlabProject -ProjectId $ProjectId | Select-Object -ExpandProperty DefaultBranch
+    }
     $Request = @{
+        # https://docs.gitlab.com/api/branches/#create-repository-branch
         HttpMethod = 'POST'
         Path       = "projects/$($ProjectId)/repository/branches"
         Body       = @{
@@ -138,7 +142,7 @@ function New-GitlabBranch {
         }
     }
 
-    if( $PSCmdlet.ShouldProcess("Project $($ProjectId)", "create branch $($Branch) from $($Ref) `nArguments:`n$($Request | ConvertTo-Json)") ) {
+    if ($PSCmdlet.ShouldProcess("project $($ProjectId)", "$($Request | ConvertTo-Json)")) {
         Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Branch'
     }
 }

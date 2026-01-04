@@ -85,7 +85,7 @@ HelpMessage: ''
 
 ### -ExpiresAt
 
-The new expiration date for the rotated token in ISO 8601 format (e.g., '2026-06-30'). If not specified, uses the default expiration policy.
+The new expiration date for the rotated token. Accepts any valid [`datetime`](https://learn.microsoft.com/en-us/dotnet/api/system.datetime) value. If not specified, uses the default expiration policy.
 
 ```yaml
 Type: System.String
