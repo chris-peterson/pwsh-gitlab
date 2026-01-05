@@ -1,6 +1,6 @@
 # Shared cache for project and group ID lookups
 # Structure: @{ $siteUrl = @{ projects = @{ $path = $id }; groups = @{ $path = $id } } }
-$script:GitlabCache = @{}
+$global:GitlabCache = @{}
 
 function Get-GitlabCachePath {
     [CmdletBinding()]
@@ -28,9 +28,9 @@ function Get-GitlabSiteCache {
         $ResolvedSiteUrl
     )
 
-    if ($script:GitlabCache.ContainsKey($ResolvedSiteUrl)) {
+    if ($global:GitlabCache.ContainsKey($ResolvedSiteUrl)) {
         Write-Debug "GitlabCache: Using in-memory cache for '$ResolvedSiteUrl'"
-        return $script:GitlabCache[$ResolvedSiteUrl]
+        return $global:GitlabCache[$ResolvedSiteUrl]
     }
 
     $CachePath = Get-GitlabCachePath -ResolvedSiteUrl $ResolvedSiteUrl
@@ -38,7 +38,7 @@ function Get-GitlabSiteCache {
         try {
             $DiskCache = Get-Content $CachePath -Raw | ConvertFrom-Yaml
             if ($DiskCache) {
-                $script:GitlabCache[$ResolvedSiteUrl] = $DiskCache
+                $global:GitlabCache[$ResolvedSiteUrl] = $DiskCache
                 $ProjectCount = $DiskCache.projects ? $DiskCache.projects.Count : 0
                 $GroupCount = $DiskCache.groups ? $DiskCache.groups.Count : 0
                 Write-Debug "GitlabCache: Loaded $ProjectCount project(s) and $GroupCount group(s) from disk for '$ResolvedSiteUrl'"
@@ -50,8 +50,8 @@ function Get-GitlabSiteCache {
     }
 
     Write-Debug "GitlabCache: Initializing empty cache for '$ResolvedSiteUrl'"
-    $script:GitlabCache[$ResolvedSiteUrl] = @{ projects = @{}; groups = @{} }
-    return $script:GitlabCache[$ResolvedSiteUrl]
+    $global:GitlabCache[$ResolvedSiteUrl] = @{ projects = @{}; groups = @{} }
+    return $global:GitlabCache[$ResolvedSiteUrl]
 }
 
 function Save-GitlabSiteCache {
@@ -62,7 +62,7 @@ function Save-GitlabSiteCache {
         $ResolvedSiteUrl
     )
 
-    if (-not $script:GitlabCache.ContainsKey($ResolvedSiteUrl)) {
+    if (-not $global:GitlabCache.ContainsKey($ResolvedSiteUrl)) {
         Write-Debug "GitlabCache: Nothing to save for '$ResolvedSiteUrl'"
         return
     }
@@ -76,7 +76,7 @@ function Save-GitlabSiteCache {
     }
 
     try {
-        $Cache = $script:GitlabCache[$ResolvedSiteUrl]
+        $Cache = $global:GitlabCache[$ResolvedSiteUrl]
         $SortedCache = [ordered]@{}
         if ($Cache.projects) {
             $SortedCache.projects = [ordered]@{}

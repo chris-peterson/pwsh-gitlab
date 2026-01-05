@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.161.3'
+    ModuleVersion = '1.161.4'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* https://github.com/chris-peterson/pwsh-gitlab/issues/143
+* bugfix: cache should use 'global' scope
 '@
         }
     }

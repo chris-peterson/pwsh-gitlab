@@ -12,6 +12,13 @@ $DocsFolder = Join-Path $ScriptDir '../..'
 $ModulePath = Join-Path $ScriptDir '../../../src/GitlabCli'
 $RepoRoot   = Resolve-Path (Join-Path $ScriptDir '../../..')
 
+# Remove existing help XML to avoid duplicate documentation
+$HelpXmlPath = Join-Path $ModulePath 'en-US/GitlabCli-Help.xml'
+if (Test-Path $HelpXmlPath) {
+    Remove-Item $HelpXmlPath -Force
+    Write-Host "Removed existing help XML file" -ForegroundColor Cyan
+}
+
 Import-Module Microsoft.PowerShell.PlatyPS
 Import-Module $ModulePath -Force
 

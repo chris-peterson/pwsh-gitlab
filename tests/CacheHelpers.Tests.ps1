@@ -98,7 +98,7 @@ Describe 'Get-ProjectIdFromCache' {
     }
 
     BeforeEach {
-        $script:GitlabCache = @{}
+        $global:GitlabCache = @{}
     }
 
     AfterAll {
@@ -138,7 +138,7 @@ Describe 'Set-ProjectIdInCache' {
     }
 
     BeforeEach {
-        $script:GitlabCache = @{}
+        $global:GitlabCache = @{}
     }
 
     AfterAll {
@@ -198,7 +198,7 @@ Describe 'Get-GroupIdFromCache' {
     }
 
     BeforeEach {
-        $script:GitlabCache = @{}
+        $global:GitlabCache = @{}
     }
 
     AfterAll {
@@ -238,7 +238,7 @@ Describe 'Set-GroupIdInCache' {
     }
 
     BeforeEach {
-        $script:GitlabCache = @{}
+        $global:GitlabCache = @{}
     }
 
     AfterAll {
@@ -292,7 +292,7 @@ Describe 'Test-GroupIdInCache' {
     }
 
     BeforeEach {
-        $script:GitlabCache = @{}
+        $global:GitlabCache = @{}
     }
 
     AfterAll {
