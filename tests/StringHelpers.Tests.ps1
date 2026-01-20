@@ -125,7 +125,7 @@ Describe "ConvertTo-UrlEncoded" {
 
     Context "Basic encoding" {
         It "Should encode spaces" {
-            'hello world' | ConvertTo-UrlEncoded | Should -Be 'hello+world'
+            'hello world' | ConvertTo-UrlEncoded | Should -Be 'hello%20world'
         }
 
         It "Should encode special characters" {
@@ -153,14 +153,14 @@ Describe "ConvertTo-UrlEncoded" {
         It "Should process multiple values from pipeline" {
             $Results = @('hello world', 'foo/bar') | ConvertTo-UrlEncoded
             $Results | Should -HaveCount 2
-            $Results[0] | Should -Be 'hello+world'
+            $Results[0] | Should -Be 'hello%20world'
             $Results[1] | Should -Be 'foo%2Fbar'
         }
     }
 
     Context "Positional parameter" {
         It "Should accept value as positional parameter" {
-            ConvertTo-UrlEncoded 'test value' | Should -Be 'test+value'
+            ConvertTo-UrlEncoded 'test value' | Should -Be 'test%20value'
         }
     }
 }

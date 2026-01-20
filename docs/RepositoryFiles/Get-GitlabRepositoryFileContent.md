@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/RepositoryFiles/Get-GitlabRepositoryFileContent
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 01/20/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabRepositoryFileContent
 ---
@@ -66,13 +66,14 @@ The path to the file in the repository (e.g., 'src/app.js' or 'README.md').
 Type: System.String
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Path
 ParameterSets:
 - Name: (All)
   Position: 0
   IsRequired: true
   ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
+  ValueFromPipelineByPropertyName: true
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []

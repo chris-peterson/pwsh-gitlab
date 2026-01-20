@@ -36,8 +36,7 @@ just
 Tests are located in the `tests/` directory. We use Pester v5+ for unit testing.
 
 ```sh
-just test                        # Run all tests
-just test -Filter "Get-*"        # Run specific tests
+just test
 ```
 
 ### Documentation — [PlatyPS](https://github.com/PowerShell/platyps)
@@ -45,7 +44,7 @@ just test -Filter "Get-*"        # Run specific tests
 Cmdlet documentation is generated from code comments using PlatyPS and published to GitHub Pages.
 
 ```sh
-just help-update    # Regenerate docs from source
+just help-update
 ```
 
 Documentation files are in `docs/` and should not be edited manually—they're generated from the module's comment-based help.

@@ -67,9 +67,9 @@ function Get-GitlabRepositoryFile {
             New-GitlabObject 'Gitlab.RepositoryFile'
     }
     catch {
-        $Error = $_
+        $Ex = $_
         switch ($ErrorActionPreference){
-            'Stop' { throw $Error }
+            'Stop' { throw $Ex }
             default { Write-Warning "File $FilePath not found in $($Project.Name) ($RefName)"; return $null }
         }
     }

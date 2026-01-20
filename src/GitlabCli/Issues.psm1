@@ -98,7 +98,7 @@ function New-GitlabIssue {
     [CmdletBinding(SupportsShouldProcess)]
     [OutputType('Gitlab.Issue')]
     param(
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string]
         $ProjectId = '.',
 

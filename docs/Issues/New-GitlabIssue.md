@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/New-GitlabIssue
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 01/20/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabIssue
 ---
@@ -179,7 +179,7 @@ ParameterSets:
   Position: Named
   IsRequired: false
   ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
+  ValueFromPipelineByPropertyName: true
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []
@@ -258,6 +258,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
+
+### System.String
+
+You can pipe a project ID to this cmdlet.
 
 ## OUTPUTS
 
