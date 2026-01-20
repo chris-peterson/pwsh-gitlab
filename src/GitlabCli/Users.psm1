@@ -372,9 +372,10 @@ function Stop-GitlabUserImpersonation {
                 }
             }
             catch {
+                $Error = $_
                 switch ($ErrorActionPreference){
-                    'Stop' { throw $_ }
-                    default { Write-Warning "Error stopping impersonation session: $_"; return $null }
+                    'Stop' { throw $Error }
+                    default { Write-Warning "Error stopping impersonation session: $($Error.Exception.Message)"; return $null }
                 }
             }
         }
