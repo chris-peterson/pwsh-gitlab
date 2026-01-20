@@ -75,7 +75,7 @@ function Invoke-GitlabApi {
             if ($Value) {
                 $SerializedQuery += $Delimiter
                 $SerializedQuery += "$Name="
-                $SerializedQuery += [System.Net.WebUtility]::UrlEncode($Value)
+                $SerializedQuery += $Value | ConvertTo-UrlEncoded
                 $Delimiter = '&'
             }
         }

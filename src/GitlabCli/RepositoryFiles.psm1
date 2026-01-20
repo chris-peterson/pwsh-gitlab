@@ -1,7 +1,3 @@
-# Contains wrappers for
-# https://docs.gitlab.com/ee/api/repository_files.html
-
-# https://docs.gitlab.com/ee/api/repository_files.html#get-file-from-repository
 function Get-GitlabRepositoryFileContent {
     [CmdletBinding()]
     [OutputType([string])]
@@ -10,7 +6,8 @@ function Get-GitlabRepositoryFileContent {
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias("Path")]
         [string]
         $FilePath,
 
@@ -39,7 +36,8 @@ function Get-GitlabRepositoryFile {
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias("Path")]
         [string]
         $FilePath,
 
@@ -64,12 +62,13 @@ function Get-GitlabRepositoryFile {
     $RefName = $(Get-GitlabBranch -ProjectId $ProjectId -Ref $Ref).Name
 
     try {
+        # https://docs.gitlab.com/api/repository_files/#get-file-from-repository
         return Invoke-GitlabApi GET "projects/$($Project.Id)/repository/files/$($FilePath | ConvertTo-UrlEncoded)?ref=$RefName" |
             New-GitlabObject 'Gitlab.RepositoryFile'
     }
     catch {
         switch ($ErrorActionPreference){
-            'Stop' { throw $_ }
+            'Stop' { throw $_.Exception.Message }
             default { Write-Warning "File $FilePath not found in $($Project.Name) ($RefName)"; return $null }
         }
     }

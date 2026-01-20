@@ -1,5 +1,5 @@
 BeforeAll {
-    . $PSScriptRoot/../src/GitlabCli/Private/Functions/CasingHelpers.ps1
+    . $PSScriptRoot/../src/GitlabCli/Private/Functions/StringHelpers.ps1
 }
 
 Describe "ConvertTo-PascalCase" {

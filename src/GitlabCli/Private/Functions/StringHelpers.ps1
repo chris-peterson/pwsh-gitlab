@@ -52,7 +52,7 @@ function ConvertTo-UrlEncoded {
     )
     Begin {}
     Process {
-        [System.Net.WebUtility]::UrlEncode($Value)
+        [Uri]::EscapeDataString($Value)
     }
     End {}
 }

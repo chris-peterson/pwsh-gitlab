@@ -1,5 +1,5 @@
 BeforeAll {
-    . $PSScriptRoot/../src/GitlabCli/Private/Functions/CasingHelpers.ps1
+    . $PSScriptRoot/../src/GitlabCli/Private/Functions/StringHelpers.ps1
     . $PSScriptRoot/../src/GitlabCli/Private/Globals.ps1
     . $PSScriptRoot/../src/GitlabCli/Private/Functions/ObjectHelpers.ps1
 }

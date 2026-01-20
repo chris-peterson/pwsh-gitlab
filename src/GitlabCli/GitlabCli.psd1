@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.161.4'
+    ModuleVersion = '1.161.5'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* bugfix: cache should use 'global' scope
+* bugfix: url encoding was using '+' instead of '%20' for spaces
 '@
         }
     }
@@ -49,7 +49,7 @@
     ScriptsToProcess = @(
         'Private/Functions/BranchHelpers.ps1'
         'Private/Functions/CacheHelpers.ps1'
-        'Private/Functions/CasingHelpers.ps1'
+        'Private/Functions/StringHelpers.ps1'
         'Private/Functions/ConfigurationHelpers.ps1'
         'Private/Functions/GroupHelpers.ps1'
         'Private/Functions/JobHelpers.ps1'
