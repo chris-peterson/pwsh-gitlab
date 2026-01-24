@@ -72,6 +72,7 @@
         'Config.psm1'
         'DeployKeys.psm1'
         'Deployments.psm1'
+        'Development.psm1'
         'Environments.psm1'
         'Git.psm1'
         'GraphQL.psm1'
@@ -106,42 +107,53 @@
         'Variables.psm1'
     )
     FunctionsToExport = @(
-        # Git
-        'Get-LocalGitContext'
-
-        # AuditEvents
+        # AuditEvents.psm1
         'Get-GitlabAuditEvent'
 
-        # Branches
+        # Branches.psm1
         'Get-GitlabBranch'
         'Get-GitlabProtectedBranch'
         'New-GitlabBranch'
         'Protect-GitlabBranch'
-        'UnProtect-GitlabBranch'
         'Remove-GitlabBranch'
+        'UnProtect-GitlabBranch'
 
-        # Commits
+        # Commits.psm1
         'Get-GitlabCommit'
 
-        # Configuration
-        'Get-GitlabConfiguration'
+        # Config.psm1
         'Add-GitlabSite'
-        'Remove-GitlabSite'
         'Get-DefaultGitlabSite'
+        'Get-GitlabConfiguration'
+        'Remove-GitlabSite'
         'Set-DefaultGitlabSite'
 
-        # Deploy Keys
+        # DeployKeys.psm1
         'Get-GitlabDeployKey'
 
-        # GraphQL
+        # Development.psm1
+        'Initialize-GitlabDevelopment'
+
+        # Deployments.psm1
+        'Get-GitlabDeployment'
+
+        # Environments.psm1
+        'Get-GitlabEnvironment'
+        'Remove-GitlabEnvironment'
+        'Stop-GitlabEnvironment'
+
+        # Git.psm1
+        'Get-LocalGitContext'
+
+        # GraphQL.psm1
         'Invoke-GitlabGraphQL'
 
-        # Group Access Tokens
+        # GroupAccessTokens.psm1
         'Get-GitlabGroupAccessToken'
         'New-GitlabGroupAccessToken'
         'Remove-GitlabGroupAccessToken'
 
-        # Groups
+        # Groups.psm1
         'Copy-GitlabGroupToLocalFileSystem'
         'Get-GitlabGroup'
         'Get-GitlabGroupVariable'
@@ -156,219 +168,208 @@
         'Update-GitlabGroup'
         'Update-LocalGitlabGroup'
 
-        # SSH Keys
+        # Integrations.psm1
+        'Enable-GitlabProjectSlackNotification'
+        'Get-GitlabProjectIntegration'
+        'Remove-GitlabProjectIntegration'
+        'Update-GitlabProjectIntegration'
+
+        # Issues.psm1
+        'Close-GitlabIssue'
+        'Get-GitlabIssue'
+        'New-GitlabIssue'
+        'Open-GitlabIssue'
+        'Update-GitlabIssue'
+
+        # Jobs.psm1
+        'Get-GitlabJob'
+        'Get-GitlabJobArtifact'
+        'Get-GitlabJobTrace'
+        'Get-GitlabPipelineDefinition'
+        'Start-GitlabJob'
+        'Start-GitlabJobLogSection'
+        'Stop-GitlabJobLogSection'
+        'Test-GitlabPipelineDefinition'
+        'Write-GitlabJobTrace'
+
+        # Keys.psm1
         'Get-GitlabKey'
 
-        # Project Access Tokens
+        # Members.psm1
+        'Add-GitlabGroupMember'
+        'Add-GitlabProjectMember'
+        'Add-GitlabUserMembership'
+        'Get-GitlabGroupMember'
+        'Get-GitlabMemberAccessLevel'
+        'Get-GitlabMembershipSortKey'
+        'Get-GitlabProjectMember'
+        'Get-GitlabUserMembership'
+        'Remove-GitlabGroupMember'
+        'Remove-GitlabProjectMember'
+        'Remove-GitlabUserMembership'
+        'Set-GitlabGroupMember'
+        'Set-GitlabProjectMember'
+        'Update-GitlabUserMembership'
+
+        # MergeRequests.psm1
+        'Approve-GitlabMergeRequest'
+        'Close-GitlabMergeRequest'
+        'Get-GitlabMergeRequest'
+        'Get-GitlabMergeRequestApprovalConfiguration'
+        'Get-GitlabMergeRequestApprovalRule'
+        'Invoke-GitlabMergeRequestReview'
+        'Merge-GitlabMergeRequest'
+        'New-GitlabMergeRequest'
+        'New-GitlabMergeRequestApprovalRule'
+        'Remove-GitlabMergeRequestApprovalRule'
+        'Set-GitlabMergeRequest'
+        'Update-GitlabMergeRequest'
+        'Update-GitlabMergeRequestApprovalConfiguration'
+
+        # Milestones.psm1
+        'Get-GitlabMilestone'
+
+        # Notes.psm1
+        'Get-GitlabIssueNote'
+        'Get-GitlabMergeRequestNote'
+        'New-GitlabIssueNote'
+
+        # PersonalAccessTokens.psm1
+        'Get-GitlabPersonalAccessToken'
+        'Invoke-GitlabPersonalAccessTokenRotation'
+        'New-GitlabPersonalAccessToken'
+        'Revoke-GitlabPersonalAccessToken'
+
+        # PipelineSchedules.psm1
+        'Disable-GitlabPipelineSchedule'
+        'Enable-GitlabPipelineSchedule'
+        'Get-GitlabPipelineSchedule'
+        'Get-GitlabPipelineScheduleVariable'
+        'New-GitlabPipelineSchedule'
+        'New-GitlabPipelineScheduleVariable'
+        'New-GitlabScheduledPipeline'
+        'Remove-GitlabPipelineSchedule'
+        'Remove-GitlabPipelineScheduleVariable'
+        'Update-GitlabPipelineSchedule'
+        'Update-GitlabPipelineScheduleVariable'
+
+        # Pipelines.psm1
+        'Get-GitlabPipeline'
+        'Get-GitlabPipelineBridge'
+        'Get-GitlabPipelineVariable'
+        'New-GitlabPipeline'
+        'Remove-GitlabPipeline'
+
+        # ProjectAccessTokens.psm1
         'Get-GitlabProjectAccessToken'
+        'Invoke-GitlabProjectAccessTokenRotation'
         'New-GitlabProjectAccessToken'
         'Remove-GitlabProjectAccessToken'
-        'Invoke-GitlabProjectAccessTokenRotation'
 
-        # Project Deploy Keys
-        'Get-GitlabProjectDeployKey'
+        # ProjectDeployKeys.psm1
         'Add-GitlabProjectDeployKey'
-        'Update-GitlabProjectDeployKey'
-        'Remove-GitlabProjectDeployKey'
         'Enable-GitlabProjectDeployKey'
+        'Get-GitlabProjectDeployKey'
+        'Remove-GitlabProjectDeployKey'
+        'Update-GitlabProjectDeployKey'
 
-        # Projects
+        # ProjectHooks.psm1
+        'Get-GitlabProjectHook'
+        'New-GitlabProjectHook'
+        'Remove-GitlabProjectHook'
+        'Update-GitlabProjectHook'
+
+        # Projects.psm1
         'Add-GitlabProjectTopic'
         'ConvertTo-GitlabTriggerYaml'
         'Copy-GitlabProject'
+        'Copy-GitlabProjectToLocalFileSystem'
         'Get-GitlabProject'
-        'Get-GitlabProjectHook'
+        'Get-GitlabProjectEvent'
         'Get-GitlabProjectVariable'
         'Invoke-GitlabProjectArchival'
         'Invoke-GitlabProjectUnarchival'
         'Move-GitlabProject'
         'New-GitlabGroupToProjectShare'
         'New-GitlabProject'
-        'New-GitlabProjectHook'
         'Remove-GitlabGroupToProjectShare'
         'Remove-GitlabProject'
         'Remove-GitlabProjectForkRelationship'
-        'Remove-GitlabProjectHook'
         'Remove-GitlabProjectTopic'
         'Remove-GitlabProjectVariable'
         'Rename-GitlabProject'
         'Rename-GitlabProjectDefaultBranch'
         'Set-GitlabProjectVariable'
         'Update-GitlabProject'
-        'Update-GitlabProjectHook'
 
-        # Repository Files
+        # Releases.psm1
+        'Get-GitlabRelease'
+
+        # RepositoryFiles.psm1
         'Get-GitlabRepositoryFile'
-        'Get-GitlabRepositoryTree'
         'Get-GitlabRepositoryFileContent'
+        'Get-GitlabRepositoryTree'
         'Get-GitlabRepositoryYmlFileContent'
         'New-GitlabRepositoryFile'
         'Update-GitlabRepositoryFile'
 
-        # Environments
-        'Get-GitlabEnvironment'
-        'Stop-GitlabEnvironment'
-        'Remove-GitlabEnvironment'
+        # Runners.psm1
+        'Get-GitlabRunner'
+        'Get-GitlabRunnerJob'
+        'Get-GitlabRunnerStats'
+        'Remove-GitlabRunner'
+        'Resume-GitlabRunner'
+        'Suspend-GitlabRunner'
+        'Update-GitlabRunner'
 
-        # Deployments
-        'Get-GitlabDeployment'
+        # Search.psm1
+        'Search-Gitlab'
+        'Search-GitlabProject'
 
-        # Issues
-        'Get-GitlabIssue'
-        'New-GitlabIssue'
-        'Update-GitlabIssue'
-        'Open-GitlabIssue'
-        'Close-GitlabIssue'
-
-        # Notes
-        'Get-GitlabIssueNote'
-        'New-GitlabIssueNote'
-        'Get-GitlabMergeRequestNote'
-
-        # MergeRequests
-        'Get-GitlabMergeRequest'
-        'New-GitlabMergeRequest'
-        'Merge-GitlabMergeRequest'
-        'Set-GitlabMergeRequest'
-        'Invoke-GitlabMergeRequestReview'
-        'Approve-GitlabMergeRequest'
-        'Update-GitlabMergeRequest'
-        'Close-GitlabMergeRequest'
-        # MergeRequest Approvals
-        'Get-GitlabMergeRequestApprovalConfiguration'
-        'Update-GitlabMergeRequestApprovalConfiguration'
-        'Get-GitlabMergeRequestApprovalRule'
-        'New-GitlabMergeRequestApprovalRule'
-        'Remove-GitlabMergeRequestApprovalRule'
-
-        # Milestones
-        'Get-GitlabMilestone'
-
-        # PATs
-        'Get-GitlabPersonalAccessToken'
-        'New-GitlabPersonalAccessToken'
-        'Invoke-GitlabPersonalAccessTokenRotation'
-        'Revoke-GitlabPersonalAccessToken'
-
-        # Service Accounts
+        # ServiceAccounts.psm1
         'Get-GitlabServiceAccount'
         'New-GitlabServiceAccount'
         'Remove-GitlabServiceAccount'
         'Update-GitlabServiceAccount'
 
-        # Pipelines
-        'Get-GitlabPipeline'
-        'Get-GitlabPipelineVariable'
-        'New-GitlabPipeline'
-        'Remove-GitlabPipeline'
-        'Get-GitlabPipelineScheduleVariable'
-        'New-GitlabPipelineScheduleVariable'
-        'Remove-GitlabPipelineScheduleVariable'
-        'Update-GitlabPipelineScheduleVariable'
-        'New-GitlabScheduledPipeline'
-        'Get-GitlabPipelineBridge'
-
-        # Pipeline Schedules
-        'Get-GitlabPipelineSchedule'
-        'New-GitlabPipelineSchedule'
-        'Update-GitlabPipelineSchedule'
-        'Enable-GitlabPipelineSchedule'
-        'Disable-GitlabPipelineSchedule'
-        'Remove-GitlabPipelineSchedule'
-
-        # Jobs
-        'Get-GitlabJob'
-        'Get-GitlabJobTrace'
-        'Get-GitlabJobArtifact'
-        'Start-GitlabJob'
-        'Get-GitlabPipelineDefinition'
-        'Test-GitlabPipelineDefinition'
-        'Start-GitlabJobLogSection'
-        'Stop-GitlabJobLogSection'
-        'Write-GitlabJobTrace'
-
-        # Releases
-        'Get-GitlabRelease'
-
-        # Runners
-        'Get-GitlabRunner'
-        'Get-GitlabRunnerJob'
-        'Update-GitlabRunner'
-        'Suspend-GitlabRunner'
-        'Resume-GitlabRunner'
-        'Remove-GitlabRunner'
-        'Get-GitlabRunnerStats'
-
-        # Search
-        'Search-Gitlab'
-        'Search-GitlabProject'
-
-        # Snippets
+        # Snippets.psm1
         'Get-GitlabSnippet'
         'Get-GitlabSnippetContent'
         'New-GitlabSnippet'
-        'Update-GitlabSnippet'
         'Remove-GitlabSnippet'
+        'Update-GitlabSnippet'
 
-        # Todo
-        'Get-GitlabTodo'
+        # Todos.psm1
         'Clear-GitlabTodo'
+        'Get-GitlabTodo'
 
-        # Topics
+        # Topics.psm1
         'Get-GitlabTopic'
         'New-GitlabTopic'
-        'Update-GitlabTopic'
         'Remove-GitlabTopic'
+        'Update-GitlabTopic'
 
-        # User Deploy Keys
+        # UserDeployKeys.psm1
         'Get-GitlabUserDeployKey'
 
-        # User
-        'Get-GitlabUser'
-        'Get-GitlabCurrentUser'
+        # Users.psm1
         'Block-GitlabUser'
+        'Get-GitlabCurrentUser'
+        'Get-GitlabUser'
+        'Get-GitlabUserEvent'
         'Remove-GitlabUser'
         'Start-GitlabUserImpersonation'
         'Stop-GitlabUserImpersonation'
         'Unblock-GitlabUser'
 
-        # Events
-        'Get-GitlabUserEvent'
-        'Get-GitlabProjectEvent'
-
-        # Integrations
-        'Get-GitlabProjectIntegration'
-        'Update-GitlabProjectIntegration'
-        'Remove-GitlabProjectIntegration'
-        'Enable-GitlabProjectSlackNotification'
-
-        # Members
-        'Get-GitlabMemberAccessLevel'
-        'Get-GitlabMembershipSortKey'
-
-        'Get-GitlabGroupMember'
-        'Set-GitlabGroupMember'
-        'Add-GitlabGroupMember'
-        'Remove-GitlabGroupMember'
-
-        'Get-GitlabProjectMember'
-        'Set-GitlabProjectMember'
-        'Add-GitlabProjectMember'
-        'Remove-GitlabProjectMember'
-
-        'Get-GitlabUserMembership'
-        'Add-GitlabUserMembership'
-        'Update-GitlabUserMembership'
-        'Remove-GitlabUserMembership'
-
-        # Utilities
-        'ConvertTo-GitlabVariables'
+        # Utilities.psm1
         'Get-FilteredObject'
         'Get-GitlabVersion'
         'Invoke-GitlabApi'
         'Open-InBrowser'
 
-        # Variables
+        # Variables.psm1
+        'ConvertTo-GitlabVariables'
         'Resolve-GitlabVariable'
     )
     AliasesToExport = @(
@@ -397,22 +398,23 @@
         'Unarchive-GitlabProject'
 
         # short form
-        'go'
         'build'
-        'envs'
         'deploys'
+        'dev'
+        'envs'
+        'go'
+        'issue'
+        'issues'
+        'job'
+        'jobs'
+        'mr'
+        'mrs'
         'pipeline'
         'pipelines'
         'play'
         'schedule'
         'schedules'
-        'job'
-        'jobs'
         'trace'
-        'issue'
-        'issues'
-        'mr'
-        'mrs'
         'var'
     )
 }

@@ -61,7 +61,7 @@ function Write-GitlabConfiguration {
     $ConfigContainer = Split-Path -Parent $global:GitlabConfigurationPath
 
     if (-not (Test-Path -Type Container $ConfigContainer)) {
-        New-Item -Type Directory $ConfigContainer | Out-Null
+        New-Item -ItemType Directory -Path $ConfigContainer | Out-Null
     }
 
     $SaveParameters = @{

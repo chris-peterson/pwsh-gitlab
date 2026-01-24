@@ -892,3 +892,25 @@ function Remove-GitlabProjectTopic {
         Update-GitlabProject -ProjectId $Project.Id -Topics $NewTopics
     }
 }
+
+function Copy-GitlabProjectToLocalFileSystem {
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(Mandatory, ValueFromPipeline)]
+        $Project
+    )
+
+    process {
+        $LocalPath = (Get-Location).Path
+        $TargetPath = "$LocalPath/$($Project.Group)"
+        if ($PSCmdlet.ShouldProcess("local file system ($TargetPath)", "clone project '$($Project.PathWithNamespace)'")) {
+            if (-not $(Test-Path $TargetPath)) {
+                New-Item -ItemType Directory -Path $TargetPath | Out-Null
+            }
+
+            Set-Location $TargetPath
+            git clone $Project.SshUrlToRepo
+            $TargetPath
+        }
+    }
+}
