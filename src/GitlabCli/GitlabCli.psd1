@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.161.5'
+    ModuleVersion = '1.162.0'
 
     RequiredModules = @(
         @{
@@ -31,8 +31,7 @@
             )
             ReleaseNotes =
 @'
-* bugfix: url encoding was using '+' instead of '%20' for spaces
-* bugfix: error handling for Get-GitlabRepositoryFile + Stop-GitlabUserImpersonation
+* feat: Get-GitLabIssue by Assignee (-Mine uses this now)
 '@
         }
     }

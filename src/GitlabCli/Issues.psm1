@@ -31,6 +31,12 @@ function Get-GitlabIssue {
         $CreatedBefore,
 
         [Parameter()]
+        [Alias('AssignedToUsername')]
+        [string]
+        $AssigneeUsername,
+
+        [Parameter()]
+        [string]
         $AuthorUsername,
 
         [Parameter(Mandatory, ParameterSetName='Mine')]
@@ -57,21 +63,27 @@ function Get-GitlabIssue {
     $Query = @{}
 
     if ($Mine) {
-        $AuthorUsername = (Get-GitlabUser -Me).Username
+        $AssigneeUsername = (Get-GitlabUser -Me).Username
     }
 
-    if ($AuthorUsername) {
+    if ($AssigneeUsername) {
+        $Query.assignee_username = $AssigneeUsername
+    }
+    elseif ($AuthorUsername) {
         $Query.author_username = $AuthorUsername
     } else {
         if ($GroupId) {
             $GroupId = Resolve-GitlabGroupId $GroupId
+            # https://docs.gitlab.com/api/issues/#list-all-group-issues
             $Path = "groups/$GroupId/issues"
         }
         elseif ($ProjectId) {
             $ProjectId = Resolve-GitlabProjectId $ProjectId
+            # https://docs.gitlab.com/api/issues/#list-all-project-issues
             $Path = "projects/$ProjectId/issues"
         }
         if ($IssueId) {
+            # https://docs.gitlab.com/api/issues/#retrieve-an-issue
             $Path += "/$IssueId"
         }
     }
