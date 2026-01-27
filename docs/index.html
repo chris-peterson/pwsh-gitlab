@@ -187,20 +187,14 @@
       background: none !important;
     }
 
-    /* Footer links - external links and acknowledgements */
-    .sidebar-nav a[href^="http"],
-    .sidebar-nav a[href*="Acknowledgements"] {
-      font-weight: normal !important;
-      font-size: 14px !important;
-      color: var(--sidebar-nav-link-color) !important;
-      text-decoration: none !important;
+    /* Footer links (li.file at root level) */
+    .sidebar-nav > ul > li.file {
+      padding-left: 0 !important;
     }
 
-    .sidebar-nav a[href^="http"]:hover,
-    .sidebar-nav a[href*="Acknowledgements"]:hover {
-      color: var(--link-color--hover) !important;
-      font-size: 14px !important;
-      transform: none !important;
+    .sidebar-nav > ul > li.file > a {
+      font-weight: normal !important;
+      padding-left: 15px !important;
     }
 
 
