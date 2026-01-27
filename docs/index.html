@@ -166,9 +166,100 @@
       display: none !important;
     }
 
-    /* Sidebar toggle button - hide it */
+    /* Sidebar toggle button - hide default docsify toggle */
     .sidebar-toggle {
       display: none !important;
+    }
+
+    /* Custom hamburger menu button for mobile */
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--base-color);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px 8px;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+
+    .mobile-menu-toggle:hover {
+      opacity: 1;
+    }
+
+    /* Mobile overlay when sidebar is open */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+    }
+
+    .sidebar-overlay.visible {
+      display: block;
+    }
+
+    /* Mobile responsive styles */
+    @media screen and (max-width: 768px) {
+      .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .sidebar {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        width: 300px !important;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 999;
+      }
+
+      body.sidebar-open .sidebar {
+        transform: translateX(0) !important;
+      }
+
+      /* Ensure main content doesn't shift */
+      .content {
+        left: 0 !important;
+        width: 100% !important;
+      }
+
+      /* Shrink titlebar brand text on mobile */
+      .titlebar-brand span {
+        font-size: 16px;
+      }
+
+      /* Reduce search width on mobile */
+      .titlebar-search.expanded .titlebar-search-input {
+        width: 140px;
+      }
+
+      .titlebar-search-results {
+        width: 280px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .titlebar-brand span {
+        display: none;
+      }
+
+      .titlebar-search.expanded .titlebar-search-input {
+        width: 120px;
+      }
+
+      .titlebar-search-results {
+        width: 240px;
+      }
     }
 
     /* Adjust sidebar for fixed titlebar */
@@ -461,8 +552,13 @@
   </style>
 </head>
 <body>
+  <!-- Overlay for mobile sidebar -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
   <!-- Unified titlebar -->
   <div class="titlebar" id="titlebar">
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleSidebar()" title="Toggle menu">
+      <i class="fas fa-bars"></i>
+    </button>
     <a href="#/" class="titlebar-brand">
       <img src="icon.png" alt="icon">
       <span>pwsh-gitlab</span>
@@ -500,8 +596,8 @@
       relativePath: false,
       alias: {
         '/.*/_sidebar.md': '/_sidebar.md',
-        // Handle folder URLs (with or without trailing slash) -> README.md
-        '/([A-Za-z]+)/?$': '/$1/README.md'
+        // Handle folder URLs with trailing slash -> README.md
+        '/([A-Za-z]+)/$': '/$1/README.md'
       },
       hideSidebar: false
     }
@@ -607,8 +703,35 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
   <!-- Syntax highlighting -->
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-powershell.min.js"></script>
-  <!-- Theme toggle and scroll behavior script -->
+  <!-- Theme toggle, sidebar toggle, and scroll behavior script -->
   <script>
+    // Mobile sidebar toggle functions
+    function toggleSidebar() {
+      document.body.classList.toggle('sidebar-open');
+      document.getElementById('sidebarOverlay').classList.toggle('visible');
+    }
+
+    function closeSidebar() {
+      document.body.classList.remove('sidebar-open');
+      document.getElementById('sidebarOverlay').classList.remove('visible');
+    }
+
+    // Close sidebar when a link is clicked (on mobile)
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('.sidebar-nav a')) {
+        if (window.innerWidth <= 768) {
+          closeSidebar();
+        }
+      }
+    });
+
+    // Close sidebar on window resize if going to desktop
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 768) {
+        closeSidebar();
+      }
+    });
+
     function toggleTheme() {
       const html = document.documentElement;
       const btn = document.getElementById('themeToggle');

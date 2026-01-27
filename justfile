@@ -22,3 +22,14 @@ help-update:
 
 help-export:
     pwsh -File ./docs/.support/scripts/Export-Help.ps1
+
+docs:
+    #!/usr/bin/env bash
+    pkill -f "docsify serve ./docs" 2>/dev/null || true
+    docsify serve ./docs -p 3000 &
+    PID=$!
+    sleep 1
+    open http://localhost:3000
+    echo "Press Enter to stop the server..."
+    read
+    kill $PID 2>/dev/null
