@@ -4,6 +4,16 @@ on:
   push:
     branches: [ '*' ]
   pull_request:
+  workflow_dispatch:
+    inputs:
+      force_publish_module:
+        description: 'Force publish module (bypass change detection)'
+        type: boolean
+        default: false
+      force_publish_docs:
+        description: 'Force publish docs (bypass change detection)'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -196,7 +206,7 @@ jobs:
   publish-module:
     name: Publish Module
     needs: release-gate
-    if: needs.release-gate.outputs.changes_in_src == 'true'
+    if: needs.release-gate.outputs.changes_in_src == 'true' || inputs.force_publish_module == true
     runs-on: ubuntu-latest
     environment:
       name: PowerShell Gallery
@@ -279,7 +289,7 @@ jobs:
   publish-docs:
     name: Publish Documentation
     needs: release-gate
-    if: needs.release-gate.outputs.changes_in_docs == 'true'
+    if: needs.release-gate.outputs.changes_in_docs == 'true' || inputs.force_publish_docs == true
     runs-on: ubuntu-latest
     permissions:
       pages: write
