@@ -268,4 +268,4 @@
 
 * [GitHub](https://github.com/chris-peterson/pwsh-gitlab)
 * [PowerShell Gallery](https://www.powershellgallery.com/packages/GitlabCli)
-* [Acknowledgements](./Acknowledgements.md)
+* [Acknowledgements](Acknowledgements.md)
