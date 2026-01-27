@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>pwsh-gitlab Documentation</title>
@@ -7,91 +7,236 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="PowerShell module for GitLab automation">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <!-- Dark theme by default -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.min.css">
+  <!-- Docsify themeable (base styles) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.min.css">
+  <!-- Prism Dracula theme for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-themes@1/themes/prism-dracula.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
+    /*
+     * Dracula (dark) & Alucard (light) themes using light-dark()
+     * https://draculatheme.com/contribute
+     * Format: light-dark(alucard-value, dracula-value)
+     */
     :root {
-      --theme-color: #FC6D26; /* GitLab orange */
-      --base-background-color: #1e1e1e;
-      --sidebar-background: #252526;
-      --sidebar-nav-link-color--active: #FC6D26;
-      --sidebar-nav-link-border-color--active: #FC6D26;
-      --link-color: #FC6D26;
-      --link-color--hover: #e85d20;
-      --code-inline-background: #2d2d2d;
-      --code-theme-background: #1e1e1e;
-      --blockquote-border-color: #FC6D26;
+      color-scheme: dark;
+
+      /* Palette colors - light-dark(alucard, dracula) */
+      --color-background:    light-dark(#f8f8f2, #282a36);
+      --color-current-line:  light-dark(#e6e6e6, #44475a);
+      --color-foreground:    light-dark(#282a36, #f8f8f2);
+      --color-comment:       light-dark(#6272a4, #6272a4);
+      --color-cyan:          light-dark(#0d7fa6, #8be9fd);
+      --color-green:         light-dark(#1d8a3d, #50fa7b);
+      --color-orange:        light-dark(#c25d00, #ffb86c);
+      --color-pink:          light-dark(#c83f71, #ff79c6);
+      --color-purple:        light-dark(#7c3aed, #bd93f9);
+      --color-red:           light-dark(#dc2626, #ff5555);
+      --color-yellow:        light-dark(#a16207, #f1fa8c);
+
+      /* Docsify themeable variables */
+      --theme-color: var(--color-purple);
+      --base-background-color: var(--color-background);
+      --base-color: var(--color-foreground);
+      --sidebar-background: light-dark(#f0f0f0, #21222c);
+      --sidebar-nav-link-color: var(--color-foreground);
+      --sidebar-nav-link-color--active: var(--color-purple);
+      --sidebar-nav-link-border-color--active: var(--color-purple);
+      --link-color: var(--color-cyan);
+      --link-color--hover: var(--color-pink);
+      --code-inline-background: var(--color-current-line);
+      --code-inline-color: var(--color-green);
+      --code-theme-background: light-dark(#f5f5f5, #282a36);
+      --code-theme-text: var(--color-foreground);
+      --blockquote-border-color: var(--color-purple);
+      --blockquote-background: var(--color-current-line);
+      --heading-color: var(--color-foreground);
+      --search-background: light-dark(#fff, #44475a);
+      --search-input-background-color: light-dark(#fff, #44475a);
+      --search-input-color: var(--color-foreground);
+      --search-input-placeholder-color: var(--color-comment);
+      --search-result-heading-color: var(--color-foreground);
+      --search-result-item-color: var(--color-foreground);
+      --search-result-keyword-background: light-dark(rgba(124, 58, 237, 0.2), rgba(189, 147, 249, 0.3));
+      --search-result-keyword-color: var(--color-pink);
+
+      /* UI element colors */
+      --border-subtle: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.1));
+      --button-bg: light-dark(rgba(0,0,0,0.05), rgba(255,255,255,0.1));
+      --button-bg-hover: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.2));
+      --button-border: light-dark(rgba(0,0,0,0.15), rgba(255,255,255,0.2));
+      --success-color: light-dark(#28a745, #50fa7b);
+
+      /* Sidebar width */
+      --sidebar-width: 25vw;
+
+      /* Table styling */
+      --table-cell-border-color: var(--border-subtle);
+      --table-head-background: light-dark(#e8e8e8, #44475a);
+      --table-row-odd-background: light-dark(#fff, #282a36);
+      --table-row-even-background: light-dark(#f8f8f8, #21222c);
     }
-    
-    /* Light theme overrides */
-    [data-theme="light"] {
-      --base-background-color: #fff;
-      --sidebar-background: #f8f8f8;
-      --code-inline-background: #f0f0f0;
-      --code-inline-color: #c75300;
-      --code-theme-background: #f6f8fa;
-      --code-theme-text: #333;
-      --base-color: #333;
-      --search-background: #fff;
-      --search-result-heading-color: #333;
-      --search-result-item-color: #555;
-      --search-input-background-color: #fff;
-      --search-input-color: #333;
-      --search-input-placeholder-color: #999;
-      --search-result-keyword-background: rgba(252, 109, 38, 0.2);
-      --search-result-keyword-color: #c75300;
-      --sidebar-nav-link-color: #333;
-      --sidebar-name-color: #333;
-      --heading-color: #333;
-      --cover-background-color: #fff;
-      --notice-tip-background: #f0f0f0;
-      --notice-important-background: #f0f0f0;
-      --notice-warn-background: #fff8e6;
-      --blockquote-background: #f6f8fa;
-      --blockquote-color: #555;
+
+    /* Alucard (light) syntax highlighting overrides */
+    @media (prefers-color-scheme: light) {
+      :root:not([style*="color-scheme: dark"]) pre[class*="language-"],
+      :root:not([style*="color-scheme: dark"]) code[class*="language-"] {
+        background: #f5f5f5 !important;
+        color: #282a36 !important;
+      }
     }
-    
-    /* Light theme code blocks */
-    [data-theme="light"] pre,
-    [data-theme="light"] code {
-      background-color: #f6f8fa !important;
-      color: #333 !important;
+
+    :root[style*="color-scheme: light"] pre[class*="language-"],
+    :root[style*="color-scheme: light"] code[class*="language-"] {
+      background: #f5f5f5 !important;
+      color: #282a36 !important;
     }
-    
-    [data-theme="light"] .token.function { color: #6f42c1; }
-    [data-theme="light"] .token.keyword { color: #d73a49; }
-    [data-theme="light"] .token.string { color: #032f62; }
-    [data-theme="light"] .token.comment { color: #6a737d; }
-    [data-theme="light"] .token.operator { color: #d73a49; }
-    [data-theme="light"] .token.variable { color: #e36209; }
-    
-    /* Light theme blockquote */
-    [data-theme="light"] blockquote {
-      background-color: #f6f8fa !important;
-      color: #555 !important;
-      border-left-color: var(--theme-color) !important;
+
+    :root[style*="color-scheme: light"] .token.comment,
+    :root[style*="color-scheme: light"] .token.prolog,
+    :root[style*="color-scheme: light"] .token.doctype,
+    :root[style*="color-scheme: light"] .token.cdata { color: #6272a4 !important; }
+    :root[style*="color-scheme: light"] .token.punctuation { color: #282a36 !important; }
+    :root[style*="color-scheme: light"] .token.property,
+    :root[style*="color-scheme: light"] .token.tag,
+    :root[style*="color-scheme: light"] .token.constant,
+    :root[style*="color-scheme: light"] .token.symbol,
+    :root[style*="color-scheme: light"] .token.deleted { color: #c83f71 !important; }
+    :root[style*="color-scheme: light"] .token.boolean,
+    :root[style*="color-scheme: light"] .token.number { color: #7c3aed !important; }
+    :root[style*="color-scheme: light"] .token.selector,
+    :root[style*="color-scheme: light"] .token.attr-name,
+    :root[style*="color-scheme: light"] .token.string,
+    :root[style*="color-scheme: light"] .token.char,
+    :root[style*="color-scheme: light"] .token.builtin,
+    :root[style*="color-scheme: light"] .token.inserted { color: #1d8a3d !important; }
+    :root[style*="color-scheme: light"] .token.operator,
+    :root[style*="color-scheme: light"] .token.entity,
+    :root[style*="color-scheme: light"] .token.url,
+    :root[style*="color-scheme: light"] .token.variable { color: #282a36 !important; }
+    :root[style*="color-scheme: light"] .token.atrule,
+    :root[style*="color-scheme: light"] .token.attr-value,
+    :root[style*="color-scheme: light"] .token.function,
+    :root[style*="color-scheme: light"] .token.class-name { color: #c25d00 !important; }
+    :root[style*="color-scheme: light"] .token.keyword { color: #c83f71 !important; }
+    :root[style*="color-scheme: light"] .token.regex,
+    :root[style*="color-scheme: light"] .token.important { color: #c25d00 !important; }
+
+    /* Table styling */
+    .markdown-section table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1em 0;
     }
-    
+
+    .markdown-section th,
+    .markdown-section td {
+      border: 1px solid var(--table-cell-border-color) !important;
+      padding: 10px 14px !important;
+      text-align: left;
+    }
+
+    .markdown-section th {
+      background: var(--table-head-background) !important;
+      font-weight: 600;
+      color: var(--base-color);
+    }
+
+    .markdown-section td {
+      background: var(--table-row-odd-background) !important;
+      color: var(--base-color);
+    }
+
+    .markdown-section tr:nth-child(even) td {
+      background: var(--table-row-even-background) !important;
+    }
+
     .sidebar-nav > ul > li > a {
       font-weight: bold;
     }
-    
-    /* Sidebar name area with toggle */
-    .sidebar > h1 {
+
+    /* Hide docsify's default repo corner and sidebar name */
+    .github-corner {
+      display: none !important;
+    }
+
+    .sidebar > h1,
+    .sidebar > .app-name {
+      display: none !important;
+    }
+
+    /* Sidebar toggle button - hide it */
+    .sidebar-toggle {
+      display: none !important;
+    }
+
+    /* Adjust sidebar for fixed titlebar */
+    .sidebar {
+      padding-top: 48px !important;
+    }
+
+    /* Hide sidebar search (moved to titlebar) */
+    .sidebar .search {
+      display: none !important;
+    }
+
+    /* Hide chevrons on leaf items (no children) */
+    .sidebar-nav li>a[href^="/"]:not([href*="?id="]):only-child,
+    .sidebar-nav li>a[href^="#/"]:not([href*="?id="]):only-child {
+      background: none !important;
+    }
+
+
+    /* Unified titlebar */
+    .titlebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--sidebar-background);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0 16px;
+      height: 48px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding-right: 10px;
+      gap: 12px;
     }
-    
-    .app-name-link {
+
+    .titlebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .titlebar-brand img {
+      height: 24px;
+      width: 24px;
+    }
+
+    .titlebar-brand span {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--base-color);
+    }
+
+    .titlebar-spacer {
       flex: 1;
     }
-    
-    /* Theme toggle in sidebar header */
+
+    .titlebar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Theme toggle */
     .theme-toggle {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
+      background: var(--button-bg);
+      border: 1px solid var(--button-border);
       border-radius: 14px;
       cursor: pointer;
       font-size: 14px;
@@ -99,83 +244,246 @@
       opacity: 0.9;
       transition: all 0.2s ease;
     }
-    
+
     .theme-toggle:hover {
       opacity: 1;
-      background: rgba(255,255,255,0.2);
+      background: var(--button-bg-hover);
       transform: scale(1.05);
     }
-    
-    /* Light mode toggle styling */
-    [data-theme="light"] .theme-toggle {
-      background: rgba(0,0,0,0.05);
-      border: 1px solid rgba(0,0,0,0.15);
-    }
-    
-    [data-theme="light"] .theme-toggle:hover {
-      background: rgba(0,0,0,0.1);
-    }
-    
-    /* Keep GitHub corner fixed */
-    .github-corner {
-      position: fixed !important;
-      top: 0;
-      right: 0;
-      z-index: 999;
-    }
-    
-    /* Light mode hamburger/sidebar toggle */
-    [data-theme="light"] .sidebar-toggle-button {
-      background-color: #f0f0f0 !important;
-      border: 1px solid #ccc !important;
-    }
-    [data-theme="light"] .sidebar-toggle-button span {
-      background-color: #555 !important;
-    }
-    
-    /* Keep sidebar header and search bar always visible */
-    .sidebar {
+
+    /* Titlebar search */
+    .titlebar-search {
+      position: relative;
       display: flex;
-      flex-direction: column;
+      align-items: center;
     }
-    
-    .sidebar > h1,
-    .sidebar > .app-name {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: var(--sidebar-background);
-      margin: 0;
-      padding: 10px 15px;
+
+    .titlebar-search-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      color: var(--base-color);
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
     }
-    
-    .sidebar .search {
-      position: sticky;
-      top: 60px;
-      z-index: 10;
-      background: var(--sidebar-background);
-      margin: 0;
-      padding: 8px 15px;
+
+    .titlebar-search-icon:hover {
+      opacity: 1;
     }
-    
-    .sidebar .search input {
-      width: 100%;
+
+    .titlebar-search-input {
+      width: 0;
+      padding: 0;
+      border: none;
+      background: var(--button-bg);
+      border-radius: 4px;
+      color: var(--base-color);
+      font-size: 14px;
+      outline: none;
+      transition: width 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
     }
-    
-    .sidebar-nav {
-      flex: 1;
+
+    .titlebar-search-input::placeholder {
+      color: var(--color-comment);
+    }
+
+    .titlebar-search.expanded .titlebar-search-input {
+      width: 200px;
+      padding: 6px 10px;
+      opacity: 1;
+    }
+
+    .titlebar-search.expanded .titlebar-search-icon {
+      display: none;
+    }
+
+    /* Search results dropdown */
+    .titlebar-search-results {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 350px;
+      max-height: 400px;
       overflow-y: auto;
+      background: var(--sidebar-background);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: none;
+      margin-top: 8px;
+      z-index: 1002;
+    }
+
+    .titlebar-search.has-results .titlebar-search-results {
+      display: block;
+    }
+
+    .titlebar-search-result {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .titlebar-search-result:hover,
+    .titlebar-search-result.selected {
+      background: var(--button-bg-hover);
+    }
+
+    .titlebar-search-result.selected {
+      outline: none;
+    }
+
+    .titlebar-search-result:last-child {
+      border-bottom: none;
+    }
+
+    .titlebar-search-result-title {
+      font-weight: 600;
+      color: var(--base-color);
+      margin-bottom: 4px;
+    }
+
+    .titlebar-search-result-content {
+      font-size: 12px;
+      color: var(--color-comment);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .titlebar-search-no-results {
+      padding: 12px;
+      color: var(--color-comment);
+      text-align: center;
+    }
+
+    /* GitHub link */
+    .titlebar-github {
+      display: flex;
+      align-items: center;
+      color: var(--base-color);
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+
+    .titlebar-github:hover {
+      opacity: 1;
+    }
+
+    .titlebar-github svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    /* Adjust main content for fixed titlebar */
+    .content {
+      padding-top: 60px !important;
+    }
+
+    section.content {
+      padding-top: 60px !important;
+    }
+
+    .markdown-section {
+      padding-top: 20px !important;
+    }
+
+    /* Remove horizontal lines/dividers under headings */
+    .markdown-section h1,
+    .markdown-section h2 {
+      border-bottom: none !important;
+    }
+
+    .markdown-section hr {
+      display: none !important;
+    }
+
+    /* Code block horizontal scroll instead of wrapping */
+    .markdown-section pre {
+      overflow-x: auto !important;
+      white-space: pre !important;
+    }
+
+    .markdown-section pre code {
+      white-space: pre !important;
+      word-wrap: normal !important;
+    }
+
+    /* Hide language label on code blocks */
+    pre[data-lang]::after {
+      display: none !important;
+    }
+
+    /* Copy button styling - icon only with outline style */
+    .docsify-copy-code-button {
+      font-size: 0 !important;
+      padding: 6px 8px !important;
+      background: transparent !important;
+      border: none !important;
+      opacity: 0.5;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .docsify-copy-code-button:hover {
+      opacity: 1;
+      background: transparent !important;
+    }
+
+    .docsify-copy-code-button::before {
+      display: none !important;
+    }
+
+    .docsify-copy-code-button::after {
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 400; /* Regular weight = outline icons */
+      font-size: 14px !important;
+      content: '\f0c5'; /* clipboard icon */
+      color: var(--base-color);
+      background: transparent !important;
+    }
+
+    .docsify-copy-code-button.copied::after {
+      font-weight: 900; /* Solid for checkmark */
+      content: '\f00c'; /* checkmark icon */
+      color: var(--success-color) !important;
     }
   </style>
 </head>
 <body>
+  <!-- Unified titlebar -->
+  <div class="titlebar" id="titlebar">
+    <a href="#/" class="titlebar-brand">
+      <img src="icon.png" alt="icon">
+      <span>pwsh-gitlab</span>
+    </a>
+    <div class="titlebar-spacer"></div>
+    <div class="titlebar-actions">
+      <div class="titlebar-search" id="titlebarSearch">
+        <div class="titlebar-search-icon" title="Search">
+          <i class="fas fa-search"></i>
+        </div>
+        <input type="text" class="titlebar-search-input" placeholder="Search cmdlets..." id="titlebarSearchInput">
+        <div class="titlebar-search-results" id="titlebarSearchResults"></div>
+      </div>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+      <a href="https://github.com/chris-peterson/pwsh-gitlab" target="_blank" class="titlebar-github" title="View on GitHub">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+      </a>
+    </div>
+  </div>
   <div id="app">Loading...</div>
   <script>
     window.$docsify = {
-      name: '<img src="icon.png" alt="icon" style="height:24px;vertical-align:middle;margin-right:8px;">pwsh-gitlab',
-      repo: 'chris-peterson/pwsh-gitlab',
+      name: 'pwsh-gitlab',
       loadSidebar: true,
-      subMaxLevel: 2,
+      subMaxLevel: 0,
+      sidebarDisplayLevel: 0, // Collapse all categories by default
       search: {
         placeholder: 'Search cmdlets...',
         noData: 'No results',
@@ -189,7 +497,8 @@
         '/.*/_sidebar.md': '/_sidebar.md',
         // Handle folder URLs (with or without trailing slash) -> README.md
         '/([A-Za-z]+)/?$': '/$1/README.md'
-      }
+      },
+      hideSidebar: false
     }
   </script>
   <!-- Docsify core -->
@@ -200,31 +509,31 @@
       hook.beforeEach(function(content) {
         // Strip YAML front matter (handles invalid YAML with spaces in keys)
         content = content.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, '');
-        
+
         // Replace "__AllParameterSets" with "Default" for cleaner display
         content = content.replace(/### __AllParameterSets/g, '### Default');
-        
+
         // Remove empty ALIASES section
         content = content.replace(/## ALIASES\s*\n+(?=##|$)/g, '');
-        
+
         // Remove empty INPUTS section
         content = content.replace(/## INPUTS\s*\n+(?=##|$)/g, '');
-        
+
         // Remove empty NOTES section
         content = content.replace(/## NOTES\s*\n+(?=##|$)/g, '');
-        
+
         // Remove sections marked HIDE_ME
         content = content.replace(/### [^\n]+\s*\n+HIDE_ME\s*\n+/g, '');
-        
+
         // Clean up verbose YAML parameter blocks
         content = content.replace(/(```yaml\n)([\s\S]*?)(```)/g, function(match, before, yaml, after) {
           var lines = yaml.split('\n');
           var cleanLines = [];
-          
+
           for (var i = 0; i < lines.length; i++) {
             var line = lines[i];
             var trimmed = line.trim();
-            
+
             // Skip fields with empty/false/useless values
             if (trimmed === "DefaultValue: ''" ||
                 trimmed === "SupportsWildcards: false" ||
@@ -239,30 +548,30 @@
                 trimmed === "ValueFromRemainingArguments: false") {
               continue;
             }
-            
+
             cleanLines.push(line);
           }
-          
+
           return before + cleanLines.join('\n') + after;
         });
-        
+
         // Reformat syntax blocks: one parameter per line
         content = content.replace(/(### (?:Default|\w+)\s*\n\n```\n)([\s\S]*?)(```)/g, function(match, before, syntax, after) {
           // Normalize whitespace
           var normalized = syntax.replace(/\s+/g, ' ').trim();
-          
+
           // Check if already formatted (cmdlet alone on first line)
           var lines = syntax.trim().split('\n');
           if (lines.length > 1 && /^[A-Z][a-zA-Z]+-[a-zA-Z]+$/.test(lines[0])) {
             return match;
           }
-          
+
           // Match cmdlet name and parameters
           var cmdletMatch = normalized.match(/^([A-Z][a-zA-Z]+-[a-zA-Z]+)\s+(.*)$/);
           if (cmdletMatch) {
             var cmdlet = cmdletMatch[1];
             var params = cmdletMatch[2];
-            
+
             // Split parameters on "] [" pattern
             var paramList = params.split(/\]\s+\[/).map(function(p) {
               p = p.trim();
@@ -270,15 +579,15 @@
               if (!p.endsWith(']')) p = p + ']';
               return '    ' + p;
             });
-            
+
             return before + cmdlet + '\n' + paramList.join('\n') + '\n' + after;
           }
           return match;
         });
-        
+
         return content;
       });
-      
+
       hook.doneEach(function() {
         var pageTitle = document.title;
         document.title = 'pwsh-gitlab: ' + pageTitle;
@@ -293,43 +602,345 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
   <!-- Syntax highlighting -->
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-powershell.min.js"></script>
-  <!-- Theme toggle script -->
+  <!-- Theme toggle and scroll behavior script -->
   <script>
     function toggleTheme() {
       const html = document.documentElement;
-      const btn = document.querySelector('.theme-toggle');
-      const currentTheme = html.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', newTheme);
-      btn.textContent = newTheme === 'dark' ? '🌙' : '☀️';
-      localStorage.setItem('theme', newTheme);
+      const btn = document.getElementById('themeToggle');
+      const currentScheme = html.style.colorScheme || 'dark';
+      const newScheme = currentScheme === 'dark' ? 'light' : 'dark';
+      html.style.colorScheme = newScheme;
+      btn.textContent = newScheme === 'dark' ? '🌙' : '☀️';
+      localStorage.setItem('theme', newScheme);
     }
-    
-    // Load saved theme preference (default to dark)
+
+    // Load saved theme preference (default to system preference)
     (function() {
-      const saved = localStorage.getItem('theme') || 'dark';
-      document.documentElement.setAttribute('data-theme', saved);
+      const saved = localStorage.getItem('theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (systemPrefersDark ? 'dark' : 'light');
+      document.documentElement.style.colorScheme = theme;
+      // Update button text
+      const btn = document.getElementById('themeToggle');
+      if (btn) btn.textContent = theme === 'dark' ? '🌙' : '☀️';
     })();
-    
-    // Inject toggle into sidebar header
-    function injectThemeToggle() {
-      const sidebarName = document.querySelector('.sidebar > h1, .app-name');
-      if (sidebarName && !document.querySelector('.theme-toggle')) {
-        const saved = localStorage.getItem('theme') || 'dark';
-        const btn = document.createElement('button');
-        btn.className = 'theme-toggle';
-        btn.onclick = toggleTheme;
-        btn.title = 'Toggle theme';
-        btn.textContent = saved === 'dark' ? '🌙' : '☀️';
-        sidebarName.appendChild(btn);
+
+    // Custom copy button behavior with checkmark feedback
+    (function() {
+      function setupCopyButtons() {
+        document.querySelectorAll('.docsify-copy-code-button').forEach(function(btn) {
+          if (btn.dataset.customized) return;
+          btn.dataset.customized = 'true';
+
+          btn.addEventListener('click', function() {
+            btn.classList.add('copied');
+            setTimeout(function() {
+              btn.classList.remove('copied');
+            }, 1500);
+          });
+        });
       }
-    }
-    
-    // Run after docsify renders
-    window.$docsify = window.$docsify || {};
-    window.$docsify.plugins = (window.$docsify.plugins || []).concat(function(hook) {
-      hook.doneEach(injectThemeToggle);
-    });
+
+      // Run on page changes
+      if (window.$docsify) {
+        window.$docsify.plugins = (window.$docsify.plugins || []).concat(function(hook) {
+          hook.doneEach(function() {
+            setTimeout(setupCopyButtons, 100);
+          });
+        });
+      }
+    })();
+
+    // Titlebar search functionality
+    (function() {
+      const searchContainer = document.getElementById('titlebarSearch');
+      const searchIcon = searchContainer.querySelector('.titlebar-search-icon');
+      const searchInput = document.getElementById('titlebarSearchInput');
+      const searchResults = document.getElementById('titlebarSearchResults');
+      let searchIndex = [];
+      let selectedIndex = -1;
+
+      // Build search index from sidebar links
+      function buildSearchIndex() {
+        searchIndex = [];
+        document.querySelectorAll('.sidebar-nav a').forEach(function(link) {
+          const href = link.getAttribute('href');
+          const title = link.textContent.trim();
+          if (href && title && href.startsWith('#')) {
+            // Determine type: entity (category) vs cmdlet
+            const isCmdlet = /^[A-Z][a-z]+-[A-Z]/.test(title);
+            const isEntity = !isCmdlet && !title.includes('-');
+            searchIndex.push({
+              title: title,
+              url: href,
+              searchText: title.toLowerCase(),
+              type: isEntity ? 'entity' : 'cmdlet'
+            });
+          }
+        });
+      }
+
+      function expandSearch() {
+        searchContainer.classList.add('expanded');
+        // Use setTimeout to ensure the input is visible before focusing
+        setTimeout(function() {
+          searchInput.focus();
+        }, 50);
+        buildSearchIndex();
+      }
+
+      function collapseSearch() {
+        searchContainer.classList.remove('expanded', 'has-results');
+        searchInput.value = '';
+        selectedIndex = -1;
+      }
+
+      function updateSelection() {
+        const items = searchResults.querySelectorAll('.titlebar-search-result');
+        items.forEach(function(item, i) {
+          item.classList.toggle('selected', i === selectedIndex);
+        });
+        // Scroll selected item into view
+        if (selectedIndex >= 0 && items[selectedIndex]) {
+          items[selectedIndex].scrollIntoView({ block: 'nearest' });
+        }
+      }
+
+      function navigateToResult(url) {
+        window.location.hash = url.startsWith('#') ? url.substring(1) : url;
+        collapseSearch();
+        searchInput.blur();
+      }
+
+      function performSearch() {
+        const query = searchInput.value.trim().toLowerCase();
+        selectedIndex = -1;
+
+        if (query.length < 1) {
+          searchContainer.classList.remove('has-results');
+          searchResults.innerHTML = '';
+          return;
+        }
+
+        // Rebuild index if empty
+        if (searchIndex.length === 0) {
+          buildSearchIndex();
+        }
+
+        // Search the index
+        let results = searchIndex.filter(function(item) {
+          return item.searchText.includes(query);
+        });
+
+        // Sort: entities first, then by start match, then alphabetical
+        results.sort(function(a, b) {
+          // Entities before cmdlets
+          if (a.type === 'entity' && b.type !== 'entity') return -1;
+          if (a.type !== 'entity' && b.type === 'entity') return 1;
+          // Start matches first
+          const aStarts = a.searchText.startsWith(query);
+          const bStarts = b.searchText.startsWith(query);
+          if (aStarts && !bStarts) return -1;
+          if (!aStarts && bStarts) return 1;
+          // Alphabetical
+          return a.title.localeCompare(b.title);
+        });
+
+        const topResults = results.slice(0, 15);
+
+        if (topResults.length > 0) {
+          searchResults.innerHTML = topResults.map(function(r, i) {
+            const typeClass = r.type === 'entity' ? ' entity-result' : ' cmdlet-result';
+            return '<div class="titlebar-search-result' + typeClass + '" data-url="' + r.url + '" data-index="' + i + '">' +
+              '<div class="titlebar-search-result-title">' + r.title + '</div>' +
+            '</div>';
+          }).join('');
+          searchContainer.classList.add('has-results');
+
+          // Add click handlers to results
+          searchResults.querySelectorAll('.titlebar-search-result').forEach(function(el) {
+            el.addEventListener('click', function() {
+              navigateToResult(el.dataset.url);
+            });
+            el.addEventListener('mouseenter', function() {
+              selectedIndex = parseInt(el.dataset.index, 10);
+              updateSelection();
+            });
+          });
+        } else {
+          // No entity/cmdlet match - do full-text search using docsify's index
+          let fullTextResults = [];
+
+          // Generic section names to filter out (not useful as search results)
+          const genericSections = ['description', 'syntax', 'parameters', 'examples', 'inputs', 'outputs', 'notes', 'related links', 'aliases'];
+
+          // Try multiple ways to access docsify's search index
+          let searchData = null;
+
+          // Method 1: Check for docsify search plugin's index in localStorage
+          try {
+            const storedIndex = localStorage.getItem('docsify.search.index');
+            if (storedIndex) {
+              searchData = JSON.parse(storedIndex);
+            }
+          } catch (e) {}
+
+          // Method 2: Access the global SEARCH_INDEX
+          if (!searchData && window.SEARCH_INDEX && window.SEARCH_INDEX.INDEXS) {
+            searchData = {};
+            window.SEARCH_INDEX.INDEXS.forEach(function(item) {
+              if (item.slug) {
+                searchData[item.slug] = { title: item.title, body: item.body };
+              }
+            });
+          }
+
+          if (searchData) {
+            Object.keys(searchData).forEach(function(path) {
+              const item = searchData[path];
+              const title = item.title || '';
+              const body = item.body || '';
+
+              // Skip generic section names
+              if (genericSections.includes(title.toLowerCase().trim())) {
+                return;
+              }
+
+              const titleLower = title.toLowerCase();
+              const bodyLower = body.toLowerCase();
+              const titleMatch = titleLower.includes(query);
+              const bodyMatch = bodyLower.includes(query);
+
+              if (titleMatch || bodyMatch) {
+                // Extract a snippet around the match
+                let snippet = '';
+                if (bodyMatch) {
+                  const idx = bodyLower.indexOf(query);
+                  const start = Math.max(0, idx - 40);
+                  const end = Math.min(body.length, idx + query.length + 60);
+                  snippet = (start > 0 ? '...' : '') + body.substring(start, end).replace(/\n/g, ' ') + (end < body.length ? '...' : '');
+                }
+
+                // Only include if path looks like a valid page
+                if (path && path.length > 1 && !path.includes('#')) {
+                  fullTextResults.push({
+                    title: title || path.split('/').pop().replace('.md', ''),
+                    url: '#' + path,
+                    snippet: snippet,
+                    score: titleMatch ? 2 : 1
+                  });
+                }
+              }
+            });
+
+            // Sort by score and deduplicate
+            fullTextResults.sort((a, b) => b.score - a.score);
+            const seen = new Set();
+            fullTextResults = fullTextResults.filter(function(r) {
+              if (seen.has(r.url)) return false;
+              seen.add(r.url);
+              return true;
+            }).slice(0, 15);
+          }
+
+          if (fullTextResults.length > 0) {
+            searchResults.innerHTML = fullTextResults.map(function(r, i) {
+              const snippetHtml = r.snippet ? '<div class="titlebar-search-result-content">' + r.snippet.replace(/</g, '&lt;') + '</div>' : '';
+              return '<div class="titlebar-search-result" data-url="' + r.url + '" data-index="' + i + '">' +
+                '<div class="titlebar-search-result-title">' + r.title + '</div>' +
+                snippetHtml +
+              '</div>';
+            }).join('');
+            searchContainer.classList.add('has-results');
+
+            // Add click handlers to results
+            searchResults.querySelectorAll('.titlebar-search-result').forEach(function(el) {
+              el.addEventListener('click', function() {
+                navigateToResult(el.dataset.url);
+              });
+              el.addEventListener('mouseenter', function() {
+                selectedIndex = parseInt(el.dataset.index, 10);
+                updateSelection();
+              });
+            });
+          } else {
+            searchResults.innerHTML = '<div class="titlebar-search-result"><div class="titlebar-search-result-title" style="opacity: 0.6">No results for "' + query + '"</div></div>';
+            searchContainer.classList.add('has-results');
+          }
+        }
+      }
+
+      // Expand search on icon click
+      searchIcon.addEventListener('click', function(e) {
+        e.stopPropagation();
+        expandSearch();
+      });
+
+      // Collapse search when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!searchContainer.contains(e.target)) {
+          collapseSearch();
+        }
+      });
+
+      // Handle search input
+      searchInput.addEventListener('input', performSearch);
+
+      // Handle keyboard navigation
+      searchInput.addEventListener('keydown', function(e) {
+        const items = searchResults.querySelectorAll('.titlebar-search-result');
+        const maxIndex = items.length - 1;
+
+        if (e.key === 'Escape') {
+          collapseSearch();
+          searchInput.blur();
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          selectedIndex = Math.min(selectedIndex + 1, maxIndex);
+          updateSelection();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          selectedIndex = Math.max(selectedIndex - 1, 0);
+          updateSelection();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (selectedIndex >= 0 && items[selectedIndex]) {
+            const url = items[selectedIndex].dataset.url;
+            if (url) {
+              navigateToResult(url);
+            } else if (items[selectedIndex].classList.contains('search-content')) {
+              items[selectedIndex].click();
+            }
+          } else if (items.length > 0) {
+            // Select first result if none selected
+            const url = items[0].dataset.url;
+            if (url) {
+              navigateToResult(url);
+            } else {
+              items[0].click();
+            }
+          }
+        }
+      });
+
+      // Intercept Cmd+F / Ctrl+F to focus search
+      document.addEventListener('keydown', function(e) {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
+          e.preventDefault();
+          expandSearch();
+          searchInput.select();
+        }
+      });
+
+      // Rebuild index when docsify navigates
+      if (window.$docsify) {
+        window.$docsify.plugins = (window.$docsify.plugins || []).concat(function(hook) {
+          hook.doneEach(function() {
+            setTimeout(buildSearchIndex, 200);
+          });
+        });
+      }
+    })();
   </script>
 </body>
 </html>

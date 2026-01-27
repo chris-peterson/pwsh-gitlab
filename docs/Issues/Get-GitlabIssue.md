@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/Get-GitlabIssue
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 01/26/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabIssue
 ---
@@ -21,24 +21,24 @@ Retrieves GitLab issues from a project, group, or the authenticated user.
 
 ```
 Get-GitlabIssue [[-IssueId] <string>] [-ProjectId <string>] [-State <string>]
- [-CreatedAfter <string>] [-CreatedBefore <string>] [-AuthorUsername <Object>] [-MaxPages <uint>]
- [-All] [-SiteUrl <string>] [<CommonParameters>]
+ [-CreatedAfter <string>] [-CreatedBefore <string>] [-AssigneeUsername <string>]
+ [-AuthorUsername <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByGroupId
 
 ```
 Get-GitlabIssue [[-IssueId] <string>] [-GroupId] <string> [-State <string>] [-CreatedAfter <string>]
- [-CreatedBefore <string>] [-AuthorUsername <Object>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+ [-CreatedBefore <string>] [-AssigneeUsername <string>] [-AuthorUsername <string>]
+ [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### Mine
 
 ```
 Get-GitlabIssue [[-IssueId] <string>] -Mine [-State <string>] [-CreatedAfter <string>]
- [-CreatedBefore <string>] [-AuthorUsername <Object>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+ [-CreatedBefore <string>] [-AssigneeUsername <string>] [-AuthorUsername <string>]
+ [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -108,12 +108,34 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
+### -AssigneeUsername
+
+Filter issues by the username of the assignee.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- AssignedToUsername
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
 ### -AuthorUsername
 
 Filter issues by the username of the author.
 
 ```yaml
-Type: System.Object
+Type: System.String
 DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
