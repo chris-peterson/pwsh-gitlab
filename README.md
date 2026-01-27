@@ -66,7 +66,9 @@ go                 # Open-InBrowser
 ### Pipeline to Browser
 
 ```powershell
-Get-GitlabProject | Get-GitlabPipeline -Latest | Open-InBrowser
+Get-GitlabProject |
+    Get-GitlabPipeline -Latest |
+    Open-InBrowser
 ```
 
 ## Common Parameters

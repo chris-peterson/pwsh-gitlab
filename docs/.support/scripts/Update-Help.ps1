@@ -203,6 +203,7 @@ $SidebarContent += '---'
 $SidebarContent += ''
 $SidebarContent += '* [GitHub](https://github.com/chris-peterson/pwsh-gitlab)'
 $SidebarContent += '* [PowerShell Gallery](https://www.powershellgallery.com/packages/GitlabCli)'
+$SidebarContent += '* [Acknowledgements](./Acknowledgements.md)'
 $SidebarContent += ''
 
 $NewSidebarContent = $SidebarContent -join "`n"

@@ -38,7 +38,9 @@ $env:GITLAB_URL = 'gitlab.example.com'  # optional, defaults to gitlab.com
 **Option B: Configuration File** (multiple sites)
 
 ```powershell
-Add-GitlabSite -Url 'https://gitlab.example.com' -AccessToken '<your-token>' -IsDefault
+Add-GitlabSite `
+    -Url 'https://gitlab.example.com' `
+    -AccessToken '<your-token>' -IsDefault
 ```
 
 ### 3. Start Using

@@ -187,6 +187,22 @@
       background: none !important;
     }
 
+    /* Footer links - external links and acknowledgements */
+    .sidebar-nav a[href^="http"],
+    .sidebar-nav a[href*="Acknowledgements"] {
+      font-weight: normal !important;
+      font-size: 14px !important;
+      color: var(--sidebar-nav-link-color) !important;
+      text-decoration: none !important;
+    }
+
+    .sidebar-nav a[href^="http"]:hover,
+    .sidebar-nav a[href*="Acknowledgements"]:hover {
+      color: var(--link-color--hover) !important;
+      font-size: 14px !important;
+      transform: none !important;
+    }
+
 
     /* Unified titlebar */
     .titlebar {
@@ -369,16 +385,11 @@
       color: var(--base-color);
       opacity: 0.8;
       transition: opacity 0.2s ease;
+      font-size: 22px;
     }
 
     .titlebar-github:hover {
       opacity: 1;
-    }
-
-    .titlebar-github svg {
-      width: 24px;
-      height: 24px;
-      fill: currentColor;
     }
 
     /* Adjust main content for fixed titlebar */
@@ -471,9 +482,9 @@
         <input type="text" class="titlebar-search-input" placeholder="Search cmdlets..." id="titlebarSearchInput">
         <div class="titlebar-search-results" id="titlebarSearchResults"></div>
       </div>
-      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle theme"><i class="fas fa-moon"></i></button>
       <a href="https://github.com/chris-peterson/pwsh-gitlab" target="_blank" class="titlebar-github" title="View on GitHub">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+        <i class="fab fa-github"></i>
       </a>
     </div>
   </div>
@@ -607,10 +618,11 @@
     function toggleTheme() {
       const html = document.documentElement;
       const btn = document.getElementById('themeToggle');
+      const icon = btn.querySelector('i');
       const currentScheme = html.style.colorScheme || 'dark';
       const newScheme = currentScheme === 'dark' ? 'light' : 'dark';
       html.style.colorScheme = newScheme;
-      btn.textContent = newScheme === 'dark' ? '🌙' : '☀️';
+      icon.className = newScheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
       localStorage.setItem('theme', newScheme);
     }
 
@@ -620,9 +632,12 @@
       const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       const theme = saved || (systemPrefersDark ? 'dark' : 'light');
       document.documentElement.style.colorScheme = theme;
-      // Update button text
+      // Update button icon
       const btn = document.getElementById('themeToggle');
-      if (btn) btn.textContent = theme === 'dark' ? '🌙' : '☀️';
+      if (btn) {
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+      }
     })();
 
     // Custom copy button behavior with checkmark feedback
