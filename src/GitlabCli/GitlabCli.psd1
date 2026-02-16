@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.162.0'
+    ModuleVersion = '1.163.0'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-* feat: Get-GitLabIssue by Assignee (-Mine uses this now)
+* feat: announce "forge"
 '@
         }
     }

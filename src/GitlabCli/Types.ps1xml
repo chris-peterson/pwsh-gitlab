@@ -4,6 +4,10 @@
     <Name>Gitlab.Branch</Name>
     <Members>
       <ScriptProperty>
+        <Name>ShortHash</Name>
+        <GetScriptBlock>$this.Commit.short_id</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
         <Name>LastAuthor</Name>
         <GetScriptBlock>$this.Commit.author_name</GetScriptBlock>
       </ScriptProperty>

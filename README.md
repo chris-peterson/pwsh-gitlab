@@ -107,6 +107,28 @@ Mutable operations support [ShouldProcess](https://learn.microsoft.com/en-us/pow
 - [CI/CD: Pipelines & Jobs](https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/)
 - [Working with Merge Requests](https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/)
 
+## Forge Ecosystem
+
+`GitlabCli` is part of the **pwsh-forge** ecosystem — a unified PowerShell interface across software forges.
+
+`GitlabCli` works standalone, but also integrates with [ForgeCli](https://github.com/chris-peterson/pwsh-forge)
+so that commands like `Get-Issue` and `Get-MergeRequest` auto-dispatch to the right provider based on your git remote.
+
+```powershell
+Import-Module GitlabCli
+Import-Module ForgeCli
+
+cd ~/src/my-gitlab-project
+Get-Issue              # routes to Get-GitlabIssue
+Get-MergeRequest       # routes to Get-GitlabMergeRequest
+```
+
+| Module | Purpose |
+|--------|---------|
+| [pwsh-forge](https://github.com/chris-peterson/pwsh-forge) | Unified dispatch layer |
+| **pwsh-gitlab** | :arrow_left: this module |
+| [pwsh-github](https://github.com/chris-peterson/pwsh-github) | GitHub provider |
+
 ## Contributing
 
 Contributions welcome! Please see the [GitHub repository](https://github.com/chris-peterson/pwsh-gitlab) for issues and pull requests.
