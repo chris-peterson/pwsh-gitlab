@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectHooks/Update-GitlabProjectHook
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabProjectHook
 ---
@@ -301,7 +301,7 @@ The ID or URL-encoded path of the project. If not specified, defaults to the pro
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

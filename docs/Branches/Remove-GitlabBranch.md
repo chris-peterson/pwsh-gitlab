@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Branches/Remove-GitlabBranch
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabBranch
 ---
@@ -71,7 +71,7 @@ Branch name to remove.  Defaults to `.` which is interpreted as the current bran
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases:
 - Name
@@ -158,7 +158,7 @@ Defaults to the current directory's git repository.
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

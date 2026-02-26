@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Environments/Get-GitlabEnvironment
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabEnvironment
 ---
@@ -110,7 +110,7 @@ The maximum number of result pages to retrieve. Defaults to 1. Increase this val
 
 ```yaml
 Type: System.Int32
-DefaultValue: ''
+DefaultValue: 1
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -154,7 +154,7 @@ The ID or URL-encoded path of the project. Defaults to the current directory's g
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -217,7 +217,7 @@ Filters environments by their state. Valid values are 'available', 'stopping', o
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: available
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/Get-GitlabIssue
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/26/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabIssue
 ---
@@ -284,7 +284,7 @@ The ID or URL-encoded path of the project. Defaults to the current directory's g
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -326,7 +326,7 @@ Filter issues by state. Valid values are 'opened' or 'closed'. Defaults to 'open
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: opened
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

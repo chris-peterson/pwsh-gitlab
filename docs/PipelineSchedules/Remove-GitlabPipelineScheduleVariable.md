@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/Remove-GitlabPipelineScheduleVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabPipelineScheduleVariable
 ---
@@ -128,7 +128,7 @@ The ID or URL-encoded path of the project. Defaults to the current directory's g
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

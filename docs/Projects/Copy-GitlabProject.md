@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Copy-GitlabProject
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Copy-GitlabProject
 ---
@@ -132,7 +132,7 @@ When true (default), maintains the fork relationship with the source project. Wh
 
 ```yaml
 Type: System.Boolean
-DefaultValue: ''
+DefaultValue: $true
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -153,7 +153,7 @@ The ID or URL-encoded path of the project to fork. Defaults to the current direc
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Deployments/Get-GitlabDeployment
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabDeployment
 ---
@@ -155,7 +155,7 @@ The maximum number of pages of results to return. Defaults to 1.
 
 ```yaml
 Type: System.Int32
-DefaultValue: ''
+DefaultValue: 1
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -176,7 +176,7 @@ The ID or URL-encoded path of the project. Defaults to the project in the curren
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -239,7 +239,7 @@ The status of deployments to return. Valid values are 'created', 'running', 'suc
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: success
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

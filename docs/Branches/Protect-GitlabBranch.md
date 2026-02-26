@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Branches/Protect-GitlabBranch
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Protect-GitlabBranch
 ---
@@ -121,7 +121,7 @@ Whether force push is allowed on this branch. Defaults to false.
 
 ```yaml
 Type: System.Boolean
-DefaultValue: ''
+DefaultValue: $false
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -142,7 +142,7 @@ The name of the branch to protect. Use '.' to protect the current local branch. 
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases:
 - Name
@@ -164,7 +164,7 @@ Whether code owner approval is required for merge requests targeting this branch
 
 ```yaml
 Type: System.Boolean
-DefaultValue: ''
+DefaultValue: $false
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -228,7 +228,7 @@ The ID or URL-encoded path of the project. Defaults to the current directory's g
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

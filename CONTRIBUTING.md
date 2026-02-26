@@ -47,7 +47,11 @@ Cmdlet documentation is generated from code comments using PlatyPS and published
 just help-update
 ```
 
-Documentation files are in `docs/` and should not be edited manually—they're generated from the module's comment-based help.
+Documentation lives in `docs/`.
+
+Run `just help-update` after adding or renaming parameters — it syncs structural metadata (types, parameter sets, aliases) while preserving hand-written descriptions. CI enforces docs are in sync.
+
+Changes not handled by PlatyPS may require manual updates to specific markdown files.
 
 ### Security Analysis
 

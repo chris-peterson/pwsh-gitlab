@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Get-GitlabProjectEvent
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabProjectEvent
 ---
@@ -106,7 +106,7 @@ The maximum number of pages to retrieve. GitLab returns 20 results per page by d
 
 ```yaml
 Type: System.Int32
-DefaultValue: ''
+DefaultValue: 1
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -127,7 +127,7 @@ The ID or URL-encoded path of the project. Defaults to the current directory's g
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Utilities/Invoke-GitlabApi
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Invoke-GitlabApi
 ---
@@ -86,7 +86,7 @@ The API version to use. Defaults to `v4`. Set to an empty string for endpoints t
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: v4
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -172,7 +172,7 @@ The maximum number of pages to retrieve for paginated results. Defaults to 1. Se
 
 ```yaml
 Type: System.UInt32
-DefaultValue: ''
+DefaultValue: 1
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

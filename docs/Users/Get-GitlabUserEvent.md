@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Get-GitlabUserEvent
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabUserEvent
 ---
@@ -186,7 +186,7 @@ Specifies the maximum number of pages of results to retrieve. Default is 1.
 
 ```yaml
 Type: System.UInt32
-DefaultValue: ''
+DefaultValue: 1
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

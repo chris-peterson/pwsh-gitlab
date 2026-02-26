@@ -23,7 +23,7 @@ function Get-GitlabMergeRequest {
         [Parameter()]
         [ValidateSet('all', 'opened', 'closed', 'locked', 'merged')]
         [string]
-        $State = 'all',
+        $State = 'opened',
 
         [Parameter()]
         [GitlabDate()][string]

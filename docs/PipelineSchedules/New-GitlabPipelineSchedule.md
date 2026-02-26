@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PipelineSchedules/New-GitlabPipelineSchedule
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabPipelineSchedule
 ---
@@ -129,7 +129,7 @@ The timezone for the cron expression (e.g., 'America/New_York', 'Europe/London')
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: UTC
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -171,7 +171,7 @@ The ID or URL-encoded path of the project. Defaults to the current directory's g
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -192,7 +192,7 @@ The branch or tag name to run the scheduled pipeline on. Defaults to the current
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases:
 - Branch

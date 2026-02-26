@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/PersonalAccessTokens/Get-GitlabPersonalAccessToken
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabPersonalAccessToken
 ---
@@ -276,7 +276,7 @@ Filter by revocation status. Set to $true to show only revoked tokens, or $false
 
 ```yaml
 Type: System.Boolean
-DefaultValue: ''
+DefaultValue: $false
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -339,7 +339,7 @@ Filter tokens by state. Valid values are 'active' (default) or 'inactive'.
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: active
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

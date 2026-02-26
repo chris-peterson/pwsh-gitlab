@@ -226,7 +226,7 @@ jobs:
         run: ./docs/.support/scripts/Export-Help.ps1
 
       - name: Publish PowerShell Module
-        uses: chris-peterson/publish-powershell-modules@v1
+        uses: chris-peterson/publish-powershell@v1
         with:
           ApiKey: ${{ secrets.PSGALLERY_API_KEY }}
 

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Integrations/Enable-GitlabProjectSlackNotification
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Enable-GitlabProjectSlackNotification
 ---
@@ -112,7 +112,7 @@ Specifies which branches trigger notifications. Valid values are: 'all', 'defaul
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: default_and_protected
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -224,7 +224,7 @@ The type of Slack integration to use. Valid values are 'slack' (legacy webhook) 
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: gitlab-slack-application
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -308,7 +308,7 @@ The ID or URL-encoded path of the project. If not specified, uses the project in
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

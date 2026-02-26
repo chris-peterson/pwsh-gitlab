@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Set-GitlabProjectVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Set-GitlabProjectVariable
 ---
@@ -87,7 +87,7 @@ When true (default), GitLab will expand variable references in the value. Set to
 
 ```yaml
 Type: System.Boolean
-DefaultValue: ''
+DefaultValue: $true
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -171,7 +171,7 @@ The ID or URL-encoded path of the project. Defaults to the current directory's g
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Get-GitlabMergeRequest
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabMergeRequest
 ---
@@ -73,29 +73,29 @@ Retrieves merge requests from GitLab at the project, group, or instance level. S
 
 ## EXAMPLES
 
-### Example 1: Get merge requests for current project
+### Example 1: Get open merge requests for current project
 
 ```powershell
 Get-GitlabMergeRequest
 ```
 
-Gets all merge requests from the project in the current directory.
+Gets open merge requests from the project in the current directory.
 
-### Example 2: Get open merge requests for a project
+### Example 2: Get all merge requests for a project
 
 ```powershell
-Get-GitlabMergeRequest -ProjectId 'mygroup/myproject' -State opened
+Get-GitlabMergeRequest -ProjectId 'mygroup/myproject' -State all
 ```
 
-Gets all open merge requests from the specified project.
+Gets all merge requests (any state) from the specified project.
 
-### Example 3: Get merge requests authored by current user
+### Example 3: Get open merge requests authored by current user
 
 ```powershell
 Get-GitlabMergeRequest -Mine
 ```
 
-Gets all merge requests authored by the current user across all accessible projects.
+Gets open merge requests authored by the current user across all accessible projects.
 
 ### Example 4: Get merge requests with approvals
 
@@ -356,7 +356,7 @@ The ID or URL-encoded path of the project. Defaults to the current directory's g
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -377,7 +377,7 @@ The role of the user specified by -Username. Valid values are 'author' (default)
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: author
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -398,7 +398,7 @@ The scope of merge requests to return. Valid values: 'created_by_me', 'assigned_
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: all
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -458,11 +458,11 @@ HelpMessage: ''
 
 ### -State
 
-Filter by merge request state. Valid values: 'all' (default), 'opened', 'closed', 'locked', 'merged'.
+Filter by merge request state. Valid values: 'opened' (default), 'all', 'closed', 'locked', 'merged'.
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: opened
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

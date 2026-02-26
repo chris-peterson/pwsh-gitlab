@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/New-GitlabProject
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabProject
 ---
@@ -71,7 +71,7 @@ The CI/CD job timeout in seconds. Set to 0 to use the default timeout.
 
 ```yaml
 Type: System.UInt32
-DefaultValue: ''
+DefaultValue: 0
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -221,7 +221,7 @@ The visibility level of the new project. Valid values are 'private', 'internal',
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: internal
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

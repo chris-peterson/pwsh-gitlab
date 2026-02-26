@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.163.0'
+    ModuleVersion = '1.163.1'
 
     RequiredModules = @(
         @{
@@ -31,7 +31,17 @@
             )
             ReleaseNotes =
 @'
-* feat: announce "forge"
+### Fixes
+- Get-GitlabMergeRequest now defaults -State to 'opened'
+  instead of 'all', restoring expected behavior where
+  `mrs -Mine` returns open MRs rather than every MR ever
+  authored (regression introduced in [f96a54e])
+
+### Other
+- Add tests and documentation for default behavior(s)
+- Populate DefaultValue fields across all docs
+- Add AGENTS.md and CLAUDE.md for AI agent conventions
+- Clarify CONTRIBUTING.md docs workflow
 '@
         }
     }

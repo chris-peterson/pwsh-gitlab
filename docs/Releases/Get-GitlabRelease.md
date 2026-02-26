@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Releases/Get-GitlabRelease
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabRelease
 ---
@@ -127,7 +127,7 @@ The ID or URL-encoded path of the project. Defaults to the current project based
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: .
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -169,7 +169,7 @@ The sort order for releases. Valid values are 'desc' (default) or 'asc'.
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: desc
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

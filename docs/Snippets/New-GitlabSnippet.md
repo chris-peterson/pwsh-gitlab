@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Snippets/New-GitlabSnippet
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/26/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabSnippet
 ---
@@ -223,7 +223,7 @@ The visibility level of the snippet: 'public', 'private' (default), or 'internal
 
 ```yaml
 Type: System.String
-DefaultValue: ''
+DefaultValue: private
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
