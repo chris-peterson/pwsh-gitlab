@@ -28,6 +28,10 @@ function Get-GitlabProject {
         [switch]
         $Recurse,
 
+        [Parameter(ParameterSetName='ByGroup')]
+        [string]
+        $Search,
+
         [Parameter(Position=0, Mandatory, ParameterSetName='ByUrl')]
         [string]
         $Url,
@@ -72,6 +76,11 @@ function Get-GitlabProject {
             $Query = @{
                 'include_subgroups' = $Recurse ? 'true' : 'false'
             }
+
+            if($Search) {
+                $Query['search'] = $Search
+            }
+            
             if (-not $IncludeArchived) {
                 $Query['archived'] = 'false'
             }
