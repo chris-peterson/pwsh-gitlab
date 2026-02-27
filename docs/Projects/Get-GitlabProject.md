@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Get-GitlabProject
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 02/27/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabProject
 ---
@@ -27,8 +27,8 @@ Get-GitlabProject [[-ProjectId] <string>] [-Select <string>] [-MaxPages <uint>] 
 ### ByGroup
 
 ```
-Get-GitlabProject [-GroupId] <string> [-Recurse] [-Select <string>] [-IncludeArchived]
- [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabProject [-GroupId] <string> [-Recurse] [-Search <string>] [-Select <string>]
+ [-IncludeArchived] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByUser
@@ -230,6 +230,27 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases:
 - r
+ParameterSets:
+- Name: ByGroup
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Search
+
+When specified with -GroupId, will filter projects that match the search string. Only searches top-level projects in the specified group. To search for projects in subgroups, use the -Recurse switch
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
 ParameterSets:
 - Name: ByGroup
   Position: Named
