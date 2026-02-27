@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Update-GitlabMergeRequest
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 02/27/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabMergeRequest
 ---
@@ -22,8 +22,8 @@ Updates properties of an existing GitLab merge request.
 ```
 Update-GitlabMergeRequest [-ProjectId] <string> [-MergeRequestId] <string> [-Title <string>]
  [-Draft] [-MarkReady] [-Description <string>] [-AssignTo <string[]>] [-Unassign]
- [-Reviewers <string[]>] [-UnsetReviewers] [-Close] [-Reopen] [-MilestoneId <string>]
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Reviewers <string[]>] [-UnsetReviewers] [-Close] [-Reopen] [-TargetBranch <string>]
+ [-MilestoneId <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -298,6 +298,27 @@ HelpMessage: ''
 ### -SiteUrl
 
 Specifies the URL of the GitLab instance. If not specified, uses the default configured site.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -TargetBranch
+
+{{ Fill TargetBranch Description }}
 
 ```yaml
 Type: System.String

@@ -39,6 +39,20 @@ function Get-GitlabIssue {
         [string]
         $AuthorUsername,
 
+        [Parameter()]
+        [string]
+        $Labels,
+
+        [Parameter()]
+        [ValidateSet('created_at', 'updated_at')]
+        [string]
+        $OrderBy,
+
+        [Parameter()]
+        [ValidateSet('asc', 'desc')]
+        [string]
+        $Sort,
+
         [Parameter(Mandatory, ParameterSetName='Mine')]
         [switch]
         $Mine,
@@ -100,6 +114,15 @@ function Get-GitlabIssue {
     if ($CreatedAfter) {
         $Query.created_after = $CreatedAfter
     }
+    if ($Labels) {
+        $Query.labels = $Labels
+    }
+    if ($OrderBy) {
+        $Query.order_by = $OrderBy
+    }
+    if ($Sort) {
+        $Query.sort = $Sort
+    }
 
     Invoke-GitlabApi GET $Path $Query -MaxPages $MaxPages |
         New-GitlabObject 'Gitlab.Issue' |
@@ -121,6 +144,14 @@ function New-GitlabIssue {
         [Parameter(Position=1)]
         [string]
         $Description,
+
+        [Parameter()]
+        [string[]]
+        $Assignees,
+
+        [Parameter()]
+        [string]
+        $Labels,
 
         [Parameter()]
         [Alias('NoTodo')]
@@ -149,8 +180,17 @@ function New-GitlabIssue {
         Body   = @{
             title       = $Title
             description = $Description
-            assignee_id = $(Get-GitlabUser -Me).Id
         }
+    }
+    if ($Assignees) {
+        $Request.Body.assignee_ids = @($Assignees | ForEach-Object {
+            Get-GitlabUser $_
+        } | Select-Object -ExpandProperty Id)
+    } else {
+        $Request.Body.assignee_id = $(Get-GitlabUser -Me).Id
+    }
+    if ($Labels) {
+        $Request.Body.labels = $Labels
     }
     if ($MilestoneId) {
         $Milestone = Get-GitlabMilestone -GroupId $Project.Group | Where-Object Iid -eq $MilestoneId

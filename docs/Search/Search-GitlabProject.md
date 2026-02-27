@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Search/Search-GitlabProject
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 02/27/2026
 PlatyPS schema version: 2024-05-01
 title: Search-GitlabProject
 ---
@@ -20,8 +20,8 @@ Searches for blobs within a specific GitLab project.
 ### __AllParameterSets
 
 ```
-Search-GitlabProject [[-ProjectId] <string>] [[-Search] <string>] [[-Filename] <string>]
- [[-SiteUrl] <string>] [<CommonParameters>]
+Search-GitlabProject [[-ProjectId] <string>] [[-Search] <string>] [[-Scope] <string>]
+ [[-Filename] <string>] [[-SiteUrl] <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -69,7 +69,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 2
+  Position: 3
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -91,6 +91,27 @@ Aliases: []
 ParameterSets:
 - Name: (All)
   Position: 0
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Scope
+
+{{ Fill Scope Description }}
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 2
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -132,7 +153,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 3
+  Position: 4
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/New-GitlabIssue
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 02/27/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabIssue
 ---
@@ -20,8 +20,9 @@ Creates a new issue in a GitLab project.
 ### __AllParameterSets
 
 ```
-New-GitlabIssue [-Title] <string> [[-Description] <string>] [-ProjectId <string>] [-MarkTodoAsRead]
- [-MilestoneId <string>] [-Follow] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabIssue [-Title] <string> [[-Description] <string>] [-ProjectId <string>]
+ [-Assignees <string[]>] [-Labels <string>] [-MarkTodoAsRead] [-MilestoneId <string>] [-Follow]
+ [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -57,6 +58,27 @@ New-GitlabIssue -ProjectId 'mygroup/myproject' -Title 'New task' -MilestoneId 5 
 Creates a new issue in the specified project, assigns it to milestone 5, and marks the automatically created todo item as read.
 
 ## PARAMETERS
+
+### -Assignees
+
+{{ Fill Assignees Description }}
+
+```yaml
+Type: System.String[]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
 ### -Confirm
 
@@ -107,6 +129,27 @@ When specified, opens the newly created issue in the default web browser.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Labels
+
+{{ Fill Labels Description }}
+
+```yaml
+Type: System.String
 DefaultValue: ''
 SupportsWildcards: false
 Aliases: []

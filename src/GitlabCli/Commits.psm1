@@ -23,6 +23,10 @@ function Get-GitlabCommit {
 
         [Parameter()]
         [string]
+        $Author,
+
+        [Parameter()]
+        [string]
         $Sha,
 
         [Parameter()]
@@ -46,6 +50,9 @@ function Get-GitlabCommit {
     }
     if ($Ref) {
         $Query.ref_name = $Ref
+    }
+    if ($Author) {
+        $Query.author = $Author
     }
     if ($Sha) {
         $Url += "/$Sha"

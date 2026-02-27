@@ -42,6 +42,10 @@ function Get-GitlabMergeRequest {
         $SourceBranch,
 
         [Parameter()]
+        [string]
+        $TargetBranch,
+
+        [Parameter()]
         [Alias('ChangeSummary')]
         [switch]
         $IncludeChangeSummary,
@@ -142,6 +146,9 @@ function Get-GitlabMergeRequest {
         $SourceBranch = Resolve-GitlabBranch $SourceBranch
         $Query.source_branch = $SourceBranch
     }
+    if ($TargetBranch) {
+        $Query.target_branch = $TargetBranch
+    }
 
     $MergeRequests = Invoke-GitlabApi GET $Path -Query $Query -MaxPages $MaxPages |
         Select-Object -ExcludeProperty approvals_before_merge | # https://docs.gitlab.com/ee/api/merge_requests.html#removals-in-api-v5
@@ -184,6 +191,14 @@ function New-GitlabMergeRequest {
 
         [Parameter()]
         [string]
+        $Description,
+
+        [Parameter()]
+        [switch]
+        $Draft,
+
+        [Parameter()]
+        [string]
         $MilestoneId,
 
         [Parameter()]
@@ -213,6 +228,9 @@ function New-GitlabMergeRequest {
     if (-not $Title) {
         $Title = $SourceBranch.Replace('-', ' ').Replace('_', ' ')
     }
+    if ($Draft -and $Title -notmatch '^Draft:\s') {
+        $Title = "Draft: $Title"
+    }
 
     $Me = Get-GitlabCurrentUser
 
@@ -222,6 +240,9 @@ function New-GitlabMergeRequest {
         remove_source_branch = 'true'
         assignee_id          = $Me.Id
         title                = $Title
+    }
+    if ($Description) {
+        $Body.description = $Description
     }
     if ($MilestoneId) {
         $Body.milestone_id = $MilestoneId
@@ -401,6 +422,10 @@ function Update-GitlabMergeRequest {
 
         [Parameter()]
         [string]
+        $TargetBranch,
+
+        [Parameter()]
+        [string]
         $MilestoneId,
 
         [Parameter()]
@@ -442,6 +467,9 @@ function Update-GitlabMergeRequest {
         } | Select-Object -ExpandProperty Id)
     } elseif ($UnsetReviewers) {
         $Request.reviewer_ids = @()
+    }
+    if ($TargetBranch) {
+        $Request.target_branch = $TargetBranch
     }
     if ($MilestoneId) {
         $Request.milestone_id = $MilestoneId
