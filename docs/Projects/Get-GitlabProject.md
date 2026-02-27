@@ -20,36 +20,36 @@ Retrieves GitLab projects by ID, group, user, topics, or URL.
 ### ById (Default)
 
 ```
-Get-GitlabProject [[-ProjectId] <string>] [-Select <string>] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabProject [[-ProjectId] <string>] [-Search <string>] [-Select <string>] [-MaxPages <uint>]
+ [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByGroup
 
 ```
-Get-GitlabProject [-GroupId] <string> [-Recurse] [-Search <string>] [-Select <string>]
+Get-GitlabProject [-GroupId] <string> [-Search <string>] [-Recurse] [-Select <string>]
  [-IncludeArchived] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByUser
 
 ```
-Get-GitlabProject [-UserId <string>] [-Mine] [-Select <string>] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabProject [-UserId <string>] [-Mine] [-Search <string>] [-Select <string>]
+ [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByTopics
 
 ```
-Get-GitlabProject [-Topics] <string[]> [-Select <string>] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabProject [-Topics] <string[]> [-Search <string>] [-Select <string>] [-MaxPages <uint>]
+ [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByUrl
 
 ```
-Get-GitlabProject [-Url] <string> [-Select <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabProject [-Url] <string> [-Search <string>] [-Select <string>] [-MaxPages <uint>] [-All]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -253,6 +253,27 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: ByGroup
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Search
+
+{{ Fill Search Description }}
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
   Position: Named
   IsRequired: false
   ValueFromPipeline: false
