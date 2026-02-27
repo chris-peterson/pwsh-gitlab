@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Get-GitlabProject
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 02/27/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabProject
 ---
@@ -20,36 +20,36 @@ Retrieves GitLab projects by ID, group, user, topics, or URL.
 ### ById (Default)
 
 ```
-Get-GitlabProject [[-ProjectId] <string>] [-Select <string>] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabProject [[-ProjectId] <string>] [-Search <string>] [-Select <string>] [-MaxPages <uint>]
+ [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByGroup
 
 ```
-Get-GitlabProject [-GroupId] <string> [-Recurse] [-Select <string>] [-IncludeArchived]
- [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabProject [-GroupId] <string> [-Search <string>] [-Recurse] [-Select <string>]
+ [-IncludeArchived] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByUser
 
 ```
-Get-GitlabProject [-UserId <string>] [-Mine] [-Select <string>] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabProject [-UserId <string>] [-Mine] [-Search <string>] [-Select <string>]
+ [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByTopics
 
 ```
-Get-GitlabProject [-Topics] <string[]> [-Select <string>] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+Get-GitlabProject [-Topics] <string[]> [-Search <string>] [-Select <string>] [-MaxPages <uint>]
+ [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByUrl
 
 ```
-Get-GitlabProject [-Url] <string> [-Select <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabProject [-Url] <string> [-Search <string>] [-Select <string>] [-MaxPages <uint>] [-All]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -232,6 +232,48 @@ Aliases:
 - r
 ParameterSets:
 - Name: ByGroup
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Search
+
+When specified with -GroupId, will filter projects that match the search string. Only searches top-level projects in the specified group. To search for projects in subgroups, use the -Recurse switch
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ByGroup
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Search
+
+{{ Fill Search Description }}
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
   Position: Named
   IsRequired: false
   ValueFromPipeline: false

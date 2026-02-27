@@ -23,6 +23,10 @@ function Get-GitlabProject {
         [string []]
         $Topics,
 
+        [Parameter()]
+        [string]
+        $Search,
+
         [Parameter(ParameterSetName='ByGroup')]
         [Alias('r')]
         [switch]
@@ -59,22 +63,36 @@ function Get-GitlabProject {
     $Projects = @()
     switch ($PSCmdlet.ParameterSetName) {
         ById {
-            if ($ProjectId -eq '.') {
-                $ProjectId = $(Get-LocalGitContext).Project
-                if (-not $ProjectId) {
-                    throw "Could not infer project based on current directory ($(Get-Location))"
+            if ($Search) {
+                # https://docs.gitlab.com/api/projects/#list-all-projects
+                $Projects = Invoke-GitlabApi GET "projects" -Query @{
+                    search = $Search
+                } -MaxPages $MaxPages
+            } else {
+                if ($ProjectId -eq '.') {
+                    $ProjectId = $(Get-LocalGitContext).Project
+                    if (-not $ProjectId) {
+                        throw "Could not infer project based on current directory ($(Get-Location))"
+                    }
                 }
+                # https://docs.gitlab.com/api/projects/#get-a-single-project
+                $Projects = Invoke-GitlabApi GET "projects/$($ProjectId | ConvertTo-UrlEncoded)"
             }
-            $Projects = Invoke-GitlabApi GET "projects/$($ProjectId | ConvertTo-UrlEncoded)"
         }
         ByGroup {
             $Group = Get-GitlabGroup $GroupId
             $Query = @{
                 'include_subgroups' = $Recurse ? 'true' : 'false'
             }
+
+            if($Search) {
+                $Query['search'] = $Search
+            }
+
             if (-not $IncludeArchived) {
                 $Query['archived'] = 'false'
             }
+            # https://docs.gitlab.com/api/groups/#list-a-groups-projects
             $Projects = Invoke-GitlabApi GET "groups/$($Group.Id)/projects" $Query -MaxPages $MaxPages |
                 Where-Object { $($_.path_with_namespace).StartsWith($Group.FullPath) } |
                 Sort-Object -Property 'Name'
@@ -86,13 +104,22 @@ function Get-GitlabProject {
                 }
                 $UserId = Get-GitlabUser -Me | Select-Object -ExpandProperty Username
             }
-            # https://docs.gitlab.com/ee/api/projects.html#list-user-projects
-            $Projects = Invoke-GitlabApi GET "users/$UserId/projects"
+            $Query = @{}
+            if ($Search) {
+                $Query.search = $Search
+            }
+            # https://docs.gitlab.com/api/projects/#list-user-projects
+            $Projects = Invoke-GitlabApi GET "users/$UserId/projects" -Query $Query -MaxPages $MaxPages
         }
         ByTopics {
-            $Projects = Invoke-GitlabApi GET "projects" -Query @{
+            $Query = @{
                 topic = $Topics -join ','
-            } -MaxPages $MaxPages
+            }
+            if ($Search) {
+                $Query.search = $Search
+            }
+            # https://docs.gitlab.com/api/projects/#list-all-projects
+            $Projects = Invoke-GitlabApi GET "projects" -Query $Query -MaxPages $MaxPages
         }
         ByUrl {
             $Match = $Url | Get-GitlabResourceFromUrl
