@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.163.1'
+    ModuleVersion = '1.164.0'
 
     RequiredModules = @(
         @{
@@ -31,17 +31,24 @@
             )
             ReleaseNotes =
 @'
-### Fixes
-- Get-GitlabMergeRequest now defaults -State to 'opened'
-  instead of 'all', restoring expected behavior where
-  `mrs -Mine` returns open MRs rather than every MR ever
-  authored (regression introduced in [f96a54e])
+### Features
+- Get-GitlabProject -Search now works across all parameter
+  sets (ById, ByGroup, ByUser, ByTopics), enabling global
+  project search and per-user/topic filtering
+- Get-GitlabCommit supports -Author to filter by committer
+- Get-GitlabIssue supports -Labels, -OrderBy, and -Sort
+  for more targeted issue queries
+- New-GitlabIssue supports -Assignees (multi-user) and
+  -Labels when creating issues
+- Get-GitlabMergeRequest and Update-GitlabMergeRequest
+  support -TargetBranch filtering
+- New-GitlabMergeRequest supports -Description and -Draft
+- Search-GitlabProject supports -Scope to search beyond
+  blobs (e.g. commits, wiki_blobs)
 
 ### Other
-- Add tests and documentation for default behavior(s)
-- Populate DefaultValue fields across all docs
-- Add AGENTS.md and CLAUDE.md for AI agent conventions
-- Clarify CONTRIBUTING.md docs workflow
+- Add unit tests for Get-GitlabProject
+- Documentation updates for all modified cmdlets
 '@
         }
     }
