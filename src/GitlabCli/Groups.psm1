@@ -169,17 +169,12 @@ function Copy-GitlabGroupToLocalFileSystem {
         $Projects = $Projects | Where-Object PathWithNamespace -NotMatch $ProjectNotLike
     }
 
-    if ($PSCmdlet.ShouldProcess("local file system ($LocalPath/$($Group.FullPath))", "clone $($Projects.Length) projects from $($Group.FullPath)" )) {
-        $Projects | ForEach-Object {
-            $Path = "$LocalPath/$($_.Group)"
+    $TargetPath = "$LocalPath/$($Group.FullPath)"
+    if ($PSCmdlet.ShouldProcess("local file system ($TargetPath)", "clone $($Projects.Length) projects from $($Group.FullPath)" )) {
+        
+        Set-Location $TargetPath
 
-            if (-not $(Test-Path $Path)) {
-                New-Item $Path -Type Directory | Out-Null
-            }
-
-            Set-Location $Path
-            git clone $_.SshUrlToRepo
-        }
+        $Projects | Copy-GitlabProjectToLocalFileSystem
 
         Set-Location $OriginalPath
     }
