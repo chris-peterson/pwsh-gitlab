@@ -2,13 +2,12 @@ BeforeAll {
     $TestModuleName = "MergeRequests"
     Get-Module -Name $TestModuleName -All | Remove-Module -Force -ErrorAction SilentlyContinue
 
-    . $PSScriptRoot/../src/GitlabCli/Private/Globals.ps1
-    . $PSScriptRoot/../src/GitlabCli/Private/Functions/PaginationHelpers.ps1
-    . $PSScriptRoot/../src/GitlabCli/Private/Validations.ps1
-    . $PSScriptRoot/../src/GitlabCli/Private/Transformations.ps1
-
     Import-Module (New-Module -Name $TestModuleName -ScriptBlock ([scriptblock]::Create(
         @(
+            Get-Content "$PSScriptRoot/../src/GitlabCli/Private/Globals.ps1" -Raw
+            Get-Content "$PSScriptRoot/../src/GitlabCli/Private/Functions/PaginationHelpers.ps1" -Raw
+            Get-Content "$PSScriptRoot/../src/GitlabCli/Private/Validations.ps1" -Raw
+            Get-Content "$PSScriptRoot/../src/GitlabCli/Private/Transformations.ps1" -Raw
             Get-Content "$PSScriptRoot/../src/GitlabCli/MergeRequests.psm1" -Raw
         ) -join "`n"))) -Force
 
