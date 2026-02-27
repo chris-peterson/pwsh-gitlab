@@ -116,6 +116,10 @@ function Search-GitlabProject {
 
         [Parameter(Mandatory=$false)]
         [string]
+        $Scope = 'blobs',
+
+        [Parameter(Mandatory=$false)]
+        [string]
         $Filename,
 
         [Parameter(Mandatory=$false)]
@@ -124,7 +128,7 @@ function Search-GitlabProject {
     )
 
     $Query = @{
-        scope = 'blobs'
+        scope = $Scope
     }
 
     $Project = Get-GitlabProject $ProjectId

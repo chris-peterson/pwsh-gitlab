@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/New-GitlabMergeRequest
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 02/27/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabMergeRequest
 ---
@@ -21,8 +21,8 @@ Creates a new GitLab merge request.
 
 ```
 New-GitlabMergeRequest [[-ProjectId] <string>] [[-SourceBranch] <string>] [[-TargetBranch] <string>]
- [[-Title] <string>] [-MilestoneId <string>] [-MarkTodoAsRead] [-Follow] [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [[-Title] <string>] [-Description <string>] [-Draft] [-MilestoneId <string>] [-MarkTodoAsRead]
+ [-Follow] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -77,6 +77,48 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases:
 - cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Description
+
+{{ Fill Description Description }}
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Draft
+
+{{ Fill Draft Description }}
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
 ParameterSets:
 - Name: (All)
   Position: Named

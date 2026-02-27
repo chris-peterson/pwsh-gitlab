@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Commits/Get-GitlabCommit
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 02/27/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabCommit
 ---
@@ -21,7 +21,8 @@ Retrieves commits from a GitLab project repository.
 
 ```
 Get-GitlabCommit [[-ProjectId] <string>] [[-Before] <string>] [[-After] <string>] [[-Ref] <string>]
- [[-Sha] <string>] [[-MaxPages] <uint>] [[-SiteUrl] <string>] [<CommonParameters>]
+ [[-Author] <string>] [[-Sha] <string>] [[-MaxPages] <uint>] [[-SiteUrl] <string>]
+ [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -96,6 +97,27 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
+### -Author
+
+{{ Fill Author Description }}
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 4
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
 ### -Before
 
 Filter commits made before this date. Also aliased as 'Until'. The date should be in a format that can be parsed as a date (e.g., '2024-01-01' or '2024-01-01T00:00:00Z').
@@ -129,7 +151,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 5
+  Position: 6
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -193,7 +215,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 4
+  Position: 5
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -214,7 +236,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 6
+  Position: 7
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false

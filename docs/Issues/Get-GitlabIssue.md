@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/Get-GitlabIssue
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 02/27/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabIssue
 ---
@@ -22,7 +22,8 @@ Retrieves GitLab issues from a project, group, or the authenticated user.
 ```
 Get-GitlabIssue [[-IssueId] <string>] [-ProjectId <string>] [-State <string>]
  [-CreatedAfter <string>] [-CreatedBefore <string>] [-AssigneeUsername <string>]
- [-AuthorUsername <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+ [-AuthorUsername <string>] [-Labels <string>] [-OrderBy <string>] [-Sort <string>]
+ [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByGroupId
@@ -30,7 +31,8 @@ Get-GitlabIssue [[-IssueId] <string>] [-ProjectId <string>] [-State <string>]
 ```
 Get-GitlabIssue [[-IssueId] <string>] [-GroupId] <string> [-State <string>] [-CreatedAfter <string>]
  [-CreatedBefore <string>] [-AssigneeUsername <string>] [-AuthorUsername <string>]
- [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+ [-Labels <string>] [-OrderBy <string>] [-Sort <string>] [-MaxPages <uint>] [-All]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### Mine
@@ -38,7 +40,8 @@ Get-GitlabIssue [[-IssueId] <string>] [-GroupId] <string> [-State <string>] [-Cr
 ```
 Get-GitlabIssue [[-IssueId] <string>] -Mine [-State <string>] [-CreatedAfter <string>]
  [-CreatedBefore <string>] [-AssigneeUsername <string>] [-AuthorUsername <string>]
- [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+ [-Labels <string>] [-OrderBy <string>] [-Sort <string>] [-MaxPages <uint>] [-All]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -236,6 +239,27 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
+### -Labels
+
+{{ Fill Labels Description }}
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
 ### -MaxPages
 
 The maximum number of pages of results to return. Each page typically contains 20 items.
@@ -278,6 +302,27 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
+### -OrderBy
+
+{{ Fill OrderBy Description }}
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
 ### -ProjectId
 
 The ID or URL-encoded path of the project. Defaults to the current directory's git repository.
@@ -302,6 +347,27 @@ HelpMessage: ''
 ### -SiteUrl
 
 The URL of the GitLab site to connect to. If not specified, uses the default configured site.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Sort
+
+{{ Fill Sort Description }}
 
 ```yaml
 Type: System.String
