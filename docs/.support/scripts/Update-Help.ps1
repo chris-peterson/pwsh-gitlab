@@ -63,7 +63,7 @@ foreach ($File in $ModifiedFiles) {
 Pop-Location
 
 Write-Host "Checking for placeholder text..." -ForegroundColor Cyan
-$PlaceholderPattern = '\{\{\s*Fill in'
+$PlaceholderPattern = '\{\{\s*Fill\s'
 $PlaceholderMatches = Get-ChildItem -Path $DocsFolder -Filter '*.md' -Recurse |
     Select-String -Pattern $PlaceholderPattern
 

@@ -102,7 +102,7 @@ HelpMessage: ''
 
 ### -Scope
 
-{{ Fill Scope Description }}
+Search scope within the project. Defaults to 'blobs'. Valid values: blobs, merge_requests, projects.
 
 ```yaml
 Type: System.String

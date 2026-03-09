@@ -99,7 +99,7 @@ HelpMessage: ''
 
 ### -Author
 
-{{ Fill Author Description }}
+Filter commits by author name or email.
 
 ```yaml
 Type: System.String

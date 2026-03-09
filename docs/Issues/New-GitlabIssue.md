@@ -61,7 +61,7 @@ Creates a new issue in the specified project, assigns it to milestone 5, and mar
 
 ### -Assignees
 
-{{ Fill Assignees Description }}
+One or more usernames to assign to the issue. If not specified, defaults to the current user.
 
 ```yaml
 Type: System.String[]
@@ -146,7 +146,7 @@ HelpMessage: ''
 
 ### -Labels
 
-{{ Fill Labels Description }}
+Comma-separated list of label names to apply to the new issue.
 
 ```yaml
 Type: System.String

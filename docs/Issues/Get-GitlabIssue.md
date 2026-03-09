@@ -241,7 +241,7 @@ HelpMessage: ''
 
 ### -Labels
 
-{{ Fill Labels Description }}
+Filter issues by comma-separated list of label names (e.g. 'bug,critical').
 
 ```yaml
 Type: System.String
@@ -304,7 +304,7 @@ HelpMessage: ''
 
 ### -OrderBy
 
-{{ Fill OrderBy Description }}
+Order results by 'created_at' or 'updated_at'.
 
 ```yaml
 Type: System.String
@@ -367,7 +367,7 @@ HelpMessage: ''
 
 ### -Sort
 
-{{ Fill Sort Description }}
+Sort order for results: 'asc' for ascending or 'desc' for descending.
 
 ```yaml
 Type: System.String

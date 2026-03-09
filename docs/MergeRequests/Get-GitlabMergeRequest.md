@@ -479,7 +479,7 @@ HelpMessage: ''
 
 ### -TargetBranch
 
-{{ Fill TargetBranch Description }}
+Filter merge requests by target branch name.
 
 ```yaml
 Type: System.String

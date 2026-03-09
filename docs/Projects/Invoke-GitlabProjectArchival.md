@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Invoke-GitlabProjectArchival
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 03/09/2026
 PlatyPS schema version: 2024-05-01
 title: Invoke-GitlabProjectArchival
 ---
@@ -20,8 +20,8 @@ Archives a GitLab project.
 ### __AllParameterSets
 
 ```
-Invoke-GitlabProjectArchival [[-ProjectId] <string>] [[-SiteUrl] <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Invoke-GitlabProjectArchival [[-ProjectId] <string>] [[-SiteUrl] <string>] [-Graceful] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -63,6 +63,27 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases:
 - cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Graceful
+
+Close all open merge requests and issues before archiving the project.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
 ParameterSets:
 - Name: (All)
   Position: Named

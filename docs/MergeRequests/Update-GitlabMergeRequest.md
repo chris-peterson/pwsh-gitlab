@@ -318,7 +318,7 @@ HelpMessage: ''
 
 ### -TargetBranch
 
-{{ Fill TargetBranch Description }}
+Change the target branch of the merge request.
 
 ```yaml
 Type: System.String

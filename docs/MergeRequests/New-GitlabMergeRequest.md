@@ -91,7 +91,7 @@ HelpMessage: ''
 
 ### -Description
 
-{{ Fill Description Description }}
+Description body for the merge request.
 
 ```yaml
 Type: System.String
@@ -112,7 +112,7 @@ HelpMessage: ''
 
 ### -Draft
 
-{{ Fill Draft Description }}
+Create the merge request as a draft by prefixing the title with 'Draft:'.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
