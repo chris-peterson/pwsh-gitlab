@@ -4,3 +4,4 @@ test.ps1
 *.csv
 PLANNING.md
 src/GitlabCli/en-US
+.claude/

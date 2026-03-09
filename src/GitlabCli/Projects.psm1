@@ -506,6 +506,10 @@ function Invoke-GitlabProjectArchival {
         $ProjectId = '.',
 
         [Parameter()]
+        [switch]
+        $Graceful,
+
+        [Parameter()]
         [string]
         $SiteUrl
     )
@@ -513,6 +517,14 @@ function Invoke-GitlabProjectArchival {
     $Project = Get-GitlabProject $ProjectId
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "archive")) {
+        if ($Graceful) {
+            Get-GitlabMergeRequest -ProjectId $Project.Id -State 'opened' -All | ForEach-Object {
+                Close-GitlabMergeRequest -ProjectId $_.ProjectId -MergeRequestId $_.MergeRequestId | Out-Null
+            }
+            Get-GitlabIssue -ProjectId $Project.Id -State 'opened' -All | ForEach-Object {
+                Close-GitlabIssue -ProjectId $_.ProjectId -IssueId $_.IssueId | Out-Null
+            }
+        }
         # https://docs.gitlab.com/ee/api/projects.html#archive-a-project
         Invoke-GitlabApi POST "projects/$($Project.Id)/archive" |
             New-GitlabObject 'Gitlab.Project'

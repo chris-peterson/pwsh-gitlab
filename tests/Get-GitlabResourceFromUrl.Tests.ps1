@@ -26,6 +26,13 @@ Describe "Get-GitlabResourceFromUrl" {
       $Result.ResourceType | Should -Be "merge_requests"
       $Result.ResourceId | Should -Be "123"
     }
+
+    It "Should handle URLs without /-/ separator" {
+      $Result = Get-GitlabResourceFromUrl -Url "https://gitlab.example.com/group/project/merge_requests/123"
+      $Result.ProjectId | Should -Be "group/project"
+      $Result.ResourceType | Should -Be "merge_requests"
+      $Result.ResourceId | Should -Be "123"
+    }
   }
 
   Context "When URL contains an issue" {

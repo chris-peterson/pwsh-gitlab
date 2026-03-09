@@ -115,8 +115,12 @@ function Get-GitlabMergeRequest {
         }
         'ByUrl' {
             $Resource = $Url | Get-GitlabResourceFromUrl
-            $ProjectId = $Resource.ProjectId
+            $ProjectId = Resolve-GitlabProjectId $Resource.ProjectId
             $MergeRequestId = $Resource.ResourceId
+            $Path = "projects/$ProjectId/merge_requests"
+            if ($MergeRequestId) {
+                $Path += "/$MergeRequestId"
+            }
         }
         'ByProjectId' {
             $ProjectId = Resolve-GitlabProjectId $ProjectId
@@ -476,8 +480,21 @@ function Update-GitlabMergeRequest {
     }
 
     if ($PSCmdlet.ShouldProcess("MR $MergeRequestId in project $ProjectId", "update $($Request | ConvertTo-Json)")) {
-        # https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
-        Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" -Body $Request | New-GitlabObject 'Gitlab.MergeRequest'
+        $Project = Get-GitlabProject -ProjectId $ProjectId
+        if ($Project.Archived) {
+            # https://gitlab.com/gitlab-org/gitlab-foss/-/issues/51258
+            try {
+                Invoke-GitlabProjectUnarchival -ProjectId $ProjectId -Confirm:$false | Out-Null
+                Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" -Body $Request | New-GitlabObject 'Gitlab.MergeRequest'
+            }
+            finally {
+                Invoke-GitlabProjectArchival -ProjectId $ProjectId -Confirm:$false | Out-Null
+            }
+        }
+        else {
+            # https://docs.gitlab.com/api/merge_requests/#update-a-merge-request
+            Invoke-GitlabApi PUT "projects/$ProjectId/merge_requests/$MergeRequestId" -Body $Request | New-GitlabObject 'Gitlab.MergeRequest'
+        }
     }
 }
 
@@ -501,9 +518,7 @@ function Close-GitlabMergeRequest {
 
     $ProjectId = Resolve-GitlabProjectId $ProjectId
 
-    if ($PSCmdlet.ShouldProcess("MR #$MergeRequestId", "close")) {
-        Update-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -Close
-    }
+    Update-GitlabMergeRequest -ProjectId $ProjectId -MergeRequestId $MergeRequestId -Close -WhatIf:$WhatIfPreference
 }
 
 function Invoke-GitlabMergeRequestReview {

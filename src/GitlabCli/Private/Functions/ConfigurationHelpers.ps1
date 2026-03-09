@@ -142,7 +142,7 @@ function Get-GitlabResourceFromUrl {
     )
 
     foreach ($SiteUrl in (Get-GitlabConfiguration | Select-Object -Expand sites | Select-Object -Expand Url)) {
-        if ($Url -match "$SiteUrl/(?<ProjectId>.+?)(?:/-/(?:(?<ResourceType>[a-zA-Z_]+)/(?<ResourceId>\d+))?)?/?$") {
+        if ($Url -match "$SiteUrl/(?<ProjectId>.+?)(?:(?:/-)?/(?:(?<ResourceType>[a-zA-Z_]+)/(?<ResourceId>\d+))?)?/?$") {
             return [PSCustomObject]@{
                 ProjectId    = $Matches.ProjectId
                 ResourceType = $Matches.ResourceType

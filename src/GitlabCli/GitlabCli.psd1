@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.164.0'
+    ModuleVersion = '1.165.0'
 
     RequiredModules = @(
         @{
@@ -32,23 +32,17 @@
             ReleaseNotes =
 @'
 ### Features
-- Get-GitlabProject -Search now works across all parameter
-  sets (ById, ByGroup, ByUser, ByTopics), enabling global
-  project search and per-user/topic filtering
-- Get-GitlabCommit supports -Author to filter by committer
-- Get-GitlabIssue supports -Labels, -OrderBy, and -Sort
-  for more targeted issue queries
-- New-GitlabIssue supports -Assignees (multi-user) and
-  -Labels when creating issues
-- Get-GitlabMergeRequest and Update-GitlabMergeRequest
-  support -TargetBranch filtering
-- New-GitlabMergeRequest supports -Description and -Draft
-- Search-GitlabProject supports -Scope to search beyond
-  blobs (e.g. commits, wiki_blobs)
+- Merge request updates now work on archived projects.
+  GitLab returns 403 on archived project modifications,
+  so Update-GitlabMergeRequest temporarily unarchives,
+  applies the change, then re-archives automatically.
+- Archive-GitlabProject -Graceful closes all open merge
+  requests and issues before archiving the project.
 
-### Other
-- Add unit tests for Get-GitlabProject
-- Documentation updates for all modified cmdlets
+### Fixes
+- Get-GitlabMergeRequest -Url now correctly fetches the
+  specific merge request instead of listing all MRs
+  (regression in 5179373).
 '@
         }
     }
