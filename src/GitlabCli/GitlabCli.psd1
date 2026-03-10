@@ -253,6 +253,9 @@
 
         # Milestones
         'Get-GitlabMilestone'
+        'New-GitlabMilestone'
+        'Update-GitlabMilestone'
+        'Remove-GitlabMilestone'
 
         # PATs
         'Get-GitlabPersonalAccessToken'
