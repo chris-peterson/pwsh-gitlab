@@ -91,6 +91,7 @@
         'Issues.psm1'
         'Jobs.psm1'
         'Keys.psm1'
+        'Labels.psm1'
         'Members.psm1'
         'MergeRequests.psm1'
         'Milestones.psm1'
@@ -108,6 +109,7 @@
         'Search.psm1'
         'ServiceAccounts.psm1'
         'Snippets.psm1'
+        'Tags.psm1'
         'Todos.psm1'
         'Topics.psm1'
         'UserDeployKeys.psm1'
@@ -168,6 +170,12 @@
 
         # SSH Keys
         'Get-GitlabKey'
+
+        # Labels
+        'Get-GitlabLabel'
+        'New-GitlabLabel'
+        'Update-GitlabLabel'
+        'Remove-GitlabLabel'
 
         # Project Access Tokens
         'Get-GitlabProjectAccessToken'
@@ -253,6 +261,9 @@
 
         # Milestones
         'Get-GitlabMilestone'
+        'New-GitlabMilestone'
+        'Update-GitlabMilestone'
+        'Remove-GitlabMilestone'
 
         # PATs
         'Get-GitlabPersonalAccessToken'
@@ -271,6 +282,7 @@
         'Get-GitlabPipelineVariable'
         'New-GitlabPipeline'
         'Remove-GitlabPipeline'
+        'Stop-GitlabPipeline'
         'Get-GitlabPipelineScheduleVariable'
         'New-GitlabPipelineScheduleVariable'
         'Remove-GitlabPipelineScheduleVariable'
@@ -299,6 +311,14 @@
 
         # Releases
         'Get-GitlabRelease'
+        'New-GitlabRelease'
+        'Update-GitlabRelease'
+        'Remove-GitlabRelease'
+
+        # Tags
+        'Get-GitlabTag'
+        'New-GitlabTag'
+        'Remove-GitlabTag'
 
         # Runners
         'Get-GitlabRunner'
@@ -408,6 +428,8 @@
 
         # short form
         'go'
+        'tags'
+        'labels'
         'build'
         'envs'
         'deploys'

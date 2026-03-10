@@ -408,3 +408,30 @@ function Remove-GitlabPipeline {
         Write-Host "$PipelineId deleted from $($Project.Name)"
     }
 }
+
+# https://docs.gitlab.com/ee/api/pipelines.html#cancel-a-pipelines-jobs
+function Stop-GitlabPipeline {
+    [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Pipeline')]
+    param (
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
+        [Alias('Id')]
+        [string]
+        $PipelineId,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
+
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "cancel pipeline $PipelineId")) {
+        Invoke-GitlabApi POST "projects/$ProjectId/pipelines/$PipelineId/cancel" |
+            New-GitlabObject 'Gitlab.Pipeline'
+    }
+}
