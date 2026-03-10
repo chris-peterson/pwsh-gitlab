@@ -108,6 +108,7 @@
         'Search.psm1'
         'ServiceAccounts.psm1'
         'Snippets.psm1'
+        'Tags.psm1'
         'Todos.psm1'
         'Topics.psm1'
         'UserDeployKeys.psm1'
@@ -300,6 +301,11 @@
         # Releases
         'Get-GitlabRelease'
 
+        # Tags
+        'Get-GitlabTag'
+        'New-GitlabTag'
+        'Remove-GitlabTag'
+
         # Runners
         'Get-GitlabRunner'
         'Get-GitlabRunnerJob'
@@ -423,6 +429,7 @@
         'issues'
         'mr'
         'mrs'
+        'tags'
         'var'
     )
 }
