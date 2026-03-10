@@ -91,6 +91,7 @@
         'Issues.psm1'
         'Jobs.psm1'
         'Keys.psm1'
+        'Labels.psm1'
         'Members.psm1'
         'MergeRequests.psm1'
         'Milestones.psm1'
@@ -165,6 +166,12 @@
         'Set-GitlabGroupVariable'
         'Update-GitlabGroup'
         'Update-LocalGitlabGroup'
+
+        # Labels
+        'Get-GitlabLabel'
+        'New-GitlabLabel'
+        'Update-GitlabLabel'
+        'Remove-GitlabLabel'
 
         # SSH Keys
         'Get-GitlabKey'
@@ -407,6 +414,7 @@
         'Unarchive-GitlabProject'
 
         # short form
+        'labels'
         'go'
         'build'
         'envs'
