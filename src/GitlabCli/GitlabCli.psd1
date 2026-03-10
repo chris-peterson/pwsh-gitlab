@@ -271,6 +271,7 @@
         'Get-GitlabPipelineVariable'
         'New-GitlabPipeline'
         'Remove-GitlabPipeline'
+        'Stop-GitlabPipeline'
         'Get-GitlabPipelineScheduleVariable'
         'New-GitlabPipelineScheduleVariable'
         'Remove-GitlabPipelineScheduleVariable'
