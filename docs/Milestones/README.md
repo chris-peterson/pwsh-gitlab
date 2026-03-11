@@ -27,3 +27,6 @@ Get-GitlabMilestone -ProjectId 'mygroup/myproject' -MilestoneId 5
 | Cmdlet | Description |
 |--------|-------------|
 | [Get-GitlabMilestone](Milestones/Get-GitlabMilestone.md) | Retrieves milestones |
+| [New-GitlabMilestone](Milestones/New-GitlabMilestone.md) | Creates a new milestone |
+| [Update-GitlabMilestone](Milestones/Update-GitlabMilestone.md) | Updates an existing milestone |
+| [Remove-GitlabMilestone](Milestones/Remove-GitlabMilestone.md) | Deletes a milestone |

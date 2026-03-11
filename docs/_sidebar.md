@@ -88,6 +88,12 @@
 * [Keys](Keys/)
   * [Get-GitlabKey](Keys/Get-GitlabKey.md)
 
+* [Labels](Labels/)
+  * [Get-GitlabLabel](Labels/Get-GitlabLabel.md)
+  * [New-GitlabLabel](Labels/New-GitlabLabel.md)
+  * [Remove-GitlabLabel](Labels/Remove-GitlabLabel.md)
+  * [Update-GitlabLabel](Labels/Update-GitlabLabel.md)
+
 * [Members](Members/)
   * [Add-GitlabGroupMember](Members/Add-GitlabGroupMember.md)
   * [Add-GitlabProjectMember](Members/Add-GitlabProjectMember.md)
@@ -121,6 +127,9 @@
 
 * [Milestones](Milestones/)
   * [Get-GitlabMilestone](Milestones/Get-GitlabMilestone.md)
+  * [New-GitlabMilestone](Milestones/New-GitlabMilestone.md)
+  * [Remove-GitlabMilestone](Milestones/Remove-GitlabMilestone.md)
+  * [Update-GitlabMilestone](Milestones/Update-GitlabMilestone.md)
 
 * [Notes](Notes/)
   * [Get-GitlabIssueNote](Notes/Get-GitlabIssueNote.md)
@@ -139,6 +148,7 @@
   * [Get-GitlabPipelineVariable](Pipelines/Get-GitlabPipelineVariable.md)
   * [New-GitlabPipeline](Pipelines/New-GitlabPipeline.md)
   * [Remove-GitlabPipeline](Pipelines/Remove-GitlabPipeline.md)
+  * [Stop-GitlabPipeline](Pipelines/Stop-GitlabPipeline.md)
 
 * [PipelineSchedules](PipelineSchedules/)
   * [Disable-GitlabPipelineSchedule](PipelineSchedules/Disable-GitlabPipelineSchedule.md)
@@ -196,6 +206,9 @@
 
 * [Releases](Releases/)
   * [Get-GitlabRelease](Releases/Get-GitlabRelease.md)
+  * [New-GitlabRelease](Releases/New-GitlabRelease.md)
+  * [Remove-GitlabRelease](Releases/Remove-GitlabRelease.md)
+  * [Update-GitlabRelease](Releases/Update-GitlabRelease.md)
 
 * [RepositoryFiles](RepositoryFiles/)
   * [Get-GitlabRepositoryFile](RepositoryFiles/Get-GitlabRepositoryFile.md)
@@ -230,6 +243,11 @@
   * [New-GitlabSnippet](Snippets/New-GitlabSnippet.md)
   * [Remove-GitlabSnippet](Snippets/Remove-GitlabSnippet.md)
   * [Update-GitlabSnippet](Snippets/Update-GitlabSnippet.md)
+
+* [Tags](Tags/)
+  * [Get-GitlabTag](Tags/Get-GitlabTag.md)
+  * [New-GitlabTag](Tags/New-GitlabTag.md)
+  * [Remove-GitlabTag](Tags/Remove-GitlabTag.md)
 
 * [Todos](Todos/)
   * [Clear-GitlabTodo](Todos/Clear-GitlabTodo.md)
