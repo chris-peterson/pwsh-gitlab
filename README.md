@@ -129,6 +129,10 @@ Get-MergeRequest       # routes to Get-GitlabMergeRequest
 | **pwsh-gitlab** | :arrow_left: this module |
 | [pwsh-github](https://github.com/chris-peterson/pwsh-github) | GitHub provider |
 
+## Project History
+
+![Project Growth Over Time](docs/history.png)
+
 ## Contributing
 
 Contributions welcome! Please see the [GitHub repository](https://github.com/chris-peterson/pwsh-gitlab) for issues and pull requests.
