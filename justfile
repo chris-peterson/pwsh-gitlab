@@ -8,6 +8,7 @@ test:
     Import-Module Pester
     $Config = New-PesterConfiguration
     $Config.Run.Exit = $true
+    $Config.Filter.ExcludeTag = 'Online'
     Invoke-Pester -Configuration $Config
 
 lint:

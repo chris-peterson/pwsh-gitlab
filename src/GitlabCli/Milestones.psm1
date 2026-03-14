@@ -66,6 +66,7 @@ function Get-GitlabMilestone {
         $Request.Query = @{ state = $State }
     }
 
+    # https://docs.gitlab.com/ee/api/milestones.html#list-project-milestones
     Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Milestone'
 }
 

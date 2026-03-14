@@ -54,6 +54,7 @@ function Get-GitlabLabel {
         $Query.include_ancestor_groups = 'true'
     }
 
+    # https://docs.gitlab.com/ee/api/labels.html#list-labels
     $Labels = Invoke-GitlabApi GET $Path -Query $Query -MaxPages $MaxPages |
         New-GitlabObject 'Gitlab.Label'
 
@@ -119,6 +120,7 @@ function New-GitlabLabel {
     }
 
     if ($PSCmdlet.ShouldProcess($Target, "create label '$Name'")) {
+        # https://docs.gitlab.com/ee/api/labels.html#create-a-new-label
         Invoke-GitlabApi POST $Path -Body $Body | New-GitlabObject 'Gitlab.Label'
     }
 }
@@ -191,6 +193,7 @@ function Update-GitlabLabel {
     }
 
     if ($PSCmdlet.ShouldProcess($Target, "update label $LabelId")) {
+        # https://docs.gitlab.com/ee/api/labels.html#edit-an-existing-label
         Invoke-GitlabApi PUT $Path -Body $Body | New-GitlabObject 'Gitlab.Label'
     }
 }
@@ -228,6 +231,7 @@ function Remove-GitlabLabel {
     }
 
     if ($PSCmdlet.ShouldProcess($Target, "delete label $LabelId")) {
+        # https://docs.gitlab.com/ee/api/labels.html#delete-a-label
         Invoke-GitlabApi DELETE $Path | Out-Null
     }
 }

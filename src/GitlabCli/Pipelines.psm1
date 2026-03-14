@@ -121,6 +121,7 @@
     if ($IncludeTestReport) {
         $Pipelines | ForEach-Object {
             try {
+                # https://docs.gitlab.com/ee/api/pipelines.html#get-a-pipelines-test-report
                 $TestReport = Invoke-GitlabApi GET "projects/$($_.ProjectId)/pipelines/$($_.Id)/test_report" | New-GitlabObject 'Gitlab.TestReport'
             }
             catch {
@@ -329,6 +330,7 @@ function New-GitlabPipeline {
     }
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create new pipeline $($Request | ConvertTo-Json)")) {
+        # https://docs.gitlab.com/ee/api/pipelines.html#create-a-new-pipeline
         $Pipeline = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject 'Gitlab.Pipeline'
 
         if ($Wait) {
@@ -404,6 +406,7 @@ function Remove-GitlabPipeline {
     $Pipeline = Get-GitlabPipeline -ProjectId $ProjectId -PipelineId $PipelineId
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "delete pipeline $PipelineId")) {
+        # https://docs.gitlab.com/ee/api/pipelines.html#delete-a-pipeline
         Invoke-GitlabApi DELETE "projects/$($Project.Id)/pipelines/$($Pipeline.Id)" | Out-Null
         Write-Host "$PipelineId deleted from $($Project.Name)"
     }

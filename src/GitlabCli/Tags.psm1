@@ -59,6 +59,7 @@ function Get-GitlabTag {
 
     $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
+    # https://docs.gitlab.com/ee/api/tags.html#list-project-repository-tags
     Invoke-GitlabApi GET $Path -Query $Query -MaxPages $MaxPages |
         New-GitlabObject 'Gitlab.Tag'
 }
@@ -100,6 +101,7 @@ function New-GitlabTag {
     }
 
     if ($PSCmdlet.ShouldProcess("project $ProjectId", "create tag '$Name' from '$Ref'")) {
+        # https://docs.gitlab.com/ee/api/tags.html#create-a-new-tag
         Invoke-GitlabApi POST "projects/$ProjectId/repository/tags" -Body $Body |
             New-GitlabObject 'Gitlab.Tag'
     }
@@ -125,6 +127,7 @@ function Remove-GitlabTag {
     $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     if ($PSCmdlet.ShouldProcess("project $ProjectId", "delete tag '$Name'")) {
+        # https://docs.gitlab.com/ee/api/tags.html#delete-a-tag
         Invoke-GitlabApi DELETE "projects/$ProjectId/repository/tags/$Name" | Out-Null
     }
 }

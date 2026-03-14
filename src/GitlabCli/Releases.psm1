@@ -46,6 +46,8 @@ function Get-GitlabRelease {
         $Query.include_html_description = 'true';
     }
     $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
+
+    # https://docs.gitlab.com/ee/api/releases/#list-releases
     Invoke-GitlabApi GET $Path -Query $Query -MaxPages $MaxPages | New-GitlabObject 'Gitlab.Release' | ForEach-Object {
         $_ | Add-Member -PassThru -NotePropertyMembers @{ ProjectId = $Project.Id }
     }
