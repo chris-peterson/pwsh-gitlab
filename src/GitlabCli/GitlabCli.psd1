@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.165.0'
+    ModuleVersion = '1.166.0'
 
     RequiredModules = @(
         @{
@@ -32,17 +32,15 @@
             ReleaseNotes =
 @'
 ### Features
-- Merge request updates now work on archived projects.
-  GitLab returns 403 on archived project modifications,
-  so Update-GitlabMergeRequest temporarily unarchives,
-  applies the change, then re-archives automatically.
-- Archive-GitlabProject -Graceful closes all open merge
-  requests and issues before archiving the project.
-
-### Fixes
-- Get-GitlabMergeRequest -Url now correctly fetches the
-  specific merge request instead of listing all MRs
-  (regression in 5179373).
+- Manage project and group labels: create, list, update,
+  and delete (Get/New/Update/Remove-GitlabLabel).
+- Manage tags: list, create, and delete repository tags
+  (Get/New/Remove-GitlabTag).
+- Create, update, and delete milestones
+  (New/Update/Remove-GitlabMilestone).
+- Create, update, and delete releases
+  (New/Update/Remove-GitlabRelease).
+- Cancel running pipelines with Stop-GitlabPipeline.
 '@
         }
     }

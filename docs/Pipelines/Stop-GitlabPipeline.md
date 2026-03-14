@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/Stop-GitlabPipeline
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/10/2026
+ms.date: 03/14/2026
 PlatyPS schema version: 2024-05-01
 title: Stop-GitlabPipeline
 ---
@@ -20,7 +20,7 @@ Cancels a pipeline's jobs in a GitLab project.
 ### __AllParameterSets
 
 ```
-Stop-GitlabPipeline [[-ProjectId] <string>] [-PipelineId] <string> [[-SiteUrl] <string>] [-WhatIf]
+Stop-GitlabPipeline [-PipelineId] <string> [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
 
@@ -49,6 +49,28 @@ Stop-GitlabPipeline -ProjectId 'mygroup/myproject' -PipelineId 12345
 Cancels pipeline 12345 in the specified project.
 
 ## PARAMETERS
+
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
 ### -PipelineId
 
@@ -114,31 +136,9 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -Confirm
-
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-DefaultValue: ''
-SupportsWildcards: false
-Aliases:
-- cf
-ParameterSets:
-- Name: (All)
-  Position: Named
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
 ### -WhatIf
 
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Releases/New-GitlabRelease
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/10/2026
+ms.date: 03/14/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabRelease
 ---
@@ -20,8 +20,8 @@ Creates a new release in a GitLab project.
 ### __AllParameterSets
 
 ```
-New-GitlabRelease [[-ProjectId] <string>] [-TagName] <string> [[-Name] <string>] [[-Description] <string>]
- [[-Ref] <string>] [[-Milestones] <string>] [[-ReleasedAt] <string>] [[-SiteUrl] <string>] [-WhatIf]
+New-GitlabRelease [-TagName] <string> [-ProjectId <string>] [-Name <string>] [-Description <string>]
+ [-Ref <string>] [-Milestones <string>] [-ReleasedAt <string>] [-SiteUrl <string>] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
 
@@ -253,7 +253,7 @@ HelpMessage: ''
 
 ### -WhatIf
 
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Tags/Get-GitlabTag
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/10/2026
+ms.date: 03/14/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabTag
 ---
@@ -20,13 +20,14 @@ Gets tags from a GitLab project repository.
 ### __AllParameterSets
 
 ```
-Get-GitlabTag [[-ProjectId] <string>] [[-Name] <string>] [[-Search] <string>] [[-Sort] <string>]
- [[-OrderBy] <string>] [[-MaxPages] <uint>] [[-SiteUrl] <string>] [-All] [<CommonParameters>]
+Get-GitlabTag [[-Name] <string>] [-ProjectId <string>] [-Search <string>] [-Sort <string>]
+ [-OrderBy <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
 
 tags
+
 
 ## DESCRIPTION
 

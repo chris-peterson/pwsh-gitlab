@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Labels/Get-GitlabLabel
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/10/2026
+ms.date: 03/14/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabLabel
 ---
@@ -20,20 +20,21 @@ Gets labels from a GitLab project or group.
 ### ByProjectId (Default)
 
 ```
-Get-GitlabLabel [[-ProjectId] <string>] [[-Name] <string>] [[-Search] <string>] [[-MaxPages] <uint>]
- [[-SiteUrl] <string>] [-IncludeAncestorGroups] [-All] [<CommonParameters>]
+Get-GitlabLabel [-ProjectId <string>] [-Name <string>] [-Search <string>] [-IncludeAncestorGroups]
+ [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByGroupId
 
 ```
-Get-GitlabLabel [-GroupId] <string> [[-Name] <string>] [[-Search] <string>] [[-MaxPages] <uint>]
- [[-SiteUrl] <string>] [-IncludeAncestorGroups] [-All] [<CommonParameters>]
+Get-GitlabLabel [-GroupId] <string> [-Name <string>] [-Search <string>] [-IncludeAncestorGroups]
+ [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
 
 labels
+
 
 ## DESCRIPTION
 

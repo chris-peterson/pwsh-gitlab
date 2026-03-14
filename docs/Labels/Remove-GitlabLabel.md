@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Labels/Remove-GitlabLabel
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/10/2026
+ms.date: 03/14/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabLabel
 ---
@@ -17,17 +17,17 @@ Deletes a label from a GitLab project or group.
 
 ## SYNTAX
 
-### ByProjectId (Default)
+### ByProjectId
 
 ```
-Remove-GitlabLabel [[-ProjectId] <string>] [-LabelId] <int> [[-SiteUrl] <string>] [-WhatIf] [-Confirm]
+Remove-GitlabLabel -LabelId <int> [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ### ByGroupId
 
 ```
-Remove-GitlabLabel [-GroupId] <string> [-LabelId] <int> [[-SiteUrl] <string>] [-WhatIf] [-Confirm]
+Remove-GitlabLabel [-GroupId] <string> -LabelId <int> [-SiteUrl <string>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
@@ -166,7 +166,7 @@ HelpMessage: ''
 
 ### -WhatIf
 
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -198,6 +198,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.String
 
 You can pipe a project ID or group ID to this cmdlet.
+
+### System.Int32
+
+You can pipe a label ID to this cmdlet.
 
 ## OUTPUTS
 

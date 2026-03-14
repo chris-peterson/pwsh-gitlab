@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Milestones/Remove-GitlabMilestone
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/10/2026
+ms.date: 03/14/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabMilestone
 ---
@@ -20,14 +20,14 @@ Deletes a milestone from a GitLab project or group.
 ### ByProject
 
 ```
-Remove-GitlabMilestone [-ProjectId <string>] -MilestoneId <int> [-SiteUrl <string>] [-WhatIf]
+Remove-GitlabMilestone -MilestoneId <int> [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
 
 ### ByGroup
 
 ```
-Remove-GitlabMilestone [-GroupId <string>] -MilestoneId <int> [-SiteUrl <string>] [-WhatIf]
+Remove-GitlabMilestone -MilestoneId <int> [-GroupId <string>] [-SiteUrl <string>] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
 
@@ -57,6 +57,28 @@ Deletes milestone 2 from the specified group without prompting for confirmation.
 
 ## PARAMETERS
 
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
 ### -GroupId
 
 The ID or URL-encoded path of the group.
@@ -68,27 +90,6 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: ByGroup
-  Position: Named
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: true
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -ProjectId
-
-The ID or URL-encoded path of the project.
-
-```yaml
-Type: System.String
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: ByProject
   Position: Named
   IsRequired: false
   ValueFromPipeline: false
@@ -121,6 +122,27 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
+### -ProjectId
+
+The ID or URL-encoded path of the project.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ByProject
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
 ### -SiteUrl
 
 The URL of the GitLab instance. If not specified, uses the default configured GitLab site.
@@ -130,6 +152,28 @@ Type: System.String
 DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -WhatIf
+
+Runs the command in a mode that only reports what would happen without performing the actions.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- wi
 ParameterSets:
 - Name: (All)
   Position: Named
@@ -154,6 +198,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.String
 
 You can pipe a project ID or group ID to this cmdlet.
+
+### System.Int32
+
+You can pipe a milestone ID to this cmdlet.
 
 ## OUTPUTS
 

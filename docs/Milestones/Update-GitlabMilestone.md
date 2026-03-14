@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Milestones/Update-GitlabMilestone
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/10/2026
+ms.date: 03/14/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabMilestone
 ---
@@ -20,7 +20,7 @@ Updates an existing milestone in a GitLab project or group.
 ### ByProject
 
 ```
-Update-GitlabMilestone [-ProjectId <string>] -MilestoneId <int> [-Title <string>]
+Update-GitlabMilestone -MilestoneId <int> [-ProjectId <string>] [-Title <string>]
  [-Description <string>] [-DueDate <string>] [-StartDate <string>] [-StateEvent <string>]
  [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -28,7 +28,7 @@ Update-GitlabMilestone [-ProjectId <string>] -MilestoneId <int> [-Title <string>
 ### ByGroup
 
 ```
-Update-GitlabMilestone [-GroupId <string>] -MilestoneId <int> [-Title <string>]
+Update-GitlabMilestone -MilestoneId <int> [-GroupId <string>] [-Title <string>]
  [-Description <string>] [-DueDate <string>] [-StartDate <string>] [-StateEvent <string>]
  [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -67,79 +67,16 @@ Updates the start and due dates of group milestone 2.
 
 ## PARAMETERS
 
-### -GroupId
+### -Confirm
 
-The ID or URL-encoded path of the group.
-
-```yaml
-Type: System.String
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: ByGroup
-  Position: Named
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: true
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -ProjectId
-
-The ID or URL-encoded path of the project.
+Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: System.String
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: ByProject
-  Position: Named
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: true
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -MilestoneId
-
-The ID of the milestone to update.
-
-```yaml
-Type: System.Int32
+Type: System.Management.Automation.SwitchParameter
 DefaultValue: ''
 SupportsWildcards: false
 Aliases:
-- Id
-ParameterSets:
-- Name: (All)
-  Position: Named
-  IsRequired: true
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: true
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -Title
-
-The new title for the milestone.
-
-```yaml
-Type: System.String
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
+- cf
 ParameterSets:
 - Name: (All)
   Position: Named
@@ -176,6 +113,91 @@ HelpMessage: ''
 ### -DueDate
 
 The due date of the milestone in YYYY-MM-DD format.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -GroupId
+
+The ID or URL-encoded path of the group.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ByGroup
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -MilestoneId
+
+The ID of the milestone to update.
+
+```yaml
+Type: System.Int32
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- Id
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -ProjectId
+
+The ID or URL-encoded path of the project.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ByProject
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -SiteUrl
+
+The URL of the GitLab instance. If not specified, uses the default configured GitLab site.
 
 ```yaml
 Type: System.String
@@ -238,15 +260,37 @@ AcceptedValues:
 HelpMessage: ''
 ```
 
-### -SiteUrl
+### -Title
 
-The URL of the GitLab instance. If not specified, uses the default configured GitLab site.
+The new title for the milestone.
 
 ```yaml
 Type: System.String
 DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -WhatIf
+
+Runs the command in a mode that only reports what would happen without performing the actions.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- wi
 ParameterSets:
 - Name: (All)
   Position: Named
@@ -271,6 +315,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.String
 
 You can pipe a project ID or group ID to this cmdlet.
+
+### System.Int32
+
+You can pipe a milestone ID to this cmdlet.
 
 ## OUTPUTS
 

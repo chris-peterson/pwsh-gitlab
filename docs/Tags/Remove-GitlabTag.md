@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Tags/Remove-GitlabTag
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/10/2026
+ms.date: 03/14/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabTag
 ---
@@ -20,7 +20,7 @@ Deletes a tag from a GitLab project repository.
 ### __AllParameterSets
 
 ```
-Remove-GitlabTag [[-ProjectId] <string>] [-Name] <string> [[-SiteUrl] <string>] [-WhatIf] [-Confirm]
+Remove-GitlabTag [-Name] <string> [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
@@ -49,6 +49,28 @@ Remove-GitlabTag -ProjectId 'mygroup/myproject' -Name 'v1.0.0-beta' -Confirm:$fa
 Deletes the tag named 'v1.0.0-beta' from the specified project without prompting for confirmation.
 
 ## PARAMETERS
+
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
 ### -Name
 
@@ -113,31 +135,9 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -Confirm
-
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-DefaultValue: ''
-SupportsWildcards: false
-Aliases:
-- cf
-ParameterSets:
-- Name: (All)
-  Position: Named
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
 ### -WhatIf
 
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -173,6 +173,10 @@ You can pipe a project ID to this cmdlet.
 ## OUTPUTS
 
 ### None
+
+This cmdlet does not produce any output.
+
+### System.Void
 
 This cmdlet does not produce any output.
 

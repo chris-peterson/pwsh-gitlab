@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Labels/New-GitlabLabel
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/10/2026
+ms.date: 03/14/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabLabel
 ---
@@ -17,18 +17,18 @@ Creates a new label in a GitLab project or group.
 
 ## SYNTAX
 
-### ByProjectId (Default)
+### ByProjectId
 
 ```
-New-GitlabLabel [[-ProjectId] <string>] [-Name] <string> [-Color] <string> [[-Description] <string>]
- [[-Priority] <int>] [[-SiteUrl] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabLabel -Name <string> -Color <string> [-ProjectId <string>] [-Description <string>]
+ [-Priority <int>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### ByGroupId
 
 ```
-New-GitlabLabel [-GroupId] <string> [-Name] <string> [-Color] <string> [[-Description] <string>]
- [[-Priority] <int>] [[-SiteUrl] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-GitlabLabel [-GroupId] <string> -Name <string> -Color <string> [-Description <string>]
+ [-Priority <int>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -228,7 +228,7 @@ HelpMessage: ''
 
 ### -WhatIf
 
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
