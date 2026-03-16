@@ -327,7 +327,6 @@ function Remove-GitlabBranch {
     )
 
     $ProjectId = Resolve-GitlabProjectId $ProjectId
-    $Name = Resolve-GitlabBranch $Name
     $Request = @{
         HttpMethod = 'DELETE'
         Path       =  "projects/$ProjectId/repository"
