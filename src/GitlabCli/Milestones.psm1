@@ -16,8 +16,8 @@ function Get-GitlabMilestone {
         [string]
         $State,
 
-        [Parameter(ParameterSetName = 'ByGroup')]
-        [Parameter(ParameterSetName = 'ByProject')]
+        [Parameter(ParameterSetName = 'ByGroup', Position = 0)]
+        [Parameter(ParameterSetName = 'ByProject', Position = 0)]
         [Alias('Id')]
         [string]
         $MilestoneId,
@@ -31,31 +31,37 @@ function Get-GitlabMilestone {
         $Data = Invoke-GitlabGraphQL -Query @"
         {
             milestone(id: "gid://gitlab/Milestone/$MilestoneId") {
-                groupMilestone,
+                iid,
                 group {
-                id
+                    id
                 }
-                projectMilestone,
                 project {
-                id
+                    id
                 }
             }
         }
 "@
-        if ($Data.Milestone.groupMilestone) {
+        if ($Data.Milestone.group.id) {
             $GroupId = $Data.Milestone.group.id -split '/' | Select-Object -Last 1
         }
-        elseif ($Data.Milestone.projectMilestone) {
+        elseif ($Data.Milestone.project.id) {
             $ProjectId = $Data.Milestone.project.id -split '/' | Select-Object -Last 1
         }
-
+        $MilestoneId = $Data.Milestone.iid
     }
 
     $Resource = ''
     if ($GroupId) {
-         $Resource = "groups/$GroupId/milestones"
+        $GroupId = Resolve-GitlabGroupId $GroupId
+        # https://docs.gitlab.com/api/group_milestones/#list-group-milestones
+        $Resource = "groups/$GroupId/milestones"
     } elseif ($ProjectId) {
-         $Resource = "projects/$ProjectId/milestones"
+        $ProjectId = Resolve-GitlabProjectId $ProjectId
+        # https://docs.gitlab.com/api/milestones/#list-all-project-milestones
+        $Resource = "projects/$ProjectId/milestones"
+    }
+    if ($MilestoneId) {
+        $Resource += "?iids[]=$MilestoneId"
     }
 
     $Request = @{
@@ -66,7 +72,6 @@ function Get-GitlabMilestone {
         $Request.Query = @{ state = $State }
     }
 
-    # https://docs.gitlab.com/ee/api/milestones.html#list-project-milestones
     Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Milestone'
 }
 
@@ -105,9 +110,11 @@ function New-GitlabMilestone {
     )
 
     if ($GroupId) {
+        $GroupId = Resolve-GitlabGroupId $GroupId
         $Path = "groups/$GroupId/milestones"
         $Target = "group $GroupId"
     } elseif ($ProjectId) {
+        $ProjectId = Resolve-GitlabProjectId $ProjectId
         $Path = "projects/$ProjectId/milestones"
         $Target = "project $ProjectId"
     } else {
@@ -177,9 +184,11 @@ function Update-GitlabMilestone {
     )
 
     if ($GroupId) {
+        $GroupId = Resolve-GitlabGroupId $GroupId
         $Path = "groups/$GroupId/milestones/$MilestoneId"
         $Target = "group $GroupId"
     } elseif ($ProjectId) {
+        $ProjectId = Resolve-GitlabProjectId $ProjectId
         $Path = "projects/$ProjectId/milestones/$MilestoneId"
         $Target = "project $ProjectId"
     } else {
@@ -237,9 +246,11 @@ function Remove-GitlabMilestone {
     )
 
     if ($GroupId) {
+        $GroupId = Resolve-GitlabGroupId $GroupId
         $Path = "groups/$GroupId/milestones/$MilestoneId"
         $Target = "group $GroupId"
     } elseif ($ProjectId) {
+        $ProjectId = Resolve-GitlabProjectId $ProjectId
         $Path = "projects/$ProjectId/milestones/$MilestoneId"
         $Target = "project $ProjectId"
     } else {

@@ -76,10 +76,10 @@ function New-GitlabTag {
         [string]
         $Name,
 
-        [Parameter(Mandatory)]
+        [Parameter()]
         [Alias('Branch')]
         [string]
-        $Ref,
+        $Ref = '.',
 
         [Parameter()]
         [string]
@@ -91,6 +91,7 @@ function New-GitlabTag {
     )
 
     $ProjectId = Resolve-GitlabProjectId $ProjectId
+    $Ref       = Resolve-GitlabBranch $Ref
 
     $Body = @{
         tag_name = $Name

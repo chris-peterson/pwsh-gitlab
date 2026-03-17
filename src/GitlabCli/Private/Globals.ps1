@@ -81,7 +81,9 @@ $global:GitlabIdentityPropertyNameExemptions = @{
 
     # Deployments & Environments
     'Gitlab.DeployKey'                 = 'Id'
+    'Gitlab.Deployment'                = ''
     'Gitlab.Environment'               = 'Id'
+    'Gitlab.Tag'                       = ''
 
     # Groups & Projects
     'Gitlab.Group'                     = 'Id'
@@ -91,6 +93,7 @@ $global:GitlabIdentityPropertyNameExemptions = @{
     'Gitlab.Topic'                     = 'Id'
 
     # Merge Requests & Issues
+    'Gitlab.Label'                     = 'Id'
     'Gitlab.MergeRequestApprovalRule'  = 'Id'
     'Gitlab.Milestone'                 = 'Iid'
     'Gitlab.Note'                      = 'Id'

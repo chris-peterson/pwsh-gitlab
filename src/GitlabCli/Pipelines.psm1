@@ -414,7 +414,7 @@ function Remove-GitlabPipeline {
 
 # https://docs.gitlab.com/ee/api/pipelines.html#cancel-a-pipelines-jobs
 function Stop-GitlabPipeline {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     [OutputType('Gitlab.Pipeline')]
     param (
         [Parameter(ValueFromPipelineByPropertyName)]

@@ -1,15 +1,20 @@
 function Get-GitlabLabel {
-    [CmdletBinding(DefaultParameterSetName='ByProjectId')]
+    [CmdletBinding()]
     [OutputType('Gitlab.Label')]
     [Alias('labels')]
     param (
         [Parameter(ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName)]
         [string]
-        $ProjectId = '.',
+        $ProjectId,
 
-        [Parameter(Position=0, Mandatory, ParameterSetName='ByGroupId', ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName='ByGroupId', ValueFromPipelineByPropertyName)]
         [string]
         $GroupId,
+
+        [Parameter()]
+        [Alias('Id')]
+        [string]
+        $LabelId,
 
         [Parameter()]
         [string]
@@ -38,12 +43,16 @@ function Get-GitlabLabel {
 
     $MaxPages = Resolve-GitlabMaxPages -MaxPages:$MaxPages -All:$All
 
-    if ($GroupId) {
-        $GroupId = Resolve-GitlabGroupId $GroupId
-        $Path = "groups/$GroupId/labels"
-    } else {
+    if ($ProjectId) {
         $ProjectId = Resolve-GitlabProjectId $ProjectId
-        $Path = "projects/$ProjectId/labels"
+        $Path      = "projects/$ProjectId/labels"
+    }
+    elseif ($GroupId) {
+        $GroupId = Resolve-GitlabGroupId $GroupId
+        $Path    = "groups/$GroupId/labels"
+    }
+    if ($LabelId) {
+        $Path += "/$LabelId"
     }
 
     $Query = @{}
@@ -63,6 +72,12 @@ function Get-GitlabLabel {
     } else {
         $Labels
     }
+    if ($ProjectId) {
+        $Labels | ForEach-Object { $_ | Add-Member -NotePropertyMembers @{ ProjectId = $ProjectId } }
+    }
+    if ($GroupId) {
+        $Labels | ForEach-Object { $_ | Add-Member -NotePropertyMembers @{ GroupId = $GroupId } }
+    }
 }
 
 function New-GitlabLabel {
@@ -71,7 +86,7 @@ function New-GitlabLabel {
     param (
         [Parameter(ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName)]
         [string]
-        $ProjectId = '.',
+        $ProjectId,
 
         [Parameter(Position=0, Mandatory, ParameterSetName='ByGroupId', ValueFromPipelineByPropertyName)]
         [string]
@@ -98,14 +113,15 @@ function New-GitlabLabel {
         $SiteUrl
     )
 
-    if ($GroupId) {
-        $GroupId = Resolve-GitlabGroupId $GroupId
-        $Path = "groups/$GroupId/labels"
-        $Target = "group $GroupId"
-    } else {
+    if ($ProjectId) {
         $ProjectId = Resolve-GitlabProjectId $ProjectId
         $Path = "projects/$ProjectId/labels"
         $Target = "project $ProjectId"
+    }
+    elseif ($GroupId) {
+        $GroupId = Resolve-GitlabGroupId $GroupId
+        $Path = "groups/$GroupId/labels"
+        $Target = "group $GroupId"
     }
 
     $Body = @{
@@ -131,7 +147,7 @@ function Update-GitlabLabel {
     param (
         [Parameter(ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName)]
         [string]
-        $ProjectId = '.',
+        $ProjectId,
 
         [Parameter(Position=0, Mandatory, ParameterSetName='ByGroupId', ValueFromPipelineByPropertyName)]
         [string]
@@ -163,21 +179,22 @@ function Update-GitlabLabel {
         $SiteUrl
     )
 
-    if ($GroupId) {
-        $GroupId = Resolve-GitlabGroupId $GroupId
-        $Path = "groups/$GroupId/labels/$LabelId"
-        $Target = "group $GroupId"
-    } else {
+    if ($ProjectId) {
         $ProjectId = Resolve-GitlabProjectId $ProjectId
-        $Path = "projects/$ProjectId/labels/$LabelId"
-        $Target = "project $ProjectId"
+        $Path      = "projects/$ProjectId/labels/$LabelId"
+        $Target    = "project $ProjectId"
+    }
+    elseif ($GroupId) {
+        $GroupId = Resolve-GitlabGroupId $GroupId
+        $Path    = "groups/$GroupId/labels/$LabelId"
+        $Target  = "group $GroupId"
     }
 
     $Body = @{}
-    if ($NewName) {
+    if ($PSBoundParameters.ContainsKey('NewName')) {
         $Body.new_name = $NewName
     }
-    if ($Color) {
+    if ($PSBoundParameters.ContainsKey('Color')) {
         $Body.color = $Color
     }
     if ($PSBoundParameters.ContainsKey('Description')) {
@@ -204,7 +221,7 @@ function Remove-GitlabLabel {
     param (
         [Parameter(ParameterSetName='ByProjectId', ValueFromPipelineByPropertyName)]
         [string]
-        $ProjectId = '.',
+        $ProjectId,
 
         [Parameter(Position=0, Mandatory, ParameterSetName='ByGroupId', ValueFromPipelineByPropertyName)]
         [string]
@@ -220,14 +237,15 @@ function Remove-GitlabLabel {
         $SiteUrl
     )
 
-    if ($GroupId) {
-        $GroupId = Resolve-GitlabGroupId $GroupId
-        $Path = "groups/$GroupId/labels/$LabelId"
-        $Target = "group $GroupId"
-    } else {
+    if ($ProjectId) {
         $ProjectId = Resolve-GitlabProjectId $ProjectId
-        $Path = "projects/$ProjectId/labels/$LabelId"
-        $Target = "project $ProjectId"
+        $Path      = "projects/$ProjectId/labels/$LabelId"
+        $Target    = "project $ProjectId"
+    }
+    elseif ($GroupId) {
+        $GroupId = Resolve-GitlabGroupId $GroupId
+        $Path    = "groups/$GroupId/labels/$LabelId"
+        $Target  = "group $GroupId"
     }
 
     if ($PSCmdlet.ShouldProcess($Target, "delete label $LabelId")) {

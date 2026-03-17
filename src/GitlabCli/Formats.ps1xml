@@ -188,15 +188,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader>
-          </TableColumnHeader>
-          <TableColumnHeader>
-          </TableColumnHeader>
-          <TableColumnHeader>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>UpdatedAt</Label>
-          </TableColumnHeader>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
         </TableHeaders>
         <TableRowEntries>
           <TableRowEntry>
@@ -209,10 +204,10 @@
                 <PropertyName>Title</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>DueDate</PropertyName>
+                <PropertyName>State</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>UpdatedAtSortable</PropertyName>
+                <PropertyName>Url</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>
@@ -1514,6 +1509,59 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>WebUrl</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>GitlabLabel</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.Label</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+                <Alignment>Right</Alignment>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Name</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>IsProjectLabel</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>GitlabTag</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.Tag</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader/>
+          <TableColumnHeader/>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Name</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Target</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

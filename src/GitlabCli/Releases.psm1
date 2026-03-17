@@ -6,7 +6,7 @@ function Get-GitlabRelease {
         [string]
         $ProjectId = '.',
 
-        [Parameter()]
+        [Parameter(Position=0)]
         [string]
         $Tag,
 
@@ -49,11 +49,10 @@ function Get-GitlabRelease {
 
     # https://docs.gitlab.com/ee/api/releases/#list-releases
     Invoke-GitlabApi GET $Path -Query $Query -MaxPages $MaxPages | New-GitlabObject 'Gitlab.Release' | ForEach-Object {
-        $_ | Add-Member -PassThru -NotePropertyMembers @{ ProjectId = $Project.Id }
+        $_ | Add-Member -PassThru -NotePropertyMembers @{ ProjectId = $ProjectId }
     }
 }
 
-# https://docs.gitlab.com/ee/api/releases/#create-a-release
 function New-GitlabRelease {
     [CmdletBinding(SupportsShouldProcess)]
     [OutputType('Gitlab.Release')]
@@ -78,10 +77,10 @@ function New-GitlabRelease {
         [Parameter()]
         [Alias('Branch')]
         [string]
-        $Ref,
+        $Ref = '.',
 
         [Parameter()]
-        [string]
+        [string[]]
         $Milestones,
 
         [Parameter()]
@@ -94,6 +93,7 @@ function New-GitlabRelease {
     )
 
     $ProjectId = Resolve-GitlabProjectId $ProjectId
+    $Ref = Resolve-GitlabBranch $Ref
 
     $Body = @{
         tag_name = $TagName
@@ -108,19 +108,19 @@ function New-GitlabRelease {
         $Body.ref = $Ref
     }
     if ($Milestones) {
-        $Body.milestones = @($Milestones -split ',')
+        $Body.milestones = $Milestones
     }
     if ($ReleasedAt) {
         $Body.released_at = $ReleasedAt
     }
 
     if ($PSCmdlet.ShouldProcess("project $ProjectId", "create release '$TagName'")) {
+        # https://docs.gitlab.com/ee/api/releases/#create-a-release
         Invoke-GitlabApi POST "projects/$ProjectId/releases" -Body $Body |
             New-GitlabObject 'Gitlab.Release'
     }
 }
 
-# https://docs.gitlab.com/ee/api/releases/#update-a-release
 function Update-GitlabRelease {
     [CmdletBinding(SupportsShouldProcess)]
     [OutputType('Gitlab.Release')]
@@ -143,7 +143,7 @@ function Update-GitlabRelease {
         $Description,
 
         [Parameter()]
-        [string]
+        [string[]]
         $Milestones,
 
         [Parameter()]
@@ -158,14 +158,14 @@ function Update-GitlabRelease {
     $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     $Body = @{}
-    if ($Name) {
+    if ($PSBoundParameters.ContainsKey('Name')) {
         $Body.name = $Name
     }
     if ($PSBoundParameters.ContainsKey('Description')) {
         $Body.description = $Description
     }
     if ($Milestones) {
-        $Body.milestones = @($Milestones -split ',')
+        $Body.milestones = $Milestones
     }
     if ($ReleasedAt) {
         $Body.released_at = $ReleasedAt
@@ -177,12 +177,12 @@ function Update-GitlabRelease {
     }
 
     if ($PSCmdlet.ShouldProcess("project $ProjectId", "update release '$TagName'")) {
+        # https://docs.gitlab.com/ee/api/releases/#update-a-release
         Invoke-GitlabApi PUT "projects/$ProjectId/releases/$TagName" -Body $Body |
             New-GitlabObject 'Gitlab.Release'
     }
 }
 
-# https://docs.gitlab.com/ee/api/releases/#delete-a-release
 function Remove-GitlabRelease {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     [OutputType([void])]
@@ -204,6 +204,7 @@ function Remove-GitlabRelease {
     $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     if ($PSCmdlet.ShouldProcess("project $ProjectId", "delete release '$TagName'")) {
+        # https://docs.gitlab.com/ee/api/releases/#delete-a-release
         Invoke-GitlabApi DELETE "projects/$ProjectId/releases/$TagName" | Out-Null
     }
 }
