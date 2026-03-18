@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.165.0'
+    ModuleVersion = '1.165.1'
 
     RequiredModules = @(
         @{
@@ -31,18 +31,8 @@
             )
             ReleaseNotes =
 @'
-### Features
-- Merge request updates now work on archived projects.
-  GitLab returns 403 on archived project modifications,
-  so Update-GitlabMergeRequest temporarily unarchives,
-  applies the change, then re-archives automatically.
-- Archive-GitlabProject -Graceful closes all open merge
-  requests and issues before archiving the project.
-
 ### Fixes
-- Get-GitlabMergeRequest -Url now correctly fetches the
-  specific merge request instead of listing all MRs
-  (regression in 5179373).
+- https://github.com/chris-peterson/pwsh-gitlab/pull/154
 '@
         }
     }
