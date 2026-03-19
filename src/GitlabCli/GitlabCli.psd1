@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.165.1'
+    ModuleVersion = '1.165.2'
 
     RequiredModules = @(
         @{
@@ -33,6 +33,7 @@
 @'
 ### Fixes
 - https://github.com/chris-peterson/pwsh-gitlab/pull/154
+- small improvements for previewing cmds
 '@
         }
     }

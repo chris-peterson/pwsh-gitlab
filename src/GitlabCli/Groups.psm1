@@ -96,7 +96,7 @@ function New-GitlabGroup {
         $Request.Body.parent_id = Resolve-GitlabGroupId $ParentGroupName
     }
 
-    if ($PSCmdlet.ShouldProcess($GroupName, "create new $Visibility group '$GroupName'" )) {
+    if ($PSCmdlet.ShouldProcess($ParentGroupName, "create new $Visibility group '$GroupName'" )) {
         Invoke-GitlabApi @Request |
             New-GitlabObject 'Gitlab.Group'
     }
