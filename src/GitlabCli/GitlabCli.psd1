@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.165.2'
+    ModuleVersion = '1.166.0'
 
     RequiredModules = @(
         @{
@@ -31,9 +31,12 @@
             )
             ReleaseNotes =
 @'
-### Fixes
-- https://github.com/chris-peterson/pwsh-gitlab/pull/154
-- small improvements for previewing cmds
+### Features
+- Pipelines can now be listed across all refs with -AnyRef
+
+### Other
+- Relocated API doc links to sit next to their API calls
+- Minor whitespace cleanup
 '@
         }
     }
