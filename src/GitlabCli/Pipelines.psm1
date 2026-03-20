@@ -90,7 +90,7 @@
         if($Ref) {
             if ($AnyRef) {
                 if ($Ref -ne '.') {
-                    Write-Warning "Ref parameter is ignored when AllBranches is specified"
+                    Write-Warning "Ref parameter is ignored when AnyRef is specified"
                 }
             }
             else {
