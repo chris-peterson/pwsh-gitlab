@@ -101,7 +101,6 @@ function Search-Gitlab {
     }
 }
 
-# https://docs.gitlab.com/ee/api/search.html#project-search-api
 function Search-GitlabProject {
     [CmdletBinding()]
     [OutputType('Gitlab.SearchResult.Blob')]
@@ -139,6 +138,7 @@ function Search-GitlabProject {
         $Query.search = $Search
     }
 
+    # https://docs.gitlab.com/ee/api/search.html#project-search-api
     $Resource = "projects/$($ProjectId | ConvertTo-UrlEncoded)/search"
     Invoke-GitlabApi GET $Resource $Query |
         New-GitlabObject 'Gitlab.SearchResult.Blob' |
