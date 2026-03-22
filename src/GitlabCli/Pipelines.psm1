@@ -14,6 +14,10 @@
         [string]
         $Ref = '.',
 
+        [Parameter()]
+        [switch]
+        $AnyRef,
+
         [Parameter(Position=0, ValueFromPipelineByPropertyName)]
         [string]
         $PipelineId,
@@ -84,8 +88,15 @@
         $Query = @{}
 
         if($Ref) {
-            $Ref = Resolve-GitlabBranch $Ref
-            $Query.ref = $Ref
+            if ($AnyRef) {
+                if ($Ref -ne '.') {
+                    Write-Warning "Ref parameter is ignored when AnyRef is specified"
+                }
+            }
+            else {
+                $Ref = Resolve-GitlabBranch $Ref
+                $Query.ref = $Ref
+            }
         }
         if ($Scope) {
             $Query.scope = $Scope

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/Get-GitlabPipeline
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 03/20/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabPipeline
 ---
@@ -20,10 +20,10 @@ Gets pipelines from a GitLab project.
 ### __AllParameterSets
 
 ```
-Get-GitlabPipeline [[-PipelineId] <string>] [-ProjectId <string>] [-Ref <string>] [-Url <string>]
- [-Scope <string>] [-Status <string>] [-Source <string>] [-Username <string>] [-Mine] [-Latest]
- [-IncludeTestReport] [-FetchDownstream] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabPipeline [[-PipelineId] <string>] [-ProjectId <string>] [-Ref <string>] [-AnyRef]
+ [-Url <string>] [-Scope <string>] [-Status <string>] [-Source <string>] [-Username <string>]
+ [-Mine] [-Latest] [-IncludeTestReport] [-FetchDownstream] [-MaxPages <uint>] [-All]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -67,6 +67,27 @@ Retrieves failed pipelines on the main branch that were triggered by the current
 ### -All
 
 Returns all pipelines without pagination limits.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -AnyRef
+
+Return pipelines from any ref instead of resolving a specific branch.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

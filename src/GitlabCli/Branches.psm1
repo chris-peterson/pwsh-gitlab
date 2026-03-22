@@ -129,8 +129,9 @@ function New-GitlabBranch {
     )
 
     $ProjectId = Resolve-GitlabProjectId -ProjectId $ProjectId
-    $Ref       = Resolve-GitlabBranch -Branch $Ref -OnBranchNotInferred {
-        Get-GitlabProject -ProjectId $ProjectId | Select-Object -ExpandProperty DefaultBranch
+    $Ref = Resolve-GitlabBranch -Branch $Ref
+    if (-not $Ref) {
+        $Ref = Get-GitlabProject -ProjectId $ProjectId | Select-Object -ExpandProperty DefaultBranch
     }
     $Request = @{
         # https://docs.gitlab.com/api/branches/#create-repository-branch
@@ -327,7 +328,7 @@ function Remove-GitlabBranch {
     )
 
     $ProjectId = Resolve-GitlabProjectId $ProjectId
-    $Name = Resolve-GitlabBranch $Name
+    $Branch = Resolve-GitlabBranch $Branch
     $Request = @{
         HttpMethod = 'DELETE'
         Path       =  "projects/$ProjectId/repository"

@@ -51,7 +51,6 @@ function Get-GitlabRepositoryFile {
         $SiteUrl
     )
 
-
     if ($FilePath.StartsWith('./')) {
         $FilePath = $FilePath.Substring(2);
     }
@@ -224,6 +223,7 @@ function Get-GitlabRepositoryTree {
     }
     $RefName = $(Get-GitlabBranch -ProjectId $ProjectId -Ref $Ref).Name
 
+    # https://docs.gitlab.com/ee/api/repositories.html#list-repository-tree
     Invoke-GitlabApi GET "projects/$($Project.Id)/repository/tree?ref=$RefName&path=$Path&recursive=$($Recurse.ToString().ToLower())" -MaxPages 10 |
         New-GitlabObject 'Gitlab.RepositoryTree'
 }

@@ -186,7 +186,6 @@ $($Object.Name):
     }
 }
 
-# https://docs.gitlab.com/ee/api/projects.html#transfer-a-project-to-a-new-namespace
 function Move-GitlabProject {
     [Alias("Transfer-GitlabProject")]
     [CmdletBinding(SupportsShouldProcess)]
@@ -208,10 +207,11 @@ function Move-GitlabProject {
     $SourceProject = Get-GitlabProject -ProjectId $ProjectId
     $Group = Get-GitlabGroup -GroupId $DestinationGroup
 
-    if ($PSCmdlet.ShouldProcess("group $($Group.FullName)", "transfer '$($SourceProject.PathWithNamespace)'")) {
+    if ($PSCmdlet.ShouldProcess("group $($Group.FullPath)", "transfer '$($SourceProject.PathWithNamespace)'")) {
+        # https://docs.gitlab.com/ee/api/projects.html#transfer-a-project-to-a-new-namespace
         Invoke-GitlabApi PUT "projects/$($SourceProject.Id)/transfer" @{
             namespace = $Group.Id
-        } -WhatIf:$WhatIfPreference | New-GitlabObject 'Gitlab.Project'
+        } | New-GitlabObject 'Gitlab.Project'
     }
 }
 

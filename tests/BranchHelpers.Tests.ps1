@@ -21,6 +21,28 @@ Describe 'Resolve-GitlabBranch' {
         }
     }
 
+    Context 'When branch is null, empty, or whitespace' {
+        It 'Should return null for $null' {
+            $Result = Resolve-GitlabBranch -Branch $null
+            $Result | Should -BeNullOrEmpty
+        }
+
+        It 'Should return null for empty string' {
+            $Result = Resolve-GitlabBranch -Branch ''
+            $Result | Should -BeNullOrEmpty
+        }
+
+        It 'Should return null for whitespace' {
+            $Result = Resolve-GitlabBranch -Branch '   '
+            $Result | Should -BeNullOrEmpty
+        }
+
+        It 'Should return null when not provided' {
+            $Result = Resolve-GitlabBranch
+            $Result | Should -BeNullOrEmpty
+        }
+    }
+
     Context 'When branch is "." in a git repository' {
         BeforeAll {
             $TempDir = Join-Path ([System.IO.Path]::GetTempPath()) "branch-test-$(New-Guid)"
@@ -55,8 +77,9 @@ Describe 'Resolve-GitlabBranch' {
             Remove-Item -Recurse -Force $TempDir
         }
 
-        It 'Should throw an error' {
-            { Resolve-GitlabBranch -Branch '.' } | Should -Throw "*Could not infer branch*"
+        It 'Should return null' {
+            $Result = Resolve-GitlabBranch -Branch '.'
+            $Result | Should -BeNullOrEmpty
         }
     }
 

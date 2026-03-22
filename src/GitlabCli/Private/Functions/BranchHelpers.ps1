@@ -11,21 +11,21 @@ function Resolve-GitlabBranch {
     [CmdletBinding()]
     [OutputType([string])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Alias('Ref')]
+        [Parameter(ValueFromPipeline)]
         [string]
-        $Branch,
-
-        [Parameter()]
-        [scriptblock]
-        $OnBranchNotInferred = { throw "Could not infer branch based on current directory ($(Get-Location))" }
+        $Branch
     )
+
+    if ([string]::IsNullOrWhiteSpace($Branch)) {
+        return $null
+    }
 
     if ($Branch -eq '.') {
         $Branch = $(Get-LocalGitContext).Branch
         if (-not $Branch) {
-            return & $OnBranchNotInferred
+            return $null
         }
-        Write-Debug "Resolve-GitlabBranch: Resolved '.' to '$Branch'"
     }
 
     return $Branch
