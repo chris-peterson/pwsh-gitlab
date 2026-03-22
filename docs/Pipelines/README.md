@@ -34,6 +34,7 @@ Get-GitlabPipeline -PipelineId 12345 -FetchDownstream
 | [Get-GitlabPipelineVariable](Pipelines/Get-GitlabPipelineVariable.md) | Gets variables for a pipeline |
 | [New-GitlabPipeline](Pipelines/New-GitlabPipeline.md) | Triggers a new pipeline |
 | [Remove-GitlabPipeline](Pipelines/Remove-GitlabPipeline.md) | Deletes a pipeline |
+| [Stop-GitlabPipeline](Pipelines/Stop-GitlabPipeline.md) | Cancels a pipeline's jobs |
 
 ## Aliases
 

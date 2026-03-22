@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.166.0'
+    ModuleVersion = '1.167.0'
 
     RequiredModules = @(
         @{
@@ -32,11 +32,15 @@
             ReleaseNotes =
 @'
 ### Features
-- Pipelines can now be listed across all refs with -AnyRef
-
-### Other
-- Relocated API doc links to sit next to their API calls
-- Minor whitespace cleanup
+- Manage project and group labels: create, list, update,
+  and delete (Get/New/Update/Remove-GitlabLabel).
+- Manage tags: list, create, and delete repository tags
+  (Get/New/Remove-GitlabTag).
+- Create, update, and delete milestones
+  (New/Update/Remove-GitlabMilestone).
+- Create, update, and delete releases
+  (New/Update/Remove-GitlabRelease).
+- Cancel running pipelines with Stop-GitlabPipeline.
 '@
         }
     }
@@ -85,6 +89,7 @@
         'Issues.psm1'
         'Jobs.psm1'
         'Keys.psm1'
+        'Labels.psm1'
         'Members.psm1'
         'MergeRequests.psm1'
         'Milestones.psm1'
@@ -102,6 +107,7 @@
         'Search.psm1'
         'ServiceAccounts.psm1'
         'Snippets.psm1'
+        'Tags.psm1'
         'Todos.psm1'
         'Topics.psm1'
         'UserDeployKeys.psm1'
@@ -162,6 +168,12 @@
 
         # SSH Keys
         'Get-GitlabKey'
+
+        # Labels
+        'Get-GitlabLabel'
+        'New-GitlabLabel'
+        'Update-GitlabLabel'
+        'Remove-GitlabLabel'
 
         # Project Access Tokens
         'Get-GitlabProjectAccessToken'
@@ -247,6 +259,9 @@
 
         # Milestones
         'Get-GitlabMilestone'
+        'New-GitlabMilestone'
+        'Update-GitlabMilestone'
+        'Remove-GitlabMilestone'
 
         # PATs
         'Get-GitlabPersonalAccessToken'
@@ -265,6 +280,7 @@
         'Get-GitlabPipelineVariable'
         'New-GitlabPipeline'
         'Remove-GitlabPipeline'
+        'Stop-GitlabPipeline'
         'Get-GitlabPipelineScheduleVariable'
         'New-GitlabPipelineScheduleVariable'
         'Remove-GitlabPipelineScheduleVariable'
@@ -293,6 +309,14 @@
 
         # Releases
         'Get-GitlabRelease'
+        'New-GitlabRelease'
+        'Update-GitlabRelease'
+        'Remove-GitlabRelease'
+
+        # Tags
+        'Get-GitlabTag'
+        'New-GitlabTag'
+        'Remove-GitlabTag'
 
         # Runners
         'Get-GitlabRunner'
@@ -402,6 +426,8 @@
 
         # short form
         'go'
+        'tags'
+        'labels'
         'build'
         'envs'
         'deploys'

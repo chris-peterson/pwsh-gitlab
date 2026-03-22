@@ -90,6 +90,7 @@ Browse the sidebar to find cmdlets organized by category:
 - [Issues](Issues/) - Work with issues
 - [Jobs](Jobs/) - Manage CI/CD jobs
 - [Keys](Keys/) - SSH key operations
+- [Labels](Labels/) - Manage project and group labels
 - [Members](Members/) - Manage group and project members
 - [MergeRequests](MergeRequests/) - Handle merge requests
 - [Milestones](Milestones/) - Track milestones
@@ -101,12 +102,13 @@ Browse the sidebar to find cmdlets organized by category:
 - [ProjectDeployKeys](ProjectDeployKeys/) - Manage project deploy keys
 - [ProjectHooks](ProjectHooks/) - Configure webhooks
 - [Projects](Projects/) - Manage projects
-- [Releases](Releases/) - View releases
+- [Releases](Releases/) - Manage releases
 - [RepositoryFiles](RepositoryFiles/) - Access repository files
 - [Runners](Runners/) - Configure CI/CD runners
 - [Search](Search/) - Search GitLab
 - [ServiceAccounts](ServiceAccounts/) - Manage service accounts
 - [Snippets](Snippets/) - Manage code snippets
+- [Tags](Tags/) - Manage repository tags
 - [Todos](Todos/) - Manage todo items
 - [Topics](Topics/) - Manage project topics
 - [UserDeployKeys](UserDeployKeys/) - Manage user deploy keys
