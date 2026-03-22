@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Releases/Update-GitlabRelease
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/14/2026
+ms.date: 03/22/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabRelease
 ---
@@ -21,8 +21,8 @@ Updates an existing release in a GitLab project.
 
 ```
 Update-GitlabRelease [-TagName] <string> [-ProjectId <string>] [-Name <string>]
- [-Description <string>] [-Milestones <string>] [-ReleasedAt <string>] [-SiteUrl <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ [-Description <string>] [-Milestones <string[]>] [-ReleasedAt <string>] [-SiteUrl <string>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -107,7 +107,7 @@ HelpMessage: ''
 Comma-separated list of milestone titles to associate with the release.
 
 ```yaml
-Type: System.String
+Type: System.String[]
 DefaultValue: ''
 SupportsWildcards: false
 Aliases: []

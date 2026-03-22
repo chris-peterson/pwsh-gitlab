@@ -33,6 +33,14 @@ BeforeAll {
         param([string]$Query)
         @{}
     }
+    function global:Resolve-GitlabProjectId {
+        param([Parameter(Position=0)][string]$ProjectId)
+        return $ProjectId
+    }
+    function global:Resolve-GitlabGroupId {
+        param([Parameter(Position=0)][string]$GroupId)
+        return $GroupId
+    }
 }
 
 Describe "New-GitlabMilestone" {

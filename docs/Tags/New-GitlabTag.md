@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Tags/New-GitlabTag
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/14/2026
+ms.date: 03/22/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabTag
 ---
@@ -20,7 +20,7 @@ Creates a new tag in a GitLab project repository.
 ### __AllParameterSets
 
 ```
-New-GitlabTag [-Name] <string> -Ref <string> [-ProjectId <string>] [-Message <string>]
+New-GitlabTag [-Name] <string> [-ProjectId <string>] [-Ref <string>] [-Message <string>]
  [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -148,7 +148,7 @@ Aliases:
 ParameterSets:
 - Name: (All)
   Position: Named
-  IsRequired: true
+  IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false

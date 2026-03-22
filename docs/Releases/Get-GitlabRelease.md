@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Releases/Get-GitlabRelease
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 03/22/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabRelease
 ---
@@ -20,8 +20,8 @@ Gets releases from a GitLab project.
 ### __AllParameterSets
 
 ```
-Get-GitlabRelease [[-ProjectId] <string>] [[-Tag] <string>] [[-Sort] <string>] [[-MaxPages] <uint>]
- [[-SiteUrl] <string>] [-IncludeHtml] [-All] [<CommonParameters>]
+Get-GitlabRelease [[-Tag] <string>] [-ProjectId <string>] [-Sort <string>] [-IncludeHtml]
+ [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -111,7 +111,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 3
+  Position: Named
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -132,7 +132,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 0
+  Position: Named
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: true
@@ -153,7 +153,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 4
+  Position: Named
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -174,7 +174,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 2
+  Position: Named
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -195,7 +195,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 1
+  Position: 0
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
