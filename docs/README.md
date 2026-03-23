@@ -1,4 +1,4 @@
-# pwsh-gitlab
+# <img src="icon.png" width="48"/> pwsh-gitlab
 
 > PowerShell module for GitLab automation
 
