@@ -7,18 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="PowerShell module for GitLab automation">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <!-- Docsify themeable (base styles) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.min.css">
-  <!-- Prism Dracula theme for syntax highlighting -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-themes@1/themes/prism-dracula.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Shared Dracula/Alucard theme -->
-  <link rel="stylesheet" href="/css/theme.css">
-  <!-- Shared titlebar component -->
-  <link rel="stylesheet" href="/css/titlebar.css">
   <style>
-    /* pwsh-gitlab: hide chevrons on leaf sidebar items */
     .sidebar-nav li>a[href^="/"]:not([href*="?id="]):only-child,
     .sidebar-nav li>a[href^="#/"]:not([href*="?id="]):only-child {
       background: none !important;
@@ -26,24 +15,6 @@
   </style>
 </head>
 <body>
-  <!-- Overlay for mobile sidebar -->
-  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-  <!-- Unified titlebar -->
-  <div class="titlebar" id="titlebar">
-    <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleSidebar()" title="Toggle menu">
-      <i class="fas fa-bars"></i>
-    </button>
-    <a href="https://chris-peterson.github.io/#/" class="titlebar-brand">
-      <span>chris-peterson</span>
-    </a>
-    <div class="titlebar-spacer"></div>
-    <div class="titlebar-actions">
-<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle theme"><i class="fas fa-moon"></i></button>
-      <a href="https://github.com/chris-peterson/pwsh-gitlab" target="_blank" class="titlebar-github" title="View on GitHub">
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
-  </div>
   <div id="app">Loading...</div>
   <script>
     window.$docsify = {
@@ -62,9 +33,6 @@
       hideSidebar: false
     }
   </script>
-  <!-- Docsify core -->
-  <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
-  <!-- Custom content transformations -->
   <script>
     window.$docsify.plugins = (window.$docsify.plugins || []).concat(function(hook) {
       hook.beforeEach(function(content) {
@@ -128,13 +96,13 @@
       });
     });
   </script>
-<!-- Sidebar collapse plugin -->
   <script src="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
-  <!-- Copy code plugin -->
-  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
-  <!-- Syntax highlighting -->
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-powershell.min.js"></script>
-  <!-- Shared docsify functionality (theme, sidebar, repo selector, copy buttons) -->
   <script src="/js/docsify-shared.js"></script>
+  <script>
+    initProject({
+      name: 'pwsh-gitlab',
+      code_languages: ['powershell']
+    });
+  </script>
 </body>
 </html>
