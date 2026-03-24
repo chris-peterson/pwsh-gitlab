@@ -5,11 +5,11 @@ param(
 
     [string]
     [Parameter()]
-    $OutputPath = 'agent_audit.md',
+    $OutputPath = 'report_agent_audit.md',
 
     [string]
     [Parameter()]
-    $StatePath = 'agent_audit_state.json'
+    $StatePath = 'report_agent_audit_state.json'
 )
 
 $AgentFilePatterns = @(
@@ -19,6 +19,9 @@ $AgentFilePatterns = @(
     '.cursorrules'
     '.cursor/rules'
     '.github/copilot-instructions.md'
+    '.mcp.json'
+    'mcp.json'
+    '.mcp/config.json'
 )
 $AgentDirectoryPrefixes = @(
     '.claude/'
@@ -77,12 +80,12 @@ foreach ($Project in $Projects) {
         continue
     }
 
-    $Matches = @()
+    $FileMatches = @()
     foreach ($Pattern in $AgentFilePatterns) {
         $Hit = $Tree | Where-Object { $_.Path -eq $Pattern -or $_.Path -like "*/$Pattern" }
         if ($Hit) {
             foreach ($File in $Hit) {
-                $Matches += [pscustomobject]@{
+                $FileMatches += [pscustomobject]@{
                     Path = $File.Path
                     Type = $File.Type
                 }
@@ -93,7 +96,7 @@ foreach ($Project in $Projects) {
         $Hit = $Tree | Where-Object { $_.Path -like "$Prefix*" }
         if ($Hit) {
             foreach ($File in $Hit) {
-                $Matches += [pscustomobject]@{
+                $FileMatches += [pscustomobject]@{
                     Path = $File.Path
                     Type = $File.Type
                 }
@@ -101,8 +104,8 @@ foreach ($Project in $Projects) {
         }
     }
 
-    if ($Matches.Count -gt 0) {
-        $Findings[$ProjectPath] = $Matches
+    if ($FileMatches.Count -gt 0) {
+        $Findings[$ProjectPath] = $FileMatches
     }
     else {
         # clear stale entry if files were removed
@@ -115,6 +118,7 @@ $ToolRules = [ordered]@{
     Claude  = @{ Files = @('AGENTS.md', 'CLAUDE.md');  Prefixes = @('.claude/') }
     Copilot = @{ Files = @('COPILOT.md', '.github/copilot-instructions.md'); Prefixes = @('.github/agents/', '.github/instructions/') }
     Cursor  = @{ Files = @('.cursorrules', '.cursor/rules'); Prefixes = @() }
+    MCP     = @{ Files = @('.mcp.json', 'mcp.json'); Prefixes = @('.mcp/') }
 }
 
 function Get-Tool ($FilePath) {
