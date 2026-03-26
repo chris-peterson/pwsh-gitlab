@@ -304,6 +304,11 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Generate icon.png from SVG
+        run: |
+          sudo apt-get install -y librsvg2-bin
+          rsvg-convert docs/favicon.svg -w 256 -h 256 -o docs/icon.png
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:

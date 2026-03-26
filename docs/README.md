@@ -1,4 +1,4 @@
-# <img src="icon.png" width="64" height="64" style="vertical-align: middle"/>GitlabCli
+# <img src="favicon.svg" width="64" height="64" style="vertical-align: middle"/>GitlabCli
 
 > PowerShell module for GitLab automation
 
