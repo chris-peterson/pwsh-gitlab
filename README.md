@@ -1,5 +1,5 @@
 
-# <img src="docs/icon.png" width="72"/>`GitlabCli`
+# <img src="docs/icon.png" width="64" height="64" style="vertical-align: middle"/>GitlabCli
 
 [![GitHub license](https://img.shields.io/github/license/chris-peterson/pwsh-gitlab.svg)](LICENSE)
 [![Platforms](https://img.shields.io/powershellgallery/p/GitlabCli)](https://www.powershellgallery.com/packages/GitlabCli)

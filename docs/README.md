@@ -1,4 +1,4 @@
-# <img src="icon.png" width="48"/> pwsh-gitlab
+# <img src="icon.png" width="64" height="64" style="vertical-align: middle"/>GitlabCli
 
 > PowerShell module for GitLab automation
 
@@ -7,7 +7,7 @@
 
 ## Overview
 
-`pwsh-gitlab` is a PowerShell module that provides cmdlets for interacting with the GitLab REST API. It enables automation of GitLab operations directly from PowerShell.
+`GitlabCli` is a PowerShell module that provides cmdlets for interacting with the GitLab REST API. It enables automation of GitLab operations directly from PowerShell.
 
 ## Installation
 
