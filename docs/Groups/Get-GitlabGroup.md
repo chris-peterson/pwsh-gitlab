@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Get-GitlabGroup
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 03/31/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabGroup
 ---
@@ -20,7 +20,7 @@ Retrieves GitLab group information.
 ### ByGroupId (Default)
 
 ```
-Get-GitlabGroup [[-GroupId] <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
+Get-GitlabGroup [[-GroupId] <string>] [-Recurse] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
  [<CommonParameters>]
 ```
 
@@ -170,7 +170,7 @@ SupportsWildcards: false
 Aliases:
 - r
 ParameterSets:
-- Name: ByParentGroup
+- Name: (All)
   Position: Named
   IsRequired: false
   ValueFromPipeline: false
