@@ -10,7 +10,7 @@ function Get-GitlabGroup {
         [string]
         $ParentGroupId,
 
-        [Parameter(ParameterSetName='ByParentGroup')]
+        [Parameter()]
         [Alias('r')]
         [switch]
         $Recurse,
