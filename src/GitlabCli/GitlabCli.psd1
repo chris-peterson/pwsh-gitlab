@@ -31,7 +31,7 @@
             )
             ReleaseNotes =
 @'
-### Features
+### Features (#153)
 - Manage project and group labels: create, list, update,
   and delete (Get/New/Update/Remove-GitlabLabel).
 - Manage tags: list, create, and delete repository tags
