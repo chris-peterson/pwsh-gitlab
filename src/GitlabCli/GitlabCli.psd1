@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.167.0'
+    ModuleVersion = '1.167.1'
 
     RequiredModules = @(
         @{
@@ -31,16 +31,9 @@
             )
             ReleaseNotes =
 @'
-### Features
-- Manage project and group labels: create, list, update,
-  and delete (Get/New/Update/Remove-GitlabLabel).
-- Manage tags: list, create, and delete repository tags
-  (Get/New/Remove-GitlabTag).
-- Create, update, and delete milestones
-  (New/Update/Remove-GitlabMilestone).
-- Create, update, and delete releases
-  (New/Update/Remove-GitlabRelease).
-- Cancel running pipelines with Stop-GitlabPipeline.
+### Fixes
+- `Get-GitlabGroup -Recurse -All` now works without requiring
+  `-ParentGroupId`, listing all groups including subgroups.
 '@
         }
     }
