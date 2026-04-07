@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Get-GitlabMergeRequest
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/27/2026
+ms.date: 04/07/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabMergeRequest
 ---
@@ -23,7 +23,8 @@ Retrieves merge requests from GitLab.
 Get-GitlabMergeRequest [[-MergeRequestId] <string>] [-ProjectId <string>] [-State <string>]
  [-CreatedAfter <string>] [-CreatedBefore <string>] [-IsDraft <bool>] [-SourceBranch <string>]
  [-TargetBranch <string>] [-IncludeChangeSummary] [-IncludeDiffs] [-IncludeApprovals]
- [-Scope <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+ [-ReviewerUsername <string>] [-Scope <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
+ [<CommonParameters>]
 ```
 
 ### ByGroupId
@@ -31,8 +32,8 @@ Get-GitlabMergeRequest [[-MergeRequestId] <string>] [-ProjectId <string>] [-Stat
 ```
 Get-GitlabMergeRequest [-GroupId] <string> [-State <string>] [-CreatedAfter <string>]
  [-CreatedBefore <string>] [-IsDraft <bool>] [-SourceBranch <string>] [-TargetBranch <string>]
- [-IncludeChangeSummary] [-IncludeDiffs] [-IncludeApprovals] [-Scope <string>] [-MaxPages <uint>]
- [-All] [-SiteUrl <string>] [<CommonParameters>]
+ [-IncludeChangeSummary] [-IncludeDiffs] [-IncludeApprovals] [-ReviewerUsername <string>]
+ [-Scope <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByUrl
@@ -40,8 +41,8 @@ Get-GitlabMergeRequest [-GroupId] <string> [-State <string>] [-CreatedAfter <str
 ```
 Get-GitlabMergeRequest [-Url] <string> [-State <string>] [-CreatedAfter <string>]
  [-CreatedBefore <string>] [-IsDraft <bool>] [-SourceBranch <string>] [-TargetBranch <string>]
- [-IncludeChangeSummary] [-IncludeDiffs] [-IncludeApprovals] [-Scope <string>] [-MaxPages <uint>]
- [-All] [-SiteUrl <string>] [<CommonParameters>]
+ [-IncludeChangeSummary] [-IncludeDiffs] [-IncludeApprovals] [-ReviewerUsername <string>]
+ [-Scope <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByUser
@@ -49,8 +50,9 @@ Get-GitlabMergeRequest [-Url] <string> [-State <string>] [-CreatedAfter <string>
 ```
 Get-GitlabMergeRequest [-State <string>] [-CreatedAfter <string>] [-CreatedBefore <string>]
  [-IsDraft <bool>] [-SourceBranch <string>] [-TargetBranch <string>] [-IncludeChangeSummary]
- [-IncludeDiffs] [-IncludeApprovals] [-Username <string>] [-Role <string>] [-Scope <string>]
- [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+ [-IncludeDiffs] [-IncludeApprovals] [-Username <string>] [-Role <string>]
+ [-ReviewerUsername <string>] [-Scope <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
+ [<CommonParameters>]
 ```
 
 ### Mine
@@ -58,8 +60,8 @@ Get-GitlabMergeRequest [-State <string>] [-CreatedAfter <string>] [-CreatedBefor
 ```
 Get-GitlabMergeRequest [-State <string>] [-CreatedAfter <string>] [-CreatedBefore <string>]
  [-IsDraft <bool>] [-SourceBranch <string>] [-TargetBranch <string>] [-IncludeChangeSummary]
- [-IncludeDiffs] [-IncludeApprovals] [-Mine] [-Scope <string>] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+ [-IncludeDiffs] [-IncludeApprovals] [-ReviewerUsername <string>] [-Mine] [-Scope <string>]
+ [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -365,6 +367,27 @@ ParameterSets:
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -ReviewerUsername
+
+Filter merge requests by reviewer username.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []
