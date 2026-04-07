@@ -38,6 +38,9 @@
 * [Git](Git/)
   * [Get-LocalGitContext](Git/Get-LocalGitContext.md)
 
+* [GitlabCli](GitlabCli/)
+  * [Get-GitlabMergeRequestApproval](GitlabCli/Get-GitlabMergeRequestApproval.md)
+
 * [GraphQL](GraphQL/)
   * [Invoke-GitlabGraphQL](GraphQL/Invoke-GitlabGraphQL.md)
 
@@ -114,6 +117,7 @@
   * [Approve-GitlabMergeRequest](MergeRequests/Approve-GitlabMergeRequest.md)
   * [Close-GitlabMergeRequest](MergeRequests/Close-GitlabMergeRequest.md)
   * [Get-GitlabMergeRequest](MergeRequests/Get-GitlabMergeRequest.md)
+  * [Get-GitlabMergeRequestApproval](MergeRequests/Get-GitlabMergeRequestApproval.md)
   * [Get-GitlabMergeRequestApprovalConfiguration](MergeRequests/Get-GitlabMergeRequestApprovalConfiguration.md)
   * [Get-GitlabMergeRequestApprovalRule](MergeRequests/Get-GitlabMergeRequestApprovalRule.md)
   * [Invoke-GitlabMergeRequestReview](MergeRequests/Invoke-GitlabMergeRequestReview.md)

@@ -580,6 +580,35 @@ function Approve-GitlabMergeRequest {
     }
 }
 
+# https://docs.gitlab.com/ee/api/merge_request_approvals.html#merge-request-level-mr-approvals
+function Get-GitlabMergeRequestApproval {
+    [CmdletBinding()]
+    [OutputType([PSCustomObject])]
+    param (
+        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory, Position=1, ValueFromPipelineByPropertyName)]
+        [Alias('Id')]
+        [string]
+        $MergeRequestId,
+
+        [Parameter(Mandatory=$false)]
+        [string]
+        $SiteUrl
+    )
+
+    $ProjectId = Resolve-GitlabProjectId $ProjectId
+
+    $Approval = Invoke-GitlabApi GET "projects/$ProjectId/merge_requests/$MergeRequestId/approvals"
+    [PSCustomObject]@{
+        ApprovalsRequired = $Approval.approvals_required
+        ApprovalsLeft     = $Approval.approvals_left
+        ApprovedBy        = @($Approval.approved_by | ForEach-Object { $_.user.name })
+    }
+}
+
 # https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-configuration
 function Get-GitlabMergeRequestApprovalConfiguration {
     [CmdletBinding()]

@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.169.0'
+    ModuleVersion = '1.170.0'
 
     RequiredModules = @(
         @{
@@ -32,8 +32,8 @@
             ReleaseNotes =
 @'
 ### Features
-- Add -ReviewerUsername parameter to Get-GitlabMergeRequest
-  for filtering by reviewer (composable with other filters)
+- Add Get-GitlabMergeRequestApproval for retrieving MR approvals
+  (standalone function returning ApprovedBy list)
 '@
         }
     }
@@ -244,6 +244,7 @@
         'Update-GitlabMergeRequest'
         'Close-GitlabMergeRequest'
         # MergeRequest Approvals
+        'Get-GitlabMergeRequestApproval'
         'Get-GitlabMergeRequestApprovalConfiguration'
         'Update-GitlabMergeRequestApprovalConfiguration'
         'Get-GitlabMergeRequestApprovalRule'

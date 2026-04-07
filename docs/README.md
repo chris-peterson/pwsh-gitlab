@@ -83,6 +83,7 @@ Browse the sidebar to find cmdlets organized by category:
 - [Deployments](Deployments/) - View deployments
 - [Environments](Environments/) - Manage environments
 - [Git](Git/) - Local git context utilities
+- [GitlabCli](GitlabCli/) - Manage GitlabCli
 - [GraphQL](GraphQL/) - Execute GraphQL queries
 - [GroupAccessTokens](GroupAccessTokens/) - Manage group access tokens
 - [Groups](Groups/) - Manage GitLab groups
