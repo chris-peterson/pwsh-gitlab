@@ -69,6 +69,10 @@ function Get-GitlabMergeRequest {
         [ValidateSet('author', 'reviewer')]
         $Role = 'author',
 
+        [Parameter()]
+        [string]
+        $ReviewerUsername,
+
         [Parameter(ParameterSetName='Mine')]
         [switch]
         $Mine,
@@ -152,6 +156,9 @@ function Get-GitlabMergeRequest {
     }
     if ($TargetBranch) {
         $Query.target_branch = $TargetBranch
+    }
+    if ($ReviewerUsername) {
+        $Query.reviewer_username = $ReviewerUsername
     }
 
     $MergeRequests = Invoke-GitlabApi GET $Path -Query $Query -MaxPages $MaxPages |
