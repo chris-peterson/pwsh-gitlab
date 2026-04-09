@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.170.0'
+    ModuleVersion = '1.170.1'
 
     RequiredModules = @(
         @{
@@ -31,9 +31,9 @@
             )
             ReleaseNotes =
 @'
-### Features
-- Add Get-GitlabMergeRequestApproval for retrieving MR approvals
-  (standalone function returning ApprovedBy list)
+### Fixes
+- `Get-GitlabMergeRequest` no longer requires being inside a git repo
+  when querying globally (e.g. `-ReviewerUsername` without `-ProjectId`)
 '@
         }
     }
