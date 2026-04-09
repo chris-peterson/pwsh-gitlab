@@ -136,6 +136,38 @@ Describe "Get-GitlabMergeRequest" {
         }
     }
 
+    Context "ByProjectId without explicit ProjectId uses global endpoint" {
+        BeforeEach {
+            Mock -CommandName Invoke-GitlabApi -ModuleName $TestModuleName -MockWith {
+                @()
+            }
+        }
+
+        It "Should use global endpoint when -ReviewerUsername is provided without -ProjectId" {
+            Get-GitlabMergeRequest -ReviewerUsername 'someuser'
+
+            Should -Invoke -CommandName Invoke-GitlabApi -ModuleName $TestModuleName -ParameterFilter {
+                $Path -eq 'merge_requests'
+            }
+        }
+
+        It "Should not call Resolve-GitlabProjectId when -ReviewerUsername is provided without -ProjectId" {
+            Mock -CommandName Resolve-GitlabProjectId -ModuleName $TestModuleName
+
+            Get-GitlabMergeRequest -ReviewerUsername 'someuser'
+
+            Should -Not -Invoke -CommandName Resolve-GitlabProjectId -ModuleName $TestModuleName
+        }
+
+        It "Should still resolve project when -ProjectId is explicitly provided" {
+            Get-GitlabMergeRequest -ProjectId 'mygroup/myproject' -ReviewerUsername 'someuser'
+
+            Should -Invoke -CommandName Invoke-GitlabApi -ModuleName $TestModuleName -ParameterFilter {
+                $Path -eq 'projects/mygroup/myproject/merge_requests'
+            }
+        }
+    }
+
     Context "-Scope parameter" {
         BeforeEach {
             Mock -CommandName Invoke-GitlabApi -ModuleName $TestModuleName -MockWith {

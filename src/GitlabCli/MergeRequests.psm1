@@ -127,11 +127,13 @@ function Get-GitlabMergeRequest {
             }
         }
         'ByProjectId' {
-            $ProjectId = Resolve-GitlabProjectId $ProjectId
-            # https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
-            $Path = "projects/$ProjectId/merge_requests"
-            if ($MergeRequestId) {
-                $Path += "/$MergeRequestId"
+            if ($PSBoundParameters.ContainsKey('ProjectId') -or $PSBoundParameters.ContainsKey('MergeRequestId')) {
+                $ProjectId = Resolve-GitlabProjectId $ProjectId
+                # https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
+                $Path = "projects/$ProjectId/merge_requests"
+                if ($MergeRequestId) {
+                    $Path += "/$MergeRequestId"
+                }
             }
         }
         'ByGroupId' {
