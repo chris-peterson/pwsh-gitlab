@@ -183,4 +183,60 @@ Describe "Get-GitlabMergeRequest" {
             }
         }
     }
+
+    Context "-MergedAfter / -MergedBefore" {
+        It "Should filter MRs merged before the MergedAfter cutoff" {
+            Mock -CommandName Invoke-GitlabApi -ModuleName $TestModuleName -MockWith {
+                @(
+                    [PSCustomObject]@{ MergedAt = '2023-06-15T00:00:00Z'; ProjectPath = 'p' },
+                    [PSCustomObject]@{ MergedAt = '2024-06-15T00:00:00Z'; ProjectPath = 'p' }
+                )
+            }
+
+            $result = Get-GitlabMergeRequest -Mine -MergedAfter '2024-01-01'
+
+            $result.Count | Should -Be 1
+            $result[0].MergedAt | Should -Be '2024-06-15T00:00:00Z'
+        }
+
+        It "Should filter MRs merged after the MergedBefore cutoff" {
+            Mock -CommandName Invoke-GitlabApi -ModuleName $TestModuleName -MockWith {
+                @(
+                    [PSCustomObject]@{ MergedAt = '2024-06-15T00:00:00Z'; ProjectPath = 'p' },
+                    [PSCustomObject]@{ MergedAt = '2025-06-15T00:00:00Z'; ProjectPath = 'p' }
+                )
+            }
+
+            $result = Get-GitlabMergeRequest -Mine -MergedBefore '2024-12-31'
+
+            $result.Count | Should -Be 1
+            $result[0].MergedAt | Should -Be '2024-06-15T00:00:00Z'
+        }
+
+        It "Should treat bare-date MergedBefore as whole-day inclusive" {
+            Mock -CommandName Invoke-GitlabApi -ModuleName $TestModuleName -MockWith {
+                @(
+                    [PSCustomObject]@{ MergedAt = '2024-12-31T23:30:00Z'; ProjectPath = 'p' }
+                )
+            }
+
+            $result = Get-GitlabMergeRequest -Mine -MergedBefore '2024-12-31'
+
+            $result.Count | Should -Be 1
+        }
+
+        It "Should exclude unmerged MRs when MergedAfter is set" {
+            Mock -CommandName Invoke-GitlabApi -ModuleName $TestModuleName -MockWith {
+                @(
+                    [PSCustomObject]@{ MergedAt = $null; ProjectPath = 'p' },
+                    [PSCustomObject]@{ MergedAt = '2024-06-15T00:00:00Z'; ProjectPath = 'p' }
+                )
+            }
+
+            $result = Get-GitlabMergeRequest -Mine -MergedAfter '2024-01-01'
+
+            $result.Count | Should -Be 1
+            $result[0].MergedAt | Should -Be '2024-06-15T00:00:00Z'
+        }
+    }
 }

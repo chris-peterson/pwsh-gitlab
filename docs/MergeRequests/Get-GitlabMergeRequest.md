@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/MergeRequests/Get-GitlabMergeRequest
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 04/07/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabMergeRequest
 ---
@@ -21,47 +21,50 @@ Retrieves merge requests from GitLab.
 
 ```
 Get-GitlabMergeRequest [[-MergeRequestId] <string>] [-ProjectId <string>] [-State <string>]
- [-CreatedAfter <string>] [-CreatedBefore <string>] [-IsDraft <bool>] [-SourceBranch <string>]
- [-TargetBranch <string>] [-IncludeChangeSummary] [-IncludeDiffs] [-IncludeApprovals]
- [-ReviewerUsername <string>] [-Scope <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+ [-CreatedAfter <string>] [-CreatedBefore <string>] [-MergedAfter <string>] [-MergedBefore <string>]
+ [-IsDraft <bool>] [-SourceBranch <string>] [-TargetBranch <string>] [-IncludeChangeSummary]
+ [-IncludeDiffs] [-IncludeApprovals] [-ReviewerUsername <string>] [-Scope <string>]
+ [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByGroupId
 
 ```
 Get-GitlabMergeRequest [-GroupId] <string> [-State <string>] [-CreatedAfter <string>]
- [-CreatedBefore <string>] [-IsDraft <bool>] [-SourceBranch <string>] [-TargetBranch <string>]
- [-IncludeChangeSummary] [-IncludeDiffs] [-IncludeApprovals] [-ReviewerUsername <string>]
- [-Scope <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+ [-CreatedBefore <string>] [-MergedAfter <string>] [-MergedBefore <string>] [-IsDraft <bool>]
+ [-SourceBranch <string>] [-TargetBranch <string>] [-IncludeChangeSummary] [-IncludeDiffs]
+ [-IncludeApprovals] [-ReviewerUsername <string>] [-Scope <string>] [-MaxPages <uint>] [-All]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByUrl
 
 ```
 Get-GitlabMergeRequest [-Url] <string> [-State <string>] [-CreatedAfter <string>]
- [-CreatedBefore <string>] [-IsDraft <bool>] [-SourceBranch <string>] [-TargetBranch <string>]
- [-IncludeChangeSummary] [-IncludeDiffs] [-IncludeApprovals] [-ReviewerUsername <string>]
- [-Scope <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+ [-CreatedBefore <string>] [-MergedAfter <string>] [-MergedBefore <string>] [-IsDraft <bool>]
+ [-SourceBranch <string>] [-TargetBranch <string>] [-IncludeChangeSummary] [-IncludeDiffs]
+ [-IncludeApprovals] [-ReviewerUsername <string>] [-Scope <string>] [-MaxPages <uint>] [-All]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### ByUser
 
 ```
 Get-GitlabMergeRequest [-State <string>] [-CreatedAfter <string>] [-CreatedBefore <string>]
- [-IsDraft <bool>] [-SourceBranch <string>] [-TargetBranch <string>] [-IncludeChangeSummary]
- [-IncludeDiffs] [-IncludeApprovals] [-Username <string>] [-Role <string>]
- [-ReviewerUsername <string>] [-Scope <string>] [-MaxPages <uint>] [-All] [-SiteUrl <string>]
- [<CommonParameters>]
+ [-MergedAfter <string>] [-MergedBefore <string>] [-IsDraft <bool>] [-SourceBranch <string>]
+ [-TargetBranch <string>] [-IncludeChangeSummary] [-IncludeDiffs] [-IncludeApprovals]
+ [-Username <string>] [-Role <string>] [-ReviewerUsername <string>] [-Scope <string>]
+ [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ### Mine
 
 ```
 Get-GitlabMergeRequest [-State <string>] [-CreatedAfter <string>] [-CreatedBefore <string>]
- [-IsDraft <bool>] [-SourceBranch <string>] [-TargetBranch <string>] [-IncludeChangeSummary]
- [-IncludeDiffs] [-IncludeApprovals] [-ReviewerUsername <string>] [-Mine] [-Scope <string>]
- [-MaxPages <uint>] [-All] [-SiteUrl <string>] [<CommonParameters>]
+ [-MergedAfter <string>] [-MergedBefore <string>] [-IsDraft <bool>] [-SourceBranch <string>]
+ [-TargetBranch <string>] [-IncludeChangeSummary] [-IncludeDiffs] [-IncludeApprovals]
+ [-ReviewerUsername <string>] [-Mine] [-Scope <string>] [-MaxPages <uint>] [-All]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -294,6 +297,48 @@ The maximum number of pages to retrieve. GitLab returns 20 results per page by d
 
 ```yaml
 Type: System.UInt32
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -MergedAfter
+
+Filter merge requests merged on or after this date (client-side). Accepts a bare date (YYYY-MM-DD) or a full ISO timestamp. Bare dates are interpreted as start-of-day.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -MergedBefore
+
+Filter merge requests merged on or before this date (client-side). Accepts a bare date (YYYY-MM-DD) or a full ISO timestamp. Bare dates are interpreted as end-of-day, matching the inclusive semantics of GitHub's `merged:` search qualifier.
+
+```yaml
+Type: System.String
 DefaultValue: ''
 SupportsWildcards: false
 Aliases: []

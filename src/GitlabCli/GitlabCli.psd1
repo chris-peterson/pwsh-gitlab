@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.170.1'
+    ModuleVersion = '1.171.0'
 
     RequiredModules = @(
         @{
@@ -31,9 +31,10 @@
             )
             ReleaseNotes =
 @'
-### Fixes
-- `Get-GitlabMergeRequest` no longer requires being inside a git repo
-  when querying globally (e.g. `-ReviewerUsername` without `-ProjectId`)
+### Features
+- `Get-GitlabMergeRequest` gains `-MergedAfter` / `-MergedBefore`
+  for filtering by merge date. Bare dates are whole-day inclusive,
+  matching the semantics of GitHub's `merged:` search qualifier.
 '@
         }
     }

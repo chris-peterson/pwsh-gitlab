@@ -33,6 +33,14 @@ function Get-GitlabMergeRequest {
         [GitlabDate()][string]
         $CreatedBefore,
 
+        [Parameter()]
+        [string]
+        $MergedAfter,
+
+        [Parameter()]
+        [string]
+        $MergedBefore,
+
         [TrueOrFalse()][bool]
         $IsDraft,
 
@@ -176,6 +184,25 @@ function Get-GitlabMergeRequest {
     if ($IncludeApprovals) {
         $MergeRequests | ForEach-Object {
             $_ | Add-GitlabMergeRequestApprovals
+        }
+    }
+
+    # GitLab's REST API has no merged-date filter, so apply client-side.
+    # Bare dates are interpreted as whole days for parity with GitHub's `merged:`
+    # qualifier: -MergedAfter '2026-01-01' includes MRs merged any time that day;
+    # -MergedBefore '2026-04-21' includes MRs merged any time that day.
+    if ($MergedAfter -or $MergedBefore) {
+        $MergedAfterDate = if ($MergedAfter) { [datetime]$MergedAfter } else { $null }
+        $MergedBeforeDate = if ($MergedBefore) {
+            $d = [datetime]$MergedBefore
+            if ($MergedBefore -notmatch 'T') { $d.AddDays(1).AddTicks(-1) } else { $d }
+        } else { $null }
+        $MergeRequests = $MergeRequests | Where-Object {
+            if (-not $_.MergedAt) { return $false }
+            $MergedAt = [datetime]$_.MergedAt
+            if ($MergedAfterDate  -and $MergedAt -lt $MergedAfterDate)  { return $false }
+            if ($MergedBeforeDate -and $MergedAt -gt $MergedBeforeDate) { return $false }
+            $true
         }
     }
 
