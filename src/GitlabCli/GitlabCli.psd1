@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.171.0'
+    ModuleVersion = '1.171.1'
 
     RequiredModules = @(
         @{
@@ -31,10 +31,14 @@
             )
             ReleaseNotes =
 @'
-### Features
-- `Get-GitlabMergeRequest` gains `-MergedAfter` / `-MergedBefore`
-  for filtering by merge date. Bare dates are whole-day inclusive,
-  matching the semantics of GitHub's `merged:` search qualifier.
+### Fixes
+- `New-GitlabPipeline -Variables` and other callers of
+  `ConvertTo-GitlabVariables` were broken since 1.166.0 -- every
+  invocation hit `Cannot convert "System.Object[]" to type
+  "System.Collections.Hashtable"`. Restored. The `-Variables`
+  parameter on `New-GitlabPipeline` is now typed as
+  `[pscustomobject]` in Get-Help; hashtable callers
+  (`@{ FOO = 'bar' }`) continue to work via internal coercion.
 '@
         }
     }

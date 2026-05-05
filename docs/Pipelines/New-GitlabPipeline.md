@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/New-GitlabPipeline
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 05/04/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabPipeline
 ---
@@ -20,7 +20,7 @@ Creates a new pipeline in a GitLab project.
 ### __AllParameterSets
 
 ```
-New-GitlabPipeline [[-ProjectId] <string>] [[-Ref] <string>] [[-Variables] <Object>]
+New-GitlabPipeline [[-ProjectId] <string>] [[-Ref] <string>] [[-Variables] <psobject>]
  [[-SiteUrl] <string>] [-Wait] [-Follow] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -173,7 +173,7 @@ HelpMessage: ''
 A hashtable of variables to pass to the pipeline. These become environment variables available to jobs in the pipeline.
 
 ```yaml
-Type: System.Object
+Type: System.Management.Automation.PSObject
 DefaultValue: ''
 SupportsWildcards: false
 Aliases:

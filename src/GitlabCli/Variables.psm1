@@ -72,8 +72,9 @@ function Resolve-GitlabVariable {
 }
 function ConvertTo-GitlabVariables {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Converts input to multiple GitLab CI variables')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', '', Justification = "PSScriptAnalyzer's type inference can't follow the ',[hashtable[]]' array-preserving idiom; the function genuinely returns hashtable[]")]
     [CmdletBinding()]
-    [OutputType([hashtable])]
+    [OutputType([hashtable[]])]
     param (
         [Parameter(ValueFromPipeline)]
         $Object,
@@ -108,6 +109,5 @@ function ConvertTo-GitlabVariables {
             $GitlabVars += $Var
         }
     }
-    $Hashtable = [hashtable] (,$GitlabVars)
-    $Hashtable
+    ,[hashtable[]] $GitlabVars
 }

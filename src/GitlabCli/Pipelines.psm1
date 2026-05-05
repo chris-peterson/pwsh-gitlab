@@ -299,6 +299,7 @@ function New-GitlabPipeline {
 
         [Parameter()]
         [Alias('vars')]
+        [pscustomobject]
         $Variables,
 
         [Parameter()]
@@ -313,6 +314,10 @@ function New-GitlabPipeline {
         [string]
         $SiteUrl
     )
+
+    if ($Variables -is [hashtable]) {
+        $Variables = [pscustomobject] $Variables
+    }
 
     $Project = Get-GitlabProject -ProjectId $ProjectId
     $ProjectId = $Project.Id
