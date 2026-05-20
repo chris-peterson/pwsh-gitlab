@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.171.1'
+    ModuleVersion = '1.172.0'
 
     RequiredModules = @(
         @{
@@ -31,14 +31,13 @@
             )
             ReleaseNotes =
 @'
-### Fixes
-- `New-GitlabPipeline -Variables` and other callers of
-  `ConvertTo-GitlabVariables` were broken since 1.166.0 -- every
-  invocation hit `Cannot convert "System.Object[]" to type
-  "System.Collections.Hashtable"`. Restored. The `-Variables`
-  parameter on `New-GitlabPipeline` is now typed as
-  `[pscustomobject]` in Get-Help; hashtable callers
-  (`@{ FOO = 'bar' }`) continue to work via internal coercion.
+### Features
+- `Get-GitlabMergeRequestApprovalRule` now accepts
+  `-MergeRequestId`, returning the approval rules GitLab
+  synthesized for that specific MR -- including the
+  `code_owner` rows built from CODEOWNERS. Previously you had
+  to drop to raw `Invoke-GitlabApi` to see CODEOWNERS rules
+  on an MR.
 '@
         }
     }
