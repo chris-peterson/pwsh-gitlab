@@ -95,6 +95,7 @@ $global:GitlabIdentityPropertyNameExemptions = @{
     # Merge Requests & Issues
     'Gitlab.Label'                     = 'Id'
     'Gitlab.MergeRequestApprovalRule'  = 'Id'
+    'Gitlab.MergeRequestApprovalRuleState' = 'Id'
     'Gitlab.Milestone'                 = 'Iid'
     'Gitlab.Note'                      = 'Id'
     'Gitlab.Todo'                      = 'Id'

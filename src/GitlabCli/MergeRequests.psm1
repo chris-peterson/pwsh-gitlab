@@ -723,16 +723,23 @@ function Update-GitlabMergeRequestApprovalConfiguration {
 }
 
 function Get-GitlabMergeRequestApprovalRule {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='Project')]
     [OutputType('Gitlab.MergeRequestApprovalRule')]
+    [OutputType('Gitlab.MergeRequestApprovalRuleState')]
     param (
-        [Parameter(Position=0, ValueFromPipelineByPropertyName)]
+        [Parameter(Position=0, ValueFromPipelineByPropertyName, ParameterSetName='Project')]
+        [Parameter(Position=0, ValueFromPipelineByPropertyName, ParameterSetName='MergeRequest')]
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=1, ValueFromPipelineByPropertyName)]
+        [Parameter(Position=1, ValueFromPipelineByPropertyName, ParameterSetName='Project')]
         [string]
         $ApprovalRuleId,
+
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName='MergeRequest')]
+        [Alias('Iid')]
+        [string]
+        $MergeRequestId,
 
         [Parameter(Mandatory=$false)]
         [string]
@@ -741,18 +748,32 @@ function Get-GitlabMergeRequestApprovalRule {
 
     $ProjectId = Resolve-GitlabProjectId $ProjectId
 
-    $Resource = "projects/$ProjectId/approval_rules"
-    if ($ApprovalRuleId) {
-        $Resource += "/$ApprovalRuleId"
-    }
+    if ($PSCmdlet.ParameterSetName -eq 'MergeRequest') {
+        # https://docs.gitlab.com/api/merge_request_approvals/#retrieve-approval-state-for-a-merge-request
+        $Response = Invoke-GitlabApi GET "projects/$ProjectId/merge_requests/$MergeRequestId/approval_state"
 
-    # https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-project-level-rules
-    # https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-a-single-project-level-rule
-    Invoke-GitlabApi GET $Resource
-        | New-GitlabObject 'Gitlab.MergeRequestApprovalRule'
-        | Add-Member -PassThru -NotePropertyMembers @{
-            ProjectId = $ProjectId
+        $Response.rules
+            | New-GitlabObject 'Gitlab.MergeRequestApprovalRuleState'
+            | Add-Member -PassThru -NotePropertyMembers @{
+                ProjectId                = $ProjectId
+                MergeRequestId           = $MergeRequestId
+                ApprovalRulesOverwritten = [bool]$Response.approval_rules_overwritten
+            }
+    }
+    else {
+        $Resource = "projects/$ProjectId/approval_rules"
+        if ($ApprovalRuleId) {
+            $Resource += "/$ApprovalRuleId"
         }
+
+        # https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-project-level-rules
+        # https://docs.gitlab.com/ee/api/merge_request_approvals.html#get-a-single-project-level-rule
+        Invoke-GitlabApi GET $Resource
+            | New-GitlabObject 'Gitlab.MergeRequestApprovalRule'
+            | Add-Member -PassThru -NotePropertyMembers @{
+                ProjectId = $ProjectId
+            }
+    }
 }
 
 function New-GitlabMergeRequestApprovalRule {

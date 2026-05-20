@@ -35,8 +35,9 @@ Merge-GitlabMergeRequest -MergeRequestId 123 -MergeWhenPipelineSucceeds
 | [Approve-GitlabMergeRequest](MergeRequests/Approve-GitlabMergeRequest.md) | Approves a merge request |
 | [Close-GitlabMergeRequest](MergeRequests/Close-GitlabMergeRequest.md) | Closes a merge request |
 | [Get-GitlabMergeRequest](MergeRequests/Get-GitlabMergeRequest.md) | Retrieves merge requests |
+| [Get-GitlabMergeRequestApproval](MergeRequests/Get-GitlabMergeRequestApproval.md) | Gets approval status (required/left/approved-by) |
 | [Get-GitlabMergeRequestApprovalConfiguration](MergeRequests/Get-GitlabMergeRequestApprovalConfiguration.md) | Gets approval settings |
-| [Get-GitlabMergeRequestApprovalRule](MergeRequests/Get-GitlabMergeRequestApprovalRule.md) | Gets approval rules |
+| [Get-GitlabMergeRequestApprovalRule](MergeRequests/Get-GitlabMergeRequestApprovalRule.md) | Gets approval rules — project templates by default, or per-MR synthesized rules (incl. CODEOWNERS) with `-MergeRequestId` |
 | [Invoke-GitlabMergeRequestReview](MergeRequests/Invoke-GitlabMergeRequestReview.md) | Opens MR for interactive review |
 | [Merge-GitlabMergeRequest](MergeRequests/Merge-GitlabMergeRequest.md) | Merges a merge request |
 | [New-GitlabMergeRequest](MergeRequests/New-GitlabMergeRequest.md) | Creates a new merge request |
