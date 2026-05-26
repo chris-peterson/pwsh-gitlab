@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.172.0'
+    ModuleVersion = '1.172.1'
 
     RequiredModules = @(
         @{
@@ -31,13 +31,10 @@
             )
             ReleaseNotes =
 @'
-### Features
-- `Get-GitlabMergeRequestApprovalRule` now accepts
-  `-MergeRequestId`, returning the approval rules GitLab
-  synthesized for that specific MR -- including the
-  `code_owner` rows built from CODEOWNERS. Previously you had
-  to drop to raw `Invoke-GitlabApi` to see CODEOWNERS rules
-  on an MR.
+### Bug Fixes
+- Get-GitlabPipeline: -AnyRef introduction broke behavior.  Returning any reference was the longstanding default behavior (prior to 12/2025)
+  This restores that behavior and marks the parameter as ignored/obsolete.  The parameter will be removed in a future release.  To filter
+  to the current branch, use -Ref '.'; to explicitly filter use -Ref '<branch-name>'
 '@
         }
     }

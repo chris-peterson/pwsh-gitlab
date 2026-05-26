@@ -12,8 +12,9 @@
         [Parameter()]
         [Alias('Branch')]
         [string]
-        $Ref = '.',
+        $Ref,
 
+        [Obsolete('This parameter is ignored (as it is the default behavior)')]
         [Parameter()]
         [switch]
         $AnyRef,
@@ -88,15 +89,8 @@
         $Query = @{}
 
         if($Ref) {
-            if ($AnyRef) {
-                if ($Ref -ne '.') {
-                    Write-Warning "Ref parameter is ignored when AnyRef is specified"
-                }
-            }
-            else {
-                $Ref = Resolve-GitlabBranch $Ref
-                $Query.ref = $Ref
-            }
+            $Ref = Resolve-GitlabBranch $Ref
+            $Query.ref = $Ref
         }
         if ($Scope) {
             $Query.scope = $Scope

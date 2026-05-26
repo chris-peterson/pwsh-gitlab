@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Pipelines/Get-GitlabPipeline
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/20/2026
+ms.date: 05/26/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabPipeline
 ---
@@ -87,7 +87,7 @@ HelpMessage: ''
 
 ### -AnyRef
 
-Return pipelines from any ref instead of resolving a specific branch.
+Obsolete/Ignored
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
