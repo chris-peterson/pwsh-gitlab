@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.172.1'
+    ModuleVersion = '1.172.2'
 
     RequiredModules = @(
         @{
@@ -32,9 +32,7 @@
             ReleaseNotes =
 @'
 ### Bug Fixes
-- Get-GitlabPipeline: -AnyRef introduction broke behavior.  Returning any reference was the longstanding default behavior (prior to 12/2025)
-  This restores that behavior and marks the parameter as ignored/obsolete.  The parameter will be removed in a future release.  To filter
-  to the current branch, use -Ref '.'; to explicitly filter use -Ref '<branch-name>'
+- https://github.com/chris-peterson/pwsh-gitlab/pull/158 - Thanks @rnebular
 '@
         }
     }
