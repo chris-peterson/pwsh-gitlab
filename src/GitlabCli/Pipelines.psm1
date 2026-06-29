@@ -147,7 +147,7 @@
         foreach ($Pipeline in $Pipelines) {
 
             # NOTE: have to stitch this together because of https://gitlab.com/gitlab-org/gitlab/-/issues/350686
-            $Bridges = Get-GitlabPipelineBridge -ProjectId $Project.Id  -PipelineId $Pipeline.Id
+            $Bridges = Get-GitlabPipelineBridge -ProjectId $ProjectId  -PipelineId $Pipeline.Id
 
             # NOTE: once 14.6 is more available, iid is included in pipeline APIs which would make this simpler (not have to search by sha)
             $Query = @"
