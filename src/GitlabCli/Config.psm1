@@ -22,6 +22,10 @@ function Get-GitlabConfiguration {
         } | New-GitlabObject 'Gitlab.Configuration'
     }
 
+    if (-not [string]::IsNullOrWhiteSpace($env:GITLAB_URL)) {
+        Write-Warning "GitlabCli: `$env:GITLAB_URL is set ('$env:GITLAB_URL') but `$env:GITLAB_ACCESS_TOKEN is not.  Environment-variable configuration requires both; falling back to file-based configuration.  See https://chris-peterson.github.io/pwsh-gitlab/#/Config/"
+    }
+
     Invoke-GitlabConfigMigration
 
     if (-not (Test-Path $global:GitlabConfigurationPath)) {

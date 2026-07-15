@@ -130,6 +130,37 @@ Describe "Resolve-GitlabSite" {
       }
     }
 
+    Context "When env-var config is incomplete (GITLAB_URL set without access token)" {
+      BeforeEach {
+        $script:SavedUrl = $env:GITLAB_URL
+        $script:SavedToken = $env:GITLAB_ACCESS_TOKEN
+        $env:GITLAB_URL = "gitlab.getty.cloud"
+        Remove-Item Env:\GITLAB_ACCESS_TOKEN -ErrorAction SilentlyContinue
+
+        Mock -CommandName Get-GitlabConfiguration -ModuleName $TestModuleName -MockWith {
+          return [PSCustomObject]@{
+            Sites = @()
+          }
+        }
+        Mock -CommandName Get-LocalGitContext -ModuleName $TestModuleName -MockWith {
+          return $null
+        }
+      }
+
+      AfterEach {
+        if ($null -ne $script:SavedUrl) { $env:GITLAB_URL = $script:SavedUrl } else { Remove-Item Env:\GITLAB_URL -ErrorAction SilentlyContinue }
+        if ($null -ne $script:SavedToken) { $env:GITLAB_ACCESS_TOKEN = $script:SavedToken } else { Remove-Item Env:\GITLAB_ACCESS_TOKEN -ErrorAction SilentlyContinue }
+      }
+
+      It "Should name the missing GITLAB_ACCESS_TOKEN in the error" {
+        { Resolve-GitlabSite } | Should -Throw "*GITLAB_ACCESS_TOKEN*"
+      }
+
+      It "Should point at the current docs, not the dead github anchor" {
+        { Resolve-GitlabSite } | Should -Throw "*chris-peterson.github.io*"
+      }
+    }
+
     Context "When local git context is empty" {
       BeforeEach {
         Mock -CommandName Get-GitlabConfiguration -ModuleName $TestModuleName -MockWith {

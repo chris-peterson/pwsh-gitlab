@@ -131,7 +131,11 @@ function Resolve-GitlabSite {
         return $Default
     }
 
-    throw "SiteUrl: Could not resolve GitLab site.  See https://github.com/chris-peterson/pwsh-gitlab#configuration"
+    $Guidance = "See https://chris-peterson.github.io/pwsh-gitlab/#/Config/"
+    if (-not [string]::IsNullOrWhiteSpace($env:GITLAB_URL) -and [string]::IsNullOrWhiteSpace($env:GITLAB_ACCESS_TOKEN)) {
+        $Guidance = "`$env:GITLAB_URL is set ('$env:GITLAB_URL') but `$env:GITLAB_ACCESS_TOKEN is not -- environment-variable configuration requires both.  $Guidance"
+    }
+    throw "SiteUrl: Could not resolve GitLab site.  $Guidance"
 }
 
 function Get-GitlabResourceFromUrl {
