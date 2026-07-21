@@ -4,12 +4,10 @@ on:
   push:
     branches: [ '*' ]
   pull_request:
+  release:
+    types: [ published ]
   workflow_dispatch:
     inputs:
-      force_publish_module:
-        description: 'Force publish module (bypass change detection)'
-        type: boolean
-        default: false
       force_publish_docs:
         description: 'Force publish docs (bypass change detection)'
         type: boolean
@@ -90,7 +88,7 @@ jobs:
         run: |
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
-          $Results = Invoke-ScriptAnalyzer -Path ./src -Recurse -Settings ./PSScriptAnalyzerSettings.ps1 -ReportSummary
+          $Results = './src', './build' | Invoke-ScriptAnalyzer -Recurse -Settings ./PSScriptAnalyzerSettings.ps1 -ReportSummary
           
           $Errors = $Results | Where-Object Severity -eq 'Error'
           $Warnings = $Results | Where-Object Severity -eq 'Warning'
@@ -182,14 +180,13 @@ jobs:
             throw $_.Exception.Message
           }
 
-  release-gate:
-    name: Release Gate
+  docs-gate:
+    name: Docs Gate
     needs: [test, security, docs]
     if: github.event.repository.fork == false && github.ref_name == 'main'
     runs-on: ubuntu-latest
     outputs:
       changes_in_docs: ${{ steps.changes.outputs.docs }}
-      changes_in_src: ${{ steps.changes.outputs.src }}
     steps:
       - uses: actions/checkout@v6
       - name: Detect changes
@@ -199,27 +196,45 @@ jobs:
           filters: |
             docs:
               - 'docs/**'
-            src:
-              - 'src/**'
-      - run: echo "All checks passed, proceeding with deployment"
 
-  publish-module:
-    name: Publish Module
-    needs: release-gate
-    if: needs.release-gate.outputs.changes_in_src == 'true' || inputs.force_publish_module == true
+  release:
+    name: Release
+    needs: [test, security, docs]
+    if: github.event.repository.fork == false && github.event_name == 'release'
     runs-on: ubuntu-latest
+
+    permissions:
+      artifact-metadata: write
+      attestations: write
+      contents: write
+      id-token: write
+      packages: write
+
     environment:
       name: PowerShell Gallery
       url: https://www.powershellgallery.com/packages/GitlabCli
 
+    env:
+      IMAGE_ID: ghcr.io/${{ github.repository }}/gitlab-cli
+      VERSION: ${{ github.event.release.tag_name }}
+
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install PlatyPS
         shell: pwsh
         run: |
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module -Name Microsoft.PowerShell.PlatyPS -Force -Scope CurrentUser
+
+      - name: Plumb version and release notes into the manifest and changelog
+        shell: pwsh
+        env:
+          RELEASE_NOTES: ${{ github.event.release.body }}
+        run: ./build/Update-ReleaseArtifacts.ps1 -Version $env:VERSION -ReleaseNotes $env:RELEASE_NOTES
 
       - name: Export MAML help
         shell: pwsh
@@ -230,33 +245,13 @@ jobs:
         with:
           ApiKey: ${{ secrets.PSGALLERY_API_KEY }}
 
-  publish-docker:
-    name: Publish Docker Image
-    needs: release-gate
-    runs-on: ubuntu-latest
-
-    env:
-      IMAGE_NAME: gitlab-cli
-      REGISTRY: ghcr.io
-      IMAGE_ID: ghcr.io/${{ github.repository }}/gitlab-cli
-
-    permissions:
-      artifact-metadata: write
-      attestations: write
-      contents: read
-      id-token: write
-      packages: write
-
-    steps:
-      - uses: actions/checkout@v6
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
       - name: Log into registry
         uses: docker/login-action@v4
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -266,9 +261,8 @@ jobs:
         with:
           images: ${{ env.IMAGE_ID }}
           tags: |
-            type=ref,event=branch
-            type=sha,prefix={{branch}}-
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=semver,pattern={{version}}
+            type=raw,value=latest
 
       - name: Build and push Docker image
         id: build
@@ -286,10 +280,24 @@ jobs:
           subject-digest: ${{ steps.build.outputs.digest }}
           push-to-registry: true
 
+      # Last, so a failed publish leaves main without a commit claiming a
+      # release that never shipped.
+      - name: Commit version bump and changelog to main
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/GitlabCli/GitlabCli.psd1 CHANGELOG.md
+          if git diff --cached --quiet; then
+            echo "No manifest or changelog changes to commit"
+          else
+            git commit -m "Release ${VERSION}"
+            git push origin main
+          fi
+
   publish-docs:
     name: Publish Documentation
-    needs: release-gate
-    if: needs.release-gate.outputs.changes_in_docs == 'true' || inputs.force_publish_docs == true
+    needs: docs-gate
+    if: needs.docs-gate.outputs.changes_in_docs == 'true' || inputs.force_publish_docs == true
     runs-on: ubuntu-latest
     permissions:
       pages: write
