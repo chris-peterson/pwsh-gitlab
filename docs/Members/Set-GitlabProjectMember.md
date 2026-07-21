@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Set-GitlabProjectMember
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 07/21/2026
 PlatyPS schema version: 2024-05-01
 title: Set-GitlabProjectMember
 ---
@@ -21,7 +21,7 @@ Sets or updates a user's membership in a GitLab project.
 
 ```
 Set-GitlabProjectMember [-UserId] <string> [-AccessLevel] <string> -SiteUrl <string>
- [-ProjectId <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-ProjectId <string>] [-WhatIf] [-Confirm]
 ```
 
 ## ALIASES

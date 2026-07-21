@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Labels/Update-GitlabLabel
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/14/2026
+ms.date: 07/21/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabLabel
 ---
@@ -22,7 +22,6 @@ Updates an existing label in a GitLab project or group.
 ```
 Update-GitlabLabel -LabelId <int> [-ProjectId <string>] [-NewName <string>] [-Color <string>]
  [-Description <string>] [-Priority <int>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
 ```
 
 ### ByGroupId

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Snippets/New-GitlabSnippet
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 07/21/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabSnippet
 ---
@@ -21,14 +21,14 @@ Creates a new GitLab snippet.
 
 ```
 New-GitlabSnippet [-Title] <string> -FileName <string> -Content <string> [-Description <string>]
- [-Visibility <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Visibility <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
 ```
 
 ### MultipleFiles
 
 ```
 New-GitlabSnippet [-Title] <string> -Files <hashtable[]> [-Description <string>]
- [-Visibility <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Visibility <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
 ```
 
 ## ALIASES

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Labels/New-GitlabLabel
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/14/2026
+ms.date: 07/21/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabLabel
 ---
@@ -21,7 +21,7 @@ Creates a new label in a GitLab project or group.
 
 ```
 New-GitlabLabel -Name <string> -Color <string> [-ProjectId <string>] [-Description <string>]
- [-Priority <int>] [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Priority <int>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
 ```
 
 ### ByGroupId

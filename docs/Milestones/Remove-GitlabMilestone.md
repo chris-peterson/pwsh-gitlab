@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Milestones/Remove-GitlabMilestone
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/14/2026
+ms.date: 07/21/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GitlabMilestone
 ---
@@ -21,14 +21,14 @@ Deletes a milestone from a GitLab project or group.
 
 ```
 Remove-GitlabMilestone -MilestoneId <int> [-ProjectId <string>] [-SiteUrl <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ [-Confirm]
 ```
 
 ### ByGroup
 
 ```
 Remove-GitlabMilestone -MilestoneId <int> [-GroupId <string>] [-SiteUrl <string>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ [-Confirm]
 ```
 
 ## ALIASES
