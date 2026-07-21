@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ProjectAccessTokens/New-GitlabProjectAccessToken
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 07/21/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabProjectAccessToken
 ---
@@ -22,7 +22,7 @@ Creates a new project access token.
 ```
 New-GitlabProjectAccessToken [-ProjectId] <string> -Name <string> -Scopes <string[]>
  [-Description <string>] [-AccessLevel <string>] [-ExpiresAt <datetime>] [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-WhatIf] [-Confirm]
 ```
 
 ## ALIASES

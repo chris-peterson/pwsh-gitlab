@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/RepositoryFiles/Update-GitlabRepositoryFile
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 07/21/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabRepositoryFile
 ---
@@ -22,7 +22,7 @@ Updates an existing file in a GitLab repository.
 ```
 Update-GitlabRepositoryFile [-FilePath] <string> -Content <string> -CommitMessage <string>
  [-ProjectId <string>] [-Branch <string>] [-SkipCi <bool>] [-SkipEqualityCheck] [-SiteUrl <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-WhatIf] [-Confirm]
 ```
 
 ## ALIASES

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Issues/Get-GitlabIssue
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/27/2026
+ms.date: 07/21/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabIssue
 ---
@@ -41,7 +41,7 @@ Get-GitlabIssue [[-IssueId] <string>] [-GroupId] <string> [-State <string>] [-Cr
 Get-GitlabIssue [[-IssueId] <string>] -Mine [-State <string>] [-CreatedAfter <string>]
  [-CreatedBefore <string>] [-AssigneeUsername <string>] [-AuthorUsername <string>]
  [-Labels <string>] [-OrderBy <string>] [-Sort <string>] [-MaxPages <uint>] [-All]
- [-SiteUrl <string>] [<CommonParameters>]
+ [-SiteUrl <string>]
 ```
 
 ## ALIASES

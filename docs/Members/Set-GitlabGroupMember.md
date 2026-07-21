@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Set-GitlabGroupMember
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 07/21/2026
 PlatyPS schema version: 2024-05-01
 title: Set-GitlabGroupMember
 ---
@@ -21,7 +21,7 @@ Sets or updates a user's membership in a GitLab group.
 
 ```
 Set-GitlabGroupMember [-UserId] <string> [-AccessLevel] <string> -SiteUrl <string>
- [-GroupId <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-GroupId <string>] [-WhatIf] [-Confirm]
 ```
 
 ## ALIASES

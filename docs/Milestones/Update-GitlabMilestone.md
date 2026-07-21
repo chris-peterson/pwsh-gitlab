@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Milestones/Update-GitlabMilestone
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 03/14/2026
+ms.date: 07/21/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabMilestone
 ---
@@ -22,7 +22,7 @@ Updates an existing milestone in a GitLab project or group.
 ```
 Update-GitlabMilestone -MilestoneId <int> [-ProjectId <string>] [-Title <string>]
  [-Description <string>] [-DueDate <string>] [-StartDate <string>] [-StateEvent <string>]
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-SiteUrl <string>] [-WhatIf] [-Confirm]
 ```
 
 ### ByGroup
@@ -30,7 +30,7 @@ Update-GitlabMilestone -MilestoneId <int> [-ProjectId <string>] [-Title <string>
 ```
 Update-GitlabMilestone -MilestoneId <int> [-GroupId <string>] [-Title <string>]
  [-Description <string>] [-DueDate <string>] [-StartDate <string>] [-StateEvent <string>]
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-SiteUrl <string>] [-WhatIf] [-Confirm]
 ```
 
 ## ALIASES

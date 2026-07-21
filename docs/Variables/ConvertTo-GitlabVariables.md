@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Variables/ConvertTo-GitlabVariables
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 07/21/2026
 PlatyPS schema version: 2024-05-01
 title: ConvertTo-GitlabVariables
 ---
@@ -129,6 +129,10 @@ HIDE_ME
 ### System.Collections.Hashtable
 
 Returns a hashtable.
+
+### System.Collections.Hashtable[]
+
+Returns an array of hashtables in GitLab variable format.
 
 ## NOTES
 

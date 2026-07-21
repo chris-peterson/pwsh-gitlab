@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ServiceAccounts/New-GitlabServiceAccount
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 07/21/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabServiceAccount
 ---
@@ -28,7 +28,7 @@ New-GitlabServiceAccount [-Name <string>] [-Username <string>] [-Email <string>]
 
 ```
 New-GitlabServiceAccount -GroupId <string> [-Name <string>] [-Username <string>] [-Email <string>]
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-SiteUrl <string>] [-WhatIf] [-Confirm]
 ```
 
 ## ALIASES

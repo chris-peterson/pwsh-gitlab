@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Integrations/Enable-GitlabProjectSlackNotification
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 07/21/2026
 PlatyPS schema version: 2024-05-01
 title: Enable-GitlabProjectSlackNotification
 ---
@@ -23,7 +23,7 @@ Enables and configures Slack notifications for a GitLab project.
 Enable-GitlabProjectSlackNotification -Channel <string> [-ProjectId <string>] [-Webhook <string>]
  [-Username <string>] [-BranchesToBeNotified <string>] [-NotifyOnlyBrokenPipelines <bool>]
  [-JobEvents <bool>] [-Enable <string[]>] [-Disable <string[]>] [-Integration <string>]
- [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-SiteUrl <string>] [-WhatIf] [-Confirm]
 ```
 
 ### AllEvents
@@ -32,7 +32,6 @@ Enable-GitlabProjectSlackNotification -Channel <string> [-ProjectId <string>] [-
 Enable-GitlabProjectSlackNotification -Channel <string> [-ProjectId <string>] [-Webhook <string>]
  [-Username <string>] [-BranchesToBeNotified <string>] [-NotifyOnlyBrokenPipelines <bool>]
  [-JobEvents <bool>] [-AllEvents] [-Integration <string>] [-SiteUrl <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
 ```
 
 ### NoEvents
