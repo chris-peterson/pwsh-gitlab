@@ -3,6 +3,9 @@
 # :all-the-things!:
 default: test lint help
 
+# Pre-commit gate: tests + lint, without regenerating help
+check: test lint
+
 test:
     #!/usr/bin/env pwsh
     Import-Module Pester

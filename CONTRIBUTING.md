@@ -63,8 +63,7 @@ We use two tools for security and code quality:
 | [CodeQL](https://codeql.github.com/) | Security vulnerability scanning | CI only |
 
 ```sh
-just lint           # Run PSScriptAnalyzer locally
-just lint-verbose   # Show detailed results
+just lint   # Run PSScriptAnalyzer locally
 ```
 
 Configuration is in `PSScriptAnalyzerSettings.ps1`.
