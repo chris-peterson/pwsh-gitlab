@@ -34,7 +34,7 @@ Describe 'Get-GitlabConfiguration environment-variable handling' {
 
     Context 'When GITLAB_URL is set but GITLAB_ACCESS_TOKEN is not' {
         BeforeEach {
-            $env:GITLAB_URL = 'gitlab.getty.cloud'
+            $env:GITLAB_URL = 'gitlab.example.com'
         }
 
         It 'warns that the environment-variable configuration is incomplete' {

@@ -134,7 +134,7 @@ Describe "Resolve-GitlabSite" {
       BeforeEach {
         $script:SavedUrl = $env:GITLAB_URL
         $script:SavedToken = $env:GITLAB_ACCESS_TOKEN
-        $env:GITLAB_URL = "gitlab.getty.cloud"
+        $env:GITLAB_URL = "gitlab.example.com"
         Remove-Item Env:\GITLAB_ACCESS_TOKEN -ErrorAction SilentlyContinue
 
         Mock -CommandName Get-GitlabConfiguration -ModuleName $TestModuleName -MockWith {
