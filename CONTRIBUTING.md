@@ -68,6 +68,31 @@ just lint   # Run PSScriptAnalyzer locally
 
 Configuration is in `PSScriptAnalyzerSettings.ps1`.
 
+## Releasing
+
+Releases are driven by [GitHub Releases](https://github.com/chris-peterson/pwsh-gitlab/releases). Publishing a release is the trigger; the release object carries the version and the notes:
+
+- The **tag** is the version, `v`-prefixed (e.g. `v1.173.0`). CI strips the `v` for both `ModuleVersion` and the image tag, so both read `1.173.0`.
+- The **release body** becomes the release notes.
+
+On publish, the `release` job:
+
+1. Writes the version into `GitlabCli.psd1` `ModuleVersion` and the body into `ReleaseNotes`, and prepends a dated section to `CHANGELOG.md`.
+2. Publishes the module to the PowerShell Gallery and the image to GHCR, tagged with the version and `latest`.
+3. Commits the manifest and changelog back to `main`.
+
+The commit-back runs last so that a failed publish leaves `main` without a commit claiming a release that never shipped.
+
+To preview the manifest and changelog edits a release will make, run the script locally with `-WhatIf`:
+
+```powershell
+./build/Update-ReleaseArtifacts.ps1 -Version v1.173.0 -ReleaseNotes "### Bug Fixes`n- ..." -WhatIf
+```
+
+Cut releases from a tag at `main`'s HEAD. The test, security, and docs gates run against the tag, but the `release` job checks out `main` (it has to, to commit the version bump back), so a tag behind `main` publishes `main`'s code rather than the code the gates checked.
+
+The commit-back uses the built-in `GITHUB_TOKEN`. If `main` becomes a protected branch, that token needs permission to push to it.
+
 ## Making Changes
 
 1. Fork the repository
