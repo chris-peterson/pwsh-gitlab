@@ -94,7 +94,9 @@ function Invoke-GitlabApi {
     if (-not [string]::IsNullOrWhiteSpace($Proxy)) {
         Write-Verbose "Using proxy $Proxy..."
     }
-    if($MaxPages -gt 1) {
+    $Paginate  = $MaxPages -gt 1 -and -not $OutFile
+    $WalkPages = $Paginate -and (Test-PowerShellRelLinkDefect)
+    if ($Paginate -and -not $WalkPages) {
         $RestMethodParams.FollowRelLink        = $true
         $RestMethodParams.MaximumFollowRelLink = $MaxPages
     }
@@ -107,15 +109,49 @@ function Invoke-GitlabApi {
 
     if ($HttpMethod -eq 'GET' -or $PSCmdlet.ShouldProcess($RestMethodParams.Uri, $HostOutput)) {
         Write-Verbose "Request: $HostOutput"
-        $Result = Invoke-RestMethod @RestMethodParams
-        Write-Verbose "Response: $($Result | ConvertTo-Json -Depth 10)"
-        if($MaxPages -gt 1) {
-            # Unwrap pagination container
-            $Result | ForEach-Object {
-                Write-Output $_
+        if ($WalkPages) {
+            # Workaround for https://github.com/PowerShell/PowerShell/issues/27861 (see
+            # Test-PowerShellRelLinkDefect): on affected versions -FollowRelLink fetches every
+            # page after the first without our Authorization header, and a group of 43 projects
+            # comes back as 39 with no error. Walking X-Next-Page ourselves keeps the header on
+            # each request, and X-Total gives us something to check the walk against.
+            $PageUri  = $RestMethodParams.Uri
+            $Appender = $PageUri.Contains('?') ? '&' : '?'
+            $Page     = 1
+            $Yielded  = 0
+            $Total    = $null
+            while ($Page -le $MaxPages) {
+                $RestMethodParams.Uri = "$PageUri$($Appender)page=$Page"
+                $Response = Invoke-WebRequest @RestMethodParams
+                $Response.Content | ConvertFrom-Json | ForEach-Object {
+                    $Yielded++
+                    Write-Output $_
+                }
+                if ($null -eq $Total) {
+                    $Total = $Response.Headers.'X-Total' | Select-Object -First 1
+                }
+                $NextPage = $Response.Headers.'X-Next-Page' | Select-Object -First 1
+                if ([string]::IsNullOrWhiteSpace($NextPage)) {
+                    break
+                }
+                $Page = [int]$NextPage
+            }
+            # A short walk is worth saying out loud: it reads downstream as "the group has
+            # fewer projects", not "the fetch came up short".
+            if ($null -ne $Total -and $Page -le $MaxPages -and $Yielded -lt [int]$Total) {
+                Write-Warning "$Path returned $Yielded of $Total record(s)"
             }
         } else {
-            Write-Output $Result
+            $Result = Invoke-RestMethod @RestMethodParams
+            Write-Verbose "Response: $($Result | ConvertTo-Json -Depth 10)"
+            if ($Paginate) {
+                # Unwrap pagination container
+                $Result | ForEach-Object {
+                    Write-Output $_
+                }
+            } else {
+                Write-Output $Result
+            }
         }
     } else {
         Write-Host "Parameters: $HostOutput"
