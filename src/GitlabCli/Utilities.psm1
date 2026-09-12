@@ -97,6 +97,10 @@ function Invoke-GitlabApi {
     if($MaxPages -gt 1) {
         $RestMethodParams.FollowRelLink        = $true
         $RestMethodParams.MaximumFollowRelLink = $MaxPages
+        # PowerShell 7.6 drops the Authorization header when following rel=next, so
+        # any paged request 401s past page 1. Drop this once the scoped upstream fix
+        # ships: https://github.com/PowerShell/PowerShell/issues/27861
+        $RestMethodParams.PreserveAuthorizationOnRedirect = $true
     }
     if ($Body.Count -gt 0) {
         $RestMethodParams.ContentType = 'application/json'
