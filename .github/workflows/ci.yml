@@ -230,11 +230,9 @@ jobs:
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module -Name Microsoft.PowerShell.PlatyPS -Force -Scope CurrentUser
 
-      - name: Plumb version and release notes into the manifest and changelog
+      - name: Promote the changelog's Unreleased section into this version
         shell: pwsh
-        env:
-          RELEASE_NOTES: ${{ github.event.release.body }}
-        run: ./build/Update-ReleaseArtifacts.ps1 -Version $env:VERSION -ReleaseNotes $env:RELEASE_NOTES
+        run: ./build/Update-ReleaseArtifacts.ps1 -Version $env:VERSION -NotesOutputPath "$env:RUNNER_TEMP/release-notes.md"
 
       - name: Export MAML help
         shell: pwsh
@@ -279,6 +277,11 @@ jobs:
           subject-name: ${{ env.IMAGE_ID }}
           subject-digest: ${{ steps.build.outputs.digest }}
           push-to-registry: true
+
+      - name: Set the release body to the promoted notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit "${VERSION}" --notes-file "${RUNNER_TEMP}/release-notes.md"
 
       # Last, so a failed publish leaves main without a commit claiming a
       # release that never shipped.
