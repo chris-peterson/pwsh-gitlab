@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Notes/Get-GitlabIssueNote
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 09/24/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabIssueNote
 ---
@@ -20,8 +20,8 @@ Retrieves notes (comments) from a GitLab issue.
 ### __AllParameterSets
 
 ```
-Get-GitlabIssueNote [-IssueId] <string> [-ProjectId <string>] [-SiteUrl <string>]
- [<CommonParameters>]
+Get-GitlabIssueNote [-IssueId] <string> [[-NoteId] <string>] [-ProjectId <string>]
+ [-SiteUrl <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -56,6 +56,14 @@ Get-GitlabIssue -IssueId 42 | Get-GitlabIssueNote
 
 Pipes an issue object to retrieve its associated notes.
 
+### Example 4: Get a specific note from an issue
+
+```powershell
+Get-GitlabIssueNote -IssueId 42 -NoteId 100
+```
+
+Retrieves the specific note with ID 100 from issue #42.
+
 ## PARAMETERS
 
 ### -IssueId
@@ -73,6 +81,27 @@ ParameterSets:
   IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -NoteId
+
+The ID of a specific note to retrieve. If not specified, all notes for the issue are returned.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 1
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []
@@ -149,4 +178,5 @@ HIDE_ME
 ## RELATED LINKS
 
 - [GitLab Notes API - List project issue notes](https://docs.gitlab.com/ee/api/notes.html#list-project-issue-notes)
+- [GitLab Notes API - Retrieve an issue note](https://docs.gitlab.com/ee/api/notes.html#retrieve-an-issue-note)
 - [New-GitlabIssueNote](New-GitlabIssueNote.md)

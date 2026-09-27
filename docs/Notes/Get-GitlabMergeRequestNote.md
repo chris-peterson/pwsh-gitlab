@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Notes/Get-GitlabMergeRequestNote
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 09/24/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabMergeRequestNote
 ---
@@ -170,4 +170,4 @@ HIDE_ME
 ## RELATED LINKS
 
 - [GitLab Notes API - List all merge request notes](https://docs.gitlab.com/ee/api/notes.html#list-all-merge-request-notes)
-- [GitLab Notes API - Get single merge request note](https://docs.gitlab.com/api/notes/#get-single-issue-note)
+- [GitLab Notes API - Retrieve a merge request note](https://docs.gitlab.com/ee/api/notes.html#retrieve-a-merge-request-note)

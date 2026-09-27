@@ -40,6 +40,11 @@
 
 * [GitlabCli](GitlabCli/)
   * [Get-GitlabMergeRequestApproval](GitlabCli/Get-GitlabMergeRequestApproval.md)
+  * [New-GitlabMergeRequestNote](GitlabCli/New-GitlabMergeRequestNote.md)
+  * [Remove-GitlabIssueNote](GitlabCli/Remove-GitlabIssueNote.md)
+  * [Remove-GitlabMergeRequestNote](GitlabCli/Remove-GitlabMergeRequestNote.md)
+  * [Update-GitlabIssueNote](GitlabCli/Update-GitlabIssueNote.md)
+  * [Update-GitlabMergeRequestNote](GitlabCli/Update-GitlabMergeRequestNote.md)
 
 * [GraphQL](GraphQL/)
   * [Invoke-GitlabGraphQL](GraphQL/Invoke-GitlabGraphQL.md)
@@ -139,6 +144,11 @@
   * [Get-GitlabIssueNote](Notes/Get-GitlabIssueNote.md)
   * [Get-GitlabMergeRequestNote](Notes/Get-GitlabMergeRequestNote.md)
   * [New-GitlabIssueNote](Notes/New-GitlabIssueNote.md)
+  * [New-GitlabMergeRequestNote](Notes/New-GitlabMergeRequestNote.md)
+  * [Remove-GitlabIssueNote](Notes/Remove-GitlabIssueNote.md)
+  * [Remove-GitlabMergeRequestNote](Notes/Remove-GitlabMergeRequestNote.md)
+  * [Update-GitlabIssueNote](Notes/Update-GitlabIssueNote.md)
+  * [Update-GitlabMergeRequestNote](Notes/Update-GitlabMergeRequestNote.md)
 
 * [PersonalAccessTokens](PersonalAccessTokens/)
   * [Get-GitlabPersonalAccessToken](PersonalAccessTokens/Get-GitlabPersonalAccessToken.md)
