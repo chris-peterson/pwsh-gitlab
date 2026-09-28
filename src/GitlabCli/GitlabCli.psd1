@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.173.0'
+    ModuleVersion = '1.174.0'
 
     RequiredModules = @(
         @{
@@ -32,10 +32,9 @@
             ReleaseNotes =
 @'
 ### Changes
-- Listings come back sorted by default. Issues and merge requests sort by their GitLab reference (`group/project#7`, `group/project!7`); anything else carrying a last-updated timestamp comes back most recent first. Passing `-Sort` or `-OrderBy` leaves the server's ordering alone.
-- `Get-GitlabMergeRequest` groups by project and merge request iid rather than by project path alone.
-- `Get-GitlabIssueNote` returns the newest comment first.
-- `Get-GitlabBranch` reports a branch's tip-commit date as `UpdatedAt` rather than `LastUpdated`, matching every other type. Scripts reading `LastUpdated` need updating.
+- Added `New-GitlabMergeRequestNote` (alias `Add-GitlabMergeRequestNote`) to add comments to merge requests, matching the existing `New-GitlabIssueNote` cmdlet.
+- Added `Update-GitlabIssueNote`, `Remove-GitlabIssueNote`, `Update-GitlabMergeRequestNote`, and `Remove-GitlabMergeRequestNote`, rounding out full CRUD support for issue and merge request comments. `Get-GitlabIssueNote` also gains a `-NoteId` parameter to retrieve a single note, matching `Get-GitlabMergeRequestNote`.
+- `Update-GitlabProject` gains a `-WikiAccessLevel` parameter (`disabled`, `private`, or `enabled`) to turn a project's wiki on or off.
 '@
         }
     }
