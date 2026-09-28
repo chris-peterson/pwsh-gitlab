@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Update-GitlabProject
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 09/28/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GitlabProject
 ---
@@ -24,8 +24,8 @@ Update-GitlabProject [[-ProjectId] <string>] [[-Visibility] <string>] [[-Name] <
  [[-Path] <string>] [[-DefaultBranch] <string>] [[-Topics] <string[]>]
  [[-BuildGitStrategy] <string>] [[-CiDefaultGitDepth] <uint>] [[-CiForwardDeployment] <bool>]
  [[-BuildTimeout] <uint>] [[-RepositoryAccessLevel] <string>] [[-BuildsAccessLevel] <string>]
- [[-OnlyAllowMergeIfAllDiscussionsAreResolved] <bool>] [[-SiteUrl] <string>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [[-WikiAccessLevel] <string>] [[-OnlyAllowMergeIfAllDiscussionsAreResolved] <bool>]
+ [[-SiteUrl] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -59,6 +59,14 @@ Update-GitlabProject -BuildGitStrategy "fetch" -CiDefaultGitDepth 50
 ```
 
 Configures the CI/CD git strategy and default git depth for the current project.
+
+### Example 4: Disable the project wiki
+
+```powershell
+Update-GitlabProject -ProjectId "mygroup/myproject" -WikiAccessLevel "disabled"
+```
+
+Turns off the wiki for the project.
 
 ## PARAMETERS
 
@@ -242,7 +250,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 12
+  Position: 13
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -326,7 +334,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 13
+  Position: 14
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -391,6 +399,27 @@ Aliases:
 ParameterSets:
 - Name: (All)
   Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -WikiAccessLevel
+
+The access level for the project wiki. Valid values are 'disabled', 'private', or 'enabled'.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 12
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
