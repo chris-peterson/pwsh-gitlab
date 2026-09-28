@@ -437,6 +437,11 @@ function Update-GitlabProject {
         $BuildsAccessLevel,
 
         [Parameter()]
+        [ValidateSet('disabled', 'private', 'enabled')]
+        [string]
+        $WikiAccessLevel,
+
+        [Parameter()]
         [TrueOrFalse()][bool]
         $OnlyAllowMergeIfAllDiscussionsAreResolved,
 
@@ -488,6 +493,9 @@ function Update-GitlabProject {
     }
     if ($Visibility) {
         $Request.visibility = $Visibility
+    }
+    if ($WikiAccessLevel) {
+        $Request.wiki_access_level = $WikiAccessLevel
     }
 
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "update project ($($Request | ConvertTo-Json))")) {
