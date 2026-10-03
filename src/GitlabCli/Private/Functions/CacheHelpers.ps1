@@ -2,7 +2,7 @@
 # Structure: @{ $siteUrl = @{ projects = @{ $path = $id }; groups = @{ $path = $id } } }
 $global:GitlabCache = @{}
 
-function Get-GitlabCachePath {
+function global:Get-GitlabCachePath {
     [CmdletBinding()]
     [OutputType([string])]
     param(
@@ -20,7 +20,7 @@ function Get-GitlabCachePath {
     $CachePath
 }
 
-function Get-GitlabSiteCache {
+function global:Get-GitlabSiteCache {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
@@ -54,7 +54,7 @@ function Get-GitlabSiteCache {
     return $global:GitlabCache[$ResolvedSiteUrl]
 }
 
-function Save-GitlabSiteCache {
+function global:Save-GitlabSiteCache {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
@@ -93,7 +93,7 @@ function Save-GitlabSiteCache {
     }
 }
 
-function Resolve-LocalGroupPath {
+function global:Resolve-LocalGroupPath {
     [CmdletBinding()]
     [OutputType([string])]
     param(
@@ -178,7 +178,7 @@ function Resolve-LocalGroupPath {
     return $GroupId
 }
 
-function Resolve-GitlabProjectId {
+function global:Resolve-GitlabProjectId {
     [CmdletBinding()]
     [OutputType([int])]
     param(
@@ -228,7 +228,7 @@ function Resolve-GitlabProjectId {
     return $Project.Id
 }
 
-function Get-ProjectIdFromCache {
+function global:Get-ProjectIdFromCache {
     [CmdletBinding()]
     [OutputType([int])]
     param(
@@ -252,7 +252,7 @@ function Get-ProjectIdFromCache {
     return $null
 }
 
-function Test-ProjectIdInCache {
+function global:Test-ProjectIdInCache {
     [CmdletBinding()]
     [OutputType([bool])]
     param(
@@ -277,7 +277,7 @@ function Test-ProjectIdInCache {
     return $false
 }
 
-function Set-ProjectIdInCache {
+function global:Set-ProjectIdInCache {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Internal cache helper, not user-facing state change')]
     [CmdletBinding()]
     param(
@@ -311,7 +311,7 @@ function Set-ProjectIdInCache {
     Save-GitlabSiteCache -ResolvedSiteUrl $ResolvedSiteUrl
 }
 
-function Resolve-GitlabGroupId {
+function global:Resolve-GitlabGroupId {
     [CmdletBinding()]
     [OutputType([int])]
     param(
@@ -363,7 +363,7 @@ function Resolve-GitlabGroupId {
     return $Group.Id
 }
 
-function Get-GroupIdFromCache {
+function global:Get-GroupIdFromCache {
     [CmdletBinding()]
     [OutputType([int])]
     param(
@@ -387,7 +387,7 @@ function Get-GroupIdFromCache {
     return $null
 }
 
-function Test-GroupIdInCache {
+function global:Test-GroupIdInCache {
     [CmdletBinding()]
     [OutputType([bool])]
     param(
@@ -412,7 +412,7 @@ function Test-GroupIdInCache {
     return $false
 }
 
-function Set-GroupIdInCache {
+function global:Set-GroupIdInCache {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Internal cache helper, not user-facing state change')]
     [CmdletBinding()]
     param(
@@ -446,7 +446,7 @@ function Set-GroupIdInCache {
     Save-GitlabSiteCache -ResolvedSiteUrl $ResolvedSiteUrl
 }
 
-function Save-ProjectToCache {
+function global:Save-ProjectToCache {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Internal cache helper, not user-facing state change')]
     [CmdletBinding()]
     [OutputType('Gitlab.Project')]
@@ -466,7 +466,7 @@ function Save-ProjectToCache {
     }
 }
 
-function Save-GroupToCache {
+function global:Save-GroupToCache {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Internal cache helper, not user-facing state change')]
     [CmdletBinding()]
     [OutputType('Gitlab.Group')]

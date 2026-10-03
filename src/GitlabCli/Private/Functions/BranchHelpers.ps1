@@ -1,4 +1,4 @@
-function Get-GitlabProtectedBranchAccessLevel {
+function global:Get-GitlabProtectedBranchAccessLevel {
     [PSCustomObject]@{
         NoAccess = 0
         Developer = 30
@@ -7,7 +7,7 @@ function Get-GitlabProtectedBranchAccessLevel {
     }
 }
 
-function Resolve-GitlabBranch {
+function global:Resolve-GitlabBranch {
     [CmdletBinding()]
     [OutputType([string])]
     param(

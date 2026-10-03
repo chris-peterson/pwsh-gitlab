@@ -1,6 +1,6 @@
 # Runner helper functions
 
-function Get-Percentile {
+function global:Get-Percentile {
     param (
         [decimal[]] $Values,
         [decimal] $Percentile

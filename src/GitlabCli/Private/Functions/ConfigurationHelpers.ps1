@@ -1,6 +1,6 @@
 # Configuration helper functions
 
-function Test-IsConfigurationEnvironmentVariables {
+function global:Test-IsConfigurationEnvironmentVariables {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Tests if configuration comes from environment variables (plural)')]
     param (
     )
@@ -8,7 +8,7 @@ function Test-IsConfigurationEnvironmentVariables {
     $env:GITLAB_ACCESS_TOKEN
 }
 
-function Invoke-GitlabConfigMigration {
+function global:Invoke-GitlabConfigMigration {
     [CmdletBinding()]
     param ()
 
@@ -38,7 +38,7 @@ function Invoke-GitlabConfigMigration {
     }
 }
 
-function Write-GitlabConfiguration {
+function global:Write-GitlabConfiguration {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory, ValueFromPipeline)]
@@ -75,7 +75,7 @@ function Write-GitlabConfiguration {
         Out-Null
 }
 
-function Resolve-GitlabSite {
+function global:Resolve-GitlabSite {
     [CmdletBinding()]
     param(
         [Parameter(Position=0, ValueFromPipeline)]
@@ -138,7 +138,7 @@ function Resolve-GitlabSite {
     throw "SiteUrl: Could not resolve GitLab site.  $Guidance"
 }
 
-function Get-GitlabResourceFromUrl {
+function global:Get-GitlabResourceFromUrl {
     param(
         [Parameter(Mandatory, ValueFromPipeline)]
         [string]

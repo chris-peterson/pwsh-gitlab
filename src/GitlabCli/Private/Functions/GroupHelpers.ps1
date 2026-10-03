@@ -1,6 +1,6 @@
 # Group helper functions
 
-function Get-PossibleGroupName {
+function global:Get-PossibleGroupName {
     param (
         [string]
         $Path
