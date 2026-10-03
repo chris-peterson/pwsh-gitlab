@@ -78,6 +78,52 @@ Describe "Gitlab.MergeRequest" {
                 Should -Be @('group/alpha!3', 'group/zulu!1', 'group/zulu!20')
         }
     }
+
+    Context "Contract properties" {
+        BeforeAll {
+            $MergeRequest = [PSCustomObject]@{
+                id      = 300
+                iid     = 7
+                state   = 'opened'
+                web_url = 'https://gitlab.example.com/group/project/-/merge_requests/7'
+                author  = [PSCustomObject]@{ username = 'jdoe'; name = 'Jane Doe' }
+            } | New-GitlabObject 'Gitlab.MergeRequest'
+        }
+
+        It "Should name its forge" {
+            $MergeRequest.Forge | Should -Be 'gitlab'
+        }
+
+        It "Should report the host of the instance it came from" {
+            $MergeRequest.Host | Should -Be 'gitlab.example.com'
+        }
+
+        It "Should expose the author's username as AuthorUsername" {
+            $MergeRequest.AuthorUsername | Should -Be 'jdoe'
+        }
+
+        It "Should report an open merge request as open" {
+            $MergeRequest.State | Should -Be 'open'
+        }
+
+        It "Should use the iid shown in the UI as Id" {
+            $MergeRequest.Id | Should -Be 7
+        }
+
+        It "Should keep the instance-wide id as DatabaseId" {
+            $MergeRequest.DatabaseId | Should -Be 300
+        }
+
+        It "Should keep MergeRequestId as the iid, for pipeline binding" {
+            $MergeRequest.MergeRequestId | Should -Be 7
+        }
+
+        It "Should leave the <_> state as GitLab reports it" -ForEach @('merged', 'closed', 'locked') {
+            $Result = [PSCustomObject]@{ id = 1; iid = 1; state = $_; web_url = 'https://gitlab.com/g/p/-/merge_requests/1' } |
+                New-GitlabObject 'Gitlab.MergeRequest'
+            $Result.State | Should -Be $_
+        }
+    }
 }
 
 Describe "Gitlab.Branch" {

@@ -77,6 +77,18 @@
     <Name>Gitlab.MergeRequest</Name>
     <Members>
       <ScriptProperty>
+        <Name>Forge</Name>
+        <GetScriptBlock>'gitlab'</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Host</Name>
+        <GetScriptBlock>if ($this.WebUrl) { ([uri] $this.WebUrl).Host }</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>AuthorUsername</Name>
+        <GetScriptBlock>$this.Author.Username</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
         <Name>AuthorName</Name>
         <GetScriptBlock>$this.Author.Name</GetScriptBlock>
       </ScriptProperty>

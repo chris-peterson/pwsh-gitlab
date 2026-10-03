@@ -4,6 +4,15 @@ All notable changes to GitlabCli are recorded here, newest first.
 
 ## [Unreleased]
 
+### Changes
+- Merge requests carry the properties ForgeCli's output contract reads: `Forge` (`gitlab`), `Host` (the instance's host, such as `gitlab.com`), and `AuthorUsername` (the author's username).
+- **Breaking:** an open merge request reports `State` as `open`, as GitHub's pull requests do, instead of GitLab's `opened`. Scripts comparing a merge request's `State` to `opened` need updating. The `-State opened` parameter value is unchanged.
+- **Breaking:** a merge request's `Id` is its iid (`7` for `!7`), matching `MergeRequestId` and GitHub's pull requests. The instance-wide id moves to `DatabaseId`.
+
+### Bug Fixes
+- GitlabCli works when another module imports it, as ForgeCli does. Its internal helpers loaded into the importing module's scope, so commands failed with errors like `The term 'Resolve-GitlabProjectId' is not recognized`; they now load into the global scope, as an interactive import already did.
+- `Get-GitlabGroupMember` works without `-MinAccessLevel`. It failed with `Cannot convert '' to access level` unless a level was passed, as did any command whose access-level parameter was left unset.
+
 ## [1.174.0] - 2026-09-28
 
 ### Changes

@@ -1,6 +1,6 @@
 # Casing conversion helper functions
 
-function ConvertTo-PascalCase {
+function global:ConvertTo-PascalCase {
     param(
         [Parameter(Position=0, ValueFromPipeline)]
         $InputObject
@@ -22,7 +22,7 @@ function ConvertTo-PascalCase {
     End {}
 }
 
-function ConvertTo-SnakeCase {
+function global:ConvertTo-SnakeCase {
     param(
         [Parameter(Position=0, ValueFromPipeline)]
         $InputObject
@@ -44,7 +44,7 @@ function ConvertTo-SnakeCase {
     End {}
 }
 
-function ConvertTo-UrlEncoded {
+function global:ConvertTo-UrlEncoded {
     param (
         [Parameter(Position=0, ValueFromPipeline)]
         [string]

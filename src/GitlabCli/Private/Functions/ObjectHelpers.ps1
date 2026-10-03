@@ -1,6 +1,6 @@
 # Object wrapper helper functions
 
-function Add-CoalescedProperty {
+function global:Add-CoalescedProperty {
     param (
         [PSCustomObject]
         [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
@@ -28,7 +28,7 @@ function Add-CoalescedProperty {
     }
 }
 
-function Get-GitlabDefaultSortProperty {
+function global:Get-GitlabDefaultSortProperty {
     param (
         [Parameter(Mandatory, Position=0)]
         $Object
@@ -51,7 +51,7 @@ function Get-GitlabDefaultSortProperty {
     }
 }
 
-function Test-GitlabSortPreference {
+function global:Test-GitlabSortPreference {
     # a caller that was given -Sort or -OrderBy is passing the user's ordering
     # through to the API; leave that result in the order it came back
     $CallStack = Get-PSCallStack
@@ -71,7 +71,7 @@ function Test-GitlabSortPreference {
     $false
 }
 
-function New-GitlabObject {
+function global:New-GitlabObject {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Creates PSCustomObject wrappers, not a state-changing operation')]
     [CmdletBinding()]
     param(
@@ -132,6 +132,18 @@ function New-GitlabObject {
                     } else {
                         Write-Warning "$DisplayType does not have an identity field"
                     }
+                }
+            }
+
+            if ($DisplayType -eq 'Gitlab.MergeRequest') {
+                # ForgeCli's contract names the open state `open`, as GitHub does.
+                if ($Wrapper.State -eq 'opened') {
+                    $Wrapper.State = 'open'
+                }
+                # Id is the iid shown in the UI, as on GitHub; the instance-wide id stays as DatabaseId.
+                if ($null -ne $Wrapper.Iid) {
+                    $Wrapper | Add-Member -MemberType NoteProperty -Name 'DatabaseId' -Value $Wrapper.Id -Force
+                    $Wrapper | Add-Member -MemberType NoteProperty -Name 'Id' -Value $Wrapper.Iid -Force
                 }
             }
             $Wrappers.Add($Wrapper)
