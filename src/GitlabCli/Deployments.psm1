@@ -1,3 +1,5 @@
+if ($PSScriptRoot) { Import-Module "$PSScriptRoot/Private/Helpers.psm1" }
+
 # https://docs.gitlab.com/ee/api/deployments.html#list-project-deployments
 function Get-GitlabDeployment {
     [Alias('deploys')]
@@ -78,6 +80,9 @@ function Get-GitlabDeployment {
     }
 
     $Result = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject 'Gitlab.Deployment'
+    foreach ($Deployment in $Result) {
+        $Deployment | Add-Member -NotePropertyName 'Pipeline' -NotePropertyValue ($Deployment.Deployable.Pipeline | New-GitlabObject 'Gitlab.Pipeline') -Force
+    }
 
     if ($Latest) {
         $Result = $Result | Select-Object -First 1

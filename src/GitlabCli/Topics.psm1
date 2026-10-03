@@ -1,3 +1,5 @@
+if ($PSScriptRoot) { Import-Module "$PSScriptRoot/Private/Helpers.psm1" }
+
 # https://docs.gitlab.com/ee/api/topics.html#list-topics
 function Get-GitlabTopic {
     [CmdletBinding(DefaultParameterSetName='Search')]

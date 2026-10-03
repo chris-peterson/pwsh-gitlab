@@ -1,3 +1,5 @@
+if ($PSScriptRoot) { Import-Module "$PSScriptRoot/Private/Helpers.psm1" }
+
 # https://docs.gitlab.com/ee/api/graphql/
 function Invoke-GitlabGraphQL {
     [CmdletBinding(SupportsShouldProcess)]

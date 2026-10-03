@@ -54,6 +54,11 @@ class AccessLevelAttribute : System.Management.Automation.ArgumentTransformation
 
         $validNames = @('guest', 'reporter', 'developer', 'maintainer', 'owner')
 
+        # An unbound [string] parameter is initialized to '' and still passes through this transformation.
+        if ([string]::IsNullOrEmpty($inputData)) {
+            return $inputData
+        }
+
         if ($inputData -in $validNames) {
             return $inputData
         }

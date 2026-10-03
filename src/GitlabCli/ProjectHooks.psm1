@@ -1,3 +1,5 @@
+if ($PSScriptRoot) { Import-Module "$PSScriptRoot/Private/Helpers.psm1" }
+
 # https://docs.gitlab.com/ee/api/projects.html#get-project-hook
 function Get-GitlabProjectHook {
   [CmdletBinding()]

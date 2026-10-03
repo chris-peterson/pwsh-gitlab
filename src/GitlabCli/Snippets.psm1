@@ -1,3 +1,5 @@
+if ($PSScriptRoot) { Import-Module "$PSScriptRoot/Private/Helpers.psm1" }
+
 function Get-GitlabSnippet {
     [CmdletBinding(DefaultParameterSetName='Mine')]
     [OutputType('Gitlab.Snippet')]

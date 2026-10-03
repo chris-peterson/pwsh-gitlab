@@ -1,3 +1,5 @@
+if ($PSScriptRoot) { Import-Module "$PSScriptRoot/Private/Helpers.psm1" }
+
 function Get-GitlabMergeRequest {
     [CmdletBinding(DefaultParameterSetName='ByProjectId')]
     [OutputType('Gitlab.MergeRequest')]

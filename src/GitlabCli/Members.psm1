@@ -1,3 +1,5 @@
+if ($PSScriptRoot) { Import-Module "$PSScriptRoot/Private/Helpers.psm1" }
+
 # https://docs.gitlab.com/ee/api/members.html#valid-access-levels
 function Get-GitlabMemberAccessLevel {
     [CmdletBinding()]

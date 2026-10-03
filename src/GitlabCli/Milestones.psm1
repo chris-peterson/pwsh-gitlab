@@ -1,3 +1,5 @@
+if ($PSScriptRoot) { Import-Module "$PSScriptRoot/Private/Helpers.psm1" }
+
 function Get-GitlabMilestone {
     [CmdletBinding(DefaultParameterSetName = 'ByGroup')]
     [OutputType('Gitlab.Milestone')]

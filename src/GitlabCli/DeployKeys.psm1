@@ -1,3 +1,5 @@
+if ($PSScriptRoot) { Import-Module "$PSScriptRoot/Private/Helpers.psm1" }
+
 function Get-GitlabDeployKey {
   [OutputType('Gitlab.DeployKey')]
   [CmdletBinding()]
