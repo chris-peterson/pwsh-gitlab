@@ -184,7 +184,7 @@ function Update-GitlabRunner {
         $Params.Query.locked = $Locked
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Params.Path)", "update ($($Params.Query | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("$($Params.Path)", "update ($($Params.Query | ConvertTo-GitlabLogText))")) {
         # https://docs.gitlab.com/ee/api/runners.html#update-runners-details
         Invoke-GitlabApi @Params | New-GitlabObject 'Gitlab.Runner'
     }

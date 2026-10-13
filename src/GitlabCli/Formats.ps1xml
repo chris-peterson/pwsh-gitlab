@@ -619,6 +619,45 @@
       </TableControl>
     </View>
     <View>
+      <Name>GitlabPipelineTrigger</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.PipelineTrigger</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader/>
+          <TableColumnHeader>
+            <Label>Owner</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Last Used</Label>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Description</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>OwnerUsername</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>LastUsed</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>GitlabProtectedBranch</Name>
       <ViewSelectedBy>
         <TypeName>Gitlab.ProtectedBranch</TypeName>

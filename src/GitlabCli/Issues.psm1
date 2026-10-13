@@ -196,7 +196,7 @@ function New-GitlabIssue {
         $Request.Body.milestone_id = $Milestone.Id
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "Create new issue ($($Request | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "Create new issue ($($Request | ConvertTo-GitlabLogText))")) {
         $Issue = Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Issue'
         if ($MarkTodoAsRead) {
             $Todo = Get-GitlabTodo | Where-Object TargetUrl -eq $Issue.WebUrl
@@ -337,7 +337,7 @@ function Update-GitlabIssue {
 
     $ProjectId = $Project.Id
 
-    if ($PSCmdlet.ShouldProcess("issue #$IssueId", "update $($Request | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("issue #$IssueId", "update $($Request | ConvertTo-GitlabLogText)")) {
         return Invoke-GitlabApi @Request|
             New-GitlabObject 'Gitlab.Issue'
     }

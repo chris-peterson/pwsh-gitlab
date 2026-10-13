@@ -138,6 +138,13 @@ Describe "New-GitlabObject" {
             $Result.Id | Should -Be 123
         }
 
+        It "Should identify pipeline triggers by Id without a warning" {
+            $Input = [PSCustomObject]@{ id = 7; description = 'notify marketplace' }
+            $Result = $Input | New-GitlabObject 'Gitlab.PipelineTrigger' -WarningVariable Warnings
+            $Result.PipelineTriggerId | Should -Be 7
+            $Warnings | Should -BeNullOrEmpty
+        }
+
         It "Should not create identity alias for types with empty exemption" {
             $Input = [PSCustomObject]@{ key = 'MY_VAR'; value = 'secret' }
             $Result = $Input | New-GitlabObject 'Gitlab.Variable'

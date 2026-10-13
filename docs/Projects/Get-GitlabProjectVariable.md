@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Get-GitlabProjectVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 10/13/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabProjectVariable
 ---
@@ -81,7 +81,7 @@ HelpMessage: ''
 
 ### -Key
 
-The key (name) of a specific variable to retrieve.
+The key (name) of a specific variable to retrieve. When no variable has this key, writes a non-terminating not-found error, which `-ErrorAction SilentlyContinue` suppresses; other failures still throw.
 
 ```yaml
 Type: System.String

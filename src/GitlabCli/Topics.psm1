@@ -88,7 +88,7 @@ function New-GitlabTopic {
         $Request.description = $Description
     }
 
-    if ($PSCmdlet.ShouldProcess("topics", "create ($($Request | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("topics", "create ($($Request | ConvertTo-GitlabLogText))")) {
         Invoke-GitlabApi POST "topics" -Body $Request | New-GitlabObject 'Gitlab.Topic'
     }
 }
@@ -131,7 +131,7 @@ function Update-GitlabTopic {
         $Request.description = $Description
     }
 
-    if ($PSCmdlet.ShouldProcess("topic $TopicId", "update ($($Request | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("topic $TopicId", "update ($($Request | ConvertTo-GitlabLogText))")) {
         Invoke-GitlabApi PUT "topics/$TopicId" -Body $Request | New-GitlabObject 'Gitlab.Topic'
     }
 }
