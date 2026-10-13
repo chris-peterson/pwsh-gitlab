@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Projects/Set-GitlabProjectVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 10/13/2026
 PlatyPS schema version: 2024-05-01
 title: Set-GitlabProjectVariable
 ---
@@ -31,6 +31,8 @@ Set-GitlabProjectVariable [-Key] <string> [-Value] <string> [-ProjectId <string>
 
 Sets a project-level CI/CD variable. If the variable already exists, it is updated; otherwise, a new variable is created. Variables can be protected, masked, and have variable expansion enabled or disabled.
 
+Pipe projects (for example, from `Get-GitlabProject`) to set the same variable on each of them. The value is never shown in `-WhatIf`, `-Confirm`, or `-Verbose` output.
+
 ## EXAMPLES
 
 ### Example 1: Create a simple variable
@@ -56,6 +58,13 @@ Set-GitlabProjectVariable -Key "MY_VAR" -Value '$OTHER_VAR' -NoExpand
 ```
 
 Creates a variable where the value is not expanded (useful for values containing $ characters).
+
+### Example 4: Set a variable on several projects
+
+```powershell
+'mygroup/app-one', 'mygroup/app-two' | Get-GitlabProject |
+    Set-GitlabProjectVariable DEPLOY_TOKEN $Token -Protect $true -Mask $true -NoExpand
+```
 
 ## PARAMETERS
 
@@ -230,7 +239,7 @@ HelpMessage: ''
 
 ### -Value
 
-The value of the variable.
+The value of the variable. Required, except under `-WhatIf`, where it may be empty because it comes from a step that was itself only previewed.
 
 ```yaml
 Type: System.String

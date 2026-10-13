@@ -56,7 +56,7 @@ function Clear-GitlabTodo {
         $Label = "todo #$TodoId"
     }
 
-    if ($PSCmdlet.ShouldProcess($Label, "$($Request | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess($Label, "$($Request | ConvertTo-GitlabLogText)")) {
         Invoke-GitlabApi @Request | Out-Null
         Write-Host "Marked $Label as done"
     }

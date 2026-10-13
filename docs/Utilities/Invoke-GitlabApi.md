@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Utilities/Invoke-GitlabApi
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 11/18/2026
 PlatyPS schema version: 2024-05-01
 title: Invoke-GitlabApi
 ---
@@ -336,6 +336,8 @@ Returns a PSObject.
 ## NOTES
 
 This cmdlet supports `-WhatIf` for non-GET requests. When using `-WhatIf`, the request parameters are displayed without making the actual API call.
+
+The request shown by `-WhatIf`, `-Confirm`, and `-Verbose` leaves out the `Authorization` header, and credential fields (such as `token` and `password`) and the values of masked, hidden, or secret-looking CI/CD variables in the request and response read `********`.
 
 For user impersonation, set `$global:GitlabUserImpersonationSession` with `Username` and `Token` properties.
 

@@ -66,6 +66,7 @@ $global:GitlabIdentityPropertyNameExemptions = @{
     'Gitlab.Pipeline'                  = 'Id'
     'Gitlab.PipelineBridge'            = 'Id'
     'Gitlab.PipelineDefinition'        = ''
+    'Gitlab.PipelineTrigger'           = 'Id'
     'Gitlab.PipelineSchedule'          = 'Id'
     'Gitlab.PipelineScheduleVariable'  = ''
     'Gitlab.PipelineVariable'          = ''

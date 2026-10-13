@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ServiceAccounts/New-GitlabServiceAccount
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 07/21/2026
+ms.date: 10/13/2026
 PlatyPS schema version: 2024-05-01
 title: New-GitlabServiceAccount
 ---
@@ -185,7 +185,7 @@ HelpMessage: ''
 
 ### -Username
 
-The username for the service account.
+The username for the service account. GitLab reserves usernames starting with `duo-`, `duo_`, `ai-`, or `ai_` for its AI entities, so the cmdlet rejects them before sending a request, including under `-WhatIf`.
 
 ```yaml
 Type: System.String

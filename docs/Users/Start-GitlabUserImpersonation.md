@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Start-GitlabUserImpersonation
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 10/14/2026
 PlatyPS schema version: 2024-05-01
 title: Start-GitlabUserImpersonation
 ---
@@ -180,4 +180,5 @@ N/A
 
 - [GitLab Users API](https://docs.gitlab.com/ee/api/users.html)
 - [Stop-GitlabUserImpersonation](Stop-GitlabUserImpersonation.md)
+- [Use-GitlabToken](Use-GitlabToken.md)
 - [Get-GitlabUser](Get-GitlabUser.md)

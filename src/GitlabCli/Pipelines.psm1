@@ -339,7 +339,7 @@ function New-GitlabPipeline {
         Body       = $Request
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create new pipeline $($Request | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create new pipeline $($Request | ConvertTo-GitlabLogText)")) {
         # https://docs.gitlab.com/ee/api/pipelines.html#create-a-new-pipeline
         $Pipeline = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject 'Gitlab.Pipeline'
 
