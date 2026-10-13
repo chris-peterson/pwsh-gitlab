@@ -61,12 +61,8 @@ function Get-GitlabSnippet {
                 $Snippet = Invoke-GitlabApi GET "snippets/$SnippetId"
             }
             ByAuthor {
-                try {
-                    Start-GitlabUserImpersonation -UserId $AuthorUsername
-                    return Get-GitlabSnippet -Mine -CreatedAfter:$CreatedAfter -CreatedBefore:$CreatedBefore -IncludeContent:$IncludeContent -MaxPages:$MaxPages -SiteUrl:$SiteUrl
-                }
-                finally {
-                    Stop-GitlabUserImpersonation
+                return Use-GitlabToken -User $AuthorUsername {
+                    Get-GitlabSnippet -Mine -CreatedAfter:$CreatedAfter -CreatedBefore:$CreatedBefore -IncludeContent:$IncludeContent -MaxPages:$MaxPages -SiteUrl:$SiteUrl
                 }
             }
         }

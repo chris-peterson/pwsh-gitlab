@@ -211,3 +211,28 @@ class GitlabTimezone : System.Management.Automation.IValidateSetValuesGenerator 
     }
 }
 
+
+# ============================================================================
+# Validation Attributes
+# ============================================================================
+# These classes implement ValidateArgumentsAttribute to provide reusable
+# argument checks that run at parameter binding, so -WhatIf catches them too.
+#
+# Usage:
+#   [ServiceAccountUsername()]
+#   [string] $Username
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Service Account Username
+# ----------------------------------------------------------------------------
+# Used by: New-GitlabServiceAccount, Set-GitlabServiceAccount
+class ServiceAccountUsernameAttribute : System.Management.Automation.ValidateArgumentsAttribute {
+    [void] Validate([object] $arguments, [System.Management.Automation.EngineIntrinsics] $engineIntrinsics) {
+        if ($arguments -match '^(duo|ai)[-_]') {
+            throw [System.Management.Automation.ValidationMetadataException]::new(
+                "Username '$arguments' starts with a prefix GitLab reserves for its AI entities (duo-, duo_, ai-, ai_)"
+            )
+        }
+    }
+}

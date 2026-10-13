@@ -207,7 +207,7 @@ function New-GitlabPersonalAccessToken {
         $Request.Body.expires_at = $ExpiresAt
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Request.Path)", "create personal access token $($Request | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("$($Request.Path)", "create personal access token $($Request | ConvertTo-GitlabLogText)")) {
         $Response = Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.NewPersonalAccessToken'
         if ($CopyToClipboard) {
             $Response.Token | Set-Clipboard

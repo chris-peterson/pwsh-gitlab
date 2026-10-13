@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Members/Set-GitlabGroupMember
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 07/21/2026
+ms.date: 10/13/2026
 PlatyPS schema version: 2024-05-01
 title: Set-GitlabGroupMember
 ---
@@ -20,15 +20,17 @@ Sets or updates a user's membership in a GitLab group.
 ### __AllParameterSets
 
 ```
-Set-GitlabGroupMember [-UserId] <string> [-AccessLevel] <string> -SiteUrl <string>
- [-GroupId <string>] [-WhatIf] [-Confirm]
+Set-GitlabGroupMember [-UserId] <string> [-AccessLevel] <string> [-GroupId <string>]
+ [-SiteUrl <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
 
 ## DESCRIPTION
 
-Sets a user's access level for a GitLab group. If the user is already a member, their access level is updated. If they are not a member, they are added with the specified access level. This cmdlet provides an idempotent way to manage group membership.
+Sets a user's access level for a GitLab group. A member who already has that access level is returned without a request. A member with a different level is updated, and a user who isn't a member is added. Any lookup failure other than not-found is raised rather than treated as "not a member".
+
+A `Gitlab.User` or `Gitlab.ServiceAccount` can be piped in as the user.
 
 ## EXAMPLES
 
@@ -126,7 +128,7 @@ Aliases: []
 ParameterSets:
 - Name: (All)
   Position: Named
-  IsRequired: true
+  IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -150,7 +152,7 @@ ParameterSets:
   Position: 0
   IsRequired: true
   ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
+  ValueFromPipelineByPropertyName: true
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []
@@ -187,6 +189,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
+
+### System.String
+
+The user, by property name (`UserId` or `Username`), so a `Gitlab.User` or `Gitlab.ServiceAccount` can be piped in.
 
 ## OUTPUTS
 

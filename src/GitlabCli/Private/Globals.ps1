@@ -16,6 +16,23 @@ $global:GitlabDefaultMaxPages           = 10
 $global:GitlabSearchResultsDefaultLimit = 100
 
 # ============================================================================
+# Secret Handling
+# Values of these request/response fields are left out of -WhatIf, -Confirm,
+# and -Verbose output; set a field to $true to show its values
+# ============================================================================
+
+$global:GitlabLogSecretValues = [ordered]@{
+    access_token  = $false
+    password      = $false
+    private_token = $false
+    runners_token = $false
+    secret        = $false
+    secret_token  = $false
+    token         = $false
+    value         = $false
+}
+
+# ============================================================================
 # Session State
 # ============================================================================
 
@@ -66,6 +83,7 @@ $global:GitlabIdentityPropertyNameExemptions = @{
     'Gitlab.Pipeline'                  = 'Id'
     'Gitlab.PipelineBridge'            = 'Id'
     'Gitlab.PipelineDefinition'        = ''
+    'Gitlab.PipelineTrigger'           = 'Id'
     'Gitlab.PipelineSchedule'          = 'Id'
     'Gitlab.PipelineScheduleVariable'  = ''
     'Gitlab.PipelineVariable'          = ''

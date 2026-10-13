@@ -177,6 +177,11 @@
   * [Update-GitlabPipelineSchedule](PipelineSchedules/Update-GitlabPipelineSchedule.md)
   * [Update-GitlabPipelineScheduleVariable](PipelineSchedules/Update-GitlabPipelineScheduleVariable.md)
 
+* [PipelineTriggers](PipelineTriggers/)
+  * [Get-GitlabPipelineTrigger](PipelineTriggers/Get-GitlabPipelineTrigger.md)
+  * [New-GitlabPipelineTrigger](PipelineTriggers/New-GitlabPipelineTrigger.md)
+  * [Remove-GitlabPipelineTrigger](PipelineTriggers/Remove-GitlabPipelineTrigger.md)
+
 * [ProjectAccessTokens](ProjectAccessTokens/)
   * [Get-GitlabProjectAccessToken](ProjectAccessTokens/Get-GitlabProjectAccessToken.md)
   * [Invoke-GitlabProjectAccessTokenRotation](ProjectAccessTokens/Invoke-GitlabProjectAccessTokenRotation.md)
@@ -248,7 +253,10 @@
 * [ServiceAccounts](ServiceAccounts/)
   * [Get-GitlabServiceAccount](ServiceAccounts/Get-GitlabServiceAccount.md)
   * [New-GitlabServiceAccount](ServiceAccounts/New-GitlabServiceAccount.md)
+  * [New-GitlabServiceAccountPersonalAccessToken](ServiceAccounts/New-GitlabServiceAccountPersonalAccessToken.md)
   * [Remove-GitlabServiceAccount](ServiceAccounts/Remove-GitlabServiceAccount.md)
+  * [Remove-GitlabServiceAccountPersonalAccessToken](ServiceAccounts/Remove-GitlabServiceAccountPersonalAccessToken.md)
+  * [Set-GitlabServiceAccount](ServiceAccounts/Set-GitlabServiceAccount.md)
   * [Update-GitlabServiceAccount](ServiceAccounts/Update-GitlabServiceAccount.md)
 
 * [Snippets](Snippets/)
@@ -285,6 +293,7 @@
   * [Start-GitlabUserImpersonation](Users/Start-GitlabUserImpersonation.md)
   * [Stop-GitlabUserImpersonation](Users/Stop-GitlabUserImpersonation.md)
   * [Unblock-GitlabUser](Users/Unblock-GitlabUser.md)
+  * [Use-GitlabToken](Users/Use-GitlabToken.md)
 
 * [Utilities](Utilities/)
   * [Get-FilteredObject](Utilities/Get-FilteredObject.md)
