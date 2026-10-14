@@ -364,12 +364,12 @@ function Stop-GitlabUserImpersonation {
                 Method  = 'DELETE'
                 Path    = "users/$($global:GitlabUserImpersonationSession.UserId)/impersonation_tokens/$($global:GitlabUserImpersonationSession.Id)"
             }
+            $Username = $global:GitlabUserImpersonationSession.Username
             # NOTE: important that we clear first as the revoke API requires admin
             $global:GitlabUserImpersonationSession = $null
             try {
-                if (Invoke-GitlabApi @Parameters) {
-                    Write-Host "Impersonation session ($($global:GitlabUserImpersonationSession.Username)) stopped"
-                }
+                Invoke-GitlabApi @Parameters | Out-Null
+                Write-Verbose "Impersonation session ($Username) stopped"
             }
             catch {
                 $Ex = $_
@@ -381,6 +381,123 @@ function Stop-GitlabUserImpersonation {
         }
         else {
             Write-Verbose "No impersonation session started.  Call 'Start-GitlabUserImpersonation' to start one."
+        }
+    }
+}
+
+function Use-GitlabToken {
+    # a piped service account also has a Username, so its set must win binding
+    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName='ServiceAccount')]
+    param (
+        [Parameter(Position=0, Mandatory)]
+        [scriptblock]
+        $ScriptBlock,
+
+        [Parameter(ParameterSetName='User', Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('UserId')]
+        [Alias('Username')]
+        [Alias('EmailAddress')]
+        [string]
+        $User,
+
+        [Parameter(ParameterSetName='ServiceAccount', Mandatory, ValueFromPipeline)]
+        [PSTypeName('Gitlab.ServiceAccount')]
+        $ServiceAccount,
+
+        [Parameter(ParameterSetName='Token', Mandatory)]
+        [string]
+        $Token,
+
+        [Parameter(ParameterSetName='ServiceAccount')]
+        [string[]]
+        $Scope = 'api',
+
+        [Parameter(ParameterSetName='ServiceAccount')]
+        [GitlabDate()][string]
+        $ExpiresAt,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    process {
+        if ($global:GitlabUserImpersonationSession) {
+            throw "An impersonation session for '$($global:GitlabUserImpersonationSession.Username)' is already active; stop it before starting another"
+        }
+
+        switch ($PSCmdlet.ParameterSetName) {
+            User {
+                Start-GitlabUserImpersonation -UserId $User
+
+                if ($WhatIfPreference) {
+                    # -WhatIf reported the start; run the block as the caller so its changes are reported too
+                    & $ScriptBlock
+                    $null = $PSCmdlet.ShouldProcess($User, 'stop impersonation')
+                    return
+                }
+
+                try {
+                    & $ScriptBlock
+                }
+                finally {
+                    Stop-GitlabUserImpersonation
+                }
+            }
+            ServiceAccount {
+                if (-not $ServiceAccount.GroupId) {
+                    throw "Service account '$($ServiceAccount.Username)' has no GroupId; get it with Get-GitlabServiceAccount -GroupId or Set-GitlabServiceAccount"
+                }
+
+                $TokenRequest = @{
+                    GroupId          = $ServiceAccount.GroupId
+                    ServiceAccountId = $ServiceAccount.Id
+                    Name             = 'GitlabCli Use-GitlabToken'
+                    Scope            = $Scope
+                    ExpiresAt        = $ExpiresAt ? $ExpiresAt : (Get-Date).AddDays(1).ToString('yyyy-MM-dd')
+                }
+                $ServiceAccountToken = New-GitlabServiceAccountPersonalAccessToken @TokenRequest
+
+                if (-not $ServiceAccountToken) {
+                    if (-not $WhatIfPreference) {
+                        throw "No personal access token was created for service account '$($ServiceAccount.Username)'"
+                    }
+                    # -WhatIf reported the mint; run the block as the caller so its changes are reported too
+                    & $ScriptBlock
+                    $null = $PSCmdlet.ShouldProcess("service account $($ServiceAccount.Id)", "revoke the personal access token created for this block")
+                    return
+                }
+
+                try {
+                    $global:GitlabUserImpersonationSession = @{
+                        Id       = $ServiceAccountToken.Id
+                        UserId   = $ServiceAccount.Id
+                        Username = $ServiceAccount.Username
+                        Token    = $ServiceAccountToken.Token
+                    }
+                    & $ScriptBlock
+                }
+                finally {
+                    # clear first so the revoke runs as the caller
+                    $global:GitlabUserImpersonationSession = $null
+                    Remove-GitlabServiceAccountPersonalAccessToken -GroupId $ServiceAccount.GroupId -ServiceAccountId $ServiceAccount.Id -TokenId $ServiceAccountToken.Id -Force
+                }
+            }
+            Token {
+                try {
+                    $global:GitlabUserImpersonationSession = @{
+                        Token = $Token
+                    }
+                    # fails fast on a bad token, and names its owner in verbose output
+                    $Owner = Get-GitlabUser -Me
+                    $global:GitlabUserImpersonationSession.UserId   = $Owner.Id
+                    $global:GitlabUserImpersonationSession.Username = $Owner.Username
+                    & $ScriptBlock
+                }
+                finally {
+                    $global:GitlabUserImpersonationSession = $null
+                }
+            }
         }
     }
 }

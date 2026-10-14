@@ -30,14 +30,10 @@ function Resolve-GitlabVariable {
             if ($Context.ProjectId) {
                 Write-Verbose "...project id: $($Context.ProjectId)"
                 try {
-                    $ProjectVar = Get-GitlabProjectVariable -ProjectId $Context.ProjectId $Key
+                    $ProjectVar = Get-GitlabProjectVariable -ProjectId $Context.ProjectId $Key -ErrorAction SilentlyContinue
                 }
                 catch {
-                    if ($_.Exception.Response.StatusCode -eq 'NotFound') {
-                        Write-Debug "Didn't find project variables for $($Context.ProjectId)"
-                    } else {
-                        Write-Warning "Error looking for project variable: $($_.Exception.Message)"
-                    }
+                    Write-Warning "Error looking for project variable: $($_.Exception.Message)"
                 }
                 if ($ProjectVar) {
                     return $ProjectVar.Value
@@ -47,14 +43,10 @@ function Resolve-GitlabVariable {
             } elseif ($Context.GroupId) {
                 Write-Verbose "...group id: $($Context.GroupId)"
                 try {
-                    $GroupVar = Get-GitlabGroupVariable $Context.GroupId $Key
+                    $GroupVar = Get-GitlabGroupVariable $Context.GroupId $Key -ErrorAction SilentlyContinue
                 }
                 catch {
-                    if ($_.Exception.Response.StatusCode.ToString() -eq 'NotFound') {
-                        Write-Debug "Didn't find group variables for $($Context.GroupId)"
-                    } else {
-                        Write-Warning "Error looking for group variable: $($_.Exception.Message)"
-                    }
+                    Write-Warning "Error looking for group variable: $($_.Exception.Message)"
                 }
                 Write-Verbose "...$GroupVar"
                 if ($GroupVar) {

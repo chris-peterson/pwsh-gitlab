@@ -80,7 +80,7 @@ function Search-Gitlab {
         $Request.Query.search = "filename:$Filename $($Request.Query.search)"
     }
 
-    if ($PSCmdlet.ShouldProcess("search", "$($Request | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("search", "$($Request | ConvertTo-GitlabLogText)")) {
         $Results = Invoke-GitlabApi @Request | New-GitlabObject $DisplayType
 
         if ($Scope -eq 'blobs') {

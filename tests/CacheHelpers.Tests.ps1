@@ -321,3 +321,23 @@ Describe 'Test-GroupIdInCache' {
         $Result | Should -BeTrue
     }
 }
+
+Describe 'Save-GitlabSiteCache under -WhatIf' {
+    BeforeAll {
+        $SavedConfigurationPath = $global:GitlabConfigurationPath
+        $global:GitlabConfigurationPath = Join-Path $TestDrive 'gitlabcli/config.yml'
+    }
+
+    AfterAll {
+        $global:GitlabConfigurationPath = $SavedConfigurationPath
+    }
+
+    It 'Should write the cache, since it is local state rather than a change to GitLab' {
+        $global:GitlabCache = @{ 'gitlab.example.com' = @{ projects = @{ 'g/p' = 42 } } }
+        & {
+            $WhatIfPreference = $true
+            Save-GitlabSiteCache -ResolvedSiteUrl 'gitlab.example.com'
+        }
+        Get-GitlabCachePath -ResolvedSiteUrl 'gitlab.example.com' | Should -Exist
+    }
+}

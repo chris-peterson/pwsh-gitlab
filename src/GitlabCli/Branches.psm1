@@ -142,7 +142,7 @@ function New-GitlabBranch {
         }
     }
 
-    if ($PSCmdlet.ShouldProcess("project $($ProjectId)", "$($Request | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("project $($ProjectId)", "$($Request | ConvertTo-GitlabLogText)")) {
         Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Branch'
     }
 }
@@ -257,7 +257,7 @@ function Protect-GitlabBranch {
         $Request.Body.allowed_to_unprotect = @($AllowedToUnprotect | ConvertTo-SnakeCase)
     }
 
-    if ($PSCmdlet.ShouldProcess("Project $ProjectId", "protect branch name $Branch with `nArguments:`n$($Request | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("Project $ProjectId", "protect branch name $Branch with `nArguments:`n$($Request | ConvertTo-GitlabLogText)")) {
         # https://docs.gitlab.com/ee/api/protected_branches.html#protect-repository-branches
         Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.ProtectedBranch'
     }
@@ -294,7 +294,7 @@ function UnProtect-GitlabBranch {
         Path       = "projects/$ProjectId/protected_branches/$($Name | ConvertTo-UrlEncoded)"
     }
 
-    if ($PSCmdlet.ShouldProcess("Project $ProjectId", "unprotect branch $($Name) with `nArguments:`n$($Request | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("Project $ProjectId", "unprotect branch $($Name) with `nArguments:`n$($Request | ConvertTo-GitlabLogText)")) {
         # https://docs.gitlab.com/ee/api/protected_branches.html#unprotect-repository-branches
         Invoke-GitlabApi @Request | Out-Null
         Write-Host "Unprotected branch '$Name'"

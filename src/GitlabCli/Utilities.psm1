@@ -107,12 +107,22 @@ function Invoke-GitlabApi {
         $RestMethodParams.Body        = $Body | ConvertTo-Json
     }
 
-    $HostOutput = "$($RestMethodParams | ConvertTo-Json)"
+    $Display = [ordered]@{
+        Method = $HttpMethod
+        Uri    = $RestMethodParams.Uri
+    }
+    if ($Body.Count -gt 0) {
+        $Display.Body = $Body
+    }
+    if ($OutFile) {
+        $Display.OutFile = $OutFile
+    }
+    $HostOutput = $Display | ConvertTo-GitlabLogText
 
     if ($HttpMethod -eq 'GET' -or $PSCmdlet.ShouldProcess($RestMethodParams.Uri, $HostOutput)) {
         Write-Verbose "Request: $HostOutput"
         $Result = Invoke-RestMethod @RestMethodParams
-        Write-Verbose "Response: $($Result | ConvertTo-Json -Depth 10)"
+        Write-Verbose "Response: $($Result | ConvertTo-GitlabLogText)"
         if($MaxPages -gt 1) {
             # Unwrap pagination container
             $Result | ForEach-Object {
