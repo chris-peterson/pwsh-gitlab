@@ -20,6 +20,7 @@ function Search-Gitlab {
         $Search,
 
         [Parameter()]
+        [ValidateRange('Positive')]
         [uint]
         $MaxResults = $global:GitlabSearchResultsDefaultLimit,
 
@@ -47,7 +48,7 @@ function Search-Gitlab {
         $MaxResults = [uint]::MaxValue
     }
 
-    $PageSize = 20
+    $PageSize = [Math]::Min([uint]100, $MaxResults)
     $MaxPages = [Math]::Max(1, $MaxResults / $PageSize)
     $Request = @{
         HttpMethod = 'GET'

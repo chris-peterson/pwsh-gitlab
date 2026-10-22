@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Search/Search-Gitlab
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 02/26/2026
+ms.date: 10/21/2026
 PlatyPS schema version: 2024-05-01
 title: Search-Gitlab
 ---
@@ -146,7 +146,7 @@ HelpMessage: ''
 
 ### -MaxResults
 
-The maximum number of results to return. Defaults to the global GitlabSearchResultsDefaultLimit.
+The maximum number of results to return, at least 1. Defaults to the global GitlabSearchResultsDefaultLimit.
 
 ```yaml
 Type: System.UInt32
