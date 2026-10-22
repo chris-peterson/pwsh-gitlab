@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.174.0'
+    ModuleVersion = '1.174.1'
 
     RequiredModules = @(
         @{
@@ -31,10 +31,8 @@
             )
             ReleaseNotes =
 @'
-### Changes
-- Added `New-GitlabMergeRequestNote` (alias `Add-GitlabMergeRequestNote`) to add comments to merge requests, matching the existing `New-GitlabIssueNote` cmdlet.
-- Added `Update-GitlabIssueNote`, `Remove-GitlabIssueNote`, `Update-GitlabMergeRequestNote`, and `Remove-GitlabMergeRequestNote`, rounding out full CRUD support for issue and merge request comments. `Get-GitlabIssueNote` also gains a `-NoteId` parameter to retrieve a single note, matching `Get-GitlabMergeRequestNote`.
-- `Update-GitlabProject` gains a `-WikiAccessLevel` parameter (`disabled`, `private`, or `enabled`) to turn a project's wiki on or off.
+### Bug Fixes
+- [`Search-Gitlab` returns every hit of a search with up to 100 results on advanced-search instances](https://github.com/chris-peterson/pwsh-gitlab/issues/180). Advanced search can repeat hits from an earlier page in place of hits it never returns, so `Search-Gitlab` now requests up to 100 results per page (GitLab's maximum), capped at `-MaxResults`, and those result sets arrive as a single page. `-MaxResults 0` is rejected.
 '@
         }
     }

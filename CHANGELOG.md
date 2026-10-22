@@ -4,6 +4,8 @@ All notable changes to GitlabCli are recorded here, newest first.
 
 ## [Unreleased]
 
+## [1.174.1] - 2026-10-22
+
 ### Bug Fixes
 - [`Search-Gitlab` returns every hit of a search with up to 100 results on advanced-search instances](https://github.com/chris-peterson/pwsh-gitlab/issues/180). Advanced search can repeat hits from an earlier page in place of hits it never returns, so `Search-Gitlab` now requests up to 100 results per page (GitLab's maximum), capped at `-MaxResults`, and those result sets arrive as a single page. `-MaxResults 0` is rejected.
 
