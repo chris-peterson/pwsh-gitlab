@@ -204,7 +204,7 @@ function Start-GitlabJob {
         $GitlabApiArguments.Body.job_variables_attributes = $Variables | ConvertTo-GitlabVariables
     }
 
-    if ($PSCmdlet.ShouldProcess("project $ProjectId", "start job $($GitlabApiArguments | ConvertTo-Json -Depth 3)")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "start job $($GitlabApiArguments | ConvertTo-GitlabLogText -Depth 3)")) {
         try {
             # https://docs.gitlab.com/ee/api/jobs.html#run-a-job
             $Job = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.Job"
@@ -283,7 +283,7 @@ function Test-GitlabPipelineDefinition {
         $Params.HttpMethod = 'GET'
     }
 
-    if ($PSCmdlet.ShouldProcess("project $ProjectId", "Validate CI definition ($($Params | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "Validate CI definition ($($Params | ConvertTo-GitlabLogText))")) {
         Invoke-GitlabApi @Params |
             New-GitlabObject 'Gitlab.PipelineDefinition' |
             Get-FilteredObject $Select

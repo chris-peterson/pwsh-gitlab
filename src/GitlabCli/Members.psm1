@@ -117,7 +117,7 @@ function Set-GitlabGroupMember {
         [string]
         $GroupId = '.',
 
-        [Parameter(Position=0, Mandatory)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Username')]
         [string]
         $UserId,
@@ -127,34 +127,43 @@ function Set-GitlabGroupMember {
         [string]
         $AccessLevel,
 
-        [Parameter(Mandatory)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
 
-    $Existing = $Null
-    try {
-        $Existing = Get-GitlabGroupMember -GroupId $GroupId -UserId $UserId
-    }
-    catch {
-        Write-Verbose "User '$UserId' is not a member of group '$GroupId'"
-    }
-
-    if ($Existing) {
-        # https://docs.gitlab.com/ee/api/members.html#edit-a-member-of-a-group-or-project
-        $Request = @{
-            HttpMethod = 'PUT'
-            Path       = "groups/$($Existing.GroupId)/members/$($Existing.Id)"
-            Body      = @{
-                access_level = Get-GitlabMemberAccessLevel $AccessLevel
+    process {
+        $Existing = $Null
+        try {
+            $Existing = Get-GitlabGroupMember -GroupId $GroupId -UserId $UserId
+        }
+        catch {
+            if (-not (Test-GitlabNotFound $_)) {
+                throw
             }
+            Write-Verbose "User '$UserId' is not a member of group '$GroupId'"
         }
-        if ($PSCmdlet.ShouldProcess("Group '$GroupId'", "update '$($Existing.Name)' membership to '$AccessLevel'")) {
-            Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Member'
-        }
-    } else {
-        if ($PSCmdlet.ShouldProcess("Group '$GroupId'", "add '$UserId' as '$AccessLevel'")) {
-            Add-GitlabGroupMember -GroupId $GroupId -UserId $UserId -AccessLevel $AccessLevel
+
+        $AccessLevelLiteral = Get-GitlabMemberAccessLevel $AccessLevel
+        if ($Existing -and $Existing.AccessLevel -eq $AccessLevelLiteral) {
+            Write-Verbose "'$($Existing.Username)' is already '$AccessLevel' in group '$GroupId'"
+            $Existing
+        } elseif ($Existing) {
+            # https://docs.gitlab.com/ee/api/members.html#edit-a-member-of-a-group-or-project
+            $Request = @{
+                HttpMethod = 'PUT'
+                Path       = "groups/$($Existing.GroupId)/members/$($Existing.Id)"
+                Body      = @{
+                    access_level = $AccessLevelLiteral
+                }
+            }
+            if ($PSCmdlet.ShouldProcess("Group '$GroupId'", "update '$($Existing.Name)' membership to '$AccessLevel'")) {
+                Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Member'
+            }
+        } else {
+            if ($PSCmdlet.ShouldProcess("Group '$GroupId'", "add '$UserId' as '$AccessLevel'")) {
+                Add-GitlabGroupMember -GroupId $GroupId -UserId $UserId -AccessLevel $AccessLevel
+            }
         }
     }
 }
@@ -291,7 +300,7 @@ function Set-GitlabProjectMember {
         [string]
         $ProjectId = '.',
 
-        [Parameter(Position=0, Mandatory)]
+        [Parameter(Position=0, Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Username')]
         [string]
         $UserId,
@@ -301,34 +310,43 @@ function Set-GitlabProjectMember {
         [string]
         $AccessLevel,
 
-        [Parameter(Mandatory)]
+        [Parameter()]
         [string]
         $SiteUrl
     )
 
-    $Existing = $Null
-    try {
-        $Existing = Get-GitlabProjectMember -ProjectId @ProjectId -UserId $UserId
-    }
-    catch {
-        Write-Verbose "User '$UserId' is not a member of '$ProjectId'"
-    }
-
-    if ($Existing) {
-        # https://docs.gitlab.com/ee/api/members.html#edit-a-member-of-a-group-or-project
-        $Request = @{
-            HttpMethod = 'PUT'
-            Path       = "projects/$($Existing.ProjectId)/members/$($Existing.Id)"
-            Body      = @{
-                access_level = Get-GitlabMemberAccessLevel $AccessLevel
+    process {
+        $Existing = $Null
+        try {
+            $Existing = Get-GitlabProjectMember -ProjectId $ProjectId -UserId $UserId
+        }
+        catch {
+            if (-not (Test-GitlabNotFound $_)) {
+                throw
             }
+            Write-Verbose "User '$UserId' is not a member of '$ProjectId'"
         }
-        if ($PSCmdlet.ShouldProcess("Project '$ProjectId'", "update '$($Existing.Name)' membership to '$AccessLevel'")) {
-            Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Member'
-        }
-    } else {
-        if ($PSCmdlet.ShouldProcess("Project '$ProjectId'", "add '$UserId' as '$AccessLevel'")) {
-            Add-GitlabProjectMember -ProjectId $ProjectId -UserId $UserId -AccessLevel $AccessLevel
+
+        $AccessLevelLiteral = Get-GitlabMemberAccessLevel $AccessLevel
+        if ($Existing -and $Existing.AccessLevel -eq $AccessLevelLiteral) {
+            Write-Verbose "'$($Existing.Username)' is already '$AccessLevel' in '$ProjectId'"
+            $Existing
+        } elseif ($Existing) {
+            # https://docs.gitlab.com/ee/api/members.html#edit-a-member-of-a-group-or-project
+            $Request = @{
+                HttpMethod = 'PUT'
+                Path       = "projects/$($Existing.ProjectId)/members/$($Existing.Id)"
+                Body      = @{
+                    access_level = $AccessLevelLiteral
+                }
+            }
+            if ($PSCmdlet.ShouldProcess("Project '$ProjectId'", "update '$($Existing.Name)' membership to '$AccessLevel'")) {
+                Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.Member'
+            }
+        } else {
+            if ($PSCmdlet.ShouldProcess("Project '$ProjectId'", "add '$UserId' as '$AccessLevel'")) {
+                Add-GitlabProjectMember -ProjectId $ProjectId -UserId $UserId -AccessLevel $AccessLevel
+            }
         }
     }
 }

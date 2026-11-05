@@ -295,7 +295,7 @@ function New-GitlabMergeRequest {
         Body = $Body
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create merge request ($($Body | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create merge request ($($Body | ConvertTo-GitlabLogText))")) {
         $MergeRequest = Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.MergeRequest'
         if ($MarkTodoAsRead) {
             $Todo = Get-GitlabTodo | Where-Object TargetUrl -eq $MergeRequest.WebUrl
@@ -376,7 +376,7 @@ function Merge-GitlabMergeRequest {
     if ($MergeWhenPipelineSucceeds) {
         $Request.Body.merge_when_pipeline_succeeds = $MergeWhenPipelineSucceeds
     }
-    if ($PSCmdlet.ShouldProcess("project $ProjectId", "merge ($($Request.Body | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("project $ProjectId", "merge ($($Request.Body | ConvertTo-GitlabLogText))")) {
         Invoke-GitlabApi @Request | New-GitlabObject 'Gitlab.MergeRequest'
     }
 }
@@ -515,7 +515,7 @@ function Update-GitlabMergeRequest {
         $Request.milestone_id = $MilestoneId
     }
 
-    if ($PSCmdlet.ShouldProcess("MR $MergeRequestId in project $ProjectId", "update $($Request | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("MR $MergeRequestId in project $ProjectId", "update $($Request | ConvertTo-GitlabLogText)")) {
         $Project = Get-GitlabProject -ProjectId $ProjectId
         if ($Project.Archived) {
             # https://gitlab.com/gitlab-org/gitlab-foss/-/issues/51258
@@ -717,7 +717,7 @@ function Update-GitlabMergeRequestApprovalConfiguration {
         $Request.selective_code_owner_removals = $SelectiveCodeOwnerRemovals
     }
 
-    if ($PSCmdlet.ShouldProcess($Project.PathWithNamespace, "update merge request approval settings to $($Request | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess($Project.PathWithNamespace, "update merge request approval settings to $($Request | ConvertTo-GitlabLogText)")) {
         Invoke-GitlabApi POST "projects/$($Project.Id)/approvals" -Body $Request | New-GitlabObject
     }
 }
@@ -806,7 +806,7 @@ function New-GitlabMergeRequestApprovalRule {
         applies_to_all_protected_branches = 'true'
     }
 
-    if ($PSCmdlet.ShouldProcess($Project.PathWithNamespace, "create new merge request approval rule $($Rule | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess($Project.PathWithNamespace, "create new merge request approval rule $($Rule | ConvertTo-GitlabLogText)")) {
         # https://docs.gitlab.com/ee/api/merge_request_approvals.html#create-project-level-rule
         Invoke-GitlabApi POST $Resource -Body $Rule | New-GitlabObject 'Gitlab.MergeRequestApprovalRule'
     }

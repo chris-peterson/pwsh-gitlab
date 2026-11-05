@@ -366,7 +366,7 @@ function New-GitlabProject {
         $Request.build_timeout = $BuildTimeout
     }
 
-    if ($PSCmdlet.ShouldProcess($NamespaceId, "create new project '$ProjectName' $($Request | ConvertTo-Json)" )) {
+    if ($PSCmdlet.ShouldProcess($NamespaceId, "create new project '$ProjectName' $($Request | ConvertTo-GitlabLogText)" )) {
         # https://docs.gitlab.com/ee/api/projects.html#create-project
         $Project = Invoke-GitlabApi POST "projects" -Body $Request | New-GitlabObject 'Gitlab.Project'
 
@@ -498,7 +498,7 @@ function Update-GitlabProject {
         $Request.wiki_access_level = $WikiAccessLevel
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "update project ($($Request | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "update project ($($Request | ConvertTo-GitlabLogText))")) {
         Invoke-GitlabApi PUT "projects/$($Project.Id)" -Body $Request |
             New-GitlabObject 'Gitlab.Project'
     }
@@ -592,8 +592,16 @@ function Get-GitlabProjectVariable {
     $ProjectId = Resolve-GitlabProjectId $ProjectId
 
     if ($Key) {
-        # https://docs.gitlab.com/ee/api/project_level_variables.html#get-a-single-variable
-        Invoke-GitlabApi GET "projects/$ProjectId/variables/$Key" | New-GitlabObject 'Gitlab.Variable'
+        try {
+            # https://docs.gitlab.com/ee/api/project_level_variables.html#get-a-single-variable
+            Invoke-GitlabApi GET "projects/$ProjectId/variables/$Key" | New-GitlabObject 'Gitlab.Variable'
+        }
+        catch {
+            if (-not (Test-GitlabNotFound $_)) {
+                throw
+            }
+            Write-Error -Message "Variable '$Key' not found in project $ProjectId" -Category ObjectNotFound -TargetObject $Key
+        }
     }
     else {
         # https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
@@ -614,6 +622,8 @@ function Set-GitlabProjectVariable {
         $Key,
 
         [Parameter(Mandatory, Position=1, ValueFromPipelineByPropertyName)]
+        [AllowNull()]
+        [AllowEmptyString()]
         [string]
         $Value,
 
@@ -638,40 +648,41 @@ function Set-GitlabProjectVariable {
         $SiteUrl
     )
 
-    if ($NoExpand) {
-        $ExpandVariables = $false
-    }
-
-    $Request = @{
-        value = $Value
-        raw   = -not $ExpandVariables
-    }
-    if ($PSBoundParameters.ContainsKey('Protect')) {
-        $Request.protected = $Protect
-    }
-    if ($PSBoundParameters.ContainsKey('Mask')) {
-        $Request.masked = $Mask
-    }
-
-    $Project = Get-GitlabProject $ProjectId
-
-    try {
-        Get-GitlabProjectVariable -ProjectId $($Project.Id) -Key $Key | Out-Null
-        $IsExistingVariable = $true
-    }
-    catch {
-        $IsExistingVariable = $false
-    }
-
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "set $($IsExistingVariable ? 'existing' : 'new') project variable ($Key) $(($Request | ConvertTo-Json))")) {
-        if ($IsExistingVariable) {
-            # https://docs.gitlab.com/ee/api/project_level_variables.html#update-variable
-            Invoke-GitlabApi PUT "projects/$($Project.Id)/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable'
+    process {
+        # under -WhatIf the value can come from a creation that was itself skipped
+        if ([string]::IsNullOrEmpty($Value) -and -not $WhatIfPreference) {
+            throw "Value for project variable '$Key' is empty"
         }
-        else {
-            $Request.key = $Key
-            # https://docs.gitlab.com/ee/api/project_level_variables.html#create-a-variable
-            Invoke-GitlabApi POST "projects/$($Project.Id)/variables" -Body $Request | New-GitlabObject 'Gitlab.Variable'
+
+        if ($NoExpand) {
+            $ExpandVariables = $false
+        }
+
+        $Request = @{
+            value = $Value
+            raw   = -not $ExpandVariables
+        }
+        if ($PSBoundParameters.ContainsKey('Protect')) {
+            $Request.protected = $Protect
+        }
+        if ($PSBoundParameters.ContainsKey('Mask')) {
+            $Request.masked = $Mask
+        }
+
+        $Project = Get-GitlabProject $ProjectId
+
+        $IsExistingVariable = [bool](Get-GitlabProjectVariable -ProjectId $Project.Id -Key $Key -ErrorAction SilentlyContinue)
+
+        if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "set $($IsExistingVariable ? 'existing' : 'new') project variable ($Key) $($Request | ConvertTo-GitlabLogText)")) {
+            if ($IsExistingVariable) {
+                # https://docs.gitlab.com/ee/api/project_level_variables.html#update-variable
+                Invoke-GitlabApi PUT "projects/$($Project.Id)/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable'
+            }
+            else {
+                $Request.key = $Key
+                # https://docs.gitlab.com/ee/api/project_level_variables.html#create-a-variable
+                Invoke-GitlabApi POST "projects/$($Project.Id)/variables" -Body $Request | New-GitlabObject 'Gitlab.Variable'
+            }
         }
     }
 }

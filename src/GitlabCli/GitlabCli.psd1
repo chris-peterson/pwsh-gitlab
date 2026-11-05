@@ -48,6 +48,7 @@
     CompatiblePSEditions = @('Core', 'Desktop')
 
     ScriptsToProcess = @(
+        'Private/Functions/ApiHelpers.ps1'
         'Private/Functions/BranchHelpers.ps1'
         'Private/Functions/CacheHelpers.ps1'
         'Private/Functions/StringHelpers.ps1'
@@ -89,6 +90,7 @@
         'PersonalAccessTokens.psm1'
         'Pipelines.psm1'
         'PipelineSchedules.psm1'
+        'PipelineTriggers.psm1'
         'ProjectAccessTokens.psm1'
         'ProjectDeployKeys.psm1'
         'Projects.psm1'
@@ -270,7 +272,10 @@
         # Service Accounts
         'Get-GitlabServiceAccount'
         'New-GitlabServiceAccount'
+        'New-GitlabServiceAccountPersonalAccessToken'
         'Remove-GitlabServiceAccount'
+        'Remove-GitlabServiceAccountPersonalAccessToken'
+        'Set-GitlabServiceAccount'
         'Update-GitlabServiceAccount'
 
         # Pipelines
@@ -293,6 +298,11 @@
         'Enable-GitlabPipelineSchedule'
         'Disable-GitlabPipelineSchedule'
         'Remove-GitlabPipelineSchedule'
+
+        # Pipeline Triggers
+        'Get-GitlabPipelineTrigger'
+        'New-GitlabPipelineTrigger'
+        'Remove-GitlabPipelineTrigger'
 
         # Jobs
         'Get-GitlabJob'
@@ -356,6 +366,7 @@
         'Remove-GitlabUser'
         'Start-GitlabUserImpersonation'
         'Stop-GitlabUserImpersonation'
+        'Use-GitlabToken'
         'Unblock-GitlabUser'
 
         # Events
@@ -415,6 +426,7 @@
         'Review-GitlabMergeRequest'
         'Revoke-GitlabGroupAccessToken'
         'Revoke-GitlabProjectAccessToken'
+        'Revoke-GitlabServiceAccountPersonalAccessToken'
         'Rotate-GitlabPersonalAccessToken'
         'Rotate-GitlabProjectAccessToken'
         'Share-GitlabGroupWithGroup'

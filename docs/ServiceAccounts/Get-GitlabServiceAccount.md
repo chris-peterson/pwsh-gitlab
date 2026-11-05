@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/ServiceAccounts/Get-GitlabServiceAccount
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 10/13/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabServiceAccount
 ---
@@ -20,15 +20,15 @@ Retrieves GitLab service accounts at the instance or group level.
 ### Instance (Default)
 
 ```
-Get-GitlabServiceAccount [[-ServiceAccountId] <int>] [-SiteUrl <string>] [-MaxPages <uint>] [-All]
- [<CommonParameters>]
+Get-GitlabServiceAccount [[-ServiceAccountId] <int>] [-Username <string>] [-SiteUrl <string>]
+ [-MaxPages <uint>] [-All] [<CommonParameters>]
 ```
 
 ### Group
 
 ```
-Get-GitlabServiceAccount [[-ServiceAccountId] <int>] -GroupId <string> [-SiteUrl <string>]
- [-MaxPages <uint>] [-All] [<CommonParameters>]
+Get-GitlabServiceAccount [[-ServiceAccountId] <int>] -GroupId <string> [-Username <string>]
+ [-SiteUrl <string>] [-MaxPages <uint>] [-All] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -159,6 +159,27 @@ HelpMessage: ''
 ### -SiteUrl
 
 The URL of the GitLab instance. If not specified, uses the default configured site.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Username
+
+Return only the account with this username. Reads every page. When no account matches, writes a non-terminating not-found error, which `-ErrorAction SilentlyContinue` suppresses.
 
 ```yaml
 Type: System.String

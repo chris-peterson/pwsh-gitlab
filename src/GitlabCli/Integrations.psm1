@@ -23,7 +23,7 @@ function Get-GitlabProjectIntegration {
     if ($Integration) {
         $Resource += "/$Integration"
     }
-    # https://docs.gitlab.com/ee/api/integrations.html#list-all-active-integrations
+    # https://docs.gitlab.com/api/project_integrations/#list-all-active-integrations
     Invoke-GitlabApi GET $Resource |
         New-GitlabObject 'Gitlab.ProjectIntegration' |
         Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId -PassThru
@@ -59,7 +59,7 @@ function Update-GitlabProjectIntegration {
     # https://docs.gitlab.com/api/project_integrations
     $Resource = "projects/$($Project.Id)/integrations/$Integration"
 
-    if ($PSCmdlet.ShouldProcess("$Resource", "update $($Settings | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("$Resource", "update $($Settings | ConvertTo-GitlabLogText)")) {
         Invoke-GitlabApi PUT $Resource -Body $Settings | New-GitlabObject 'Gitlab.ProjectIntegration'
     }
 }
@@ -227,7 +227,7 @@ function Enable-GitlabProjectSlackNotification {
         Write-Debug "Legacy integration check failed: $_"
     }
 
-    if ($PSCmdlet.ShouldProcess("$Action slack notifications for $ProjectId", "notify $Channel ($($Settings | ConvertTo-Json)))")) {
+    if ($PSCmdlet.ShouldProcess("$Action slack notifications for $ProjectId", "notify $Channel ($($Settings | ConvertTo-GitlabLogText)))")) {
         if ($ExistingLegacyIntegration) {
             Remove-GitlabProjectIntegration -ProjectId $ProjectId -Integration 'slack'
         }
