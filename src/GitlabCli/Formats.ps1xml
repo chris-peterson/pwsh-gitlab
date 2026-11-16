@@ -1092,7 +1092,7 @@
                 <PropertyName>Key</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <ScriptBlock>($_.Masked -or $_.Hidden) ? '********' : $_.Value</ScriptBlock>
+                <PropertyName>DisplayValue</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Protected</PropertyName>
@@ -1116,6 +1116,35 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader/>
+          <TableColumnHeader>
+            <Label>Value</Label>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Key</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>DisplayValue</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>GitlabPipelineScheduleVariable</Name>
+      <ViewSelectedBy>
+        <TypeName>Gitlab.PipelineScheduleVariable</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader/>
+          <TableColumnHeader>
+            <Label>Value</Label>
+          </TableColumnHeader>
           <TableColumnHeader/>
         </TableHeaders>
         <TableRowEntries>
@@ -1125,7 +1154,10 @@
                 <PropertyName>Key</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Value</PropertyName>
+                <PropertyName>DisplayValue</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>VariableType</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

@@ -2,6 +2,7 @@ BeforeAll {
     . $PSScriptRoot/../src/GitlabCli/Private/Functions/StringHelpers.ps1
     . $PSScriptRoot/../src/GitlabCli/Private/Globals.ps1
     . $PSScriptRoot/../src/GitlabCli/Private/Functions/ObjectHelpers.ps1
+    . $PSScriptRoot/../src/GitlabCli/Private/Functions/SensitiveValueHelpers.ps1
 }
 
 Describe "New-GitlabObject" {
@@ -106,6 +107,19 @@ Describe "New-GitlabObject" {
             $Result = $Input | New-GitlabObject
             $Result.Url | Should -Be 'https://gitlab.com/target'
             $Result.TargetUrl | Should -Be 'https://gitlab.com/target'
+        }
+    }
+
+    Context "Sensitive properties" {
+        It "Should add a Display alias for each property named in -MaskIfSensitive" {
+            $Result = [PSCustomObject]@{ key = 'DB_PASS'; value = 'p@ss'; masked = $true } | New-GitlabObject -MaskIfSensitive Value
+            $Result.DisplayValue | Should -Be '********'
+            $Result.Value | Should -Be 'p@ss'
+        }
+
+        It "Should not add an alias without -MaskIfSensitive" {
+            $Result = [PSCustomObject]@{ key = 'DB_PASS'; value = 'p@ss'; masked = $true } | New-GitlabObject
+            $Result.PSObject.Properties['DisplayValue'] | Should -BeNullOrEmpty
         }
     }
 

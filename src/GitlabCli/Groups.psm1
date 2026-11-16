@@ -237,11 +237,11 @@ function Get-GitlabGroupVariable {
 
     if ($Key) {
         # https://docs.gitlab.com/ee/api/group_level_variables.html#show-variable-details
-        Invoke-GitlabApi GET "groups/$GroupId/variables/$Key" | New-GitlabObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "groups/$GroupId/variables/$Key" | New-GitlabObject 'Gitlab.Variable' -MaskIfSensitive Value
     }
     else {
         # https://docs.gitlab.com/ee/api/group_level_variables.html#list-group-variables
-        Invoke-GitlabApi GET "groups/$GroupId/variables" -MaxPages $MaxPages | New-GitlabObject 'Gitlab.Variable'
+        Invoke-GitlabApi GET "groups/$GroupId/variables" -MaxPages $MaxPages | New-GitlabObject 'Gitlab.Variable' -MaskIfSensitive Value
     }
 }
 
@@ -312,15 +312,15 @@ function Set-GitlabGroupVariable {
         $Request.masked = $true
     }
 
-    if ($PSCmdlet.ShouldProcess("group $GroupId", "set $($IsExistingVariable ? 'existing' : 'new') variable $Key to $(($Request | Hide-GitlabSensitiveValues).value)")) {
+    if ($PSCmdlet.ShouldProcess("group $GroupId", "set $($IsExistingVariable ? 'existing' : 'new') variable $Key to $(($Request + @{ key = $Key } | Hide-GitlabSensitiveValues).value)")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/group_level_variables.html#update-variable
-            Invoke-GitlabApi PUT "groups/$GroupId/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable'
+            Invoke-GitlabApi PUT "groups/$GroupId/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable' -MaskIfSensitive Value
         }
         else {
             $Request.key = $Key
             # https://docs.gitlab.com/ee/api/group_level_variables.html#create-variable
-            Invoke-GitlabApi POST "groups/$GroupId/variables" -Body $Request | New-GitlabObject 'Gitlab.Variable'
+            Invoke-GitlabApi POST "groups/$GroupId/variables" -Body $Request | New-GitlabObject 'Gitlab.Variable' -MaskIfSensitive Value
         }
     }
 }
