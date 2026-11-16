@@ -301,14 +301,18 @@ function Set-GitlabGroupVariable {
     }
 
     try {
-        Get-GitlabGroupVariable $GroupId $Key | Out-Null
+        $ExistingVariable = Get-GitlabGroupVariable $GroupId $Key
         $IsExistingVariable = $True
     }
     catch {
         $IsExistingVariable = $False
     }
+    if ($IsExistingVariable -and $ExistingVariable.Masked -and -not $PSBoundParameters.ContainsKey('Mask')) {
+        # preserve the variable's masked flag on update
+        $Request.masked = $true
+    }
 
-    if ($PSCmdlet.ShouldProcess("group $GroupId", "set $($IsExistingVariable ? 'existing' : 'new') variable $Key to $Value")) {
+    if ($PSCmdlet.ShouldProcess("group $GroupId", "set $($IsExistingVariable ? 'existing' : 'new') variable $Key to $(($Request | Hide-GitlabSensitiveValues).value)")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/group_level_variables.html#update-variable
             Invoke-GitlabApi PUT "groups/$GroupId/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable'

@@ -656,14 +656,18 @@ function Set-GitlabProjectVariable {
     $Project = Get-GitlabProject $ProjectId
 
     try {
-        Get-GitlabProjectVariable -ProjectId $($Project.Id) -Key $Key | Out-Null
+        $ExistingVariable = Get-GitlabProjectVariable -ProjectId $($Project.Id) -Key $Key
         $IsExistingVariable = $true
     }
     catch {
         $IsExistingVariable = $false
     }
+    if ($IsExistingVariable -and $ExistingVariable.Masked -and -not $PSBoundParameters.ContainsKey('Mask')) {
+        # preserve the variable's masked flag on update
+        $Request.masked = $true
+    }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "set $($IsExistingVariable ? 'existing' : 'new') project variable ($Key) $(($Request | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "set $($IsExistingVariable ? 'existing' : 'new') project variable ($Key) $($Request | Hide-GitlabSensitiveValues | ConvertTo-Json)")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/project_level_variables.html#update-variable
             Invoke-GitlabApi PUT "projects/$($Project.Id)/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable'

@@ -1078,7 +1078,9 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader/>
-          <TableColumnHeader/>
+          <TableColumnHeader>
+            <Label>Value</Label>
+          </TableColumnHeader>
           <TableColumnHeader/>
           <TableColumnHeader/>
           <TableColumnHeader/>
@@ -1090,7 +1092,7 @@
                 <PropertyName>Key</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Value</PropertyName>
+                <ScriptBlock>($_.Masked -or $_.Hidden) ? '********' : $_.Value</ScriptBlock>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Protected</PropertyName>

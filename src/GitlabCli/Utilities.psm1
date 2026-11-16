@@ -107,12 +107,19 @@ function Invoke-GitlabApi {
         $RestMethodParams.Body        = $Body | ConvertTo-Json
     }
 
-    $HostOutput = "$($RestMethodParams | ConvertTo-Json)"
+    $DisplayParams = $RestMethodParams.Clone()
+    if ($Body.Count -gt 0) {
+        $DisplayParams.Body = $Body
+    }
+    $HostOutput = $DisplayParams | Hide-GitlabSensitiveValues | ConvertTo-Json -Depth 10
 
     if ($HttpMethod -eq 'GET' -or $PSCmdlet.ShouldProcess($RestMethodParams.Uri, $HostOutput)) {
         Write-Verbose "Request: $HostOutput"
         $Result = Invoke-RestMethod @RestMethodParams
-        Write-Verbose "Response: $($Result | ConvertTo-Json -Depth 10)"
+        if ($VerbosePreference -ne 'SilentlyContinue') {
+            # responses can carry secrets (new access tokens, masked variable values)
+            Write-Verbose "Response: $($Result | Hide-GitlabSensitiveValues | ConvertTo-Json -Depth 10)"
+        }
         if($MaxPages -gt 1) {
             # Unwrap pagination container
             $Result | ForEach-Object {

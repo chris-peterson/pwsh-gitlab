@@ -57,6 +57,7 @@
         'Private/Functions/MergeRequestHelpers.ps1'
         'Private/Functions/ObjectHelpers.ps1'
         'Private/Functions/PaginationHelpers.ps1'
+        'Private/Functions/SensitiveValueHelpers.ps1'
         'Private/Functions/RunnerHelpers.ps1'
         'Private/Validations.ps1'
         'Private/Globals.ps1'
