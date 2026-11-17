@@ -593,11 +593,11 @@ function Get-GitlabProjectVariable {
 
     if ($Key) {
         # https://docs.gitlab.com/ee/api/project_level_variables.html#get-a-single-variable
-        Invoke-GitlabApi GET "projects/$ProjectId/variables/$Key" | New-GitlabObject 'Gitlab.Variable' -MaskIfSensitive Value
+        Invoke-GitlabApi GET "projects/$ProjectId/variables/$Key" | New-GitlabObject 'Gitlab.Variable'
     }
     else {
         # https://docs.gitlab.com/ee/api/project_level_variables.html#list-project-variables
-        Invoke-GitlabApi GET "projects/$ProjectId/variables" -MaxPages $MaxPages | New-GitlabObject 'Gitlab.Variable' -MaskIfSensitive Value
+        Invoke-GitlabApi GET "projects/$ProjectId/variables" -MaxPages $MaxPages | New-GitlabObject 'Gitlab.Variable'
     }
 }
 
@@ -667,15 +667,17 @@ function Set-GitlabProjectVariable {
         $Request.masked = $true
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "set $($IsExistingVariable ? 'existing' : 'new') project variable ($Key) $($Request + @{ key = $Key } | Hide-GitlabSensitiveValues | ConvertTo-Json)")) {
+    # the update path carries the key too, so redaction can see it
+    $Request.key = $Key
+
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "set $($IsExistingVariable ? 'existing' : 'new') project variable ($Key) $($Request | Hide-GitlabSensitiveValues | ConvertTo-Json)")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/project_level_variables.html#update-variable
-            Invoke-GitlabApi PUT "projects/$($Project.Id)/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable' -MaskIfSensitive Value
+            Invoke-GitlabApi PUT "projects/$($Project.Id)/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable'
         }
         else {
-            $Request.key = $Key
             # https://docs.gitlab.com/ee/api/project_level_variables.html#create-a-variable
-            Invoke-GitlabApi POST "projects/$($Project.Id)/variables" -Body $Request | New-GitlabObject 'Gitlab.Variable' -MaskIfSensitive Value
+            Invoke-GitlabApi POST "projects/$($Project.Id)/variables" -Body $Request | New-GitlabObject 'Gitlab.Variable'
         }
     }
 }

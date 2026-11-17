@@ -84,13 +84,7 @@ function New-GitlabObject {
 
         [Parameter()]
         [switch]
-        $PreserveCasing,
-
-        # properties whose value can be a secret; each gets a Display<Name> alias
-        # that table views show in its place
-        [Parameter()]
-        [string[]]
-        $MaskIfSensitive
+        $PreserveCasing
     )
     Begin {
         $Wrappers = New-Object 'Collections.Generic.List[object]'
@@ -124,8 +118,9 @@ function New-GitlabObject {
             # aliases for common property names
             $Wrapper | Add-CoalescedProperty -From @('WebUrl', 'TargetUrl') -To 'Url'
 
-            foreach ($Name in $MaskIfSensitive) {
-                $Wrapper | Add-GitlabDisplayProperty -Name $Name
+            # table views show DisplayValue in place of Value, so a secret stays off the console
+            if ($Wrapper.PSObject.Properties['Value']) {
+                $Wrapper | Add-GitlabDisplayValue
             }
 
             if ($DisplayType) {

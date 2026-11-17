@@ -94,7 +94,7 @@ Describe "Variable table views" {
                     . "$ModuleRoot/Private/Functions/SensitiveValueHelpers.ps1"
                     Update-TypeData   -AppendPath "$ModuleRoot/Types.ps1xml"
                     Update-FormatData -AppendPath "$ModuleRoot/Formats.ps1xml"
-                    $Response | New-GitlabObject $DisplayType -MaskIfSensitive Value -WarningAction SilentlyContinue | Format-Table | Out-String -Width 200
+                    $Response | New-GitlabObject $DisplayType -WarningAction SilentlyContinue | Format-Table | Out-String -Width 200
                 }).AddArgument($ModuleRoot).AddArgument($DisplayType).AddArgument($Response)
                 $PowerShell.Invoke() -join ''
             } finally {

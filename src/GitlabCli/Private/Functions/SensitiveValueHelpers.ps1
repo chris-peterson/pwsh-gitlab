@@ -87,35 +87,27 @@ function Test-GitlabSensitiveVariable {
 
 <#
 .SYNOPSIS
-Adds a Display<Name> property: the named property's value, or ******** when
-the variable is sensitive.
+Adds DisplayValue: the object's Value, or ******** when the object is a
+sensitive variable.
 
 .DESCRIPTION
-Table views show Display<Name> in place of <Name>, so a secret never reaches
-the console by default. <Name> keeps the real value for callers that ask for
-it. The alias is a ScriptProperty, so the sensitivity test runs only when
-something reads it.
+New-GitlabObject adds it to every object with a Value, and table views show
+it in place of Value, so a secret never reaches the console by default. Value
+keeps the real value for callers that ask for it. DisplayValue is a
+ScriptProperty, so the sensitivity test runs only when something reads it.
 #>
-function Add-GitlabDisplayProperty {
+function Add-GitlabDisplayValue {
     [CmdletBinding()]
     param(
         [Parameter(ValueFromPipeline)]
-        $InputObject,
-
-        [Parameter(Mandatory)]
-        [string]
-        $Name
+        $InputObject
     )
 
     Process {
-        # the getter runs wherever the object is read, outside this module's
-        # scope, so it carries the test with it rather than calling it by name
-        $IsSensitive = ${function:Test-GitlabSensitiveVariable}
         $Getter = {
-            $Value = $this.$Name
             $Properties = $this.PSObject.Properties.Match('*', 'NoteProperty')
-            ((& $IsSensitive $Properties) -and -not [string]::IsNullOrEmpty("$Value")) ? '********' : $Value
-        }.GetNewClosure()
-        $InputObject | Add-Member -MemberType ScriptProperty -Name "Display$Name" -Value $Getter -Force
+            ((Test-GitlabSensitiveVariable $Properties) -and -not [string]::IsNullOrEmpty("$($this.Value)")) ? '********' : $this.Value
+        }
+        $InputObject | Add-Member -MemberType ScriptProperty -Name 'DisplayValue' -Value $Getter -Force
     }
 }

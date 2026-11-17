@@ -163,12 +163,12 @@ Describe "Test-GitlabSensitiveVariable" {
     }
 }
 
-Describe "Add-GitlabDisplayProperty" {
+Describe "Add-GitlabDisplayValue" {
 
     It "Should hide a sensitive value and keep Value intact" {
         $Variable = [PSCustomObject]@{ Key = 'DEPLOY_TOKEN'; Value = 'glpat-123'; Masked = $false }
 
-        $Variable | Add-GitlabDisplayProperty -Name Value
+        $Variable | Add-GitlabDisplayValue
 
         $Variable.DisplayValue | Should -Be '********'
         $Variable.Value         | Should -Be 'glpat-123'
@@ -177,14 +177,14 @@ Describe "Add-GitlabDisplayProperty" {
     It "Should show a non-sensitive value" {
         $Variable = [PSCustomObject]@{ Key = 'REGION'; Value = 'us-west-2'; Masked = $false }
 
-        $Variable | Add-GitlabDisplayProperty -Name Value
+        $Variable | Add-GitlabDisplayValue
 
         $Variable.DisplayValue | Should -Be 'us-west-2'
     }
 
     It "Should follow changes made after it was added" {
         $Variable = [PSCustomObject]@{ Key = 'REGION'; Value = 'us-west-2'; Masked = $false }
-        $Variable | Add-GitlabDisplayProperty -Name Value
+        $Variable | Add-GitlabDisplayValue
 
         $Variable.Masked = $true
 

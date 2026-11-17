@@ -316,7 +316,7 @@ function Get-GitlabPipelineScheduleVariable {
     $ProjectId = Resolve-GitlabProjectId $ProjectId
     $PipelineSchedule = Get-GitlabPipelineSchedule -ProjectId $ProjectId -PipelineScheduleId $PipelineScheduleId
 
-    $Wrapper = $PipelineSchedule.Variables | New-GitlabObject "Gitlab.PipelineScheduleVariable" -MaskIfSensitive Value
+    $Wrapper = $PipelineSchedule.Variables | New-GitlabObject "Gitlab.PipelineScheduleVariable"
     $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId
     $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
 
@@ -374,7 +374,7 @@ function New-GitlabPipelineScheduleVariable {
     }
 
     if ($PSCmdlet.ShouldProcess("project $ProjectId schedule #$PipelineScheduleId", "create variable '$Key'")) {
-        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.PipelineScheduleVariable" -MaskIfSensitive Value
+        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.PipelineScheduleVariable"
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
         $Wrapper
@@ -429,7 +429,7 @@ function Update-GitlabPipelineScheduleVariable {
     }
 
     if ($PSCmdlet.ShouldProcess("project $ProjectId schedule #$PipelineScheduleId", "update variable '$Key'")) {
-        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.PipelineScheduleVariable" -MaskIfSensitive Value
+        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.PipelineScheduleVariable"
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
         $Wrapper
@@ -467,7 +467,7 @@ function Remove-GitlabPipelineScheduleVariable {
     }
 
     if ($PSCmdlet.ShouldProcess("project $ProjectId schedule #$PipelineScheduleId", "delete variable '$Key'")) {
-        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.PipelineScheduleVariable" -MaskIfSensitive Value
+        $Wrapper = Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject "Gitlab.PipelineScheduleVariable"
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'ProjectId' -Value $ProjectId
         $Wrapper | Add-Member -MemberType 'NoteProperty' -Name 'PipelineScheduleId' -Value $PipelineSchedule.Id
         $Wrapper

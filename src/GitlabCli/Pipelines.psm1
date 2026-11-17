@@ -229,7 +229,7 @@ function Get-GitlabPipelineVariable {
         $KeyValues | Where-Object Key -eq $Variable | Select-Object -ExpandProperty Value
     } else {
         if ($As -eq 'KeyValuePairs') {
-            $KeyValues | New-GitlabObject 'Gitlab.PipelineVariable' -MaskIfSensitive Value
+            $KeyValues | New-GitlabObject 'Gitlab.PipelineVariable'
         } elseif ($As -eq 'Object') {
             $Obj = New-Object PSObject
             $KeyValues.Key | ForEach-Object {
