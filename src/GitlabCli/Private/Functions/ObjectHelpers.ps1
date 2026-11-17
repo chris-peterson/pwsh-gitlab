@@ -118,6 +118,11 @@ function New-GitlabObject {
             # aliases for common property names
             $Wrapper | Add-CoalescedProperty -From @('WebUrl', 'TargetUrl') -To 'Url'
 
+            # table views show DisplayValue in place of Value, so a secret stays off the console
+            if ($Wrapper.PSObject.Properties['Value']) {
+                $Wrapper | Add-GitlabDisplayValue
+            }
+
             if ($DisplayType) {
                 $Wrapper.PSTypeNames.Insert(0, $DisplayType)
 

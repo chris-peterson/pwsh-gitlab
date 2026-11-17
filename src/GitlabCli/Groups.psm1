@@ -312,13 +312,15 @@ function Set-GitlabGroupVariable {
         $Request.masked = $true
     }
 
+    # the update path carries the key too, so redaction can see it
+    $Request.key = $Key
+
     if ($PSCmdlet.ShouldProcess("group $GroupId", "set $($IsExistingVariable ? 'existing' : 'new') variable $Key to $(($Request | Hide-GitlabSensitiveValues).value)")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/group_level_variables.html#update-variable
             Invoke-GitlabApi PUT "groups/$GroupId/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable'
         }
         else {
-            $Request.key = $Key
             # https://docs.gitlab.com/ee/api/group_level_variables.html#create-variable
             Invoke-GitlabApi POST "groups/$GroupId/variables" -Body $Request | New-GitlabObject 'Gitlab.Variable'
         }

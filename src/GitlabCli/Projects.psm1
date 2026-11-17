@@ -667,13 +667,15 @@ function Set-GitlabProjectVariable {
         $Request.masked = $true
     }
 
+    # the update path carries the key too, so redaction can see it
+    $Request.key = $Key
+
     if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "set $($IsExistingVariable ? 'existing' : 'new') project variable ($Key) $($Request | Hide-GitlabSensitiveValues | ConvertTo-Json)")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/project_level_variables.html#update-variable
             Invoke-GitlabApi PUT "projects/$($Project.Id)/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable'
         }
         else {
-            $Request.key = $Key
             # https://docs.gitlab.com/ee/api/project_level_variables.html#create-a-variable
             Invoke-GitlabApi POST "projects/$($Project.Id)/variables" -Body $Request | New-GitlabObject 'Gitlab.Variable'
         }

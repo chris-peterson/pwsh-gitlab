@@ -70,6 +70,13 @@ Describe "Hide-GitlabSensitiveValues" {
             (@{ key = 'REGION'; value = 'us-west-2'; masked = $false } | Hide-GitlabSensitiveValues).value | Should -Be 'us-west-2'
         }
 
+        It "Should redact an unmasked variable whose key looks like a secret" {
+            $Result = @{ key = 'DEPLOY_TOKEN'; value = 'glpat-123'; masked = $false } | Hide-GitlabSensitiveValues
+
+            $Result.value | Should -Be '********'
+            $Result.key   | Should -Be 'DEPLOY_TOKEN'
+        }
+
         It "Should redact hidden variables" {
             (@{ value = 'p@ss'; masked_and_hidden = $true } | Hide-GitlabSensitiveValues).value | Should -Be '********'
         }
@@ -124,5 +131,63 @@ Describe "Hide-GitlabSensitiveValues" {
 
             $Response.token | Should -Be 'glpat-NEW'
         }
+    }
+}
+
+Describe "Test-GitlabSensitiveVariable" {
+
+    It "Should treat <Key> as sensitive" -ForEach @(
+        @{ Key = 'CI_TOKEN' }
+        @{ Key = 'app_secret' }
+        @{ Key = 'DB_PASSWORD' }
+        @{ Key = 'FTP_PASSWD' }
+        @{ Key = 'SSH_KEY' }
+        @{ Key = 'AWS_CREDENTIALS' }
+        @{ Key = 'PRIVATE_URL' }
+    ) {
+        Test-GitlabSensitiveVariable ([PSCustomObject]@{ key = $Key; value = 'v' }).PSObject.Properties | Should -BeTrue
+    }
+
+    It "Should treat <Key> as not sensitive" -ForEach @(
+        @{ Key = 'REGION' }
+        @{ Key = 'IMAGE_TAG' }
+    ) {
+        Test-GitlabSensitiveVariable ([PSCustomObject]@{ key = $Key; value = 'v' }).PSObject.Properties | Should -BeFalse
+    }
+
+    It "Should treat a <Flag> variable as sensitive" -ForEach @(
+        @{ Flag = 'Masked' }
+        @{ Flag = 'Hidden' }
+    ) {
+        Test-GitlabSensitiveVariable ([PSCustomObject]@{ Key = 'REGION'; Value = 'v'; $Flag = $true }).PSObject.Properties | Should -BeTrue
+    }
+}
+
+Describe "Add-GitlabDisplayValue" {
+
+    It "Should hide a sensitive value and keep Value intact" {
+        $Variable = [PSCustomObject]@{ Key = 'DEPLOY_TOKEN'; Value = 'glpat-123'; Masked = $false }
+
+        $Variable | Add-GitlabDisplayValue
+
+        $Variable.DisplayValue | Should -Be '********'
+        $Variable.Value         | Should -Be 'glpat-123'
+    }
+
+    It "Should show a non-sensitive value" {
+        $Variable = [PSCustomObject]@{ Key = 'REGION'; Value = 'us-west-2'; Masked = $false }
+
+        $Variable | Add-GitlabDisplayValue
+
+        $Variable.DisplayValue | Should -Be 'us-west-2'
+    }
+
+    It "Should follow changes made after it was added" {
+        $Variable = [PSCustomObject]@{ Key = 'REGION'; Value = 'us-west-2'; Masked = $false }
+        $Variable | Add-GitlabDisplayValue
+
+        $Variable.Masked = $true
+
+        $Variable.DisplayValue | Should -Be '********'
     }
 }

@@ -4,6 +4,9 @@ All notable changes to GitlabCli are recorded here, newest first.
 
 ## [Unreleased]
 
+### Bug Fixes
+- [Secrets no longer print to the console](https://github.com/chris-peterson/pwsh-gitlab/issues/178). `-WhatIf` and `-Verbose` show the access token and other credential fields as `********`. Project, group, pipeline, and pipeline schedule variables show `********` in place of the value when the variable is masked or hidden, or when its key looks like a secret (contains `TOKEN`, `SECRET`, `PASSWORD`, `PASSWD`, `KEY`, `CREDENTIAL`, or `PRIVATE`). Only the display changes: `.Value` still returns the real value. `Set-GitlabProjectVariable` and `Set-GitlabGroupVariable` also keep an existing variable masked when it's updated without `-Mask`.
+
 ## [1.174.1] - 2026-10-22
 
 ### Bug Fixes
