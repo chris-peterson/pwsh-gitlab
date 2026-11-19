@@ -1,3 +1,5 @@
+if ($PSScriptRoot) { Import-Module "$PSScriptRoot/Private/Helpers.psm1" }
+
 function Get-GitlabKey {
     [CmdletBinding(DefaultParameterSetName = 'ById')]
     [OutputType('Gitlab.SSHKey')]

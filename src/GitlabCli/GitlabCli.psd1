@@ -48,18 +48,6 @@
     CompatiblePSEditions = @('Core', 'Desktop')
 
     ScriptsToProcess = @(
-        'Private/Functions/ApiHelpers.ps1'
-        'Private/Functions/BranchHelpers.ps1'
-        'Private/Functions/CacheHelpers.ps1'
-        'Private/Functions/StringHelpers.ps1'
-        'Private/Functions/ConfigurationHelpers.ps1'
-        'Private/Functions/GroupHelpers.ps1'
-        'Private/Functions/JobHelpers.ps1'
-        'Private/Functions/MergeRequestHelpers.ps1'
-        'Private/Functions/ObjectHelpers.ps1'
-        'Private/Functions/PaginationHelpers.ps1'
-        'Private/Functions/SensitiveValueHelpers.ps1'
-        'Private/Functions/RunnerHelpers.ps1'
         'Private/Validations.ps1'
         'Private/Globals.ps1'
         'Private/Transformations.ps1'
@@ -68,6 +56,7 @@
     FormatsToProcess = @('Formats.ps1xml')
 
     NestedModules = @(
+        'Private/Helpers.psm1'
         'AuditEvents.psm1'
         'Branches.psm1'
         'Commits.psm1'

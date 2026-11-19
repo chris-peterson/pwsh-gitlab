@@ -139,6 +139,18 @@ function New-GitlabObject {
                     }
                 }
             }
+
+            if ($DisplayType -eq 'Gitlab.MergeRequest') {
+                # ForgeCli's contract names the open state `open`, as GitHub does.
+                if ($Wrapper.State -eq 'opened') {
+                    $Wrapper.State = 'open'
+                }
+                # Id is the iid shown in the UI, as on GitHub; the instance-wide id stays as DatabaseId.
+                if ($null -ne $Wrapper.Iid) {
+                    $Wrapper | Add-Member -MemberType NoteProperty -Name 'DatabaseId' -Value $Wrapper.Id -Force
+                    $Wrapper | Add-Member -MemberType NoteProperty -Name 'Id' -Value $Wrapper.Iid -Force
+                }
+            }
             $Wrappers.Add($Wrapper)
         }
     }

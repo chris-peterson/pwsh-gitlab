@@ -1,3 +1,5 @@
+if ($PSScriptRoot) { Import-Module "$PSScriptRoot/Private/Helpers.psm1" }
+
 function Get-GitlabGroup {
     [CmdletBinding(DefaultParameterSetName='ByGroupId')]
     [OutputType('Gitlab.Group')]

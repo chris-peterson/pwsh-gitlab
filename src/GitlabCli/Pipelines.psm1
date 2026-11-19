@@ -1,4 +1,6 @@
-﻿function Get-GitlabPipeline {
+﻿if ($PSScriptRoot) { Import-Module "$PSScriptRoot/Private/Helpers.psm1" }
+
+function Get-GitlabPipeline {
 
     [Alias('pipeline')]
     [Alias('pipelines')]

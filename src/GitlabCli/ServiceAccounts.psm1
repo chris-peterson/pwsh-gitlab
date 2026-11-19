@@ -1,3 +1,5 @@
+if ($PSScriptRoot) { Import-Module "$PSScriptRoot/Private/Helpers.psm1" }
+
 function Get-GitlabServiceAccount {
     [CmdletBinding(DefaultParameterSetName='Instance')]
     [OutputType('Gitlab.ServiceAccount')]
