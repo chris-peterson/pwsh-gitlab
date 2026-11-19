@@ -100,6 +100,7 @@ $CategoryDescriptions = @{
     'Notes' = 'Comments on issues and merge requests'
     'PersonalAccessTokens' = 'Manage personal access tokens'
     'PipelineSchedules' = 'Schedule pipelines'
+    'PipelineTriggers' = 'Manage pipeline trigger tokens'
     'Pipelines' = 'Trigger and monitor pipelines'
     'ProjectAccessTokens' = 'Manage project access tokens'
     'ProjectDeployKeys' = 'Manage project deploy keys'

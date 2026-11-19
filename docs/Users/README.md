@@ -24,8 +24,8 @@ Get-GitlabUserEvent -UserId 'john.doe'
 # Block a user (admin)
 Block-GitlabUser -UserId 123
 
-# Impersonate a user for debugging (admin)
-Start-GitlabUserImpersonation -UserId 'john.doe'
+# Run commands as another user (admin)
+Use-GitlabToken -User 'john.doe' { Get-GitlabSnippet -Mine }
 ```
 
 ## Cmdlets
@@ -40,3 +40,4 @@ Start-GitlabUserImpersonation -UserId 'john.doe'
 | [Start-GitlabUserImpersonation](Users/Start-GitlabUserImpersonation.md) | Starts impersonating a user |
 | [Stop-GitlabUserImpersonation](Users/Stop-GitlabUserImpersonation.md) | Stops user impersonation |
 | [Unblock-GitlabUser](Users/Unblock-GitlabUser.md) | Unblocks a user account |
+| [Use-GitlabToken](Users/Use-GitlabToken.md) | Runs a script block as a user, service account, or token |

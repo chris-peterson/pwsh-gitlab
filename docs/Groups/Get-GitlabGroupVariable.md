@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Groups/Get-GitlabGroupVariable
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 10/13/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GitlabGroupVariable
 ---
@@ -94,7 +94,7 @@ HelpMessage: ''
 
 ### -Key
 
-The key (name) of a specific variable to retrieve. If not specified, all variables are returned.
+The key (name) of a specific variable to retrieve. If not specified, all variables are returned. When no variable has this key, writes a non-terminating not-found error, which `-ErrorAction SilentlyContinue` suppresses; other failures still throw.
 
 ```yaml
 Type: System.String

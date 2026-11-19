@@ -110,7 +110,7 @@ function New-GitlabPipelineSchedule {
         $Body.active = $Active
     }
 
-    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create new schedule $($Body | ConvertTo-Json)")) {
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "create new schedule $($Body | ConvertTo-GitlabLogText)")) {
 
         $GitlabApiArguments = @{
             HttpMethod = 'POST'
@@ -193,7 +193,7 @@ function Update-GitlabPipelineSchedule {
     }
 
     if ($GitlabApiArguments.Body.Count -gt 0) {
-        if ($PSCmdlet.ShouldProcess("$($GitlabApiArguments.Path)", "update schedule $($GitlabApiArguments.Body | ConvertTo-Json)")) {
+        if ($PSCmdlet.ShouldProcess("$($GitlabApiArguments.Path)", "update schedule $($GitlabApiArguments.Body | ConvertTo-GitlabLogText)")) {
             Invoke-GitlabApi @GitlabApiArguments | New-GitlabObject 'Gitlab.PipelineSchedule'
         }
     }
@@ -201,11 +201,11 @@ function Update-GitlabPipelineSchedule {
     if ($NewOwner) {
         if ($PSCmdlet.ShouldProcess("project $ProjectId", "transfer ownership of pipeline schedule $PipelineScheduleId to $NewOwner")) {
             $Owner = Get-GitlabUser $NewOwner
-            Start-GitlabUserImpersonation -UserId $Owner.Id
-            # https://docs.gitlab.com/ee/api/pipeline_schedules.html#take-ownership-of-a-pipeline-schedule
-            Invoke-GitlabApi POST "projects/$ProjectId/pipeline_schedules/$PipelineScheduleId/take_ownership" | Out-Null
+            Use-GitlabToken -User $Owner.Id {
+                # https://docs.gitlab.com/ee/api/pipeline_schedules.html#take-ownership-of-a-pipeline-schedule
+                Invoke-GitlabApi POST "projects/$ProjectId/pipeline_schedules/$PipelineScheduleId/take_ownership" | Out-Null
+            }
             Write-Host "Ownership of pipeline schedule $PipelineScheduleId transferred to $($Owner.Username)"
-            Stop-GitlabUserImpersonation
         }
     }
 }

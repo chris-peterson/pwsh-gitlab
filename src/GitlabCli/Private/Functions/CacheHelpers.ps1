@@ -72,7 +72,7 @@ function Save-GitlabSiteCache {
 
     if (-not (Test-Path $CacheDir)) {
         Write-Debug "GitlabCache: Creating cache directory '$CacheDir'"
-        New-Item -ItemType Directory -Path $CacheDir -Force | Out-Null
+        New-Item -ItemType Directory -Path $CacheDir -Force -WhatIf:$false | Out-Null
     }
 
     try {
@@ -86,7 +86,7 @@ function Save-GitlabSiteCache {
             $SortedCache.groups = [ordered]@{}
             $Cache.groups.GetEnumerator() | Sort-Object Key | ForEach-Object { $SortedCache.groups[$_.Key] = $_.Value }
         }
-        $SortedCache | ConvertTo-Yaml | Set-Content -Path $CachePath -Force
+        $SortedCache | ConvertTo-Yaml | Set-Content -Path $CachePath -Force -WhatIf:$false
         Write-Debug "GitlabCache: Persisted cache to '$CachePath'"
     } catch {
         Write-Debug "GitlabCache: Error saving cache to disk: $_"

@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Stop-GitlabUserImpersonation
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 01/02/2026
+ms.date: 10/14/2026
 PlatyPS schema version: 2024-05-01
 title: Stop-GitlabUserImpersonation
 ---
@@ -135,7 +135,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### None
 
-Clears the global variable $GitlabUserImpersonationSession and displays a confirmation message.
+Clears the global variable $GitlabUserImpersonationSession. With `-Verbose`, names the user whose session stopped.
 
 ### System.Object
 
@@ -151,4 +151,5 @@ N/A
 
 - [GitLab Users API](https://docs.gitlab.com/ee/api/users.html)
 - [Start-GitlabUserImpersonation](Start-GitlabUserImpersonation.md)
+- [Use-GitlabToken](Use-GitlabToken.md)
 - [Get-GitlabUser](Get-GitlabUser.md)

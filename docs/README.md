@@ -99,6 +99,7 @@ Browse the sidebar to find cmdlets organized by category:
 - [PersonalAccessTokens](PersonalAccessTokens/) - Manage personal access tokens
 - [Pipelines](Pipelines/) - Trigger and monitor pipelines
 - [PipelineSchedules](PipelineSchedules/) - Schedule pipelines
+- [PipelineTriggers](PipelineTriggers/) - Manage pipeline trigger tokens
 - [ProjectAccessTokens](ProjectAccessTokens/) - Manage project access tokens
 - [ProjectDeployKeys](ProjectDeployKeys/) - Manage project deploy keys
 - [ProjectHooks](ProjectHooks/) - Configure webhooks

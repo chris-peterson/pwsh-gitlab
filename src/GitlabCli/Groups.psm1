@@ -236,8 +236,16 @@ function Get-GitlabGroupVariable {
     $GroupId = $GroupId | ConvertTo-UrlEncoded
 
     if ($Key) {
-        # https://docs.gitlab.com/ee/api/group_level_variables.html#show-variable-details
-        Invoke-GitlabApi GET "groups/$GroupId/variables/$Key" | New-GitlabObject 'Gitlab.Variable'
+        try {
+            # https://docs.gitlab.com/ee/api/group_level_variables.html#show-variable-details
+            Invoke-GitlabApi GET "groups/$GroupId/variables/$Key" | New-GitlabObject 'Gitlab.Variable'
+        }
+        catch {
+            if (-not (Test-GitlabNotFound $_)) {
+                throw
+            }
+            Write-Error -Message "Variable '$Key' not found in group $GroupId" -Category ObjectNotFound -TargetObject $Key
+        }
     }
     else {
         # https://docs.gitlab.com/ee/api/group_level_variables.html#list-group-variables
@@ -300,13 +308,8 @@ function Set-GitlabGroupVariable {
         $Request.masked = $Mask
     }
 
-    try {
-        $ExistingVariable = Get-GitlabGroupVariable $GroupId $Key
-        $IsExistingVariable = $True
-    }
-    catch {
-        $IsExistingVariable = $False
-    }
+    $ExistingVariable = Get-GitlabGroupVariable $GroupId $Key -ErrorAction SilentlyContinue
+    $IsExistingVariable = [bool]$ExistingVariable
     if ($IsExistingVariable -and $ExistingVariable.Masked -and -not $PSBoundParameters.ContainsKey('Mask')) {
         # preserve the variable's masked flag on update
         $Request.masked = $true
@@ -315,7 +318,7 @@ function Set-GitlabGroupVariable {
     # the update path carries the key too, so redaction can see it
     $Request.key = $Key
 
-    if ($PSCmdlet.ShouldProcess("group $GroupId", "set $($IsExistingVariable ? 'existing' : 'new') variable $Key to $(($Request | Hide-GitlabSensitiveValues).value)")) {
+    if ($PSCmdlet.ShouldProcess("group $GroupId", "set $($IsExistingVariable ? 'existing' : 'new') variable $Key $($Request | ConvertTo-GitlabLogText)")) {
         if ($IsExistingVariable) {
             # https://docs.gitlab.com/ee/api/group_level_variables.html#update-variable
             Invoke-GitlabApi PUT "groups/$GroupId/variables/$Key" -Body $Request | New-GitlabObject 'Gitlab.Variable'
@@ -396,7 +399,7 @@ function Update-GitlabGroup {
         $Body.visibility = $Visibility
     }
 
-    if ($PSCmdlet.ShouldProcess("group $GroupId", "update ($($Body | ConvertTo-Json))")) {
+    if ($PSCmdlet.ShouldProcess("group $GroupId", "update ($($Body | ConvertTo-GitlabLogText))")) {
         Invoke-GitlabApi PUT "groups/$GroupId" -Body $Body | New-GitlabObject 'Gitlab.Group'
     }
 }
