@@ -4,6 +4,8 @@ All notable changes to GitlabCli are recorded here, newest first.
 
 ## [Unreleased]
 
+## [1.175.0] - 2026-11-20
+
 ### Changes
 - Added `Get-GitlabPipelineTrigger`, `New-GitlabPipelineTrigger`, and `Remove-GitlabPipelineTrigger` to manage a project's pipeline trigger tokens. `Get-GitlabPipelineTrigger -Description` returns the triggers with that description, newest first, and `Remove-GitlabPipelineTrigger` takes triggers from the pipeline.
 - Added `New-GitlabServiceAccountPersonalAccessToken` and `Remove-GitlabServiceAccountPersonalAccessToken` (alias `Revoke-GitlabServiceAccountPersonalAccessToken`) to create and revoke a group service account's personal access tokens.

@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.174.1'
+    ModuleVersion = '1.175.0'
 
     RequiredModules = @(
         @{
@@ -31,8 +31,26 @@
             )
             ReleaseNotes =
 @'
+### Changes
+- Added `Get-GitlabPipelineTrigger`, `New-GitlabPipelineTrigger`, and `Remove-GitlabPipelineTrigger` to manage a project's pipeline trigger tokens. `Get-GitlabPipelineTrigger -Description` returns the triggers with that description, newest first, and `Remove-GitlabPipelineTrigger` takes triggers from the pipeline.
+- Added `New-GitlabServiceAccountPersonalAccessToken` and `Remove-GitlabServiceAccountPersonalAccessToken` (alias `Revoke-GitlabServiceAccountPersonalAccessToken`) to create and revoke a group service account's personal access tokens.
+- Added `Use-GitlabToken`, which runs a script block as another identity and stops using its token afterwards, including when the block throws. `-User` impersonates a user, `-ServiceAccount` runs as a group service account through a personal access token created for the block, and both revoke their token afterwards; `-Token` runs with a token you pass. Run as a service account, what the block creates (such as a pipeline trigger token) belongs to that account. Under `-WhatIf`, `-User` and `-ServiceAccount` report the token's creation and revocation and run the block as you, with `-WhatIf` in effect. The temporary token stays valid for at least `$global:GitlabTemporaryTokenLifetime` (1 hour by default). `Start-GitlabUserImpersonation` and `Stop-GitlabUserImpersonation` remain for longer sessions.
+- Added `Set-GitlabServiceAccount`, which returns the group service account with a username or creates it, and `Get-GitlabServiceAccount -Username`. Service accounts from `Get-GitlabServiceAccount -GroupId` carry `GroupId`, so they pipe into the token cmdlets, `Use-GitlabToken`, and `Set-GitlabProjectMember`.
+- `New-GitlabServiceAccount` and `Set-GitlabServiceAccount` reject a `-Username` starting with `duo-`, `duo_`, `ai-`, or `ai_`, which GitLab reserves for its AI entities, before sending a request, so `-WhatIf` catches it too.
+- `Set-GitlabProjectMember` and `Set-GitlabGroupMember` return a member who already has the requested access level without a request, and take a user or service account from the pipeline.
+- `Set-GitlabProjectVariable` takes projects from the pipeline and sets the variable on each.
+- Added `Set-GitlabProjectAvatar`, `Set-GitlabGroupAvatar`, and `Set-GitlabTopicAvatar` to set an avatar image from a file or a `data:` URI, and `Remove-GitlabProjectAvatar`, `Remove-GitlabGroupAvatar`, and `Remove-GitlabTopicAvatar` to clear it. GitLab doesn't accept SVG avatars, so an SVG is converted to a PNG first; this needs `rsvg-convert`, ImageMagick, or (on macOS) the built-in `sips`.
+- `Invoke-GitlabApi -Form` sends multipart form data, including file uploads.
+- `Get-GitlabProjectVariable -Key` and `Get-GitlabGroupVariable -Key` write a non-terminating not-found error for a missing key, which `-ErrorAction SilentlyContinue` suppresses. Other failures still throw.
+
 ### Bug Fixes
-- [`Search-Gitlab` returns every hit of a search with up to 100 results on advanced-search instances](https://github.com/chris-peterson/pwsh-gitlab/issues/180). Advanced search can repeat hits from an earlier page in place of hits it never returns, so `Search-Gitlab` now requests up to 100 results per page (GitLab's maximum), capped at `-MaxResults`, and those result sets arrive as a single page. `-MaxResults 0` is rejected.
+- [Secrets no longer print to the console](https://github.com/chris-peterson/pwsh-gitlab/issues/178). `-WhatIf` and `-Verbose` show the access token and other credential fields as `********`. Project, group, pipeline, and pipeline schedule variables show `********` in place of the value when the variable is masked or hidden, or when its key looks like a secret (contains `TOKEN`, `SECRET`, `PASSWORD`, `PASSWD`, `KEY`, `CREDENTIAL`, or `PRIVATE`). Only the display changes: `.Value` still returns the real value. `Set-GitlabProjectVariable` and `Set-GitlabGroupVariable` also keep an existing variable masked when it's updated without `-Mask`.
+- `Set-GitlabProjectMember` and `Set-GitlabGroupMember` no longer require `-SiteUrl`, and `Set-GitlabProjectMember` finds an existing member instead of always trying to add one. A lookup failure other than not-found is raised instead of being treated as "not a member".
+- `Set-GitlabProjectVariable` and `Set-GitlabGroupVariable` raise a failed existence check instead of trying to create the variable.
+- `Update-GitlabPipelineSchedule -NewOwner` stops impersonating the new owner when taking ownership fails, instead of leaving the impersonation session active.
+- `Start-GitlabUserImpersonation` no longer creates an impersonation token that's already expired. Its expiry was the next day's local date, but GitLab expires a token at 00:00 UTC on that date, so late in the day west of UTC the token was expired on creation. It now stays valid for at least `$global:GitlabTemporaryTokenLifetime` (1 hour by default).
+- `Stop-GitlabUserImpersonation -Verbose` names the user whose session stopped.
+- Under `-WhatIf`, the local project and group ID cache is still written, instead of printing "What if" lines for it.
 '@
         }
     }
