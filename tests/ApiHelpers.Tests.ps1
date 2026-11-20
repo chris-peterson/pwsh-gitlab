@@ -87,4 +87,28 @@ Describe "Invoke-GitlabApi" {
       $Headers.Authorization -eq 'Bearer glpat-SECRET-ACCESS'
     }
   }
+
+  Context "-Form" {
+    BeforeAll {
+      $Image = New-Item -ItemType File -Path (Join-Path $TestDrive 'logo.png') -Force
+    }
+
+    It "Should send the fields as multipart form data instead of JSON" {
+      Invoke-GitlabApi PUT 'projects/42' -Form @{ avatar = $Image } -Confirm:$false | Out-Null
+      Should -Invoke Invoke-RestMethod -ModuleName $TestModuleName -ParameterFilter {
+        $Form.avatar.FullName -eq $Image.FullName -and -not $Body -and -not $ContentType
+      }
+    }
+
+    It "Should show the uploaded file's path in -WhatIf output" {
+      $Text = Get-DisplayedText { Invoke-GitlabApi PUT 'projects/42' -Form @{ avatar = $Image } -WhatIf }
+      $Text | Should -Match '"avatar": ".*logo\.png"'
+      Should -Invoke Invoke-RestMethod -ModuleName $TestModuleName -Times 0
+    }
+
+    It "Should refuse a request that has both -Body and -Form" {
+      { Invoke-GitlabApi PUT 'projects/42' -Body @{ name = 'x' } -Form @{ avatar = $Image } -Confirm:$false } |
+        Should -Throw '*combined*'
+    }
+  }
 }

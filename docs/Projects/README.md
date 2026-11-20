@@ -45,10 +45,12 @@ Invoke-GitlabProjectArchival -ProjectId 'mygroup/old-project'
 | [New-GitlabProject](Projects/New-GitlabProject.md) | Creates a new project |
 | [Remove-GitlabGroupToProjectShare](Projects/Remove-GitlabGroupToProjectShare.md) | Removes project sharing |
 | [Remove-GitlabProject](Projects/Remove-GitlabProject.md) | Deletes a project |
+| [Remove-GitlabProjectAvatar](Projects/Remove-GitlabProjectAvatar.md) | Removes a project's avatar |
 | [Remove-GitlabProjectForkRelationship](Projects/Remove-GitlabProjectForkRelationship.md) | Removes fork relationship |
 | [Remove-GitlabProjectTopic](Projects/Remove-GitlabProjectTopic.md) | Removes topics from a project |
 | [Remove-GitlabProjectVariable](Projects/Remove-GitlabProjectVariable.md) | Removes a CI/CD variable |
 | [Rename-GitlabProject](Projects/Rename-GitlabProject.md) | Renames a project |
 | [Rename-GitlabProjectDefaultBranch](Projects/Rename-GitlabProjectDefaultBranch.md) | Changes the default branch |
+| [Set-GitlabProjectAvatar](Projects/Set-GitlabProjectAvatar.md) | Sets a project's avatar |
 | [Set-GitlabProjectVariable](Projects/Set-GitlabProjectVariable.md) | Sets a CI/CD variable |
 | [Update-GitlabProject](Projects/Update-GitlabProject.md) | Updates project settings |

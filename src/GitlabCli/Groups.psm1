@@ -404,6 +404,53 @@ function Update-GitlabGroup {
     }
 }
 
+# https://docs.gitlab.com/api/groups/#upload-a-group-avatar
+function Set-GitlabGroupAvatar {
+    [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Group')]
+    param (
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
+        [string]
+        $GroupId,
+
+        [Parameter(Mandatory, Position=1)]
+        [ValidateScript({ Test-GitlabAvatarSource $_ }, ErrorMessage="'{0}' is not a file or a data: URI")]
+        [string]
+        $Path,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    $GroupId = $GroupId | ConvertTo-UrlEncoded
+
+    if ($PSCmdlet.ShouldProcess("group $GroupId", "set avatar to $(Get-GitlabAvatarSourceText $Path)")) {
+        Invoke-GitlabAvatarUpload -Path $Path -ApiPath "groups/$GroupId" | New-GitlabObject 'Gitlab.Group'
+    }
+}
+
+# https://docs.gitlab.com/api/groups/#remove-a-group-avatar
+function Remove-GitlabGroupAvatar {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType('Gitlab.Group')]
+    param (
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
+        [string]
+        $GroupId,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    $GroupId = $GroupId | ConvertTo-UrlEncoded
+
+    if ($PSCmdlet.ShouldProcess("group $GroupId", "remove avatar")) {
+        Invoke-GitlabApi PUT "groups/$GroupId" -Body @{ avatar = '' } | New-GitlabObject 'Gitlab.Group'
+    }
+}
+
 function Rename-GitlabGroup {
     [CmdletBinding(SupportsShouldProcess)]
     [OutputType('Gitlab.Group')]

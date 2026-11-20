@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Utilities/Invoke-GitlabApi
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 11/18/2026
+ms.date: 11/19/2026
 PlatyPS schema version: 2024-05-01
 title: Invoke-GitlabApi
 ---
@@ -21,8 +21,8 @@ Makes direct REST API calls to a GitLab instance.
 
 ```
 Invoke-GitlabApi [-HttpMethod] <string> [-Path] <string> [[-Query] <hashtable>] [-Body <hashtable>]
- [-MaxPages <uint>] [-Api <string>] [-SiteUrl <string>] [-AccessToken <string>] [-ProxyUrl <string>]
- [-OutFile <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Form <hashtable>] [-MaxPages <uint>] [-Api <string>] [-SiteUrl <string>] [-AccessToken <string>]
+ [-ProxyUrl <string>] [-OutFile <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -132,6 +132,27 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases:
 - cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Form
+
+Fields to send as `multipart/form-data` instead of a JSON body. A `System.IO.FileInfo` value (for example, from `Get-Item`) is uploaded as a file; other values are sent as text fields. Cannot be combined with `-Body`.
+
+```yaml
+Type: System.Collections.Hashtable
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
 ParameterSets:
 - Name: (All)
   Position: Named

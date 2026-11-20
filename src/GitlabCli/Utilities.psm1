@@ -19,6 +19,11 @@ function Invoke-GitlabApi {
         [hashtable]
         $Body = @{},
 
+        # multipart/form-data fields; a [IO.FileInfo] value is uploaded as a file
+        [Parameter()]
+        [hashtable]
+        $Form = @{},
+
         [Parameter()]
         [uint]
         $MaxPages = 1,
@@ -102,9 +107,15 @@ function Invoke-GitlabApi {
         # ships: https://github.com/PowerShell/PowerShell/issues/27861
         $RestMethodParams.PreserveAuthorizationOnRedirect = $true
     }
+    if ($Body.Count -gt 0 -and $Form.Count -gt 0) {
+        throw "-Body and -Form can't be combined"
+    }
     if ($Body.Count -gt 0) {
         $RestMethodParams.ContentType = 'application/json'
         $RestMethodParams.Body        = $Body | ConvertTo-Json
+    }
+    if ($Form.Count -gt 0) {
+        $RestMethodParams.Form = $Form
     }
 
     $Display = [ordered]@{
@@ -113,6 +124,13 @@ function Invoke-GitlabApi {
     }
     if ($Body.Count -gt 0) {
         $Display.Body = $Body
+    }
+    if ($Form.Count -gt 0) {
+        $Display.Form = @{}
+        foreach ($Name in $Form.Keys) {
+            $Value = $Form[$Name]
+            $Display.Form[$Name] = $Value -is [IO.FileSystemInfo] ? $Value.FullName : $Value
+        }
     }
     if ($OutFile) {
         $Display.OutFile = $OutFile

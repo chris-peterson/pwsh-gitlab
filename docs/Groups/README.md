@@ -36,9 +36,11 @@ Copy-GitlabGroupToLocalFileSystem -GroupId 'my-group'
 | [New-GitlabGroup](Groups/New-GitlabGroup.md) | Creates a new group |
 | [New-GitlabGroupToGroupShare](Groups/New-GitlabGroupToGroupShare.md) | Shares a group with another group |
 | [Remove-GitlabGroup](Groups/Remove-GitlabGroup.md) | Deletes a group |
+| [Remove-GitlabGroupAvatar](Groups/Remove-GitlabGroupAvatar.md) | Removes a group's avatar |
 | [Remove-GitlabGroupToGroupShare](Groups/Remove-GitlabGroupToGroupShare.md) | Removes a group share |
 | [Remove-GitlabGroupVariable](Groups/Remove-GitlabGroupVariable.md) | Removes a CI/CD variable |
 | [Rename-GitlabGroup](Groups/Rename-GitlabGroup.md) | Renames a group |
+| [Set-GitlabGroupAvatar](Groups/Set-GitlabGroupAvatar.md) | Sets a group's avatar |
 | [Set-GitlabGroupVariable](Groups/Set-GitlabGroupVariable.md) | Sets a CI/CD variable |
 | [Update-GitlabGroup](Groups/Update-GitlabGroup.md) | Updates group settings |
 | [Update-LocalGitlabGroup](Groups/Update-LocalGitlabGroup.md) | Updates local clones of group projects |

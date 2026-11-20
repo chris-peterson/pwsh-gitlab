@@ -157,3 +157,48 @@ function Remove-GitlabTopic {
         }
     }
 }
+
+# https://docs.gitlab.com/api/topics/#upload-a-topic-avatar
+function Set-GitlabTopicAvatar {
+    [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Topic')]
+    param (
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
+        [Alias('Id')]
+        [string]
+        $TopicId,
+
+        [Parameter(Mandatory, Position=1)]
+        [ValidateScript({ Test-GitlabAvatarSource $_ }, ErrorMessage="'{0}' is not a file or a data: URI")]
+        [string]
+        $Path,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    if ($PSCmdlet.ShouldProcess("topic $TopicId", "set avatar to $(Get-GitlabAvatarSourceText $Path)")) {
+        Invoke-GitlabAvatarUpload -Path $Path -ApiPath "topics/$TopicId" | New-GitlabObject 'Gitlab.Topic'
+    }
+}
+
+# https://docs.gitlab.com/api/topics/#remove-a-topic-avatar
+function Remove-GitlabTopicAvatar {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType('Gitlab.Topic')]
+    param (
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
+        [Alias('Id')]
+        [string]
+        $TopicId,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    if ($PSCmdlet.ShouldProcess("topic $TopicId", "remove avatar")) {
+        Invoke-GitlabApi PUT "topics/$TopicId" -Body @{ avatar = '' } | New-GitlabObject 'Gitlab.Topic'
+    }
+}

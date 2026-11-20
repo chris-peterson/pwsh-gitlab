@@ -957,3 +957,52 @@ function Remove-GitlabProjectTopic {
         Update-GitlabProject -ProjectId $Project.Id -Topics $NewTopics
     }
 }
+
+# https://docs.gitlab.com/api/projects/#upload-a-project-avatar
+function Set-GitlabProjectAvatar {
+    [CmdletBinding(SupportsShouldProcess)]
+    [OutputType('Gitlab.Project')]
+    param (
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter(Mandatory, Position=0)]
+        [ValidateScript({ Test-GitlabAvatarSource $_ }, ErrorMessage="'{0}' is not a file or a data: URI")]
+        [string]
+        $Path,
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    $Project = Get-GitlabProject $ProjectId
+
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "set avatar to $(Get-GitlabAvatarSourceText $Path)")) {
+        Invoke-GitlabAvatarUpload -Path $Path -ApiPath "projects/$($Project.Id)" |
+            New-GitlabObject 'Gitlab.Project'
+    }
+}
+
+# https://docs.gitlab.com/api/projects/#remove-a-project-avatar
+function Remove-GitlabProjectAvatar {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [OutputType('Gitlab.Project')]
+    param (
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $ProjectId = '.',
+
+        [Parameter()]
+        [string]
+        $SiteUrl
+    )
+
+    $Project = Get-GitlabProject $ProjectId
+
+    if ($PSCmdlet.ShouldProcess("$($Project.PathWithNamespace)", "remove avatar")) {
+        Invoke-GitlabApi PUT "projects/$($Project.Id)" -Body @{ avatar = '' } |
+            New-GitlabObject 'Gitlab.Project'
+    }
+}

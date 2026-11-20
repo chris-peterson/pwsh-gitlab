@@ -49,6 +49,7 @@
 
     ScriptsToProcess = @(
         'Private/Functions/ApiHelpers.ps1'
+        'Private/Functions/AvatarHelpers.ps1'
         'Private/Functions/BranchHelpers.ps1'
         'Private/Functions/CacheHelpers.ps1'
         'Private/Functions/StringHelpers.ps1'
@@ -154,9 +155,11 @@
         'New-GitlabGroup'
         'New-GitlabGroupToGroupShare'
         'Remove-GitlabGroup'
+        'Remove-GitlabGroupAvatar'
         'Remove-GitlabGroupToGroupShare'
         'Remove-GitlabGroupVariable'
         'Rename-GitlabGroup'
+        'Set-GitlabGroupAvatar'
         'Set-GitlabGroupVariable'
         'Update-GitlabGroup'
         'Update-LocalGitlabGroup'
@@ -198,12 +201,14 @@
         'New-GitlabProjectHook'
         'Remove-GitlabGroupToProjectShare'
         'Remove-GitlabProject'
+        'Remove-GitlabProjectAvatar'
         'Remove-GitlabProjectForkRelationship'
         'Remove-GitlabProjectHook'
         'Remove-GitlabProjectTopic'
         'Remove-GitlabProjectVariable'
         'Rename-GitlabProject'
         'Rename-GitlabProjectDefaultBranch'
+        'Set-GitlabProjectAvatar'
         'Set-GitlabProjectVariable'
         'Update-GitlabProject'
         'Update-GitlabProjectHook'
@@ -356,6 +361,8 @@
         'New-GitlabTopic'
         'Update-GitlabTopic'
         'Remove-GitlabTopic'
+        'Set-GitlabTopicAvatar'
+        'Remove-GitlabTopicAvatar'
 
         # User Deploy Keys
         'Get-GitlabUserDeployKey'

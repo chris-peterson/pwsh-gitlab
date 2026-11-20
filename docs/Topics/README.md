@@ -21,6 +21,9 @@ New-GitlabTopic -Name 'microservices' -Description 'Microservice-based applicati
 # Update a topic
 Update-GitlabTopic -TopicId 123 -Description 'Updated description'
 
+# Set a topic's avatar
+Set-GitlabTopicAvatar -TopicId 123 -Path ./microservices.png
+
 # Remove a topic
 Remove-GitlabTopic -TopicId 123
 ```
@@ -34,4 +37,6 @@ Remove-GitlabTopic -TopicId 123
 | [Get-GitlabTopic](Topics/Get-GitlabTopic.md) | Gets topics |
 | [New-GitlabTopic](Topics/New-GitlabTopic.md) | Creates a new topic |
 | [Remove-GitlabTopic](Topics/Remove-GitlabTopic.md) | Deletes a topic |
+| [Remove-GitlabTopicAvatar](Topics/Remove-GitlabTopicAvatar.md) | Removes a topic's avatar |
+| [Set-GitlabTopicAvatar](Topics/Set-GitlabTopicAvatar.md) | Sets a topic's avatar |
 | [Update-GitlabTopic](Topics/Update-GitlabTopic.md) | Updates a topic |
