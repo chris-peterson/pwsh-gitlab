@@ -328,7 +328,7 @@ function Start-GitlabUserImpersonation {
         Path    = "users/$($User.Id)/impersonation_tokens"
         Body = @{
             name = "pwsh-gitlab temporary impersonation token $($User.Username)"
-            expires_at = (Get-Date).AddDays(1).ToString('yyyy-MM-dd')
+            expires_at = Get-GitlabTemporaryTokenExpiryDate
             scopes = @('api', 'read_user')
         }
     }
@@ -449,14 +449,21 @@ function Use-GitlabToken {
                     throw "Service account '$($ServiceAccount.Username)' has no GroupId; get it with Get-GitlabServiceAccount -GroupId or Set-GitlabServiceAccount"
                 }
 
+                # the token cmdlets live in ServiceAccounts.psm1, and preference variables
+                # don't cross a module boundary, so -WhatIf and -Confirm have to be passed on
+                $ShouldProcessParameters = @{ WhatIf = $WhatIfPreference }
+                if ($PSBoundParameters.ContainsKey('Confirm')) {
+                    $ShouldProcessParameters.Confirm = $PSBoundParameters.Confirm
+                }
+
                 $TokenRequest = @{
                     GroupId          = $ServiceAccount.GroupId
                     ServiceAccountId = $ServiceAccount.Id
                     Name             = 'GitlabCli Use-GitlabToken'
                     Scope            = $Scope
-                    ExpiresAt        = $ExpiresAt ? $ExpiresAt : (Get-Date).AddDays(1).ToString('yyyy-MM-dd')
+                    ExpiresAt        = $ExpiresAt ? $ExpiresAt : (Get-GitlabTemporaryTokenExpiryDate)
                 }
-                $ServiceAccountToken = New-GitlabServiceAccountPersonalAccessToken @TokenRequest
+                $ServiceAccountToken = New-GitlabServiceAccountPersonalAccessToken @TokenRequest @ShouldProcessParameters
 
                 if (-not $ServiceAccountToken) {
                     if (-not $WhatIfPreference) {
@@ -480,7 +487,7 @@ function Use-GitlabToken {
                 finally {
                     # clear first so the revoke runs as the caller
                     $global:GitlabUserImpersonationSession = $null
-                    Remove-GitlabServiceAccountPersonalAccessToken -GroupId $ServiceAccount.GroupId -ServiceAccountId $ServiceAccount.Id -TokenId $ServiceAccountToken.Id -Force
+                    Remove-GitlabServiceAccountPersonalAccessToken -GroupId $ServiceAccount.GroupId -ServiceAccountId $ServiceAccount.Id -TokenId $ServiceAccountToken.Id -Force @ShouldProcessParameters
                 }
             }
             Token {

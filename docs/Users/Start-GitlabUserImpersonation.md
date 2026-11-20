@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Start-GitlabUserImpersonation
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 10/14/2026
+ms.date: 11/19/2026
 PlatyPS schema version: 2024-05-01
 title: Start-GitlabUserImpersonation
 ---
@@ -28,7 +28,7 @@ Start-GitlabUserImpersonation [-UserId] <string> [-SiteUrl <string>] [-WhatIf] [
 
 ## DESCRIPTION
 
-Creates an impersonation token for a GitLab user and starts an impersonation session. This allows administrators to perform actions as another user for troubleshooting or support purposes. The impersonation token is valid for 24 hours. Only one impersonation session can be active at a time.
+Creates an impersonation token for a GitLab user and starts an impersonation session. This allows administrators to perform actions as another user for troubleshooting or support purposes. The impersonation token stays valid for at least `$global:GitlabTemporaryTokenLifetime` (1 hour by default); GitLab expires tokens by date at 00:00 UTC, so it can last up to a day longer. Only one impersonation session can be active at a time.
 
 ## EXAMPLES
 

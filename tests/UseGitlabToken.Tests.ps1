@@ -14,6 +14,7 @@ BeforeAll {
       Get-Content "$PSScriptRoot/../src/GitlabCli/Private/Functions/ApiHelpers.ps1" -Raw
       Get-Content "$PSScriptRoot/../src/GitlabCli/Private/Functions/SensitiveValueHelpers.ps1" -Raw
       Get-Content "$PSScriptRoot/../src/GitlabCli/Private/Functions/PaginationHelpers.ps1" -Raw
+      Get-Content "$PSScriptRoot/../src/GitlabCli/Private/Functions/TokenHelpers.ps1" -Raw
       Get-Content "$PSScriptRoot/../src/GitlabCli/ServiceAccounts.psm1" -Raw
       Get-Content "$PSScriptRoot/../src/GitlabCli/Users.psm1" -Raw
     ) -join "`n"))) -Force

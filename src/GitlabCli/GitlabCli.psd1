@@ -53,6 +53,7 @@
         'Private/Functions/BranchHelpers.ps1'
         'Private/Functions/CacheHelpers.ps1'
         'Private/Functions/StringHelpers.ps1'
+        'Private/Functions/TokenHelpers.ps1'
         'Private/Functions/ConfigurationHelpers.ps1'
         'Private/Functions/GroupHelpers.ps1'
         'Private/Functions/JobHelpers.ps1'

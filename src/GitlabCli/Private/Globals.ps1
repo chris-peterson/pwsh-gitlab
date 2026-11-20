@@ -15,6 +15,10 @@ $global:GitlabConfigurationPath = Join-Path $env:HOME "/.config/powershell/gitla
 $global:GitlabDefaultMaxPages           = 10
 $global:GitlabSearchResultsDefaultLimit = 100
 
+# The shortest time a temporary token from Use-GitlabToken or Start-GitlabUserImpersonation stays
+# valid. GitLab expires tokens by date, so the real lifetime runs up to a day longer.
+$global:GitlabTemporaryTokenLifetime    = [TimeSpan]::FromHours(1)
+
 # ============================================================================
 # Session State
 # ============================================================================

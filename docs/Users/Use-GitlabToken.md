@@ -4,7 +4,7 @@ external help file: GitlabCli-Help.xml
 HelpUri: https://chris-peterson.github.io/pwsh-gitlab/#/Users/Use-GitlabToken
 Locale: en-US
 Module Name: GitlabCli
-ms.date: 10/14/2026
+ms.date: 11/19/2026
 PlatyPS schema version: 2024-05-01
 title: Use-GitlabToken
 ---
@@ -121,7 +121,7 @@ HelpMessage: ''
 
 ### -ExpiresAt
 
-When the service account's temporary token expires. Defaults to one day from now. The token is revoked when the block finishes, so this only matters if revocation fails.
+When the service account's temporary token expires. By default the token stays valid for at least `$global:GitlabTemporaryTokenLifetime` (1 hour unless you change it); GitLab expires tokens by date at 00:00 UTC, so it can last up to a day longer. The token is revoked when the block finishes, so this only matters if revocation fails.
 
 ```yaml
 Type: System.String
